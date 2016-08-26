@@ -1,0 +1,74 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="./styles/common-styles.html">
+
+<dom-module id="intro-view">
+    <template>
+
+        <style include="common-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        
+        
+        
+        .circle {
+            display: inline-block;
+            height: 64px;
+            width: 64px;
+            border-radius: 50%;
+            background: #ddd;
+            line-height: 64px;
+            font-size: 30px;
+            color: #555;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 22px;
+            margin: 16px 0;
+            color: #212121;
+        }
+        </style>
+        <div class="card">
+        <iron-icon icon="menu"></iron-icon>
+            <h2>Welcome to the ReVeRIES demonstrator! A web application for authoring and running mobile serious games.</h2>
+            <h3>Features {{test}}</h3>
+            <ul>
+                <li>Only based on reusable web components</li>
+                <li>Let you author complex mobile scenarios and play them</li>
+                <li>No need for any installation : everything is done through this web app!</li>
+            </ul>
+        </div>
+        <div class="card">
+            <p> Before using ReVeRIES for playing on a mobile device, please check your configuration using the <b>Configuration</b> button on the left side menu.</p>
+            <p> To gain access to all the power of ReVERIES, please login, you can then access your games and ressources. If you don't want to login you can play have an overview of the games in the Demo Game section.</p>
+        </div>
+        <div class="card">
+            <p> License : I am pretty sure license information goes there, I am not a jurist so I will just gives general advices
+                <ul>
+                    <li>This software is distrubuted without any garantee of performance or safety.</li>
+                    <li>Feel free to distribute this app with any modification you like</li>
+                    <li>There are no such thing as premium plan, if you bought one you've being scammed</li>
+                    <li>Please don't use this app for taking over the world, it is not designed for that. Use Excel instead</li>
+                </ul>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'intro-view'
+    });
+    </script>
+</dom-module>

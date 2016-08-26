@@ -1,0 +1,160 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer P7bowroject Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->7
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-audio-player/paper-audio-player.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<dom-module id="media-viewer-activity">
+    <template>
+        <style include="shared-styles">
+        .mediaimg {
+            height: 300px;
+            display: inline-flex;
+            border-radius: 3px;
+        }
+        
+        .mediablock {
+            display: inline-flex;
+            margin-bottom: 15px;
+            margin-left: 24px;
+            box-shadow: 6px 5px 26px #CECEB9;
+            -moz-box-shadow: 6px 5px 2px #CECEB9;
+            -webkit-box-shadow: 6px 5px 2px #CECEB9;
+            -o-box-shadow: 6px 5px 2px #CECEB9;
+            box-shadow: 6px 5px 26px #CECEB9;
+        }
+        
+        .selected {
+            opacity: 0.7;
+            background-color: lightblue;
+        }
+        
+        .innerdiv {
+            margin-top: 25px;
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            height: 100%;
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        </style>
+        <div class="innerdiv">
+            <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <template is="dom-repeat" id="models" items="{{items}}" as="item">
+                <template is="dom-if" if="{{_ismedia(item)}}">
+                    <template is="dom-if" if="{{_isimage(item)}}">
+                        <div class$="{{computeClass(item.selected)}}" on-click="select">
+                            <img class="mediaimg" src="/file/{{item._id}}">
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'media-viewer-activity',
+            _isselect: function(index) {
+                console.log(index)
+
+            },
+            genReq: function() {
+                this.$.ajaxLoader.generateRequest();
+            },
+            computeClass: function(elem) {
+                if (!elem) {
+                    return 'mediablock'
+                } else {
+                    return 'mediablock selected'
+                }
+            },
+            select: function(elem) {
+
+                var model = elem.model;
+                if (model.get('item.selected')) {
+                    model.set('item.selected', false);
+                    this.set('mediaId', null);
+                    this.set('mediaName', null)
+                    return
+                }
+
+                for (var i = 0; i < this.items.length; i++) {
+                    this.set('items.#' + i + '.selected', false);
+
+                }
+                if (!model.get('item.selected')) {
+                    model.set('item.selected', true)
+                        //model.set('item.class', 'mediablock selected')
+                }
+                if (model.get('item.selected')) {
+                    this.set('mediaId', model.get('item._id'));
+                    this.set('mediaName', model.get('item.filename'))
+                }
+            },
+            ready: function() {
+                this.addEventListener('authentification-changed', function(event) {
+                    if (event.detail.logged)
+                        this.$.ajaxLoader.generateRequest();
+                })
+
+                this.addEventListener('media-changed', function(event) {
+                    this.$.ajaxLoader.generateRequest();
+                })
+
+
+            },
+            _getSize: function(item) {
+                return (item.length / 1024).toPrecision(2);
+            },
+            _ismedia: function(item) {
+                console.log("ismedia")
+                return this._isaudio(item) | this._isvideo(item)  | this._isimage(item);
+            },
+
+            _isaudio: function(item) {
+                var result = item.contentType == 'audio/mp3';
+                return result;
+            },
+
+            _isvideo: function(item) {
+                var supported = item.contentType == 'video/webm';
+                return supported
+            },
+            _isimage: function(item) {
+                var image = item.contentType == 'image/png' | item.contentType=='image/jpeg' |item.contentType =='image/bmp'| item.contentType =='image/gif' 
+                return image;
+            },
+
+            properties: {
+                mediaUrl: {
+                    type: String,
+                    notify: true
+                },
+                mediaId: {
+                    type: String,
+                    reflectToAttribute: true,
+                    notify: true
+                },
+                mediaName: {
+                    type: String,
+                    reflectToAttribute: true,
+                    notify: true
+                },
+
+            }
+        });
+    })();
+    </script>
+</dom-module>

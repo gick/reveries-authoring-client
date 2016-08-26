@@ -1,0 +1,63 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../src/element/POI/point-interest-register.html">
+<link rel="import" href="../src/element/POI/poi-from-map.html">
+<link rel="import" href="./styles/common-styles.html">
+
+<dom-module id="poi-view">
+    <template>
+        <style include="common-styles">
+        </style>
+        <div class="card">
+            <h1>Point of interest and maps</h1>
+            <b>Point of interest</b> (POI) represents <b>physical location</b> within the mobile game area.
+            <br> Point of interest are fundamental for the design of mobile activities : most activities being situated, they must be associated with a point of interest.
+            <br> There are two way of adding a new POI :
+            <ul>
+                <li>The POI can be added using the <b> POI mobile tool</b>. This tool is designed to be used with a mobile phone where GPS is activated. Using this tool with your mobile phone, you can add new POI directly, and take an optionnal photo of the POI </li>
+                <li> <b>The POI can be added using a map.</b> In that case, you have to select on the map the location of the POI and associate optional comments. The map can be Google Map or another map as long as the map reflects well the game area</li>
+            </ul>
+        </div>
+        <div class="card">
+            <paper-tabs  attr-for-selected="activity" selected={{selected}}>
+                <paper-tab activity="POIREG">Add POI from mobile</paper-tab>
+                <paper-tab activity="POIMAP">Add POI from map</paper-tab>
+                <paper-tab activity="CUSTOMMAP">Create custom map</paper-tab>
+            </paper-tabs>
+            <iron-pages attr-for-selected="activity" selected="{{selected}}">
+                <point-interest-register activity="POIREG"> </point-interest-register>
+                <poi-from-map  activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
+                <div activity="CUSTOMMAP">Page 3</div>
+            </iron-pages>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'poi-view',
+        ready: function() {
+
+        },
+        updateMedia: function() {
+            this.$.mediaviewer.updateMedia();
+        },
+        clearList: function() {
+            this.$.uploader.clear();
+        }
+    });
+    </script>
+</dom-module>

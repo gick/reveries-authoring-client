@@ -1,0 +1,192 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-audio-player/paper-audio-player.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
+<dom-module id="media-viewer">
+    <template>
+        <style include="shared-styles">
+        paper-card {
+            --paper-card-header: {
+                background-color: #b2ffa6;
+            }
+            ;
+            --paper-card-header-text: {
+                width: 250px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            ;
+            --paper-card: {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            ;
+            --paper-card-actions {
+                border-top: 1px solid lightgrey;
+            }
+        }
+        
+        .myactions {
+            border-top: 1px solid lightgrey!important;
+        }
+        
+        .info {
+            color: #737373;
+            font-weight: 400;
+            font-size: 16px;
+            font-family: 'Roboto', 'Noto', sans-serif;
+            display: inline-block;
+        }
+        
+        .mediaimg {
+            height: 300px;
+            display: flex;
+            border-radius: 3px;
+            -moz-box-shadow: 6px 5px 2px #CECEB9;
+            -webkit-box-shadow: 6px 5px 2px #CECEB9;
+            -o-box-shadow: 6px 5px 2px #CECEB9;
+            box-shadow: 6px 5px 2px #CECEB9;
+            margin-bottom: 15px;
+        }
+        
+        .innerdiv {
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .ghost {
+            opacity: 0.4;
+        }
+        
+        .chosen {
+            opacity: 0.5;
+            background-color: lightgrey;
+        }
+        </style>
+        <akc-meta-query key="status" value={{status}}></akc-meta-query>
+        <div class="innerdiv">
+            <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
+                <template is="dom-repeat" items="{{items}}" as="item">
+                    <template is="dom-if" if="{{_ismedia(item)}}">
+                        <paper-card class="drag" heading="{{item.filename}}">
+                            <div class=card-content>
+                                <template is="dom-if" if="{{_isaudio(item)}}">
+                                    <img class="mediaimg" src="/file/5710cd61b8f1164314cfef02">
+                                    <paper-audio-player src="/file/{{item._id}}"></paper-audio-player>
+                                </template>
+                                <template is="dom-if" if="{{_isimage(item)}}">
+                                    <div class="mediablock">
+                                        <img class="mediaimg" src="/file/{{item._id}}">
+                                    </div>
+                                </template>
+                                <template is="dom-if" if="{{_isvideo(item)}}">
+                                    <div class="mediablock">
+                                        <video preload width="300px" controls>
+                                            <source src="/file/{{item._id}}" type="{{item.contentType}}">
+                                        </video>
+                                    </div>
+                                </template>
+                                <div>Filename :
+                                    <div class="info">{{item.filename}}</div>
+                                </div>
+                                <div>Type :
+                                    <div class="info">{{item.contentType}}</div>
+                                </div>
+                                <div>Upload date :
+                                    <div class="info">{{item.uploadDate}}</div>
+                                </div>
+                                <div>Size :
+                                    <div class="info">{{_getSize(item)}} Ko</div>
+                                </div>
+                                <div>Public :
+                                    <div class="info">{{item.metadata.public}}</div>
+                                </div>
+                            </div>
+                            <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
+                                <paper-button on-click='genRequest'>Remove</paper-button>
+                                <remove-ressource ressource-url='/file' callbackfunction="{{callbackRemove}}" ressource-id={{item._id}}></remove-ressource>
+                            </div>
+                        </paper-card>
+                    </template>
+                </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'media-viewer',
+
+            ready: function() {
+                this.callbackRemove=this.updateMedia.bind(this)
+
+
+
+            },
+            updateMedia:function(){
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            genRequest: function(event) {
+                event.srcElement.nextElementSibling.genRequest();
+            },
+            _mediaRemoved: function(response) {
+                console.log(response);
+            },
+            _getSize: function(item) {
+                return (item.length / 1024).toPrecision(2);
+            },
+            _ismedia: function(item) {
+                return this._isaudio(item) + this._isvideo(item) + this._isimage(item);
+            },
+
+            _isaudio: function(item) {
+                var result = item.contentType == 'audio/mp3';
+                return result;
+            },
+
+            _isvideo: function(item) {
+                var supported = item.contentType == 'video/webm';
+                return supported
+            },
+            _isimage: function(item) {
+                var image = item.contentType == 'image/png' | item.contentType=='image/jpeg' |item.contentType =='image/bmp'| item.contentType =='image/gif' 
+                return image;
+            },
+            _statusObserver:function(newval){
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            properties: {
+                callback: {
+                    type: Object,
+                    value: {}
+                },
+                mediaUrl: {
+                    type: String,
+                    notify: true
+                },
+                status:{
+                    type:Object,
+                    notify:true,
+                    observer:'_statusObserver'
+                }
+
+            }
+        });
+    </script>
+</dom-module>
+

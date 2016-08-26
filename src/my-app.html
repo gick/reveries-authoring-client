@@ -1,0 +1,150 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../src/element/auth-manager/auth-manager.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/akc-meta/akc-meta.html">
+<dom-module id="my-app">
+    <template>
+        <style>
+        :host {
+            display: block;
+            --app-primary-color: #4285f4;
+            --app-secondary-color: black;
+        }
+        
+        app-header {
+            background-color: var(--app-primary-color);
+            color: #fff;
+        }
+        
+        app-header paper-icon-button {
+            --paper-icon-button-ink-color: white;
+        }
+        
+        .drawer-list {
+            margin: 0 20px;
+        }
+        
+        .drawer-list a {
+            display: block;
+            padding: 0 16px;
+            line-height: 40px;
+            text-decoration: none;
+            color: var(--app-secondary-color);
+        }
+        
+        .drawer-list a.iron-selected {
+            color: black;
+            font-weight: bold;
+        }
+        
+        .drawer-list a.subroute {
+            padding-left: 32px;
+        }
+        </style>
+        <app-location use-hash-as-path route="{{route}}"></app-location>
+        <auth-manager id="manager"></auth-manager>
+        <akc-meta key="media" value=0></akc-meta>
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <app-route route="{{route}}" pattern="#/page" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
+        <app-drawer-layout fullbleed>
+            <!-- Drawer content -->
+            <app-drawer>
+                <app-toolbar>Menu</app-toolbar>
+                <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
+                    <a name="intro" href="#intro">
+                        <iron-icon icon="icons:home"></iron-icon> <span>ReVeRieS</span> </a>
+                    <a name="login" href="#login">
+                        <iron-icon icon="info"></iron-icon>
+                        <span hidden$={{status.logged}}>Login</span>
+                        <span hidden$={{!status.logged}}>Profile/Logout</span>
+                    </a>
+                    <a name="media" href="#media">My media</a>
+                    <a name="poi" href="#poi">My POI</a>
+                    <a name="constructor" href="#constructor">Element constructor</a>
+                </iron-selector>
+            </app-drawer>
+            <!-- Main content -->
+            <app-header-layout has-scrolling-region>
+                <app-header condenses reveals effects="waterfall">
+                    <app-toolbar>
+                        <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+                        <div title>ReVeRIeS 1.0</div>
+                    </app-toolbar>
+                </app-header>
+                <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+                    <intro-view name="intro"></intro-view>
+                    <login-view name="login"></login-view>
+                    <media-view name="media"></media-view>
+                    <poi-view name="poi"></poi-view>
+                    <constructor-view name="constructor"></constructor-view>
+                </iron-pages>
+            </app-header-layout>
+        </app-drawer-layout>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'my-app',
+        ready: function() {
+            //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
+            //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
+            this.$.manager.getUserInfo();
+        },
+        properties: {
+            meta: {
+                type: String,
+                notify: true,
+                reflectToAttribute: true
+            },
+            page: {
+                type: String,
+                reflectToAttribute: true,
+                observer: '_pageChanged'
+            }
+
+        },
+
+        observers: [
+            '_routePageChanged(route.page)'
+        ],
+
+        _routePageChanged: function() {
+            console.log(this.route.path)
+            console.log(this.page)
+            this.page = this.route.path || 'intro';
+            //console.log(page)
+        },
+
+        _pageChanged: function(page) {
+            // load page import on demand.
+            console.log(page)
+            this.importHref(
+                this.resolveUrl(page + '-view.html'), null, null, true);
+        }
+
+    })
+    </script>
+</dom-module>

@@ -1,0 +1,75 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<dom-module id="remove-ressource">
+    <template>
+        <style>
+        :host {
+            display: block;
+        }
+        
+        span {
+            @apply(--paper-font-body1);
+        }
+        </style>
+        <iron-ajax id="remove" url="{{ressourceUrl}}/{{ressourceId}}" method="DELETE" on-response="_removed"></iron-ajax>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'remove-ressource',
+
+            ready: function() {
+                this.$.remove.addEventListener('removed', function() {
+                    this.$.remove.generateRequest()
+                })
+                this.set('genRequest', function() {
+                    this.$.remove.generateRequest()
+                })
+                this.set('_removed', function() {
+                    if (typeof(this.callbackfunction) === "function")
+                        {this.callbackfunction()}
+                })
+            },
+            _callbackObserver: function(newval, oldval) {
+                this.set('callbackfunction', newval);
+            },
+            properties: {
+                ressourceTooltip: {
+                    type: String,
+                    value: "Remove element"
+                },
+                ressourceButton: {
+                    type: Boolean,
+                    value: true
+                },
+                ressourceIcon: {
+                    type: String,
+                    value: "icons:delete"
+                },
+                ressourceId: {
+                    type: String,
+                    notify: true,
+                },
+                ressourceUrl: {
+                    type: String,
+                    notify: true
+                },
+                callbackfunction: {
+                    type: Object,
+                    notify: true,
+                    observer: '_callbackObserver',
+                },
+                genRequest: {
+                    type: Object,
+                    readonly: true,
+                }
+            },
+
+        });
+    })();
+    </script>
+</dom-module>
