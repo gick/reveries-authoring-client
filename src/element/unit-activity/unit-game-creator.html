@@ -1,0 +1,153 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="./unit-activity-constructor.html">
+<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../item-list/item-list.html">
+<link rel="import" href="../point-interest/map-display.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<dom-module id="unit-game-creator">
+    <template>
+        <style>
+        :host {
+            display: inline-flex;
+        }
+        
+        .creatorList {
+            padding-top: 0px;
+        }
+        
+        .header {
+            display: inline-flex;
+            height: 30PX;
+            width: 100%;
+            background-color: #b2ffa;
+            justify-content: center;
+            align-content: center;
+            background-color: wheat;
+            align-items: center;
+            align-self: baseline;
+            border-radius: '4px'
+        }
+        
+        .container {
+            border-radius: 3px;
+            padding: 15px;
+            align-items: center;
+            flex-direction: column;
+            margin: 10px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            display: inline-flex;
+            min-width: 300px;
+        }
+        
+        .outerdiv {
+            display: block;
+            align-items: flex-start;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        .innerMap {
+            display: inline-flex;
+            flex-direction: row;
+        }
+        
+        .innerdiv {
+            display: inline-flex;
+            flex-flow: initial;
+            flex-direction: row;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            align-content: center;
+            flex-grow: 1;
+            width: 50%
+        }
+        </style>
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
+        <div style='display:flex'>
+            <unit-activity-constructor></unit-activity-constructor>
+        </div>
+        <div class="outerdiv">
+            <div class="container">
+                <iron-ajax id="ajaxLoaderPOI" url="/poi" handle-as="json" last-response="{{poiitems}}"></iron-ajax>
+                <item-list id="poiItem" heading="Your POIS" class="creatorList" list-group="POI" max-element="20" items={{poiitems}} pull="clone"></item-list>
+                <map-display hidden$="{{mapHidden}}" style="display:inline-flex;width:400px" id="poiwithmap"></map-display>
+                <paper-button on-click="showMap">Show map</paper-button>
+            </div>
+            <div class="container">
+                <iron-ajax id="ajaxLoaderMedia" url="/listUserMediaFiles" handle-as="json" last-response="{{mediaitems}}"></iron-ajax>
+                <item-list heading="Your Medias" class="creatorList" list-group="media" max-element="20" items={{mediaitems}} pull="clone"></item-list>
+            </div>
+            <div class="container">
+                <iron-ajax id="ajaxLoaderActivities" url="/freetextactivity" handle-as="json" last-response="{{freetextitems}}"></iron-ajax>
+                <item-list heading="Free Text Activities" class="creatorList" list-group="activities" max-element="20" items={{freetextitems}} pull="clone"></item-list>
+            </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'unit-game-creator',
+            ready: function() {
+                this.addEventListener("item-selected", this.itemSelected.bind(this))
+
+                this.mapHidden = true;
+                this.addEventListener('authentification-changed', function(event) {
+                    if (event.detail.logged) {
+                        this.$.ajaxLoaderPOI.generateRequest();
+                        this.$.ajaxLoaderMedia.generateRequest();
+                        this.$.ajaxLoaderActivities.generateRequest();
+                    }
+                })
+                this.addEventListener('poi-changed', function(event) {
+                    this.$.ajaxLoaderPOI.generateRequest();
+                })
+
+                this.addEventListener('media-changed', function(event) {
+                    this.$.ajaxLoaderMedia.generateRequest();
+                })
+
+            },
+            showMap: function() {
+                this.mapHidden = !this.mapHidden;
+                window.dispatchEvent(new Event('resize'));
+            },
+            itemSelected: function(ev) {
+                var data = ev.detail;
+                if (data.map) {
+                    this.$.poiwithmap.showPOI(data)
+                }
+            },
+
+
+            observers: [
+                'statusChanged(status)',
+                'newpoiChanged(newpoi)'
+            ],
+            newpoiChanged(newpoi) {
+                if (newpoi) {
+                    this.$.ajaxLoaderPOI.generateRequest();
+
+                }
+            },
+            statusChanged: function(status) {
+                if (status.logged) {
+                    this.$.ajaxLoaderPOI.generateRequest();
+                    this.$.ajaxLoaderMedia.generateRequest();
+                    this.$.ajaxLoaderActivities.generateRequest();
+
+                }
+            },
+
+            properties: {
+
+            }
+        })
+    })();
+    </script>
+</dom-module>

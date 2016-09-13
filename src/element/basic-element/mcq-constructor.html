@@ -1,0 +1,137 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../media-viewer/media-viewer-activity.html">
+<dom-module id="mcq-constructor">
+    <style>
+    .flexForm {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+    </style>
+    <template>
+        <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcqactivity">
+            <paper-input name="question" value={{question}} label="Question" required></paper-input>
+            <paper-input name="distractor1" label="First distracor(wrong choice)" value={{distractor1}} required></paper-input>
+            <paper-input name="distractor2" label="Second distractor (wrong choice)" value={{distractor2}} required></paper-input>
+            <paper-input name="response" label="Valid choice" value={{correctChoice}} required></paper-input>
+            <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
+            <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
+            <paper-button id="addImage" on-click="setImage">Set clue image</paper-button>
+            <template is="dom-if" if="{{imageId}}" restamp>
+                <paper-input name="filename" editable=false value="{{fileName}}" label="File"></paper-input>
+                <paper-input name="imageId" style="display:none"" editable=false value="{{imageId}}" label="File"></paper-input>
+                <paper-button id="removeImage" on-click="removeImage">Remove clue</paper-button>
+            </template>
+            <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
+            <paper-button raised on-click="_reset">Reset</paper-button>
+        </form>
+        <paper-dialog id="selectImage">
+            <h2> Select image</h2>
+            <paper-dialog-scrollable>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" on-click="setValues" id="mediavieweractivity"></media-viewer-activity>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button raised style="background-color: lightgreen" dialog-confirm>Accept</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+        Polymer({
+            is: 'mcq-constructor',
+            ready: function() {
+
+            },
+            removeImage:function(){
+                this.set('imageId',null);
+                this.set('fileName',null);
+
+            },
+            setValues:function(){
+                this.set('imageId',this.currentid);
+                this.set('fileName',this.currentname);
+            },
+            setImage:function(){
+                this.$.mediavieweractivity.genReq();
+                this.$.selectImage.open();
+            }
+            ,
+            logout: function() {},
+            _submit: function(event) {
+                this.$.freeTextForm.submit();
+            },
+            _reset: function(event) {},
+            properties: {
+                imageId: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+
+                distractor1: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                distractor2: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                correctChoice: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                wrongMessage: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                correctMessage: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                question: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                mediaPath: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                },
+                hasImage: {
+                    type: Boolean,
+                    notify: true,
+                    value: false,
+                },
+
+            }
+        });
+    })();
+    </script>
+</dom-module>

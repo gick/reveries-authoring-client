@@ -6,6 +6,8 @@
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="./google-map-marker-icons.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <dom-module id="poi-map-representation">
     <template>
@@ -59,6 +61,7 @@
             margin-right: 10px;
         }
         </style>
+        <akc-meta key="newPOI" value={{newPOICreated}}></akc-meta>
         <paper-material class="flexible" elevation="2">
             <form id="poimap" is="iron-form" method="POST" action="/poimap" class="innerdiv">
                 <h3 class="smallh3">Edit POI</h3>
@@ -78,7 +81,6 @@
                 <template is="dom-if" restamp=true if="{{!_noarea(hasArea)}}">
                     <paper-input style="display:inline-flex;" name="radius" value={{radius}} label="Trigger area radius (m)"></paper-input>
                     <paper-button name class="small" raised on-click="_removeArea">Remove trigger area</paper-button>
-                    <input type="hidden" value={{currentid}} name="imageId" />
                     <input type="hidden" value={{areaLat}} name="areaLat" />
                     <input type="hidden" value={{areaLong}} name="areaLong" />
                 </template>
@@ -163,7 +165,7 @@
             },
             submitForm: function() {
                 this.$.poimap.submit();
-                this.fire('poi-saved', null);
+                this.set("newPOICreated","newOne" + this.latitude);
             },
             removeMark: function() {
                 this.fire('remove-marker', {
@@ -178,6 +180,7 @@
             },
 
             ready: function() {
+                this.set("newPOICreated",null);
                 if (this.get('radius') !== 0) {
                     this.set('hasArea', true);
                 }

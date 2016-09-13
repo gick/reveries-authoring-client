@@ -37,7 +37,6 @@
         }
         </style>
         <div class="outerdiv">
-            <google-maps-api></google-maps-api> 
             <google-map api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc"  id="gmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="48.085206" longitude="-0.755491" click-events>
                 <template is="dom-repeat" items={{markers}} as="marker">
                     <google-map-marker click-events title="{{marker.title}}" icon={{marker.icon}} on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>

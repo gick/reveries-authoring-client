@@ -1,0 +1,210 @@
+<!--
+@license
+Copyright Pierre-Yves Gicquel ReVeRIES project-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/Sortable/Sortable.html">
+<link rel="import" href="./custom-item.html">
+<dom-module id="item-list">
+    <template>
+        <style>
+        :host {
+            display: block;
+            width: 100%;
+        }
+        
+        custom-item {
+            display: inline-flex;
+            justify-content: center;
+        }
+        
+        .sortable {
+            display: inline-flex;
+            width: 100%;
+            flex-direction: column;
+        }
+        
+        .begin {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .element {
+            border-style: solid;
+            border-width: 1px;
+            justify-content: center;
+            font-family: monospace;
+            font-weight: 100;
+            border-bottom: none;
+        }
+        
+        .last-element {
+            border-bottom: solid;
+            border-bottom-width: 1px;
+        }
+        
+        .noEnougthElement {
+            border-style: dashed;
+            justify-content: center;
+            font-family: monospace;
+            font-weight: 100;
+            border-top-style: solid;
+            border-top-width: 1px;
+        }
+        
+        .noElement {
+            border-style: dashed;
+            justify-content: center;
+            font-family: monospace;
+            font-weight: 100;
+        }
+        
+        .heading {
+            width: 100%;
+            height: 40px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            background-color: #b2ffa6;
+            justify-content: center;
+            display: inline-flex;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
+        }
+        </style>
+        <div hidden$={{!heading.length}}>
+            <div class=heading>{{heading}}</div>
+            <paper-listbox class="begin" style="width:100%;padding-top:0px">
+                <sortable-js id="beginList" class="sortable" group={{listGroup}} handle=".handle">
+                    <template is="dom-repeat" items={{items}} as="item">
+                        <custom-item name="{{item.name}}" data="{{item}}" class$="{{setClass(index)}}">
+                        </custom-item>
+                    </template>
+                </sortable-js>
+                <div id="noMaxHeadingElement">
+                    <paper-item class="handle noEnougthElement">
+                        <div>{{listname}}</div>
+                    </paper-item>
+                </div>
+            </paper-listbox>
+        </div>
+        <div hidden$={{heading.length}}>
+            <paper-listbox style="width:100%">
+                <sortable-js id="finalList" class="sortable" group="{{listGroup}}" handle=".handle">
+                    <template is="dom-repeat" items={{items}} as="item">
+                        <custom-item name="{{item.name}}" listname={{listname}} data="{{item}}" class$="{{setClass(index)}}">
+                        </custom-item>
+                    </template>
+                    <div id="noMaxHeadingElement">
+                        <paper-item class="handle noEnougthElement">
+                            <div>{{listname}}</div>
+                        </paper-item>
+                    </div>
+                </sortable-js>
+            </paper-listbox>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'item-list',
+
+            setClass: function(index) {
+                if (index + 1 < this.get('maxElement')) {
+                    return "element handle"
+                } else {
+                    return "handle element last-element";
+                }
+            },
+            getGroup: function(listname) {
+                return {
+                    name: listname,
+                    pull: 'clone',
+                    put: true
+                }
+            },
+            ready: function() {
+                this.$.finalList.addEventListener('add', this.itemAdded.bind(this))
+                this.$.beginList.addEventListener('remove', this.itemRemove.bind(this))
+            },
+
+            itemSelected:function(event){
+
+            },
+
+
+            itemAdded: function(event) {
+                if (event.item) return;
+                var len = this.get('items').length;
+                if (len < this.get('maxElement')) return;
+                this.splice('items', this.get('maxElement'), 1);
+            },
+
+            itemRemove: function(event) {
+                console.log(event)
+                if (event.detail) {
+                    this.push('items', {
+                        name: event.detail.item.__data__.name,
+                        filename: event.detail.item.__data__.data.filename,
+                        data: event.detail.item.__data__.data
+                    })
+                }
+            },
+
+            noElement: function(items) {
+                var len = items.length;
+                if (!len) {
+                    return false
+                }
+                if (len == 0) return false;
+                if (len == 1) return false;
+
+                return true
+            },
+
+            noMaxElement: function(items) {
+                var len = items.length;
+                return items < this.get('maxElement');
+            },
+            noMaxElement2: function(items) {
+                var len = items.length;
+                return items.length < this.get('maxElement');
+            },
+
+
+
+            properties: {
+                items: {
+                    type: Array,
+                    notify: true,
+                    value: [],
+                },
+                listname: {
+                    type: String,
+                    notify: true,
+                },
+                maxElement: {
+                    type: Number,
+                    notify: true,
+                    value: 6,
+                },
+                listGroup: {
+                    type: String,
+                    notify: true,
+                },
+                heading: {
+                    type: String,
+                    notify: true,
+                    value: '',
+                }
+
+            },
+
+
+        });
+    })();
+    </script>
+</dom-module>

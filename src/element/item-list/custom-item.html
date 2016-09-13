@@ -1,0 +1,69 @@
+<!--
+@license
+Copyright Pierre-Yves Gicquel ReVeRIES project-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<dom-module id="custom-item">
+    <template>
+        <style>
+        .inner {
+            width: 100%;
+            height: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        </style>
+        <div class="inner" on-click="fireSelected">
+            <div> {{name}} {{data.filename}}</div>
+            <template is="dom-repeat" items="{{data}}">
+            <input hidden name="{{item}}" value="{{getText(data)}}">
+
+            </template>
+            <input hidden name="{{listname}}" value="{{getText(data)}}">
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'custom-item',
+            ready:function(){
+                this.getDataKey()
+            },
+            getDataKey:function(){
+                var result=[]
+                for(x in this.data){
+                   result.push(x) 
+                }
+                this.dataKey=result;
+            },
+            getText: function(data) {
+                return JSON.stringify(data);
+            },
+            fireSelected: function() {
+                this.fire("item-selected", this.data);
+            },
+
+            properties: {
+                name: {
+                    type: String,
+                    notify: true,
+                },
+                data: {
+                    type: Object,
+                    notify: true
+                },
+                listname: {
+                    type: String,
+                    notify: true
+                }
+
+            },
+
+            ready: function() {}
+        });
+    })();
+    </script>
+</dom-module>

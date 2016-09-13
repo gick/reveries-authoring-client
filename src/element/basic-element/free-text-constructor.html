@@ -7,25 +7,37 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/iron-label/iron-label.html">
-<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="./free-text-question.html">
-
+<link rel="import" href="../media-viewer/media-viewer-activity.html">
 <dom-module id="free-text-constructor">
     <style>
+    :host {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        align-content: space-around;
+    }
+    
     .freeTextCreator {
         border-radius: 3px;
         padding: 10px;
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
         width: 400px;
         margin-left: 20px;
@@ -56,6 +68,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         justify-content: space-between;
     }
     
+    .mediaimg {
+        height: 300px;
+        display: flex;
+        border-radius: 3px;
+        -moz-box-shadow: 6px 5px 2px #CECEB9;
+        -webkit-box-shadow: 6px 5px 2px #CECEB9;
+        -o-box-shadow: 6px 5px 2px #CECEB9;
+        box-shadow: 6px 5px 2px #CECEB9;
+        margin-bottom: 15px;
+    }
+    
     .previewquestion {
         display: inline-flex;
         flex-grow: 2;
@@ -64,6 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
+        <akc-meta key="newquestion" value={{newquestion}}></akc-meta>
         <form class="freeTextCreator" id="freeTextForm" is="iron-form" method="post" action="/freetextactivity">
             <paper-input name="name" value={{name}} label="Name"></paper-input>
             <paper-input name="question" value={{quest}} label="Question"></paper-input>
@@ -72,6 +96,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrong}} required></paper-input>
             <paper-button on-click="showImageDialog">Set image</paper-button>
             <template is="dom-if" if="{{mediaId}}" restamp=true>
+                <div class="mediablock">
+                    <img class="mediaimg" src="/file/{{mediaId}}">
+                </div>
                 <paper-input style="display:none" name="imageId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
                 <paper-input style=";" name="filename" editable=false value="{{mediaName}}" label="File name"></paper-input>
                 <paper-button raised on-click="removeImage">Remove Image</paper-button>
@@ -81,6 +108,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button raised on-click="_reset">Reset</paper-button>
             </div>
         </form>
+        <paper-dialog id="selectImage">
+            <h2> Select image</h2>
+            <paper-dialog-scrollable>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+            </div>
+        </paper-dialog>
         <div class="previewContainer">
             <h3>Free text live preview</h3>
             <free-text-question class="previewquestion" image-style="height:300px;align-self:center;" question="{{quest}}" wrong-answer="{{wrong}}" correct-answer="{{correct}}" image-id={{mediaId}} response="{{resp}}" response-label="Entrez la réponse"></free-text-question>
@@ -91,7 +127,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'use strict';
         Polymer({
             is: 'free-text-constructor',
-            ready: function() {},
+            ready: function() {
+                this.newquestion = null;
+            },
+            setValues: function() {
+                this.set('mediaId', this.currentid)
+            },
             logout: function() {},
             _mediaObserver: function(newval, old) {
                 this.set('mediaId', newval);
@@ -104,13 +145,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.set('mediaName', null);
             },
             showImageDialog: function() {
-                this.fire("showImageDialog", "show");
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
+
             },
             handleResponse: function(resp) {},
             _changeHasMedia: function(newv, oldb) {}.bind(this),
             _submit: function(event) {
                 this.$.freeTextForm.submit();
-                this.fire('saveFreeTextActivity', null);
+                this.newquestion = "newQuestion" + this.quest;
             },
             _reset: function(event) {},
             properties: {

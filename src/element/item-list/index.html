@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../bower_components/polymer/polymer.html">
+    <link rel="import" href="./item-list.html">
+</head>
+<style type="text/css">
+
+
+
+</style>
+<body>
+  <template id="t" is="dom-bind">
+
+<item-list listname="POI" max-element=1 list-group="POI" items={{test}}></item-list>
+
+  </template>
+
+</body>
+<script>
+  var t = document.querySelector('#t');
+  t.test=['place1']
+  t.addEventListener('dom-change', function() {
+    // auto-binding template is ready.
+  });
+</script>
+
+</html>

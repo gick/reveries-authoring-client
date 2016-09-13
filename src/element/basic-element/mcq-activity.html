@@ -1,0 +1,99 @@
+    <link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<dom-module id="mcq-activity">
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
+        .outer {
+        display: inline-flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+
+    .inner {
+        display: inline-flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+    </style>
+    <template>
+        <div class=outer>
+            <template is="dom-if" if="{{needClue}}">
+                <img height="260px" src="/file/{{imageId}}">
+            </template>
+            <div class="inner">
+                <div class="question" name="question">{{question}}</div>
+                <paper-radio-group id="mcq" class="layout vertical wrap">
+                    <paper-radio-button name="resp1">{{correctAnswer}}</paper-radio-button>
+                    <paper-radio-button name="resp2">{{wrongAnswer1}}</paper-radio-button>
+                    <paper-radio-button name="resp3">{{wrongAnswer2}}</paper-radio-button>
+                </paper-radio-group>
+                <paper-toast id="correct" class="fit-bottom" text="{{correctAnswerMessage}}"></paper-toast>
+                <paper-toast id="wrong" class="fit-bottom" text="{{wrongAnswerMessage}}"></paper-toast>
+                <div style="margin-top:40px" class="card-actions">
+                    <paper-button raised on-click="validate">Validate</paper-button>
+                    <paper-button  raised>Dismiss</paper-button>
+                    <paper-button on-click="getClue" >Clue</paper-button>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+        Polymer({
+            is: 'mcq-activity',
+            ready: function() {
+
+            },
+            getClue: function() {
+                this.set('needClue', !this.needClue);
+            },
+            validate: function() {
+                if (this.$.mcq.selectedItem == this.correctAnswer) {
+                    this.$.correct.open();
+                } else {
+                    this.$.wrong.open();
+                }
+            },
+            properties: {
+                question: {
+                    type: String,
+                    notify: true,
+                },
+                correctAnswerMessage: {
+                    type: String,
+                    notify: true,                    
+                },
+                wrongAnswerMessage:{
+                    type:String,
+                    notify: true,
+                },
+                
+                correctAnswer: {
+                    type: String,
+                    notify: true,
+                },
+
+                wrongAnswer1: {
+                    type: String,
+                    notify: true,
+                },
+                wrongAnswer2: {
+                    type: String,
+                    notify: true,
+                },
+
+                imageId: {
+                    type: String,
+                    notify: true,
+                },
+            }
+        });
+    })();
+    </script>
+</dom-module>

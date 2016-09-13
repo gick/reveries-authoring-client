@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../remove-ressource-element/remove-ressource.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
 <dom-module id="free-text-question">
     <style include="shared-styles">
     .insideflex {
@@ -99,7 +99,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             removeElement: function() {
-                this.remove();
                 this.$.remover.genRequest();
             },
             handleResponse: function() {},

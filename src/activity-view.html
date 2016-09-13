@@ -13,35 +13,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="./styles/common-styles.html">
-<link rel="import" href="./element/basic-element/free-text-constructor.html">
-<link rel="import" href="./element/basic-element/list-free-text-activities.html">
-<link rel="import" href="./element/basic-element/mcq-media-maker.html">
+<link rel="import" href="./element/unit-activity/unit-game-creator.html">
 
-<dom-module id="constructor-view">
+<dom-module id="activity-view">
     <template>
         <style include="common-styles">
 
         </style>
         <div class="card">
-            <h2>Scenario element constructor</h2>
+            <h2>Activity element constructor</h2>
         </div>
         <div class="card">
-            <free-text-constructor></free-text-constructor>
-        </div>
-        <div class="card">
-            <h3>My elements</h3>
-            <list-free-text-activities style="display:inline-flex;" url="/freetextactivity" id="listfreetext"></list-free-text-activities>
-        </div>
-        <div class="card">
-            <h3>MCQ creator</h3>
-            <mcq-media-maker style="display:inline-flex;"></mcq-media-maker>
+            <unit-game-creator></unit-game-creator>
         </div>
 
     </template>
     <script>
     Polymer({
 
-        is: 'constructor-view',
+        is: 'activity-view',
         ready: function() {
 
         },

@@ -1,0 +1,250 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../item-list/item-list.html">
+<dom-module id="unit-activity-constructor">
+    <style>
+    .freeTextCreator {
+        border-radius: 3px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 400px;
+        margin-left: 20px;
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    }
+    
+    .shadow-2dp {
+        @apply(--shadow-elevation-2dp);
+        padding: 10px;
+    }
+    
+    hr {
+        display: block;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: inset;
+        border-width: 1px;
+    }
+    
+    .insideflex {
+        background-color: #f3f3f3;
+        height: 43px;
+        display: inline-flex;
+        flex-direction: row;
+        align-self: stretch;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 5px;
+        box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    
+    ,
+    .insideflexOption {
+        display: inline-flex;
+        flex-direction: row;
+        align-self: stretch;
+        justify-content: space-between;
+        margin-top: 16px;
+        margin-bottom: 10px;
+    }
+    
+    ,
+    .toggleMedia {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+    }
+    
+    .titleone {
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    
+    .namefield: {
+        width: 100%;
+    }
+    
+    .contain {
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-self: stretch;
+    }
+    
+    .subtitle {
+        font-weight: bold;
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    
+    .previewquestion {
+        display: inline-flex;
+        flex-grow: 2;
+        padding: 10px;
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    }
+    </style>
+    <template>
+        <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
+            <paper-input style="width:100%" name="activityName" value={{quest}} label="Game unit name"></paper-input>
+            <hr>
+            <div class="contain">
+                <div class="insideflex">
+                    <h3>Game unit starting screen</h3>
+                    <paper-icon-button icon="icons:expand-more" on-click="toggleIntroduction"></paper-icon-button>
+                </div>
+                <iron-collapse id="startingScreen" opened class="shadow-2dp">
+                    <item-list list-group="media" max-element="1" items={{items}} listname="Starting media"></item-list>
+                    
+                    <paper-textarea label="Starting instruction" name="startText" placeholder="Small instruction text" aria-labelledby="instruction"></paper-textarea>
+                </iron-collapse>
+            </div>
+            <div class="contain">
+                <div class="insideflex">
+                    <h3>Place and guiding</h3>
+                    <paper-icon-button icon="icons:expand-more" on-click="togglePOI"></paper-icon-button>
+                </div>
+                <iron-collapse id="poiguide" opened class="shadow-2dp">
+                    <item-list items=[] list-group="POI" max-element=1 listname="POI"></item-list>
+                    <label class="subtitle" id="label1">User guidance:</label>
+                    <paper-radio-group aria-labelledby="label1">
+                        <paper-radio-button name="compass">Device compass</paper-radio-button>
+                        <paper-radio-button name="map">POI map</paper-radio-button>
+                        <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
+                        <paper-radio-button name="noguide">No guidance</paper-radio-button>
+                    </paper-radio-group>
+                    <label class="subtitle" id="label2">POI reached validation:</label>
+                    <paper-radio-group aria-labelledby="label2">
+                        <paper-radio-button disabled name="QR">QR code scan (not implemented)</paper-radio-button>
+                        <paper-radio-button name="gps">Device GPS</paper-radio-button>
+                    </paper-radio-group>
+                </iron-collapse>
+            </div>
+            <div class="contain">
+                <div class="insideflex">
+                    <h3>Situated activities</h3>
+                    <paper-icon-button icon="icons:expand-more" on-click="toggleActivities"></paper-icon-button>
+                </div>
+                <iron-collapse id="activities" opened class="shadow-2dp">
+                    <item-list items=[] list-group="activities" max-element=10  listname="Activities"></item-list>
+                    <label class="subtitle" id="label1">Activities skip:</label>
+                    <paper-radio-group aria-labelledby="label1">
+                        <paper-radio-button value=true name="passActivities">Allowed</paper-radio-button>
+                        <paper-radio-button value=false name="passActivities">Not allowed</paper-radio-button>
+                    </paper-radio-group>
+                </iron-collapse>
+            </div>
+            <div class="contain">
+                <div class="insideflex">
+                    <h3>Pedagogical feedback</h3>
+                    <paper-icon-button icon="icons:expand-more" on-click="toggleFeedback"></paper-icon-button>
+                </div>
+                <iron-collapse id="endingScreen" opened class="shadow-2dp">
+                    <item-list items=[] list-group="media" max-element=1  listname="Feedback media"></item-list>
+                    <paper-textarea label="Pedagogical feedback" name="feedbackText" placeholder="Pedagogical feedback text" aria-labelledby="instruction"></paper-textarea>
+                </iron-collapse>
+            </div>
+            <div class="insideflex">
+                <paper-button raised on-click="_submit">Save</paper-button>
+                <paper-button raised on-click="_reset">Reset</paper-button>
+            </div>
+        </form>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+        Polymer({
+            is: 'unit-activity-constructor',
+            ready: function() {
+            },
+            togglePOI: function() {
+                this.$.poiguide.toggle();
+            },
+            toggleActivities: function() {
+                this.$.activities.toggle();
+            },
+            toggleIntroduction: function() {
+                this.$.startingScreen.toggle();
+            },
+            toggleFeedback: function() {
+                this.$.endingScreen.toggle();
+            },
+
+            _mediaObserver: function(newval, old) {
+                this.set('mediaId', newval);
+            },
+            _activateObs: function(newval, oldval) {
+                this.set('imageRequired', newval)
+            },
+            removeImage: function() {
+                this.set('mediaId', null);
+                this.set('mediaName', null);
+            },
+            showImageDialog: function() {
+                this.fire("showImageDialog", "show");
+            },
+            handleResponse: function(resp) {},
+            _changeHasMedia: function(newv, oldb) {}.bind(this),
+            _submit: function(event) {
+                this.$.unitActivityForm.submit();
+                this.fire('unitGameSaved',null);
+            },
+            _reset: function(event) {},
+            properties: {
+                mediaId: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                },
+                mediaName: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                },
+                activate: {
+                    type: Boolean,
+                    reflectToAttribute: true,
+                    value: false,
+                    observer: '_activateObs'
+                },
+                imageRequired: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+                }
+
+            }
+        });
+    })();
+    </script>
+</dom-module>

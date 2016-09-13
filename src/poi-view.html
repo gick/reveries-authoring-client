@@ -15,12 +15,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../src/element/POI/point-interest-register.html">
+<link rel="import" href="../src/element/POI/point-interest-display.html">
 <link rel="import" href="../src/element/POI/poi-from-map.html">
 <link rel="import" href="./styles/common-styles.html">
-
 <dom-module id="poi-view">
     <template>
         <style include="common-styles">
+
         </style>
         <div class="card">
             <h1>Point of interest and maps</h1>
@@ -33,16 +34,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </ul>
         </div>
         <div class="card">
-            <paper-tabs  attr-for-selected="activity" selected={{selected}}>
+            <paper-tabs attr-for-selected="activity" selected={{selected}}>
                 <paper-tab activity="POIREG">Add POI from mobile</paper-tab>
                 <paper-tab activity="POIMAP">Add POI from map</paper-tab>
                 <paper-tab activity="CUSTOMMAP">Create custom map</paper-tab>
             </paper-tabs>
             <iron-pages attr-for-selected="activity" selected="{{selected}}">
                 <point-interest-register activity="POIREG"> </point-interest-register>
-                <poi-from-map  activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
+                <poi-from-map activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
                 <div activity="CUSTOMMAP">Page 3</div>
             </iron-pages>
+        </div>
+        <div class="card">
+            <point-interest-display callback="updatePOI" poi-url="/poi" id="poidisplay"></point-interest-display>
         </div>
     </template>
     <script>

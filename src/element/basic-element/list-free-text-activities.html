@@ -1,0 +1,88 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../remove-ressource-element/remove-ressource.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="./free-text-question.html">
+<dom-module id="list-free-text-activities">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        
+        .previewquestion {
+            display: inline-flex;
+            padding: 10px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            margin: 10px;
+        }
+        </style>
+            <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+            <akc-meta-query key="newquestion" value="{{newquestion}}"></akc-meta-query>
+
+        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <template is="dom-repeat" items="{{items}}" as="item">
+            <template is=dom-if if="{{hasImage(item.imageId)}}">
+                <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" question="{{item.question}}" image-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+            </template>
+            <template is=dom-if if="{{!hasImage(item.imageId)}}">
+                <free-text-question class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+            </template>
+        </template>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'list-free-text-activities',
+            ready: function() {
+
+            },
+            requestElements: function() {
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            hasImage: function(imageId) {
+                if (!imageId) {
+                    return false
+                }
+                if (imageId.length === 0) {
+                    return false
+                }
+                return true;
+            },
+            observers: [
+                'statusChanged(status)',
+                'newquestionChanged(newquestion)'
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            newquestionChanged: function(newquestion){
+                if(newquestion){
+                    this.$.ajaxLoader.generateRequest();
+    
+                }
+            },
+            properties: {
+                url: {
+                    type: String,
+                    notify: true
+                },
+                state: {
+                    type: Boolean,
+                    notify: true,
+                    value: false,
+                }
+            }
+        });
+    })();
+    </script>
+</dom-module>

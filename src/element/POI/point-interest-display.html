@@ -1,0 +1,228 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel="import" href="./map-display.html">
+<dom-module id="point-interest-display">
+    <template>
+        <style include="shared-styles">
+        :host {
+            display: inline-flex
+        }
+        
+        ;
+        .outer {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        
+        paper-card {
+            --paper-card-header: {
+                background-color: #b2ffa6;
+            }
+            --paper-card-header-text: {
+                width: 250px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            ;
+            --paper-card-actions {
+                border-top: 1px solid lightgrey;
+            }
+            ;
+            --paper-card: {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            ;
+        }
+        
+        .info {
+            color: #737373;
+            font-weight: 400;
+            font-size: 16px;
+            font-family: 'Roboto', 'Noto', sans-serif;
+            display: inline-block;
+        }
+        
+        .generalflex {
+            display: inline-flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+        
+        .mediaimg {
+            height: 300px;
+            display: flex;
+            border-radius: 3px;
+            -moz-box-shadow: 6px 5px 2px #CECEB9;
+            -webkit-box-shadow: 6px 5px 2px #CECEB9;
+            -o-box-shadow: 6px 5px 2px #CECEB9;
+            box-shadow: 6px 5px 2px #CECEB9;
+            margin-bottom: 15px;
+        }
+        
+        .innerdiv {
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            height: 100%;
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        
+        map-display: {}
+        </style>
+        <div class="outer">
+            <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+            <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
+            <iron-ajax id="ajaxLoader" url="{{poiUrl}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <map-display id="gmap"></map-display>
+        </div>
+        <div class="innerdiv">
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <paper-card class="generalflex" heading="{{item.name}}">
+                    <div style="flex-grow:1" class=card-content>
+                        <template is="dom-if" if={{item.photo}}>
+                            <div class="mediablock">
+                                <img class="mediaimg" src="/file/{{item.photo}}">
+                            </div>
+                        </template>
+                        <template is="dom-if" if={{item.creator}}>
+                            <div>Creator :
+                                <div class="info"> {{item.creator}}</div>
+                            </div>
+                        </template>
+                        <div>Longitude :
+                            <div class="info"> {{item.longitude}}</div>
+                        </div>
+                        <div>Latitude :
+                            <div class="info">{{item.latitude}}</div>
+                        </div>
+                        <div>Public :
+                            <div class="info">{{item.public}}</div>
+                        </div>
+                        <div>Date taken :
+                            <div class="info">{{item.date}}</div>
+                        </div>
+                        <template is="dom-if" if={{item.comment}}>
+                            <div>Info :
+                                <div class="info"> {{item.comment}}</div>
+                            </div>
+                            <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
+                                <paper-button on-click='genRemove'>Remove</paper-button>
+                                <paper-button data="{{items}}" info="itemsOnMap.length" on-click="showOnMap">{{getPhrase(item,itemsOnMap.length)}}</paper-button>
+                            </div>
+                        </template>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+        <remove-ressource id="remover" ressource-id={{itemid}} callbackfunction="{{callback}}" ressource-url='/poi'></remove-ressource>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'point-interest-display',
+
+            ready: function() {
+                this.itemsOnMap = [];
+                this.addEventListener('getrequest', function() {
+                    this.$.ajaxLoader.generateRequest();
+                })
+
+                this.addEventListener('poi-changed', function() {
+                    this.$.ajaxLoader.generateRequest();
+                })
+                this.set('callback', function() {
+                    this.$.ajaxLoader.generateRequest();
+                }.bind(this));
+
+            },
+            showOnMap: function(event) {
+                if (!(this.itemInArray(event.model.__data__.item))) {
+                    this.$.gmap.showPOI(event.model.__data__.item);
+                    this.push('itemsOnMap', event.model.__data__.item._id)
+                } else {
+                    this.$.gmap.removePOI(event.model.__data__.item);
+                    this.splice('itemsOnMap', this.itemIndex(event.model.__data__.item), 1)
+
+                }
+            },
+            genRemove: function(event) {
+                this.itemid=event.model.item._id;
+                this.$.remover.genRequest();
+            },
+
+            genrequest: function(event) {
+                this.$.ajaxLoader.generateRequest();
+            },
+
+            getPhrase: function(item) {
+                if (!this.itemInArray(item)) {
+                    return "Show on map"
+                } else {
+                    return "Hide on map"
+                }
+
+            },
+            itemInArray: function(item) {
+                for (var i = 0; i < this.itemsOnMap.length; i++) {
+                    if (this.itemsOnMap[i] == item._id) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            itemIndex: function(item) {
+                for (var i = 0; i < this.itemsOnMap.length; i++) {
+                    if (this.itemsOnMap[i] == item._id) {
+                        return i;
+                    }
+                }
+                return -1;
+
+            },
+            observers: [
+                'statusChanged(status)',
+                'newpoiChanged(newpoi)'
+            ],
+            properties: {
+                callbackfunction: {
+                    type: Object,
+                },
+                poiUrl: {
+                    type: String,
+                    notify: true,
+                }
+
+            },
+            newpoiChanged:function(newpoi){
+                if(newpoi){
+                this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            }
+        });
+    })();
+    </script>
+</dom-module>
