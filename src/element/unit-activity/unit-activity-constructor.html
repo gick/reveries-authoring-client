@@ -124,7 +124,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="icons:expand-more" on-click="toggleIntroduction"></paper-icon-button>
                 </div>
                 <iron-collapse id="startingScreen" opened class="shadow-2dp">
-                    <item-list list-group="media" max-element="1" items={{items}} listname="Starting media"></item-list>
+                    <item-list list-group='{"name":"media","pull":"true","put":true}' max-element="1" items={{items}} listname="Starting media"></item-list>
                     
                     <paper-textarea label="Starting instruction" name="startText" placeholder="Small instruction text" aria-labelledby="instruction"></paper-textarea>
                 </iron-collapse>
@@ -135,7 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="icons:expand-more" on-click="togglePOI"></paper-icon-button>
                 </div>
                 <iron-collapse id="poiguide" opened class="shadow-2dp">
-                    <item-list items=[] list-group="POI" max-element=1 listname="POI"></item-list>
+                    <item-list list-group='{"name":"POI","pull":"true","put":true}' listname="POI"></item-list>
                     <label class="subtitle" id="label1">User guidance:</label>
                     <paper-radio-group aria-labelledby="label1">
                         <paper-radio-button name="compass">Device compass</paper-radio-button>
@@ -156,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="icons:expand-more" on-click="toggleActivities"></paper-icon-button>
                 </div>
                 <iron-collapse id="activities" opened class="shadow-2dp">
-                    <item-list items=[] list-group="activities" max-element=10  listname="Activities"></item-list>
+                    <item-list items=[] list-group='{"name":"activities","pull":"true","put":true}' max-element=10  listname="Activities"></item-list>
                     <label class="subtitle" id="label1">Activities skip:</label>
                     <paper-radio-group aria-labelledby="label1">
                         <paper-radio-button value=true name="passActivities">Allowed</paper-radio-button>
@@ -170,7 +170,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="icons:expand-more" on-click="toggleFeedback"></paper-icon-button>
                 </div>
                 <iron-collapse id="endingScreen" opened class="shadow-2dp">
-                    <item-list items=[] list-group="media" max-element=1  listname="Feedback media"></item-list>
+                    <item-list items=[] list-group='{"name":"media","pull":"true","put":true}' max-element=1  listname="Feedback media"></item-list>
                     <paper-textarea label="Pedagogical feedback" name="feedbackText" placeholder="Pedagogical feedback text" aria-labelledby="instruction"></paper-textarea>
                 </iron-collapse>
             </div>

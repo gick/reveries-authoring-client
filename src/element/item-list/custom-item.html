@@ -3,6 +3,7 @@
 Copyright Pierre-Yves Gicquel ReVeRIES project-->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <dom-module id="custom-item">
     <template>
         <style>
@@ -12,15 +13,12 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             display: inline-flex;
             justify-content: center;
             align-items: center;
+            color: #757575;
         }
         </style>
+        <akc-meta key="activityViewPOI" value="{{activityPOI}}"></akc-meta>
         <div class="inner" on-click="fireSelected">
             <div> {{name}} {{data.filename}}</div>
-            <template is="dom-repeat" items="{{data}}">
-            <input hidden name="{{item}}" value="{{getText(data)}}">
-
-            </template>
-            <input hidden name="{{listname}}" value="{{getText(data)}}">
         </div>
     </template>
     <script>
@@ -29,21 +27,14 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
 
         Polymer({
             is: 'custom-item',
-            ready:function(){
-                this.getDataKey()
-            },
-            getDataKey:function(){
-                var result=[]
-                for(x in this.data){
-                   result.push(x) 
-                }
-                this.dataKey=result;
-            },
-            getText: function(data) {
-                return JSON.stringify(data);
+            ready: function() {
+                // this.getDataKey()
             },
             fireSelected: function() {
-                this.fire("item-selected", this.data);
+                if (this.data && this.data.latitude) {
+                    this.activityPOI = [];
+                    this.activityPOI = this.data;
+                }
             },
 
             properties: {
@@ -53,7 +44,7 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                 },
                 data: {
                     type: Object,
-                    notify: true
+                    notify: true,
                 },
                 listname: {
                     type: String,

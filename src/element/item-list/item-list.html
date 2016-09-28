@@ -19,15 +19,19 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             justify-content: center;
         }
         
+        custom-item:last-of-type {
+            border-bottom-style: solid;
+            border-bottom-width: thin;
+        }
+
+        .sortable:focus{
+            outline:none;
+        }
         .sortable {
+            padding-top: 0px;
             display: inline-flex;
             width: 100%;
             flex-direction: column;
-        }
-        
-        .begin {
-            max-height: 400px;
-            overflow-y: auto;
         }
         
         .element {
@@ -37,27 +41,8 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             font-family: monospace;
             font-weight: 100;
             border-bottom: none;
-        }
-        
-        .last-element {
-            border-bottom: solid;
-            border-bottom-width: 1px;
-        }
-        
-        .noEnougthElement {
-            border-style: dashed;
-            justify-content: center;
-            font-family: monospace;
-            font-weight: 100;
-            border-top-style: solid;
-            border-top-width: 1px;
-        }
-        
-        .noElement {
-            border-style: dashed;
-            justify-content: center;
-            font-family: monospace;
-            font-weight: 100;
+            color: #8D99AE;
+            cursor:pointer;
         }
         
         .heading {
@@ -65,42 +50,32 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             height: 40px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-            background-color: #b2ffa6;
+            background-color: #BBBDF6;
             justify-content: center;
             display: inline-flex;
             align-items: center;
             font-weight: bold;
-            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
         }
         </style>
-        <div hidden$={{!heading.length}}>
-            <div class=heading>{{heading}}</div>
-            <paper-listbox class="begin" style="width:100%;padding-top:0px">
-                <sortable-js id="beginList" class="sortable" group={{listGroup}} handle=".handle">
-                    <template is="dom-repeat" items={{items}} as="item">
-                        <custom-item name="{{item.name}}" data="{{item}}" class$="{{setClass(index)}}">
+        <div>
+            <template restamp=true is="dom-if" if="{{hasHeading}}">
+                <div class="heading">{{heading}}</div>
+            </template>
+            <template restamp=true is="dom-if" if="{{listname}}">
+                <div class="heading">{{listname}}</div>
+            </template>
+            <paper-listbox style="width:100%;padding-top:0px;">
+                <sortable-js id="finalList" sort=true class="sortable" group="{{groupObject}}" handle=".handle">
+                    <template is="dom-if" if="{{hasHeading}}">
+                        <template is="dom-repeat" items="{{items}}" as="item">
+                            <custom-item name="{{item.name}}" listname={{listname}} data="{{item}}" class="element handle">
+                            </custom-item>
+                        </template>
+                    </template>
+                    <template restamp=true is="dom-if" if="{{listname}}">
+                        <custom-item listname={{listname}} class="element handle">
                         </custom-item>
                     </template>
-                </sortable-js>
-                <div id="noMaxHeadingElement">
-                    <paper-item class="handle noEnougthElement">
-                        <div>{{listname}}</div>
-                    </paper-item>
-                </div>
-            </paper-listbox>
-        </div>
-        <div hidden$={{heading.length}}>
-            <paper-listbox style="width:100%">
-                <sortable-js id="finalList" class="sortable" group="{{listGroup}}" handle=".handle">
-                    <template is="dom-repeat" items={{items}} as="item">
-                        <custom-item name="{{item.name}}" listname={{listname}} data="{{item}}" class$="{{setClass(index)}}">
-                        </custom-item>
-                    </template>
-                    <div id="noMaxHeadingElement">
-                        <paper-item class="handle noEnougthElement">
-                            <div>{{listname}}</div>
-                        </paper-item>
-                    </div>
                 </sortable-js>
             </paper-listbox>
         </div>
@@ -111,69 +86,38 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
 
         Polymer({
             is: 'item-list',
-
-            setClass: function(index) {
-                if (index + 1 < this.get('maxElement')) {
-                    return "element handle"
-                } else {
-                    return "handle element last-element";
-                }
-            },
-            getGroup: function(listname) {
-                return {
-                    name: listname,
-                    pull: 'clone',
-                    put: true
-                }
-            },
             ready: function() {
-                this.$.finalList.addEventListener('add', this.itemAdded.bind(this))
-                this.$.beginList.addEventListener('remove', this.itemRemove.bind(this))
+                this.$.finalList.addEventListener('move', this.itemAdded.bind(this))
+                this.$.finalList.addEventListener('remove', this.itemRemoved.bind(this))
             },
-
-            itemSelected:function(event){
-
-            },
-
-
             itemAdded: function(event) {
-                if (event.item) return;
-                var len = this.get('items').length;
-                if (len < this.get('maxElement')) return;
-                this.splice('items', this.get('maxElement'), 1);
-            },
+                if (event.item) {
+                    event.clone.data = event.item.__data__.data
+                    event.clone.name = event.item.__data__.name
+                    console.log(event)
+                }
 
-            itemRemove: function(event) {
-                console.log(event)
-                if (event.detail) {
-                    this.push('items', {
-                        name: event.detail.item.__data__.name,
-                        filename: event.detail.item.__data__.data.filename,
-                        data: event.detail.item.__data__.data
-                    })
+            },
+            itemRemoved: function(event) {
+                if (event.item) {
+                    event.clone.data = event.item.__data__.data
+                    event.clone.name = event.item.__data__.name
+                    console.log(event)
                 }
             },
-
-            noElement: function(items) {
-                var len = items.length;
-                if (!len) {
-                    return false
+            _headingObserver: function(newval, oldval) {
+                if (newval && typeof(newval) === 'string' && newval.length > 0) {
+                    this.hasHeading = true;
+                } else {
+                    this.hasHeading = false;
                 }
-                if (len == 0) return false;
-                if (len == 1) return false;
-
-                return true
             },
-
-            noMaxElement: function(items) {
-                var len = items.length;
-                return items < this.get('maxElement');
+            _listGroupObserver: function(newval, oldval) {
+                if (newval) {
+                    console.log(newval)
+                    this.groupObject = JSON.parse(newval);
+                }
             },
-            noMaxElement2: function(items) {
-                var len = items.length;
-                return items.length < this.get('maxElement');
-            },
-
 
 
             properties: {
@@ -181,6 +125,11 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                     type: Array,
                     notify: true,
                     value: [],
+                },
+                itemsArray: {
+                    type: Array,
+                    notify: true,
+                    value: []
                 },
                 listname: {
                     type: String,
@@ -194,14 +143,17 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                 listGroup: {
                     type: String,
                     notify: true,
+                    observer: '_listGroupObserver'
                 },
                 heading: {
                     type: String,
                     notify: true,
                     value: '',
+                    observer: '_headingObserver'
                 }
 
             },
+
 
 
         });
