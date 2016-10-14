@@ -1,0 +1,72 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../unit-activity/unit-game.html">
+<dom-module id="list-unit-game">
+    <template>
+        <style>
+
+        </style>
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <template is="dom-repeat" items="{{items}}" as="item">
+            <unit-game game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
+        </template>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'list-unit-game',
+            ready: function() {
+                this.gameUnitArray=[];
+                this.addEventListener('newGame',this.handleGame.bind(this))
+
+            },
+            requestElements: function() {
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            handleGame:function(item){
+                if(item){
+                    this.push('gameUnitArray',item);
+                }
+            },
+            observers: [
+                'statusChanged(status)'
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            properties: {
+                unitGame: {
+                    type: Object,
+                    notify: true
+                },
+                state: {
+                    type: Boolean,
+                    notify: true,
+                    value: false,
+                },
+                gameUnit:{
+                    type:Number,
+                    notify:true,
+                    reflectToAttribute:true
+                },
+                gameUnitArray:{
+                    type:Array,
+                    notify:true,
+                    reflectToAttribute:true
+                }
+            }
+        });
+    })();
+    </script>
+</dom-module>

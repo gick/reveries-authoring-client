@@ -35,7 +35,12 @@
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.2.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.0",
     "paper-radio-button": "PolymerElements/paper-radio-button#^1.2.1",
-    "iron-label": "PolymerElements/iron-label#^1.0.2"
+    "iron-label": "PolymerElements/iron-label#^1.0.2",
+    "paper-menu": "PolymerElements/paper-menu#^1.2.2",
+    "qr-code": "webcomponent-qr-code#^0.1.8",
+    "qrious": "^2.1.0",
+    "paper-slider": "PolymerElements/paper-slider#^1.0.11",
+    "paper-fab": "PolymerElements/paper-fab#^1.2.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

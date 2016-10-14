@@ -24,6 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../src/element/auth-manager/auth-manager.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
 <link rel="import" href="../bower_components/akc-meta/akc-meta.html">
 <dom-module id="my-app">
     <template>
@@ -47,12 +50,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             margin: 0 20px;
         }
         
+        a.firstLevel {
+            color: black;
+            text-decoration: none;
+        }
+        
         .drawer-list a {
             display: block;
-            padding: 0 16px;
             line-height: 40px;
             text-decoration: none;
             color: var(--app-secondary-color);
+        }
+        
+        a.menuLink {
+            padding-left: 30px;
+        }
+        
+        .firstLevelMenu {
+            font-weight: bold;
         }
         
         .drawer-list a.iron-selected {
@@ -60,9 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-weight: bold;
         }
         
-        .drawer-list a.subroute {
-            padding-left: 32px;
-        }
+        .drawer-list a.subroute {}
         </style>
         <app-location use-hash-as-path route="{{route}}"></app-location>
         <auth-manager id="manager"></auth-manager>
@@ -72,20 +85,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-drawer-layout fullbleed>
             <!-- Drawer content -->
             <app-drawer>
-                <app-toolbar>Menu</app-toolbar>
                 <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="intro" href="#intro">
-                        <iron-icon icon="icons:home"></iron-icon> <span>ReVeRieS</span> </a>
-                    <a name="login" href="#login">
-                        <iron-icon icon="info"></iron-icon>
-                        <span hidden$={{status.logged}}>Login</span>
-                        <span hidden$={{!status.logged}}>Profile/Logout</span>
-                    </a>
-                    <a name="media" href="#media">My media</a>
-                    <a name="poi" href="#poi">My POI</a>
-                    <a name="constructor" href="#constructor">Element constructor</a>
-                    <a name="activity" href="#activity">Activity constructor</a>
-
+                    <paper-menu>
+                        <paper-item class="menu-content firstLevelMenu">
+                            <a class='' name="intro" href="#intro">
+                                <iron-icon icon="icons:home"></iron-icon> <span>ReVeRieS</span>
+                            </a>
+                        </paper-item>
+                        <paper-item>
+                            <a class='menuLink' name="login" href="#login">Login/logout</a>
+                        </paper-item>
+                        <paper-submenu>
+                            <paper-item class="menu-trigger firstLevelMenu">
+                                My media
+                            </paper-item>
+                            <paper-menu class="menu-content">
+                                <paper-item>
+                                    <a class='menuLink' name="qrcode" href="#qrcode">My QR Codes</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a class='menuLink' name="image" href="#image">My images</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a class='menuLink' name="video" href="#video">My audio/videos</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a class='menuLink' name="poi" href="#poi">My POI</a>
+                                </paper-item>
+                            </paper-menu>
+                        </paper-submenu>
+                        <paper-submenu>
+                            <paper-item class="menu-trigger firstLevelMenu">
+                                My games elements
+                            </paper-item>
+                            <paper-menu class="menu-content">
+                                <paper-item>
+                                    <a class='menuLink' name="freetext" href="#freetext">Free text questions</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a class='menuLink' name="mcq" href="#mcq">Multiple choice question</a>
+                                </paper-item>
+                            </paper-menu>
+                        </paper-submenu>
+                        <paper-submenu>
+                            <paper-item class="menu-trigger firstLevelMenu">
+                                My activities
+                            </paper-item>
+                            <paper-menu class="menu-content">
+                                <paper-item>
+                                    <a class='menuLink' name="constructor" href="#constructor">Game unit</a>
+                                </paper-item>
+                                <paper-item>
+                                    <a class='menuLink' name="mlg" href="#mlg">Mobile Learning Games</a>
+                                </paper-item>
+                            </paper-menu>
+                        </paper-submenu>
+                    </paper-menu>
                 </iron-selector>
             </app-drawer>
             <!-- Main content -->
@@ -99,10 +154,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
                     <intro-view name="intro"></intro-view>
                     <login-view name="login"></login-view>
-                    <media-view name="media"></media-view>
+                    <video-view name="video"></video-view>
                     <poi-view name="poi"></poi-view>
+                    <qrcode-view name="qrcode"></qrcode-view>
+                    <freetext-view name="freetext"></freetext-view>
+                    <image-view name="image"></image-view>
+                    <mcq-view name="mcq"></mcq-view>
                     <constructor-view name="constructor"></constructor-view>
-                    <activity-view name="activity"></activity-view>
+                    <mlg-view name="mlg"></mlg-view>
                 </iron-pages>
             </app-header-layout>
         </app-drawer-layout>

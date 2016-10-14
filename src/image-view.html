@@ -1,0 +1,76 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/file-upload/file-upload.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../src/element/media-viewer/media-viewer.html">
+<link rel="import" href="./styles/common-styles.html">
+
+<dom-module id="image-view">
+    <template>
+        <style include="common-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+                
+        h1 {
+            font-size: 22px;
+            margin: 16px 0;
+            color: #212121;
+        }
+        </style>
+        <div class="card">
+            <h1>My images ressources</h1>
+            <b>Images plays an important role in mobile learning games. Images are a simple way to communicate concepts to the user.
+            <br> In this section :
+            <ul>
+                <li>you can upload new images of different types (jpgif, png, g), to be used later during activities design</li>
+                <li> You can add metadata to an image such as keywords or title</li>
+                <li> You can also remove images</li>
+            </ul>
+            Images can be public or private,
+            <ul>
+                <li>if public, other users can see and use your images</li>
+                <li>if private only the user that uploaded the image can see it. </li>
+            </ul>
+        </div>
+        <div class="card">
+            <h2>Media uploader</h2>
+            <paper-checkbox style="display:inline-block;" raised checked={{setpublic}}>Make image public</paper-checkbox>
+            <file-upload id="uploader" on-success="updateMedia" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
+            </file-upload>
+            <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="{{this.clearList}}">Clear uploaded list</paper-icon-button>
+            <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
+        </div>
+        <div class="card">
+            <media-viewer media-url="/listUserImages" id="mediaviewer"></media-viewer>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'image-view',
+        ready: function() {
+
+        },
+        updateMedia: function() {
+            this.$.mediaviewer.updateMedia();
+        },
+        clearList: function() {
+            this.$.uploader.clear();
+        }
+    });
+    </script>
+</dom-module>

@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../../bower_components/paper-audio-player/paper-audio-player.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <dom-module id="media-viewer">
     <template>
@@ -80,15 +80,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <akc-meta-query key="status" value={{status}}></akc-meta-query>
         <div class="innerdiv">
-            <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <iron-ajax id="ajaxLoader" url="{{mediaUrl}}" handle-as="json" last-response="{{items}}"></iron-ajax>
                 <template is="dom-repeat" items="{{items}}" as="item">
                     <template is="dom-if" if="{{_ismedia(item)}}">
                         <paper-card class="drag" heading="{{item.filename}}">
                             <div class=card-content>
-                                <template is="dom-if" if="{{_isaudio(item)}}">
-                                    <img class="mediaimg" src="/file/5710cd61b8f1164314cfef02">
-                                    <paper-audio-player src="/file/{{item._id}}"></paper-audio-player>
-                                </template>
                                 <template is="dom-if" if="{{_isimage(item)}}">
                                     <div class="mediablock">
                                         <img class="mediaimg" src="/file/{{item._id}}">
@@ -163,7 +159,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return supported
             },
             _isimage: function(item) {
-                var image = item.contentType == 'image/png' | item.contentType=='image/jpeg' |item.contentType =='image/bmp'| item.contentType =='image/gif' 
+                var image = (item.contentType == 'image/png' | item.contentType=='image/jpeg' |item.contentType =='image/bmp'| item.contentType =='image/gif') && item.metadata.type!=="qrcode"
                 return image;
             },
             _statusObserver:function(newval){
@@ -177,7 +173,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 mediaUrl: {
                     type: String,
-                    notify: true
+                    notify: true,
+                    default:'listUserImage'
                 },
                 status:{
                     type:Object,

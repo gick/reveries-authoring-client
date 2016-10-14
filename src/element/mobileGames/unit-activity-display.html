@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel="import" href="../remove-ressource-element/remove-ressource.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <dom-module id="unit-activity-display">
     <template>
@@ -84,8 +84,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
         <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
-        <akc-meta key="games" value="{{items}}"></akc-meta>
-
         <div class="outer">
             <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
         </div>

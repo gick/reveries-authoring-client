@@ -19,10 +19,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="./free-text-question.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../helper/word-list.html">
 <dom-module id="free-text-constructor">
     <style>
     :host {
@@ -59,7 +61,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         color: #333;
     }
-    
+    .imagePicker{
+        position:fixed
+        left:256px;
+        right:256px;
+    }
     .previewContainer {
         display: inline-flex;
         align-self: inherit;
@@ -69,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     
     .mediaimg {
-        height: 300px;
+        height: 250px;
         display: flex;
         border-radius: 3px;
         -moz-box-shadow: 6px 5px 2px #CECEB9;
@@ -77,6 +83,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         -o-box-shadow: 6px 5px 2px #CECEB9;
         box-shadow: 6px 5px 2px #CECEB9;
         margin-bottom: 15px;
+    }
+    
+    .mediablock {
+        display: flex;
+        align-items: center;
+        align-self: center;
     }
     
     .previewquestion {
@@ -87,40 +99,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
+        <word-list id="randomSentence"></word-list>
         <akc-meta key="newquestion" value={{newquestion}}></akc-meta>
         <form class="freeTextCreator" id="freeTextForm" is="iron-form" method="post" action="/freetextactivity">
-            <paper-input name="name" value={{name}} label="Name"></paper-input>
-            <paper-input name="question" value={{quest}} label="Question"></paper-input>
-            <paper-input style=";" name="response" label="Response" value={{resp}} required></paper-input>
-            <paper-input style=";" name="correctMessage" label="Correct answer message" value={{correct}} required></paper-input>
-            <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrong}} required></paper-input>
+            <paper-input name="question" value={{question}} label="Question"></paper-input>
+            <paper-input name="responseFieldLabel" value={{responseLabel}} label="Response field label"></paper-input>
+            <paper-input style=";" name="response" label="Response" value={{response}} required></paper-input>
+            <paper-input style=";" name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
+            <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
             <paper-button on-click="showImageDialog">Set image</paper-button>
             <template is="dom-if" if="{{mediaId}}" restamp=true>
                 <div class="mediablock">
                     <img class="mediaimg" src="/file/{{mediaId}}">
                 </div>
                 <paper-input style="display:none" name="imageId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
-                <paper-input style=";" name="filename" editable=false value="{{mediaName}}" label="File name"></paper-input>
                 <paper-button raised on-click="removeImage">Remove Image</paper-button>
             </template>
             <div class="insideflex">
                 <paper-button raised on-click="_submit">Save</paper-button>
                 <paper-button raised on-click="_reset">Reset</paper-button>
+                <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
             </div>
         </form>
-        <paper-dialog id="selectImage">
-            <h2> Select image</h2>
-            <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
-            </paper-dialog-scrollable>
-            <div class="buttons">
-                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-            </div>
-        </paper-dialog>
-        <div class="previewContainer">
-            <h3>Free text live preview</h3>
-            <free-text-question class="previewquestion" image-style="height:300px;align-self:center;" question="{{quest}}" wrong-answer="{{wrong}}" correct-answer="{{correct}}" image-id={{mediaId}} response="{{resp}}" response-label="Entrez la réponse"></free-text-question>
-        </div>
     </template>
     <script>
     (function() {
@@ -129,13 +129,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'free-text-constructor',
             ready: function() {
                 this.newquestion = null;
+                this.$.freeTextForm.addEventListener('iron-form-response', function() {
+                    this.newquestion = "newQuestion" + this.question;
+
+                }.bind(this))
             },
             setValues: function() {
                 this.set('mediaId', this.currentid)
             },
-            logout: function() {},
-            _mediaObserver: function(newval, old) {
-                this.set('mediaId', newval);
+            dummyFill: function() {
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                for (var i = 0; i < inputList.length; i++) {
+                    inputList[i].value = this.$.randomSentence.getRandomSentence(5);
+                }
             },
             _activateObs: function(newval, oldval) {
                 this.set('imageRequired', newval)
@@ -145,23 +151,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.set('mediaName', null);
             },
             showImageDialog: function() {
-                this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
+                this.fire('selectImage',null)
 
             },
-            handleResponse: function(resp) {},
-            _changeHasMedia: function(newv, oldb) {}.bind(this),
             _submit: function(event) {
                 this.$.freeTextForm.submit();
-                this.newquestion = "newQuestion" + this.quest;
             },
             _reset: function(event) {},
             properties: {
                 mediaId: {
                     type: String,
                     notify: true,
+                    reflectToAttribute: true,
                     value: null,
                 },
+                name: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                question: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                response: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                correctMessage: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                wrongMessage: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+
                 mediaName: {
                     type: String,
                     notify: true,
@@ -174,6 +203,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     observer: '_activateObs'
                 },
                 imageRequired: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                responseLabel: {
                     type: String,
                     notify: true,
                     reflectToAttribute: true

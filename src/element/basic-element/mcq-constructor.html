@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../helper/word-list.html">
 <dom-module id="mcq-constructor">
     <style>
     .flexForm {
@@ -29,7 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
-        <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcqactivity">
+        <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcq">
+            <word-list id="randomSentence"></word-list>
             <paper-input name="question" value={{question}} label="Question" required></paper-input>
             <paper-input name="distractor1" label="First distracor(wrong choice)" value={{distractor1}} required></paper-input>
             <paper-input name="distractor2" label="Second distractor (wrong choice)" value={{distractor2}} required></paper-input>
@@ -39,19 +40,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-button id="addImage" on-click="setImage">Set clue image</paper-button>
             <template is="dom-if" if="{{imageId}}" restamp>
                 <paper-input name="filename" editable=false value="{{fileName}}" label="File"></paper-input>
-                <paper-input name="imageId" style="display:none"" editable=false value="{{imageId}}" label="File"></paper-input>
-                <paper-button id="removeImage" on-click="removeImage">Remove clue</paper-button>
+                <paper-input name="imageId" style="display:none" " editable=false value="{{imageId}} " label="File "></paper-input>
+                <paper-button id="removeImage " on-click="removeImage ">Remove clue</paper-button>
             </template>
-            <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
-            <paper-button raised on-click="_reset">Reset</paper-button>
+            <div class="card-actions">
+            <paper-button style="margin-top:15px " raised on-click="_submit">Save</paper-button>
+            <paper-button raised on-click="_reset ">Reset</paper-button>
+            <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+            </div>
         </form>
-        <paper-dialog id="selectImage">
+        <paper-dialog id="selectImage ">
             <h2> Select image</h2>
             <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" on-click="setValues" id="mediavieweractivity"></media-viewer-activity>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}} " on-click="setValues " id="mediavieweractivity "></media-viewer-activity>
             </paper-dialog-scrollable>
-            <div class="buttons">
-                <paper-button raised style="background-color: lightgreen" dialog-confirm>Accept</paper-button>
+            <div class="buttons ">
+                <paper-button raised style="background-color: lightgreen " dialog-confirm>Accept</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -73,10 +77,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.set('fileName',this.currentname);
             },
             setImage:function(){
-                this.$.mediavieweractivity.genReq();
-                this.$.selectImage.open();
-            }
-            ,
+                this.fire('selectImage',null)
+            },
+            dummyFill:function(){
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                for(var i=0;i<inputList.length;i++){
+                    inputList[i].value=this.$.randomSentence.getRandomSentence(5);
+                } 
+            },
+
+            
             logout: function() {},
             _submit: function(event) {
                 this.$.freeTextForm.submit();

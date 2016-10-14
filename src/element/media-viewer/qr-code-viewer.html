@@ -1,0 +1,149 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-audio-player/paper-audio-player.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
+<dom-module id="qr-code-viewer">
+    <template>
+        <style include="shared-styles">
+        paper-card {
+            --paper-card-header: {
+                background-color: #b2ffa6;
+            }
+            ;
+            --paper-card-header-text: {
+                width: 250px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            ;
+            --paper-card: {
+                margin-left: 15px;
+                margin-bottom: 15px;
+            }
+            ;
+            --paper-card-actions {
+                border-top: 1px solid lightgrey;
+            }
+        }
+        
+        .myactions {
+            border-top: 1px solid lightgrey!important;
+        }
+        
+        .info {
+            color: #737373;
+            font-weight: 400;
+            font-size: 16px;
+            font-family: 'Roboto', 'Noto', sans-serif;
+            display: inline-block;
+        }
+        
+        .mediaimg {
+            height: 300px;
+            display: flex;
+            border-radius: 3px;
+            -moz-box-shadow: 6px 5px 2px #CECEB9;
+            -webkit-box-shadow: 6px 5px 2px #CECEB9;
+            -o-box-shadow: 6px 5px 2px #CECEB9;
+            box-shadow: 6px 5px 2px #CECEB9;
+            margin-bottom: 15px;
+        }
+        
+        .innerdiv {
+            position: relative;
+            overflow: visible;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .ghost {
+            opacity: 0.4;
+        }
+        
+        .chosen {
+            opacity: 0.5;
+            background-color: lightgrey;
+        }
+        </style>
+        <akc-meta-query key="status" value={{status}}></akc-meta-query>
+        <div class="innerdiv">
+            <iron-ajax id="ajaxLoader" url="/listUserQrcode" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <paper-card>
+                    <div class=card-content>
+                        <div class="mediablock">
+                            <img class="mediaimg" src="/file/{{item._id}}">
+                        </div>
+                        <div>QR code string :
+                            <div class="info">{{item.metadata.qrcode}} </div>
+                        </div>
+                        <div>Public :
+                            <div class="info">{{item.metadata.public}}</div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
+                        <paper-button on-click='genRequest'>Remove</paper-button>
+                        <remove-ressource ressource-url='/file' callbackfunction="{{callbackRemove}}" ressource-id={{item._id}}></remove-ressource>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        is: 'qr-code-viewer',
+
+        ready: function() {
+            this.callbackRemove = this.updateMedia.bind(this)
+
+
+
+        },
+        updateMedia: function() {
+            this.$.ajaxLoader.generateRequest();
+
+        },
+        genRequest: function(event) {
+            event.srcElement.nextElementSibling.genRequest();
+        },
+        _mediaRemoved: function(response) {
+            console.log(response);
+        },
+        _statusObserver: function(newval) {
+            this.$.ajaxLoader.generateRequest();
+
+        },
+        properties: {
+            callback: {
+                type: Object,
+                value: {}
+            },
+            status: {
+                type: Object,
+                notify: true,
+                observer: '_statusObserver'
+            },
+
+            url: {
+                type: String,
+                notify: true,
+                default: '/listUserQrcode'
+            }
+        }
+    });
+    </script>
+</dom-module>

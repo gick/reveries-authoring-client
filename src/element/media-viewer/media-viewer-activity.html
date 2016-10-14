@@ -37,17 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             background-color: lightblue;
         }
         
-        .innerdiv {
-            margin-top: 25px;
-            position: relative;
-            overflow: visible;
-            width: 100%;
-            height: 100%;
-            display: inline-flex;
-            flex-wrap: wrap;
-        }
         </style>
-        <div class="innerdiv">
             <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
             <template is="dom-repeat" id="models" items="{{items}}" as="item">
                 <template is="dom-if" if="{{_ismedia(item)}}">
@@ -58,7 +48,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </template>
                 </template>
             </template>
-        </div>
     </template>
     <script>
     (function() {

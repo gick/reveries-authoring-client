@@ -5,8 +5,9 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="./custom-item.html">
-<dom-module id="item-list">
+<dom-module id="item-post-list">
     <template>
         <style>
         :host {
@@ -78,15 +79,19 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
         }
         </style>
         <div>
-            <div class="heading">{{heading}}</div>
+            <div class="heading">{{listname}}</div>
             <paper-listbox style="width:100%;padding-top:0px;">
                 <div class="sortable">
-                    <template is="dom-repeat" items="{{items}}" as="item">
-                        <custom-item name="{{item.name}}" item-type="{{listId}}" data="{{item}}" class="element handle">
-                        </custom-item>
+                    <template is="dom-repeat" items="{{postItem}}" as="item">
+                        <div class="inner">
+                            <div>{{item.name}} {{item.filename}} {{item.question}}</div>
+                            <paper-input hidden name='{{item.itemType}}' game-unit={{item}}></paper-input>
+                            <paper-icon-button on-click="removeItem" class="innerIcon" icon="delete"></paper-icon-button>
+                        </div>
                     </template>
                 </div>
             </paper-listbox>
+        </div>
         </div>
     </template>
     <script>
@@ -94,40 +99,36 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
         'use strict';
 
         Polymer({
-            is: 'item-list',
-            ready: function() {},
-            sendItem: function(event) {
-                switch (this.listId) {
-                    case 'poi':
-                        if (event && event.model && event.model.__data__) {
-                            var poi = event.model.__data__.item;
-                            this.fire('add-poi', poi)
-                        }
-                        break;
-                    case 'activities':
-                        if (event && event.model && event.model.__data__) {
-                            var activity = event.model.__data__.item;
-                            this.fire('add-activity', activity)
-                        }
-                        break;
-
-
-                    case 'media':
-                        if (event && event.model && event.model.__data__) {
-                            var media = event.model.__data__.item;
-                            this.fire('add-media', media,pos)
-                        }
-                        break;
+            is: 'item-post-list',
+            ready: function() {
+                this.postItem = []
+                    //this.$.finalList.addEventListener('move', this.itemAdded.bind(this))
+                    //this.$.finalList.addEventListener('remove', this.itemRemoved.bind(this))
+            },
+            removeItem: function(evt) {
+                if (evt.model.__data__) {
+                    this.splice('postItem', evt.model.__data__.index, 1)
 
                 }
             },
-            /**_headingObserver: function(newval, oldval) {
-                if (newval && typeof(newval) === 'string' && newval.length > 0) {
-                    this.hasHeading = true;
-                } else {
-                    this.hasHeading = false;
+            getString: function(item) {
+                return JSON.stringify(item)
+            },
+            addItem: function(data, itemType) {
+                var array = this.postItem
+                data.itemType = itemType;
+                if (this.maxElement && this.postItem && this.postItem.length < this.maxElement) {
+                    this.push('postItem', data)
+                    this.postItem = []
+                    this.postItem = array
+                } else
+                if (this.maxElement && this.postItem && this.postItem.length >= this.maxElement) {
+                    this.pop('postItem')
+                    this.push('postItem', data)
+                    this.postItem = []
+                    this.postItem = array
                 }
-            },**/
+            },
 
 
             properties: {
@@ -135,6 +136,11 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                     type: Array,
                     notify: true,
                     value: [],
+                },
+                itemsArray: {
+                    type: Array,
+                    notify: true,
+                    value: []
                 },
                 listname: {
                     type: String,
@@ -149,12 +155,7 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                     type: String,
                     notify: true,
                     value: ''
-                },
-                listId: {
-                    type: String,
-                    notify: true
                 }
-
 
             },
 

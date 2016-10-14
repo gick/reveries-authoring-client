@@ -1,0 +1,61 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="./word-list.html">
+
+<dom-module id="input-filler">
+</dom-module>
+</template>
+<script>
+(function() {
+    'use strict';
+    Polymer({
+        is: 'input-filler',
+        ready: function() {
+        },
+        getUserInfo: function() {
+            this.$.userInfo.generateRequest();
+        },
+        logout:function(){
+        	this.$.logout.generateRequest();
+
+        },
+        handleLogout:function(){
+            this.$.userInfo.generateRequest();
+        },
+        validateAuth: function(resp) {
+        	var status={}
+            var response = resp.detail.__data__.response;
+            if (!response.success) {
+                status.logged=false;
+                status.name= '';
+                status.status= '';
+            } else {
+                status.logged= true;
+                status.name=response.user.name;
+                status.isadmin=response.user.isadmin;
+                status.email=response.user.email;
+            }
+            this.status=status
+        },
+
+        authenticate: function(username, pass) {
+            var nameParam = 'name=' + username;
+            var passParam = '&password=' + pass
+            this.set('authparam', nameParam + passParam);
+            this.$.userLogin.generateRequest();
+
+        },
+        properties: {
+            authenticated: {
+                type: Boolean,
+                value: false,
+                reflectToAttribute: true
+            },
+            authparam: {
+                type: String,
+                value: '',
+                notify: true
+            }
+        }
+    })
+})();
+</script>

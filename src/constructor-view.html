@@ -1,3 +1,4 @@
+
 <!--
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
@@ -13,37 +14,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="./styles/common-styles.html">
-<link rel="import" href="./element/basic-element/free-text-constructor.html">
-<link rel="import" href="./element/basic-element/list-free-text-activities.html">
-<link rel="import" href="./element/basic-element/mcq-media-maker.html">
-
+<link rel="import" href="../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="./element/unit-activity/unit-activity-constructor.html">
+<link rel="import" href="./element/unit-activity/unit-game-ressource.html">
 <dom-module id="constructor-view">
     <template>
         <style include="common-styles">
-
+        .elem {
+            display: flex;
+            flex-direction: row;
+        }
+        
+        unit-game-ressource {
+            display: inline-flex;
+            flex-direction: column;
+            padding: 10px;
+            margin: 10px;
+        }
         </style>
+        <akc-meta-query key="media" value={{selectMedia}}></akc-meta-query>
         <div class="card">
-            <h2>Scenario element constructor</h2>
+            <h2>Game unit creator</h2>
         </div>
-        <div class="card">
-            <free-text-constructor></free-text-constructor>
+        <div class="card elem">
+            <unit-activity-constructor id="unitGame"></unit-activity-constructor>
+            <unit-game-ressource id="gameResource"></unit-game-ressource>
         </div>
-        <div class="card">
-            <h3>My elements</h3>
-            <list-free-text-activities style="display:inline-flex;" url="/freetextactivity" id="listfreetext"></list-free-text-activities>
-        </div>
-        <div class="card">
-            <h3>MCQ creator</h3>
-            <mcq-media-maker style="display:inline-flex;"></mcq-media-maker>
-        </div>
-
     </template>
     <script>
     Polymer({
 
         is: 'constructor-view',
         ready: function() {
+            this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
+        },
+        addNewItem: function(event) {
+            if (event.detail) {
+                switch (event.detail.itemType) {
+                    case "poi":
+                        this.$.unitGame.addPOI(event.detail.item)
+                        break
+                    case "media":
+                        this.$.unitGame.addMedia(event.detail.item, this.selectMedia)
+                        break
+                    case "freeText":
+                        this.$.unitGame.addFreetext(event.detail.item)
+                        break
+                    case "mcq":
+                        this.$.unitGame.addMcq(event.detail.item)
+                        break
 
+
+                }
+            }
         },
         updateMedia: function() {
             this.$.mediaviewer.updateMedia();

@@ -7,34 +7,12 @@
 <dom-module id="map-display">
     <template>
         <style>
-        .outerdiv {
-            display: inline-flex;
-            align-items: flex-start;
-            flex-direction: row;
-            flex-wrap: wrap;
-            ;
-            width: 100%;
-        }
+       
         
-        .innerdiv {
-            display: inline-flex;
-            flex-flow: initial;
-            flex-direction: row;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            align-content: center;
-            flex-grow: 1;
-            width: 50%
-        }
-        
-        google-map {
-            width: 500px;
-            height: 500px;
-            display: inline-flex;
+        .mymap {width:500px;height:500px;display: inline-flex;
         }
         </style>
-            <google-map api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="poimapgmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{lat}}" longitude="{{long}}" click-events>
+            <google-map class="mymap" api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="poimapgmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{lat}}" longitude="{{long}}" click-events>
                 <template is="dom-repeat" items={{markers}} as="marker">
                     <google-map-marker click-events title="{{marker.title}}" on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
                 </template>
@@ -46,6 +24,7 @@
 
         Polymer({
             is: 'map-display',
+           
             ready: function() {
 
                 this.markers=[];
@@ -138,6 +117,11 @@
             },
 
             properties: {
+                mapSize:{
+                    type:String,
+                    notify:true,
+                    default:"width:500px;height:500px;display: inline-flex;"
+                },
                 lat: {
                     type: Number
                 },

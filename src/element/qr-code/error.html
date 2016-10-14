@@ -1,0 +1,124 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<script src="../../../bower_components/qrious/dist/umd/qrious.js"></script>
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<dom-module id="qrcode-generator">
+    <style>
+    .flexRadio {
+        display: inline-flex;
+        flex-direction: column;
+    }
+    
+    .qrContainer {
+        display: inline-flex;
+        flex-direction: column;
+        max-width: 300px;
+        align-items: center;
+        max-height: 300px;
+        align-items: center;
+    }
+    
+    .formIdentity {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+    }
+    </style>
+    <template>
+        <akc-meta key="mediaAdded" value={{newCode}}></akc-meta>
+        <form class="formIdentity" id="qrgenerator" is="iron-form">
+            <div class="qrContainer">
+                <paper-input style="display:inline-flex;width:100%" name="qrcodevalue" value={{qrcode}} label="QR code value"></paper-input>
+                <canvas style="width:200px" id="qr"></canvas>
+            </div>
+        </form>
+        <paper-toast id="toastsent" text="QR-code Registered successfully!"></paper-toast>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'qrcode-generator',
+            handleResponse: function(resp) {
+                console.log(resp)
+
+            },
+            postCanvasAsFile: function() {
+                var client = new XMLHttpRequest();
+                client.onreadystatechange = function() {
+                    if (client.readyState == 4 && client.status == 200) {
+                        //  this.fire('poi-changed'); // Another callback here
+                        this.$.toastsent.open();
+                        this.newCode = this.qrcode;
+                    }
+                }.bind(this);
+
+                client.open("post", '/qrcode', true);
+
+                this.$.qr.toBlob(function(blob) {
+                    var file=new File([blob],"qrCode")
+                    var formData = new FormData();
+                    formData.append("file", blob,'qrcode.png');
+                    formData.append('qrcode',this.qrcode)
+                    client.send(formData);
+                }.bind(this))
+
+
+
+
+
+
+            },
+            genReq: function() {
+                this.$.ajaxLoader.generateRequest();
+            },
+            _qrTextObserver: function(newText) {
+                (function() {
+                    if (newText && typeof(newText) === 'string' && newText.length > 0) {
+                        const qr = new QRious({
+                            element: this.$.qr,
+                            value: newText,
+                            size: 700
+                        })
+
+                    }
+
+                }.bind(this))()
+            },
+
+
+            properties: {
+                qrcode: {
+                    type: String,
+                    notify: true,
+                    observer: '_qrTextObserver'
+                },
+
+
+                qrcodeSize: {
+                    type: Number,
+                    notify: true,
+                    observer: '_qrSizeObserver',
+                    default: 150
+                }
+
+
+
+            }
+        });
+    })();
+    </script>
+</dom-module>

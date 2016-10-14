@@ -1,0 +1,83 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-audio-player/paper-audio-player.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
+<dom-module id="video-viewer">
+    <style>
+
+    </style>
+    <template>
+        <akc-meta-query key="status" value={{status}}></akc-meta-query>
+        <div class="innerdiv">
+            <iron-ajax id="ajaxLoader" url="/listUserAudioVideo" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <paper-card>
+                    <div class=card-content>
+                        <template is="dom-if" if="{{_isAudio(item)}}">
+                            <img src='/file/57f78beb4c22d562745e69ae' style="height:150px">
+                            <paper-audio-player src="/file/{{item._id}}"></paper-audio-player>
+                        </template>
+                        <template is="dom-if" if="{{_isVideo(item)}}">
+                            <video controls height="150" src="/file/{{item._id}}"></video>
+                        </template>
+                    </div>
+                    <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
+                        <paper-button on-click='genRequest'>Remove</paper-button>
+                        <remove-ressource ressource-url='/file' callbackfunction="{{callbackRemove}}" ressource-id={{item._id}}></remove-ressource>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'video-viewer',
+            handleResponse: function(resp) {
+                console.log(resp)
+
+            },
+            genReq: function() {
+                this.$.ajaxLoader.generateRequest();
+            },
+            _statusObserver: function(newval) {
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            _isVideo: function(item) {
+                if (item.contentType.indexOf('video') >= 0) {
+                    return true;
+                }
+                return false
+            },
+            _isAudio: function(item) {
+                if (item.contentType.indexOf('audio') >= 0) {
+                    return true;
+                }
+                return false
+            },
+
+            properties: {
+                callback: {
+                    type: Object,
+                    value: {}
+                },
+                mediaUrl: {
+                    type: String,
+                    notify: true
+                },
+                status: {
+                    type: Object,
+                    notify: true,
+                    observer: '_statusObserver'
+                }
+
+            }
+        });
+    })();
+    </script>
+</dom-module>

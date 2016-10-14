@@ -1,0 +1,66 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="./media-viewer-activity.html">
+<dom-module is="media-viewer-dialog">
+    <template>
+        <style>
+        #mediaDialog{
+        	position:absolute;
+        }
+        </style>
+        <paper-dialog id="mediaDialog" vertical-align="{{vallign}}" horizontal-align="{{hallign}}" always-on-top="true">
+            <h2>{{heading}}</h2>
+            <paper-dialog-scrollable>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'media-viewer-dialog',
+            ready: function() {
+
+            },
+            setTarget: function(element) {
+                this.$.mediaDialog.positionTarget = element;
+            },
+            openDialog: function() {
+                this.$.mediaDialog.open();
+                this.$.mediaviewer.genReq();
+            },
+            properties: {
+                heading: {
+                    type: String,
+                    notify: true
+                },
+                vallign: {
+                    type: String,
+                    notify: true,
+                    default: 'auto'
+                },
+                hallign: {
+                    type: String,
+                    notify: true,
+                    default: 'auto'
+                },
+                currentid: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+
+                }
+
+
+            }
+        })
+    })()
+    </script>
+</dom-module>

@@ -1,0 +1,126 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../item-list/item-list.html">
+<link rel="import" href="../POI/map-display.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<dom-module id="unit-game-ressource">
+    <style>
+    :host {
+        width: 100%;
+    }
+    
+    .creatorList {
+        padding-top: 0px;
+    }
+    
+    .container {
+        display: flex;
+        flex-grow: 2;
+        border-radius: 3px;
+        padding: 15px;
+        align-items: center;
+        flex-direction: column;
+        margin: 10px;
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    }
+    
+    .outerdiv {
+        display: block;
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+    
+    map-display {}
+    </style>
+    <template>
+        <akc-meta key="media" value={{selectMedia}}></akc-meta>
+        <akc-meta-query key="status" value={{status}}></akc-meta-query>
+        <paper-tabs attr-for-selected="name" selected={{selected}}>
+            <paper-tab name="media">Media ressources</paper-tab>
+            <paper-tab name="POI">POI</paper-tab>
+            <paper-tab name="freetext">Free text activities</paper-tab>
+            <paper-tab name="mcq">MCQ</paper-tab>
+        </paper-tabs>
+        <iron-pages attr-for-selected="name" selected="{{selected}}">
+            <div style="display:flex;flex-direction:row" name="POI">
+                <div style="width:50%" class="container">
+                    <iron-ajax id="ajaxLoaderPOI" url="/poi" handle-as="json" last-response="{{poiitems}}"></iron-ajax>
+                    <item-list id="poiItem" list-id='poi' heading="Your POIS" class="creatorList" items={{poiitems}}></item-list>
+                </div>
+                <map-display style="width:50%;flex-grow:1" id="activityMap"></map-display>
+            </div>
+            <div class="container" name="media">
+                <iron-ajax id="ajaxLoaderMedia" url="/listUserImages" handle-as="json" last-response="{{mediaitems}}"></iron-ajax>
+                <item-list heading="Your Medias" list-id="media" class="creatorList" items={{mediaitems}}></item-list>
+                <div>
+                    <paper-radio-group attr-for-selected="name" selected="{{selectMedia}}">
+                        <paper-radio-button name="startMedia">Start media</paper-radio-button>
+                        <paper-radio-button name="fbMedia">Feedback media</paper-radio-button>
+                    </paper-radio-group>
+                </div>
+            </div>
+            <div class="container" name="freetext">
+                <iron-ajax id="ajaxLoaderActivities" url="/freetextactivity" handle-as="json" last-response="{{freetextitems}}"></iron-ajax>
+                <item-list id="freeText" list-id='freeText' heading="Free Text Activities" class="creatorList" items={{freetextitems}}></item-list>
+            </div>
+            <div class="container" name="mcq">
+                <iron-ajax id="ajaxLoaderMcq" url="/mcq" handle-as="json" last-response="{{mcqitems}}"></iron-ajax>
+                <item-list id="mcqlist" list-id='mcq' heading="MCQ activities" class="creatorList" items={{mcqitems}}></item-list>
+            </div>
+        </iron-pages>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'unit-game-ressource',
+            ready: function() {
+                this.mapHidden = true;
+
+            },
+            showMap: function() {
+                this.mapHidden = !this.mapHidden;
+                window.dispatchEvent(new Event('resize'));
+            },
+            observers: [
+                'statusChanged(status)',
+                'newpoiChanged(newpoi)',
+                'activityViewPOIChanged(activityPOI)'
+            ],
+            newpoiChanged(newpoi) {
+                if (newpoi) {
+                    this.$.ajaxLoaderPOI.generateRequest();
+
+                }
+            },
+            statusChanged: function(status) {
+                if (status.logged) {
+                    this.$.ajaxLoaderPOI.generateRequest();
+                    this.$.ajaxLoaderMedia.generateRequest();
+                    this.$.ajaxLoaderActivities.generateRequest();
+                    this.$.ajaxLoaderMcq.generateRequest();
+
+                }
+            },
+            activityViewPOIChanged: function(activityPOI) {
+                if (activityPOI && activityPOI.latitude) {
+                    this.$.activityMap.showPOI(activityPOI)
+                }
+            },
+            properties: {}
+
+
+        })
+    })();
+    </script>
+</dom-module>

@@ -1,0 +1,32 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<dom-module id="word-list">
+</dom-module>
+</template>
+<script>
+(function() {
+    'use strict';
+    Polymer({
+        is: 'word-list',
+        ready: function() {
+        },
+        getRandomWord: function() {
+            return this.wordList[Math.floor(Math.random() * this.wordList.length)]  
+        },
+        getRandomSentence:function(size){
+            var result=''
+            for(var i=0;i<size;i++){
+                result=result+' ' +this.getRandomWord();
+            }
+            return result;
+        },
+        properties: {
+            wordList: {
+                type: Array,
+                value: ['dolphin','cake','eating','panda','drinking','obvious','narrative','mug','tango','dancing', 'valey','checkmate','sphere','coco']
+            }
+        }
+    })
+})();
+</script>
+

@@ -3,7 +3,10 @@
 Copyright Pierre-Yves Gicquel ReVeRIES project-->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+
+
 <dom-module id="custom-item">
     <template>
         <style>
@@ -16,9 +19,8 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             color: #757575;
         }
         </style>
-        <akc-meta key="activityViewPOI" value="{{activityPOI}}"></akc-meta>
-        <div class="inner" on-click="fireSelected">
-            <div> {{name}} {{data.filename}}</div>
+        <div class="inner" >
+            <div> <paper-icon-button on-click="addContent" icon="add-circle"></paper-icon-button>{{name}} {{data.filename}}<paper-icon-button></paper-icon-button></div>
         </div>
     </template>
     <script>
@@ -30,11 +32,8 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             ready: function() {
                 // this.getDataKey()
             },
-            fireSelected: function() {
-                if (this.data && this.data.latitude) {
-                    this.activityPOI = [];
-                    this.activityPOI = this.data;
-                }
+            addContent: function() {
+               this.fire('addItem',{item:this.data,itemType:this.itemType,pos:this.position})
             },
 
             properties: {
@@ -46,9 +45,14 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                     type: Object,
                     notify: true,
                 },
-                listname: {
-                    type: String,
-                    notify: true
+                itemType:{
+                    type:String,
+                    notify:true
+
+                },
+                position:{
+                    type:String,
+                    notify:true
                 }
 
             },

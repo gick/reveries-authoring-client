@@ -1,0 +1,58 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../src/element/unit-activity/list-unit-game.html">
+<link rel="import" href="./styles/common-styles.html">
+<dom-module id="mlg-view">
+    <template>
+        <style include="common-styles">
+
+        </style>
+        <akc-meta-query key='currentList' value="{{currentList}}"></akc-meta-query>
+        <form is="iron-form" id="mlgform" method="post" action="/mlg">
+            <input type="text" name="mlg" value="{{mlgList}}">
+        </form>
+        <div class="card">
+            <h1>Mobile Learning Games are the last conception step</h1>
+            <br> This part is likely to change in term of interactions :
+            <ul>
+                <li>Add of filters </li>
+                <li>Add of import from web</li>
+            </ul>
+        </div>
+        <div class="card">
+            <paper-icon-button on-click="saveMlg" icon="icons:cloud-upload"></paper-icon-button>
+            <list-unit-game game-unit-array="{{unitGames}}"></list-unit-game>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'mlg-view',
+        ready: function() {},
+        saveMlg: function() {
+            var mlgArray = [];
+            for (var i = 0; i < this.unitGames.length; i++) {
+                if (this.unitGames[i].detail._id) {
+                    mlgArray.push(this.unitGames[i].detail._id);
+                }
+            }
+            this.mlgList = mlgArray;
+            this.$.mlgform.submit();
+        }
+    });
+    </script>
+</dom-module>

@@ -27,18 +27,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     
     .mediaimg {
-        display: inline-flex;
-        margin-right: 15px;
+        align-self: center;
+        display: flex;
+        max-width: 250px;
+        max-height: 250px;
+        border-radius: 3px;
+        -moz-box-shadow: 6px 5px 2px #CECEB9;
+        -webkit-box-shadow: 6px 5px 2px #CECEB9;
+        -o-box-shadow: 6px 5px 2px #CECEB9;
+        box-shadow: 6px 5px 2px #CECEB9;
     }
     
     .question {
         display: inline-flex;
         font-family: 'Roboto', 'Noto', sans-serif;
         -webkit-font-smoothing: antialiased;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 500;
         line-height: 24px;
         max-width: 300px;
+        color: black;
     }
     
     .element {
@@ -60,14 +68,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
         <div style="display:inline-flex">
             <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
-            <template is="dom-if" if={{imageId}}>
-                <img src="/file/{{imageId}}" style$="{{imageStyle}}" class="mediaimg">
-            </template>
             <form class="inner">
                 <div class="question" name="question">{{question}}</div>
+                <template is="dom-if" if={{mediaId}}>
+                    <img src="/file/{{mediaId}}" class="mediaimg">
+                </template>
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}" required></paper-input>
-                <paper-toast id="correct" class="fit-bottom" text="{{correctAnswer}}"></paper-toast>
-                <paper-toast id="wrong" class="fit-bottom" text="{{wrongAnswer}}"></paper-toast>
+                <paper-toast id="correct" class="fit-bottom" text="{{correctMessage}}"></paper-toast>
+                <paper-toast id="wrong" class="fit-bottom" text="{{wrongMessage}}"></paper-toast>
                 <div style="" class="insideflex">
                     <paper-button raised on-click="validate">Validate</paper-button>
                     <paper-button raised>Dismiss</paper-button>
@@ -105,13 +113,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _submit: function() {},
             properties: {
                 question: {
-                    type: String
+                    type: String,
+                    notify: true,
                 },
-                correctgAnswer: {
-                    type: String
+                response: {
+                    type: String,
+                    notify: true,
+
                 },
-                wrongAnswer: {
-                    type: String
+                correctMessage: {
+                    type: String,
+                    notify: true,
+                },
+                wrongMessage: {
+                    type: String,
+                    notify: true,
                 },
 
                 submit: {
@@ -121,17 +137,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Boolean
                 },
                 responseLabel: {
-                    type: String
-                },
-                response: {
-                    type: String
-                },
-                imageId: {
                     type: String,
-                    notify: true
+                    notify: true,
                 },
-                imageStyle: {
-                    type: 'string',
+                mediaId: {
+                    type: String,
                     notify: true
                 },
                 itemId: {

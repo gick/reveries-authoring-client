@@ -4,8 +4,8 @@
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="./free-text-question.html">
-<dom-module id="list-free-text-activities">
+<link rel="import" href="./mcq-activity.html">
+<dom-module id="list-mcq-activity">
     <template>
         <style include="shared-styles">
         :host {
@@ -20,17 +20,12 @@
             margin: 10px;
         }
         </style>
-            <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-            <akc-meta-query key="newquestion" value="{{newquestion}}"></akc-meta-query>
-
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <akc-meta-query key="newmcq" value="{{newmcq}}"></akc-meta-query>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <template is="dom-repeat" items="{{items}}" as="item">
-            <template is=dom-if if="{{hasImage(item.imageId)}}">
-                <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" question="{{item.question}}" media-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-            </template>
-            <template is=dom-if if="{{!hasImage(item.imageId)}}">
-                <free-text-question class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-            </template>
+            <mcq-activity class="previewquestion" question={{item.question}} correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} image-id={{item.mediaId}}>
+            </mcq-activity>
         </template>
     </template>
     <script>
@@ -38,7 +33,7 @@
         'use strict';
 
         Polymer({
-            is: 'list-free-text-activities',
+            is: 'list-mcq-activity',
             ready: function() {
 
             },
@@ -57,7 +52,7 @@
             },
             observers: [
                 'statusChanged(status)',
-                'newquestionChanged(newquestion)'
+                'mcqChanged(newmcq)'
             ],
             statusChanged: function(stat) {
                 if (stat.logged) {
@@ -65,21 +60,16 @@
 
                 }
             },
-            newquestionChanged: function(newquestion){
-                if(newquestion){
+            mcqChanged: function(newquestion) {
+                if (newquestion) {
                     this.$.ajaxLoader.generateRequest();
-    
+
                 }
             },
             properties: {
                 url: {
                     type: String,
                     notify: true
-                },
-                state: {
-                    type: Boolean,
-                    notify: true,
-                    value: false,
                 }
             }
         });
