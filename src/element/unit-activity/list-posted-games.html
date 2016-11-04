@@ -1,0 +1,93 @@
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel=import href="./explanation-unit.html">
+<link rel=import href='./unit-game.html'>
+<dom-module id="list-posted-games">
+    <template>
+        <style>
+
+        </style>
+        <paper-input label="Activity Name" value="{{activityName}}"></paper-input>
+        <paper-icon-button icon="icons:save" style={float:left} on-click="saveUnit"></paper-icon-button>
+        <explanation-unit game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></explanation-unit>
+        <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
+            <unit-game id="listItems" game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
+        </template>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'list-posted-games',
+            ready: function() {
+
+            },
+            addItem: function(item) {
+               this.$.listItem.set('items',item)
+               console.log(item)
+
+            },
+            cons: function() {
+                console.log(test)
+            },
+
+            /* saveUnit: function() {
+
+                 var toSave = {}
+                 var idList = new Array()
+                 sendList = []
+                 toSave.activityName = this.activityName.value
+                 var dep = JSON.stringify(toSave.activityName)
+                 for (var i = 0; i < this.gameSaved.length; i++) {
+                     idList[i] = this.gameSaved[i]._id;
+
+                 }
+             },*/
+
+                properties: {
+                gameSaved: {
+                    type: Array,
+                    notify: true,
+
+                },
+                feedbackText: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                },
+                newGame: {
+                    type: Array,
+                    notify: true
+                },
+                activityName: {
+                    type: String,
+                    notify: true,
+                    value: null,
+
+                },
+                mlbPosition: {
+                    type: Number,
+                    notify: true,
+                },
+                gameUnit: {
+                    type: Object,
+                    notify: true,
+                },
+                currentPos: {
+                    type: Number,
+                    notify: true,
+                    value: 0
+                }
+
+            },
+        });
+    })();
+    </script>
+</dom-module>

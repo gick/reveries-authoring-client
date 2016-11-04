@@ -1,0 +1,145 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="imteport" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel=import href="../media-viewer/media-viewer-dialog.html"
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<dom-module id="explanation-unit">
+    <template>
+        <style is="custom-style">
+        .cafe-header {
+            @apply(--paper-font-headline);
+        }
+        
+        .cafe-light {
+            color: var(--paper-grey-600);
+        }
+        
+        .cafe-location {
+            float: right;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+        
+        .cafe-reserve {
+            color: var(--google-blue-500);
+        }
+        .image{width:200px; height: 250px;float:right;}
+        iron-icon.star {
+            --iron-icon-width: 16px;
+            --iron-icon-height: 16px;
+            color: var(--paper-amber-500);
+        }
+        
+        iron-icon.star:last-of-type {
+            color: var(--paper-grey-500);
+        }
+        </style>
+        <paper-card  alt="Donuts">
+            <div class="card-content">
+                <div class="cafe-header">
+                    <paper-input label="Unit game short description"></paper-input><img on-click="showDialog" href="{{startImage}}" class="image">
+                    <media-viewer-dialog id="suspect"></media-viewer-dialog>
+                    <div class="cafe-location cafe-light">
+                        <iron-icon icon="communication:location-on"></iron-icon>
+                    </div>
+                </div>
+                <div class="cafe-rating">
+                    <iron-icon class="star" icon="star"></iron-icon>
+                    <iron-icon class="star" icon="star"></iron-icon>
+                    <iron-icon class="star" icon="star"></iron-icon>
+                    <iron-icon class="star" icon="star"></iron-icon>
+                    <iron-icon class="star" icon="star"></iron-icon>
+                </div>
+                <p>Plant identification based on observation</p>
+                <p class="cafe-light">Identification of a plant with medical properties to a walk in the forest</p>
+            </div>
+            <div style="float:left" class="card-actions">
+                <p>Interactions during the game</p>
+                <div class="horizontal justified">
+                    <paper-icon-button icon="icons:event"></paper-icon-button>
+                    <paper-button>QR-Code</paper-button>
+                    <paper-button>Photo</paper-button>
+                    <paper-button>Photobooth</paper-button>
+                </div>
+                <paper-button class="cafe-reserve">Reserve</paper-button>
+            </div>
+        </paper-card>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'explanation-unit',
+
+            ready: function() {
+                this.addEventListener('authentification-changed', function(event) {
+                    if (event.detail.logged)
+                        this.$.ajaxLoader.generateRequest();
+                })
+
+                this.addEventListener('unit-game-changed', function() {
+                    this.$.ajaxLoader.generateRequest();
+                })
+                this.set('callback', function() {
+                    this.$.ajaxLoader.generateRequest();
+                }.bind(this));
+
+            },
+            showDialog: function() {
+                this.$.suspect.openDialog();
+            },
+
+            itemInArray: function(item) {
+                for (var i = 0; i < this.itemsOnMap.length; i++) {
+                    if (this.itemsOnMap[i] == item._id) {
+                        return true;
+                    }
+                }
+                return false;
+            },
+            itemIndex: function(item) {
+                for (var i = 0; i < this.itemsOnMap.length; i++) {
+                    if (this.itemsOnMap[i] == item._id) {
+                        return i;
+                    }
+                }
+                return -1;
+
+            },
+            observers: [
+                'statusChanged(status)',
+                'newpoiChanged(newpoi)'
+            ],
+            statusChanged: function(status) {
+                if (status.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            properties: {
+                startImage:{type:String,
+                    notify:true,
+                    default : "/home/gicquel/rev-rel/src/element/image/choix.jpg"},
+                callbackfunction: {
+                    type: Object,
+                },
+            }
+        });
+    })();
+    </script>
+</dom-module>

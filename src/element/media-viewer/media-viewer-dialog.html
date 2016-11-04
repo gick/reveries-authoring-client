@@ -13,10 +13,10 @@
         <paper-dialog id="mediaDialog" vertical-align="{{vallign}}" horizontal-align="{{hallign}}" always-on-top="true">
             <h2>{{heading}}</h2>
             <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></media-viewer-activity>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                <paper-button raised ID="mediaDialog" style="background-color: lightgreen" on-click="OpenDialog" dialog-confirm>Accept</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -33,11 +33,9 @@
                 this.$.mediaDialog.positionTarget = element;
             },
             openDialog: function() {
-                this.$.mediaDialog.open();
-                this.$.mediaviewer.genReq();
-            },
+                this.$.mediaDialog.open()           },
             properties: {
-                heading: {
+                heading: {  
                     type: String,
                     notify: true
                 },

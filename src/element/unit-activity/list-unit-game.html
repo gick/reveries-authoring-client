@@ -10,41 +10,30 @@
         <style>
 
         </style>
+        <akc-meta key="games" value="{{gameList}}"></akc-meta>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
-        <template is="dom-repeat" items="{{items}}" as="item">
-            <unit-game game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
-        </template>
+            <iron-ajax id="ajaxLoader" request="setUnitGames" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <unit-game on-click="saveGame" game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
+            </template>
     </template>
-    <script>
+    </dom-module>
+
+    <script>    
     (function() {
         'use strict';
 
         Polymer({
-            is: 'list-unit-game',
+            is: 'list-unit-game',               
             ready: function() {
-                this.gameUnitArray=[];
-                this.addEventListener('newGame',this.handleGame.bind(this))
-
-            },
-            requestElements: function() {
                 this.$.ajaxLoader.generateRequest();
+               // this.addEventListener('newGame',this.saveGame.bind(this));
+            },
+            saveGame:function(item){
+                this.fire('newgame',item);
+            },
+            
 
-            },
-            handleGame:function(item){
-                if(item){
-                    this.push('gameUnitArray',item);
-                }
-            },
-            observers: [
-                'statusChanged(status)'
-            ],
-            statusChanged: function(stat) {
-                if (stat.logged) {
-                    this.$.ajaxLoader.generateRequest();
-
-                }
-            },
             properties: {
                 unitGame: {
                     type: Object,
@@ -55,18 +44,23 @@
                     notify: true,
                     value: false,
                 },
-                gameUnit:{
-                    type:Number,
-                    notify:true,
-                    reflectToAttribute:true
+                gameUnit: {
+                    type: Number,
+                    notify: true,
+                    reflectToAttribute: true
                 },
-                gameUnitArray:{
-                    type:Array,
-                    notify:true,
-                    reflectToAttribute:true
+                gameList: {
+                    type: Array,
+                    notify: true,
+                    reflectToAttribute: true,
+                    default:[]
+                },
+                gameSaved: {
+                    type: Array,
+                    notify: true,
+                    reflectToAttribute: true
                 }
             }
         });
     })();
     </script>
-</dom-module>

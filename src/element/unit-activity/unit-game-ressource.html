@@ -70,7 +70,11 @@
             </div>
             <div class="container" name="freetext">
                 <iron-ajax id="ajaxLoaderActivities" url="/freetextactivity" handle-as="json" last-response="{{freetextitems}}"></iron-ajax>
-                <item-list id="freeText" list-id='freeText' heading="Free Text Activities" class="creatorList" items={{freetextitems}}></item-list>
+                <item-list id="freeTextList" list-id='freeText' heading="Free Text Activities" class="creatorList" 
+                items="{{freetextitems}}" as='item'>
+                    {{item.freetext}}
+
+                </item-list>
             </div>
             <div class="container" name="mcq">
                 <iron-ajax id="ajaxLoaderMcq" url="/mcq" handle-as="json" last-response="{{mcqitems}}"></iron-ajax>

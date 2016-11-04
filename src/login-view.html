@@ -61,8 +61,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="card">
                 <form class="insidePaper" id="authform" is="iron-form" method="post" action="/login">
                     <h1>Log in</h1>
-                    <paper-input on-keypress="_keyPressed" name="name" value={{nameVal}} label="Name" required></paper-input>
-                    <paper-input on-keypress="_keyPressed" type="password" value="{{passVal}}" name="password" label="password" required></paper-input>
+                    <paper-input on-keydown="checkEnter" name="name" value={{nameVal}} label="Name" required></paper-input>
+                    <paper-input on-keydown="checkEnter" type="password" value="{{passVal}}" name="password" label="password" required></paper-input>
                     <paper-button raised on-click="_submit">Submit</paper-button>
                     <paper-button raised on-click="_reset">Reset</paper-button>
                     <div class="output"></div>
@@ -105,8 +105,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _submit: function() {
             this.$.manager.authenticate(this.nameVal,this.passVal);
         },
-        _statusObserver:function(stat){
-          console.log(stat)
+        checkEnter:function(evt){
+        	if(evt.keyCode===13){
+        		this._submit()
+        	}
         },
 
         is: 'login-view',

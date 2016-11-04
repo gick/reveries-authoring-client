@@ -9,6 +9,7 @@
         <iron-ajax id="logout" url='/logout' handle-as="json" on-response="handleLogout"></iron-ajax>
         <iron-ajax id="userInfo" url='/profile' handle-as="json" on-response="validateAuth"></iron-ajax>
         <iron-ajax method='post' url='/login' id="userLogin" body='{{authparam}}' handle-as="json" on-response="validateAuth"></iron-ajax>
+        
 </dom-module>
 </template>
 <script>
