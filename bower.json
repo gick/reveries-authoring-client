@@ -40,7 +40,10 @@
     "qr-code": "webcomponent-qr-code#^0.1.8",
     "qrious": "^2.1.0",
     "paper-slider": "PolymerElements/paper-slider#^1.0.11",
-    "paper-fab": "PolymerElements/paper-fab#^1.2.1"
+    "paper-fab": "PolymerElements/paper-fab#^1.2.1",
+    "iron-ajax": "^1.4.3",
+    "iron-form": "^1.1.4",
+    "geo-location": "^1.0.6"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
