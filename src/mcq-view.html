@@ -84,6 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             console.log(this.$.mediaDialog);
 
             this.$.mediaDialog.openDialog();
+window.dispatchEvent(new Event('resize'));
 
         }
     });

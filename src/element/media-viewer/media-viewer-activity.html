@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/paper-audio-player/paper-audio-player.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <dom-module id="media-viewer-activity">
     <template>
         <style include="shared-styles">
@@ -36,18 +37,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             opacity: 0.7;
             background-color: lightblue;
         }
-        
         </style>
-            <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
-            <template is="dom-repeat" id="models" items="{{items}}" as="item">
-                <template is="dom-if" if="{{_ismedia(item)}}">
-                    <template is="dom-if" if="{{_isimage(item)}}">
-                        <div class$="{{computeClass(item.selected)}}" on-click="select">
-                            <img class="mediaimg" src="/file/{{item._id}}">
-                        </div>
-                    </template>
+        <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <template is="dom-repeat" id="models" items="{{items}}" as="item">
+            <template is="dom-if" if="{{_ismedia(item)}}">
+                <template is="dom-if" if="{{_isimage(item)}}">
+                    <div class$="{{computeClass(item.selected)}}" on-click="select">
+                        <img class="mediaimg" src="/file/{{item._id}}">
+                    </div>
                 </template>
             </template>
+        </template>
     </template>
     <script>
     (function() {
@@ -109,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _ismedia: function(item) {
                 console.log("ismedia")
-                return this._isaudio(item) | this._isvideo(item)  | this._isimage(item);
+                return this._isaudio(item) | this._isvideo(item) | this._isimage(item);
             },
 
             _isaudio: function(item) {
@@ -122,8 +123,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return supported
             },
             _isimage: function(item) {
-                var image = item.contentType == 'image/png' | item.contentType=='image/jpeg' |item.contentType =='image/bmp'| item.contentType =='image/gif' 
+                var image = item.contentType == 'image/png' | item.contentType == 'image/jpeg' | item.contentType == 'image/bmp' | item.contentType == 'image/gif'
                 return image;
+            },
+            observers: [
+                'statusChanged(status)'
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
             },
 
             properties: {

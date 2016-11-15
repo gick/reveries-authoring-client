@@ -1,6 +1,7 @@
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../styles/common-styles.html">
@@ -13,12 +14,20 @@
         <style>
 
         </style>
-        <paper-input label="Activity Name" value="{{activityName}}"></paper-input>
-        <paper-icon-button icon="icons:save" style={float:left} on-click="saveUnit"></paper-icon-button>
-        <explanation-unit game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></explanation-unit>
-        <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
-            <unit-game id="listItems" game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
-        </template>
+        <form class="" id="mlgform" is="iron-form" method="post" action="/mlg">
+            <paper-input label="Mobile game name" value="{{mlgName}}"></paper-input>
+            <paper-icon-button icon="icons:save" style={float:left} on-click="saveUnit"></paper-icon-button>
+            <explanation-unit explanation-generic="{{expGen}}" activity-description="{{activityDescription}}" start-image="{{startImage}}" feedback-text="{{item.feedbackText}}">
+            </explanation-unit>
+            <input style="display:none" name="objectivesDescription" value="{{expGen}}">
+            <input style="display:none" name="activityDescription" value="{{activityDescription}}">
+            <input style="display:none" name="unitGamesIds" value="{{unitGamesIds}}">
+            <input style="display:none" name="mlgName" value="{{mlgName}}">
+            <input style="display:none" name="activityPicture" value="{{startImage}}">
+            <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
+                <unit-game id="listItems" game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
+            </template>
+        </form>
     </template>
     <script>
     (function() {
@@ -27,31 +36,34 @@
         Polymer({
             is: 'list-posted-games',
             ready: function() {
-
+                this.unitGamesIds = "";
+                this.items = [];
             },
             addItem: function(item) {
-               this.$.listItem.set('items',item)
-               console.log(item)
-
+                this.push('items', item.model.__data__.item)
+                var unitGameId = item.model.__data__.item._id;
+                if (this.unitGamesIds) {
+                    this.unitGamesIds = this.unitGamesIds + ',' + unitGameId;
+                }else{
+                    this.unitGamesIds=unitGameId
+                }
+            },
+            getUnitActivityAsJSON: function() {
+                if (this.items) {
+                    var exp = JSON.stringify(this.items);
+                    return exp;
+                }
+                return {}
             },
             cons: function() {
                 console.log(test)
             },
 
-            /* saveUnit: function() {
+            saveUnit: function() {
+                this.$.mlgform.submit();
+            },
 
-                 var toSave = {}
-                 var idList = new Array()
-                 sendList = []
-                 toSave.activityName = this.activityName.value
-                 var dep = JSON.stringify(toSave.activityName)
-                 for (var i = 0; i < this.gameSaved.length; i++) {
-                     idList[i] = this.gameSaved[i]._id;
-
-                 }
-             },*/
-
-                properties: {
+            properties: {
                 gameSaved: {
                     type: Array,
                     notify: true,

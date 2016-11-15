@@ -14,7 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
-<link rel=import href="../media-viewer/media-viewer-dialog.html"
+<link rel=import href="../media-viewer/media-viewer-dialog.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <dom-module id="explanation-unit">
@@ -37,7 +37,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .cafe-reserve {
             color: var(--google-blue-500);
         }
-        .image{width:200px; height: 250px;float:right;}
+        
+        .image {
+            width: 200px;
+            height: 250px;
+            float: right;
+        }
+        
         iron-icon.star {
             --iron-icon-width: 16px;
             --iron-icon-height: 16px;
@@ -48,11 +54,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: var(--paper-grey-500);
         }
         </style>
-        <paper-card  alt="Donuts">
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <paper-card alt="Donuts">
             <div class="card-content">
                 <div class="cafe-header">
-                    <paper-input label="Unit game short description"></paper-input><img on-click="showDialog" href="{{startImage}}" class="image">
-                    <media-viewer-dialog id="suspect"></media-viewer-dialog>
+                    <h3 label="Unit game short description">Mobile Game description</h3>
+                    <img on-click="showDialog" src="/file/{{startImage}}" class="image">
+                    <media-viewer-dialog currentid="{{startImage    }}" id="suspect"></media-viewer-dialog>
                     <div class="cafe-location cafe-light">
                         <iron-icon icon="communication:location-on"></iron-icon>
                     </div>
@@ -64,8 +73,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <iron-icon class="star" icon="star"></iron-icon>
                     <iron-icon class="star" icon="star"></iron-icon>
                 </div>
-                <p>Plant identification based on observation</p>
-                <p class="cafe-light">Identification of a plant with medical properties to a walk in the forest</p>
+                <p>
+                    <paper-input style="display:flex" value="{{explanationGeneric}}" label="Explication des objectifs du MLG"></paper-input>
+                </p>
+                <p class="cafe-light">
+                    <paper-input style="display:flex" value="{{activityDescription}}" label="Description de l'activité réalisé"> </paper-input>
+                </p>
             </div>
             <div style="float:left" class="card-actions">
                 <p>Interactions during the game</p>
@@ -87,15 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'explanation-unit',
 
             ready: function() {
-                this.addEventListener('authentification-changed', function(event) {
-                    if (event.detail.logged)
-                        this.$.ajaxLoader.generateRequest();
-                })
-
-                this.addEventListener('unit-game-changed', function() {
-                    this.$.ajaxLoader.generateRequest();
-                })
-                this.set('callback', function() {
+                 this.set('callback', function() {
                     this.$.ajaxLoader.generateRequest();
                 }.bind(this));
 
@@ -132,12 +137,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             properties: {
-                startImage:{type:String,
-                    notify:true,
-                    default : "/home/gicquel/rev-rel/src/element/image/choix.jpg"},
+                startImage: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                    default: "57b6f0ca0c86c10927563ea1h"
+                },
                 callbackfunction: {
                     type: Object,
                 },
+                explanationGeneric: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                activityDescription: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+                }
             }
         });
     })();

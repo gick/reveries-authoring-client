@@ -6,17 +6,15 @@
 <dom-module is="media-viewer-dialog">
     <template>
         <style>
-        #mediaDialog{
-        	position:absolute;
-        }
+
         </style>
-        <paper-dialog id="mediaDialog" vertical-align="{{vallign}}" horizontal-align="{{hallign}}" always-on-top="true">
+        <paper-dialog id="mediaDialog" vertical-offset="300px" vertical-align="bottom" horizontal-align="auto" always-on-top="true">
             <h2>{{heading}}</h2>
             <paper-dialog-scrollable>
                 <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></media-viewer-activity>
             </paper-dialog-scrollable>
             <div class="buttons">
-                <paper-button raised ID="mediaDialog" style="background-color: lightgreen" on-click="OpenDialog" dialog-confirm>Accept</paper-button>
+                <paper-button raised ID="mediaDialog" style="background-color: lightgreen" on-click="openDialog" dialog-confirm>Accept</paper-button>
             </div>
         </paper-dialog>
     </template>
@@ -33,9 +31,10 @@
                 this.$.mediaDialog.positionTarget = element;
             },
             openDialog: function() {
-                this.$.mediaDialog.open()           },
+                this.$.mediaDialog.open()
+            },
             properties: {
-                heading: {  
+                heading: {
                     type: String,
                     notify: true
                 },
