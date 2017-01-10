@@ -52,15 +52,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (event.detail) {
                 switch (event.detail.itemType) {
                     case "poi":
+                        event.detail.item.itemType=event.detail.itemType;
                         this.$.unitGame.addPOI(event.detail.item)
                         break
                     case "media":
+                        event.detail.item.itemType=this.selectMedia;
                         this.$.unitGame.addMedia(event.detail.item, this.selectMedia)
                         break
                     case "freeText":
+                        event.detail.item.itemType='activities';
+                        event.detail.item.activityType='freeText';
                         this.$.unitGame.addFreetext(event.detail.item)
                         break
                     case "mcq":
+                        event.detail.item.itemType='activities';
+                        event.detail.item.activityType='mcq';
                         this.$.unitGame.addMcq(event.detail.item)
                         break
 

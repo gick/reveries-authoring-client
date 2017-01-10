@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../unit-activity/unit-game.html">
 <dom-module id="list-unit-game">
@@ -10,57 +11,96 @@
         <style>
 
         </style>
-        <akc-meta key="games" value="{{gameList}}"></akc-meta>
-        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <remove-ressource id="remover" callbackfunction="cleanRemove" ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
+        <div id="handler">
+            <akc-meta key="games" value="{{gameList}}"></akc-meta>
+            <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+            <akc-meta-query key="newUnitGame" value="{{unit}}"></akc-meta-query>
             <iron-ajax id="ajaxLoader" request="setUnitGames" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
             <template is="dom-repeat" items="{{items}}" as="item">
-                <unit-game on-click="saveGame" game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
+                <unit-game game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
             </template>
+        </div>
     </template>
-    </dom-module>
+</dom-module>
+<script>
+(function() {
+    'use strict';
 
-    <script>    
-    (function() {
-        'use strict';
+    Polymer({
+        is: 'list-unit-game',
+        ready: function() {
+            this.$.ajaxLoader.generateRequest();
+            this.$.handler.addEventListener('saveGame', function(event) {
+                this.saveGame(event)
+            }.bind(this))
 
-        Polymer({
-            is: 'list-unit-game',               
-            ready: function() {
+            this.$.handler.addEventListener('removeGame', function(event) {
+                this.removeGame(event);
+            }.bind(this))
+
+            // this.addEventListener('newGame',this.saveGame.bind(this));
+        },
+        saveGame: function(item) {
+            this.fire('newgame', item);
+        },
+        cleanRemove: function() {
+            this.$.ajaxLoader.generateRequest();
+
+        },
+        removeGame: function(event) {
+            this.itemId = event.detail._id;
+            this.$.remover.genRequest();
+            this.$.ajaxLoader.generateRequest();
+
+        },
+        observers: [
+            'statusChanged(status)',
+            'newUnitGame(unit)'
+        ],
+        statusChanged: function(stat) {
+            if (stat.logged) {
                 this.$.ajaxLoader.generateRequest();
-               // this.addEventListener('newGame',this.saveGame.bind(this));
-            },
-            saveGame:function(item){
-                this.fire('newgame',item);
-            },
-            
 
-            properties: {
-                unitGame: {
-                    type: Object,
-                    notify: true
-                },
-                state: {
-                    type: Boolean,
-                    notify: true,
-                    value: false,
-                },
-                gameUnit: {
-                    type: Number,
-                    notify: true,
-                    reflectToAttribute: true
-                },
-                gameList: {
-                    type: Array,
-                    notify: true,
-                    reflectToAttribute: true,
-                    default:[]
-                },
-                gameSaved: {
-                    type: Array,
-                    notify: true,
-                    reflectToAttribute: true
-                }
             }
-        });
-    })();
-    </script>
+        },
+        newUnitGame: function(newquestion) {
+            if (newquestion) {
+                this.$.ajaxLoader.generateRequest();
+
+            }
+        },
+        properties: {
+            index: {
+                type: Number,
+                notify: true,
+            },
+            unitGame: {
+                type: Object,
+                notify: true
+            },
+            state: {
+                type: Boolean,
+                notify: true,
+                value: false,
+            },
+            gameUnit: {
+                type: Number,
+                notify: true,
+                reflectToAttribute: true
+            },
+            gameList: {
+                type: Array,
+                notify: true,
+                reflectToAttribute: true,
+                default: []
+            },
+            gameSaved: {
+                type: Array,
+                notify: true,
+                reflectToAttribute: true
+            }
+        }
+    });
+})();
+</script>

@@ -31,8 +31,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
+        <akc-meta key="newmcq" value="{{save_question}}"></akc-meta>
         <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcq">
-            <media-viewer-dialog id="suspect"></media-viewer-dialog>
+            <paper-dialog style="left:269px" id="selectImage">
+                <h2> Select image</h2>
+                <paper-dialog-scrollable>
+                    <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+                </paper-dialog-scrollable>
+                <div class="buttons">
+                    <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                </div>
+            </paper-dialog>
             <word-list id="randomSentence"></word-list>
             <paper-input name="question" value={{question}} label="Question" required></paper-input>
             <paper-input name="distractor1" label="First distracor(wrong choice)" value={{distractor1}} required></paper-input>
@@ -43,13 +52,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-button id="addImage" on-click="setImage">Set clue image</paper-button>
             <template is="dom-if" if="{{imageId}}" restamp>
                 <paper-input name="filename" editable=false value="{{fileName}}" label="File"></paper-input>
-                <paper-input name="imageId" style="display:none" " editable=false value="{{imageId}} " label="File "></paper-input>
-                <paper-button id="removeImage " on-click="removeImage ">Remove clue</paper-button>
+                <paper-input name="imageId" style="display:none" editable=false value="{{imageId}}" label="File"></paper-input>
+                <paper-button id="removeImage" on-click="removeImage">Remove clue</paper-button>
             </template>
             <div class="card-actions ">
-            <paper-button style="margin-top:15px " raised on-click="_submit ">Save</paper-button>
-            <paper-button raised on-click="_reset ">Reset</paper-button>
-            <paper-button raised on-click="dummyFill ">Dummy fill</paper-button>
+                <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
+                <paper-button raised on-click="_reset">Reset</paper-button>
+                <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
             </div>
         </form>
     </template>
@@ -59,35 +68,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'mcq-constructor',
             ready: function() {
-                this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
+                //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
             },
-            removeImage:function(){
-                this.set('imageId',null);
-                this.set('fileName',null);
+            removeImage: function() {
+                this.set('imageId', null);
+                this.set('fileName', null);
 
             },
-            setValues:function(){
-                this.set('imageId',this.currentid);
-                this.set('fileName',this.currentname);
+            setValues: function() {
+                this.set('imageId', this.currentid);
+                this.set('fileName', this.currentname);
             },
-            setImage:function(){
-              //  this.$.mediaviewer.genReq();
-              //  this.$.selectImage.open();
-              this.$.suspect.openDialog()
-
-              //  this.fire('selectImage',null)
+            setImage: function() {
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
             },
-            dummyFill:function(){
+            dummyFill: function() {
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
-                for(var i=0;i<inputList.length;i++){
-                    inputList[i].value=this.$.randomSentence.getRandomSentence(5);
-                } 
+
+                for (var i = 0; i < inputList.length; i++) {
+                    if(inputList[i].name!="imageId")
+                    inputList[i].value = this.$.randomSentence.getRandomSentence(5);
+                }
             },
 
-            
+
             logout: function() {},
             _submit: function(event) {
                 this.$.freeTextForm.submit();
+                this.save_question=this.question;
             },
             _reset: function(event) {},
             properties: {

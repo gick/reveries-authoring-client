@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="outer">
             <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
             <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
-            <iron-ajax id="ajaxLoader" url="{{poiUrl}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <iron-ajax id="ajaxLoader" url="/poi" handle-as="json" last-response="{{items}}"></iron-ajax>
             <map-display id="gmap"></map-display>
         </div>
         <div class="innerdiv">
@@ -140,9 +140,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready: function() {
                 this.itemsOnMap = [];
-                this.addEventListener('getrequest', function() {
                     this.$.ajaxLoader.generateRequest();
-                })
+                
 
                 this.addEventListener('poi-changed', function() {
                     this.$.ajaxLoader.generateRequest();

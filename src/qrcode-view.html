@@ -56,7 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'qrcode-view',
         ready: function() {
-
+            this.$.qrGenerator.addEventListener('qr-code-changed',function(){this.updateMedia()}.bind(this))
         },
         save:function(){
           this.$.qrGenerator.postCanvasAsFile();

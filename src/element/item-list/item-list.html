@@ -96,31 +96,6 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
         Polymer({
             is: 'item-list',
             ready: function() {},
-            sendItem: function(event) {
-                switch (this.listId) {
-                    case 'poi':
-                        if (event && event.model && event.model.__data__) {
-                            var poi = event.model.__data__.item;
-                            this.fire('add-poi', poi)
-                        }
-                        break;
-                    case 'activities':
-                        if (event && event.model && event.model.__data__) {
-                            var activity = event.model.__data__.item;
-                            this.fire('add-activity', activity)
-                        }
-                        break;
-
-
-                    case 'media':
-                        if (event && event.model && event.model.__data__) {
-                            var media = event.model.__data__.item;
-                            this.fire('add-media', media,pos)
-                        }
-                        break;
-
-                }
-            },
             /**_headingObserver: function(newval, oldval) {
                 if (newval && typeof(newval) === 'string' && newval.length > 0) {
                     this.hasHeading = true;

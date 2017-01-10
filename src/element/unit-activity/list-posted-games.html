@@ -9,24 +9,23 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel=import href="./explanation-unit.html">
 <link rel=import href='./unit-game.html'>
+<link rel=import href='./posted-game.html'>
 <dom-module id="list-posted-games">
     <template>
         <style>
 
         </style>
-        <form class="" id="mlgform" is="iron-form" method="post" action="/mlg">
-            <paper-input label="Mobile game name" value="{{mlgName}}"></paper-input>
-            <paper-icon-button icon="icons:save" style={float:left} on-click="saveUnit"></paper-icon-button>
+        <form style="display:flex" id="mlgform" is="iron-form" method="post" action="/mlg">
             <explanation-unit explanation-generic="{{expGen}}" activity-description="{{activityDescription}}" start-image="{{startImage}}" feedback-text="{{item.feedbackText}}">
             </explanation-unit>
+            <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
+                <posted-game style="display: flex;align-items: flex-end;" id="listItems" game-unit="{{item}}" mlg-position="{{index}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></posted-game>
+            </template>
             <input style="display:none" name="objectivesDescription" value="{{expGen}}">
             <input style="display:none" name="activityDescription" value="{{activityDescription}}">
             <input style="display:none" name="unitGamesIds" value="{{unitGamesIds}}">
             <input style="display:none" name="mlgName" value="{{mlgName}}">
             <input style="display:none" name="activityPicture" value="{{startImage}}">
-            <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
-                <unit-game id="listItems" game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
-            </template>
         </form>
     </template>
     <script>
@@ -38,14 +37,15 @@
             ready: function() {
                 this.unitGamesIds = "";
                 this.items = [];
+                this.$.mlgform.addEventListener('removeGameUnit',function(event){this.alert(event.detail)})
             },
             addItem: function(item) {
-                this.push('items', item.model.__data__.item)
-                var unitGameId = item.model.__data__.item._id;
+                this.push('items', item)
+                var unitGameId = item._id;
                 if (this.unitGamesIds) {
                     this.unitGamesIds = this.unitGamesIds + ',' + unitGameId;
-                }else{
-                    this.unitGamesIds=unitGameId
+                } else {
+                    this.unitGamesIds = unitGameId
                 }
             },
             getUnitActivityAsJSON: function() {

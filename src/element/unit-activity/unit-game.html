@@ -59,10 +59,9 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
                     <paper-icon-button icon="icons:feedback"></paper-icon-button>
                     <span>{{feedbackText}}</span>
                     <hr> Add to MLG
-                    <paper-icon-button on-click="setPos" icon="icons:cloud-upload"></paper-icon-button>
-                    <template is="dom-if" if="{{mlbPosition}}">
-                        <paper-fab mini noink label={{mlbPosition}}></paper-fab>
-                    </template>
+                    <paper-icon-button on-click="saveGame" icon="icons:cloud-upload"></paper-icon-button>
+                    <hr> Delete
+                    <paper-icon-button on-click="removeGame" icon="icons:clear"></paper-icon-button>
                 </div>
             </paper-card>
         </div>
@@ -74,15 +73,12 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
             is: 'unit-game',
             ready: function() {
             },
-            activiy:function(evt){
-                console.log(x)
+            saveGame:function(){
+                this.fire('saveGame',this.gameUnit)
             },
-            setPos: function() {
-                this.mlbPosition = this.currentPos + 1;
-                this.currentPos = this.mlbPosition;
-                this.gameUnit.orderGame=this.mlbPosition
-                this.fire('newGame',this.gameUnit);
-           },
+            removeGame:function(){
+                this.fire('removeGame',this.gameUnit);
+            },
             properties: {
                 startText: {
                     type: String,

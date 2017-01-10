@@ -84,8 +84,8 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                 <div class="sortable">
                     <template is="dom-repeat" items="{{postItem}}" as="item">
                         <div class="inner">
-                            <div>{{item.name}} {{item.filename}} {{item.question}}</div>
-                            <paper-input hidden name='{{item.itemType}}' game-unit={{item}}></paper-input>
+                            <div>{{item.name}} {{item.filename}} {{item.question}} {{item.activityType}}</div>
+                            <paper-input hidden name='{{item.itemType}}' value="{{item._id}},{{item.activityType}}" game-unit={{item}}>{{item._id}},{{item.activityType}}</paper-input>
                             <paper-icon-button on-click="removeItem" class="innerIcon" icon="delete"></paper-icon-button>
                         </div>
                     </template>
@@ -114,9 +114,8 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
             getString: function(item) {
                 return JSON.stringify(item)
             },
-            addItem: function(data, itemType) {
+            addItem: function(data) {
                 var array = this.postItem
-                data.itemType = itemType;
                 if (this.maxElement && this.postItem && this.postItem.length < this.maxElement) {
                     this.push('postItem', data)
                     this.postItem = []
@@ -132,12 +131,7 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
 
 
             properties: {
-                items: {
-                    type: Array,
-                    notify: true,
-                    value: [],
-                },
-                itemsArray: {
+                postItem: {
                     type: Array,
                     notify: true,
                     value: []

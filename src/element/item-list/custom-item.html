@@ -20,7 +20,7 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
         }
         </style>
         <div class="inner" >
-            <div> <paper-icon-button on-click="addContent" icon="add-circle"></paper-icon-button>{{name}} {{data.filename}}<paper-icon-button></paper-icon-button></div>
+            <div> <paper-icon-button on-click="addContent" icon="add-circle"></paper-icon-button>{{preview}} {{position}}<paper-icon-button></paper-icon-button></div>
         </div>
     </template>
     <script>
@@ -30,9 +30,28 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
         Polymer({
             is: 'custom-item',
             ready: function() {
-                // this.getDataKey()
+                this.setContent()
             },
+            setContent:function(){
+                switch(this.itemType){
+                    case "media" : 
+                        this.preview=this.data.filename
+                        break;
+                    case "poi" :
+                        this.preview=this.data.name;
+                        break;
+                    case "freeText":
+                        this.preview=this.data.question;
+                        break;
+                    case "mcq" :
+                        this.preview=this.data.question;
+                        break;
+                }
+
+            }
+            ,
             addContent: function() {
+               this.setContent()
                this.fire('addItem',{item:this.data,itemType:this.itemType,pos:this.position})
             },
 
@@ -57,7 +76,6 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
 
             },
 
-            ready: function() {}
         });
     })();
     </script>

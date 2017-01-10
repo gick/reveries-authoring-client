@@ -22,7 +22,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
-<dom-module id="posted-games">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
+
+<dom-module id="posted-game">
     <style is="custom-style">
     #notes {
         display: inline-flex;
@@ -50,19 +52,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <div id="notes">
-            <paper-card class="header" heading="{{activityName}}">
+            <paper-card class="header" heading="POSTED">
                 <div class="card-content cardFlex">
                     <paper-icon-button icon="icons:info"></paper-icon-button>
                     <span>{{startText}}</span>
                 </div>
                 <div class="card-actions">
-                    <paper-icon-button icon="icons:feedback"></paper-icon-button>
-                    <span>{{feedbackText}}</span>
-                    <hr> Add to MLG
-                    <paper-icon-button on-click="setPos" icon="icons:cloud-upload"></paper-icon-button>
-                    <template is="dom-if" if="{{mlbPosition}}">
-                        <paper-fab mini noink label={{mlbPosition}}></paper-fab>
-                    </template>
+                    <hr> Remove
+                    <paper-icon-button on-click="remove" icon="icons:cloud-upload"></paper-icon-button>
                 </div>
             </paper-card>
         </div>
@@ -74,11 +71,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'posted-game',
             ready: function() {
             },
-            setPos: function() {
-                this.mlbPosition = this.currentPos + 1;
-                this.currentPos = this.mlbPosition;
-                this.gameUnit.orderGame=this.mlbPosition
-                this.fire('newGame',this.gameUnit);
+            removing: function() {
+                this.fire('removeGameUnit',this.mlgPosition);
            },
             properties: {
                 startText: {
@@ -97,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     value: null,
 
                 },
-                mlbPosition: {
+                mlgPosition: {
                     type: Number,
                     notify: true,
                 },

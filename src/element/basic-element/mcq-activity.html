@@ -1,4 +1,4 @@
-    <link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/iron-label/iron-label.html">
@@ -8,12 +8,12 @@
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <dom-module id="mcq-activity">
     <style is="custom-style" include="iron-flex iron-flex-alignment">
-        .outer {
+    .outer {
         display: inline-flex;
         flex-wrap: wrap;
         flex-direction: row;
     }
-
+    
     .inner {
         display: inline-flex;
         flex-wrap: wrap;
@@ -21,6 +21,7 @@
     }
     </style>
     <template>
+        <remove-ressource id="remover" callback="{{callBackremove}}" ressource-id={{itemId}} ressource-url='/mcq'></remove-ressource>
         <div class=outer>
             <template is="dom-if" if="{{needClue}}">
                 <img height="260px" src="/file/{{imageId}}">
@@ -36,8 +37,8 @@
                 <paper-toast id="wrong" class="fit-bottom" text="{{wrongAnswerMessage}}"></paper-toast>
                 <div style="margin-top:40px" class="card-actions">
                     <paper-button raised on-click="validate">Validate</paper-button>
-                    <paper-button  raised>Dismiss</paper-button>
-                    <paper-button on-click="getClue" >Clue</paper-button>
+                    <paper-button on-click="removeElement" raised>Suppress</paper-button>
+                    <paper-button on-click="getClue">Clue</paper-button>
                 </div>
             </div>
         </div>
@@ -50,9 +51,14 @@
             ready: function() {
 
             },
+            removeElement: function() {
+                this.$.remover.genRequest();
+            },
+
             getClue: function() {
                 this.set('needClue', !this.needClue);
             },
+
             validate: function() {
                 if (this.$.mcq.selectedItem == this.correctAnswer) {
                     this.$.correct.open();
@@ -67,13 +73,13 @@
                 },
                 correctAnswerMessage: {
                     type: String,
-                    notify: true,                    
-                },
-                wrongAnswerMessage:{
-                    type:String,
                     notify: true,
                 },
-                
+                wrongAnswerMessage: {
+                    type: String,
+                    notify: true,
+                },
+
                 correctAnswer: {
                     type: String,
                     notify: true,
@@ -86,6 +92,11 @@
                 wrongAnswer2: {
                     type: String,
                     notify: true,
+                },
+
+                itemId: {
+                    type: String,
+                    notify: true
                 },
 
                 imageId: {

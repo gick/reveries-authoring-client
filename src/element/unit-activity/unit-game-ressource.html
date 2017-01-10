@@ -56,7 +56,6 @@
                     <iron-ajax id="ajaxLoaderPOI" url="/poi" handle-as="json" last-response="{{poiitems}}"></iron-ajax>
                     <item-list id="poiItem" list-id='poi' heading="Your POIS" class="creatorList" items={{poiitems}}></item-list>
                 </div>
-                <map-display style="width:50%;flex-grow:1" id="activityMap"></map-display>
             </div>
             <div class="container" name="media">
                 <iron-ajax id="ajaxLoaderMedia" url="/listUserImages" handle-as="json" last-response="{{mediaitems}}"></iron-ajax>
@@ -72,8 +71,6 @@
                 <iron-ajax id="ajaxLoaderActivities" url="/freetextactivity" handle-as="json" last-response="{{freetextitems}}"></iron-ajax>
                 <item-list id="freeTextList" list-id='freeText' heading="Free Text Activities" class="creatorList" 
                 items="{{freetextitems}}" as='item'>
-                    {{item.freetext}}
-
                 </item-list>
             </div>
             <div class="container" name="mcq">

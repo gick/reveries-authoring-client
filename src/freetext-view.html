@@ -13,12 +13,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/basic-element/free-text-question.html">
 <link rel="import" href="./element/basic-element/free-text-constructor.html">
 <link rel="import" href="./element/basic-element/list-free-text-activities.html">
-<link rel="import" href="./element/media-viewer/media-viewer-dialog.html">
+<link rel="import" href="./element/media-viewer/media-viewer-activity.html">
 <dom-module id="freetext-view">
     <template>
         <style include="common-styles">
@@ -46,6 +47,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
+        <paper-dialog style="left:269px" id="selectImage">
+            <h2> Select image</h2>
+            <paper-dialog-scrollable>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+            </div>
+        </paper-dialog>
+
         <div class="card">
             <h1>Free text questions</h1> Free text questions are questions where the answer is not limited to a set of choice. The user can give any string as an answer. It can be usefull for open question for instance.
             <br> In this section :
@@ -53,7 +64,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <li> you can generate free text questions, associate a correct answer, and an optionnal media file</li>
             </ul>
         </div>
-            <media-viewer-dialog id="mediaDialog" currentid='{{mediaId}}' heading="Select an image"></media-viewer-dialog>
         <div class="card">
             <div class='flexQuestion'>
                 <free-text-constructor id="questionConstructor" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{mediaId}}" response-label="{{rLabel}}">
@@ -77,11 +87,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             this.$.questionConstructor.addEventListener('selectImage', this.setImage.bind(this));
         },
-        setImage: function() {
-            console.log(this.$.mediaDialog);
-
-            this.$.mediaDialog.openDialog();
-        }
+            setImage: function() {
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
+            },
 
     });
     </script>

@@ -118,6 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <word-list id="randomSentence"></word-list>
+        <akc-meta key="newUnitGame" value="{{unitGameName}}"></akc-meta>
         <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
             <paper-input style="width:100%" name="activityName" value={{quest}} label="Game unit name"></paper-input>
             <hr>
@@ -147,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-radio-group>
                     <label class="subtitle" id="label2">POI reached validation:</label>
                     <paper-radio-group aria-labelledby="label2">
-                        <paper-radio-button disabled name="QR">QR code scan (not implemented)</paper-radio-button>
+                        <paper-radio-button  name="QR">QR code scan (not implemented)</paper-radio-button>
                         <paper-radio-button name="gps">Device GPS</paper-radio-button>
                     </paper-radio-group>
                 </iron-collapse>
@@ -158,11 +159,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="icons:expand-more" on-click="toggleActivities"></paper-icon-button>
                 </div>
                 <iron-collapse id="activities" opened class="shadow-2dp">
-                    <item-post-list id="freetextActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
+                    <item-post-list id="pedagogicActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
                     <label class="subtitle" id="label1">Activities skip:</label>
                     <paper-radio-group aria-labelledby="label1">
-                        <paper-radio-button value=true name="passActivities">Allowed</paper-radio-button>
-                        <paper-radio-button value=false name="passActivities">Not allowed</paper-radio-button>
+                        <paper-radio-button  name="passActivities">Allowed</paper-radio-button>
+                        <paper-radio-button  name="noPassActivities">Not allowed</paper-radio-button>
                     </paper-radio-group>
                 </iron-collapse>
             </div>
@@ -192,12 +193,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             },
             addFreetext:function(item){
-                this.$.freetextActivities.addItem(item)
+                this.$.pedagogicActivities.addItem(item)
             },
 
 
             addMcq:function(item){
-                this.$.freetextActivities.addItem(item)
+                this.$.pedagogicActivities.addItem(item)
             },
 
 
@@ -246,6 +247,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _submit: function(event) {
                 this.$.unitActivityForm.submit();
                 this.fire('unitGameSaved', null);
+                this.unitGameName=this.quest;
             },
             _reset: function(event) {},
             properties: {

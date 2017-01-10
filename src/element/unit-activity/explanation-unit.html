@@ -20,6 +20,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="explanation-unit">
     <template>
         <style is="custom-style">
+        :host {
+            display: flex;
+        }
+        
         .cafe-header {
             @apply(--paper-font-headline);
         }
@@ -44,6 +48,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             float: right;
         }
         
+        .gameUnit {
+            min-width: 400px;
+        }
+        
         iron-icon.star {
             --iron-icon-width: 16px;
             --iron-icon-height: 16px;
@@ -55,42 +63,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <paper-dialog style="left:269px" id="selectImage">
+            <h2> Select image</h2>
+            <paper-dialog-scrollable>
+                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+            </div>
+        </paper-dialog>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
-        <paper-card alt="Donuts">
+        <div class="card gameUnit">
             <div class="card-content">
                 <div class="cafe-header">
                     <h3 label="Unit game short description">Mobile Game description</h3>
-                    <img on-click="showDialog" src="/file/{{startImage}}" class="image">
-                    <media-viewer-dialog currentid="{{startImage    }}" id="suspect"></media-viewer-dialog>
-                    <div class="cafe-location cafe-light">
-                        <iron-icon icon="communication:location-on"></iron-icon>
-                    </div>
                 </div>
-                <div class="cafe-rating">
-                    <iron-icon class="star" icon="star"></iron-icon>
-                    <iron-icon class="star" icon="star"></iron-icon>
-                    <iron-icon class="star" icon="star"></iron-icon>
-                    <iron-icon class="star" icon="star"></iron-icon>
-                    <iron-icon class="star" icon="star"></iron-icon>
+                <div>
+                    <paper-textarea style="width:300px" value="{{explanationGeneric}}" label="Nom"></paper-textarea>
+                    <paper-textarea style="width:300px" value="{{explanationGeneric}}" label="Explication des objectifs"></paper-textarea>
+                    <paper-textarea style="width:300px" value="{{activityDescription}}" label="Description de l'activité"> </paper-textarea>
                 </div>
-                <p>
-                    <paper-input style="display:flex" value="{{explanationGeneric}}" label="Explication des objectifs du MLG"></paper-input>
-                </p>
-                <p class="cafe-light">
-                    <paper-input style="display:flex" value="{{activityDescription}}" label="Description de l'activité réalisé"> </paper-input>
-                </p>
             </div>
             <div style="float:left" class="card-actions">
-                <p>Interactions during the game</p>
-                <div class="horizontal justified">
-                    <paper-icon-button icon="icons:event"></paper-icon-button>
-                    <paper-button>QR-Code</paper-button>
-                    <paper-button>Photo</paper-button>
-                    <paper-button>Photobooth</paper-button>
-                </div>
-                <paper-button class="cafe-reserve">Reserve</paper-button>
+                <paper-button class="cafe-reserve">Save</paper-button>
+                <paper-button class="cafe-reserve">Cancel</paper-button>
             </div>
-        </paper-card>
+        </div>
     </template>
     <script>
     (function() {
@@ -100,13 +98,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'explanation-unit',
 
             ready: function() {
-                 this.set('callback', function() {
+                this.set('callback', function() {
                     this.$.ajaxLoader.generateRequest();
                 }.bind(this));
 
             },
             showDialog: function() {
-                this.$.suspect.openDialog();
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
             },
 
             itemInArray: function(item) {
