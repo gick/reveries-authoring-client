@@ -115,6 +115,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
+
+    div.unitActions{
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    }
     </style>
     <template>
         <word-list id="randomSentence"></word-list>
@@ -128,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-icon-button icon="icons:expand-more" on-click="toggleIntroduction"></paper-icon-button>
                 </div>
                 <iron-collapse id="startingScreen" opened class="shadow-2dp">
-                    <item-post-list id="startMedia" list-id="startMedia" listname="Starting media"></item-post-list>
+                    <item-post-list max-element=1 id="startMedia" list-id="startMedia" listname="Starting media"></item-post-list>
                     <paper-textarea label="Starting instruction" name="startText" placeholder="Small instruction text" aria-labelledby="instruction"></paper-textarea>
                 </iron-collapse>
             </div>
@@ -140,15 +146,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-collapse id="poiguide" opened class="shadow-2dp">
                     <item-post-list list-type='dest' max-element=5 id="poi" list-id='poi' listname="POI"></item-post-list>
                     <label class="subtitle" id="label1">User guidance:</label>
-                    <paper-radio-group aria-labelledby="label1">
-                        <paper-radio-button name="compass">Device compass</paper-radio-button>
+                    <paper-radio-group selected="compass">
+                        <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
                         <paper-radio-button name="map">POI map</paper-radio-button>
                         <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
                         <paper-radio-button name="noguide">No guidance</paper-radio-button>
                     </paper-radio-group>
                     <label class="subtitle" id="label2">POI reached validation:</label>
-                    <paper-radio-group aria-labelledby="label2">
-                        <paper-radio-button  name="QR">QR code scan (not implemented)</paper-radio-button>
+                    <paper-radio-group selected="QR" aria-labelledby="label2">
+                        <paper-radio-button   name="QR">QR code scan</paper-radio-button>
                         <paper-radio-button name="gps">Device GPS</paper-radio-button>
                     </paper-radio-group>
                 </iron-collapse>
@@ -161,8 +167,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <iron-collapse id="activities" opened class="shadow-2dp">
                     <item-post-list id="pedagogicActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
                     <label class="subtitle" id="label1">Activities skip:</label>
-                    <paper-radio-group aria-labelledby="label1">
-                        <paper-radio-button  name="passActivities">Allowed</paper-radio-button>
+                    <paper-radio-group selected="passActivities" aria-labelledby="label1">
+                        <paper-radio-button name="passActivities">Allowed</paper-radio-button>
                         <paper-radio-button  name="noPassActivities">Not allowed</paper-radio-button>
                     </paper-radio-group>
                 </iron-collapse>
@@ -177,7 +183,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-textarea label="Pedagogical feedback" name="feedbackText" placeholder="Pedagogical feedback text" aria-labelledby="instruction"></paper-textarea>
                 </iron-collapse>
             </div>
-            <div class="insideflex">
+            <div class="insideflex unitActions">
                 <paper-button raised on-click="_submit">Save</paper-button>
                 <paper-button raised on-click="_reset">Reset</paper-button>
                 <paper-button raised on-click="dummyFill">Dummy Fill</paper-button>

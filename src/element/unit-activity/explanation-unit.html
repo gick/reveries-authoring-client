@@ -79,13 +79,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <h3 label="Unit game short description">Mobile Game description</h3>
                 </div>
                 <div>
-                    <paper-textarea style="width:300px" value="{{explanationGeneric}}" label="Nom"></paper-textarea>
-                    <paper-textarea style="width:300px" value="{{explanationGeneric}}" label="Explication des objectifs"></paper-textarea>
-                    <paper-textarea style="width:300px" value="{{activityDescription}}" label="Description de l'activité"> </paper-textarea>
+                    <paper-textarea style="width:300px" name="name" value="{{mlgName}}" label="Nom"></paper-textarea>
+                    <paper-textarea style="width:300px" name="objectivesDescription" value="{{explanationGeneric}}" label="Explication des objectifs"></paper-textarea>
+                    <paper-textarea style="width:300px" name="activityDescription" value="{{activityDescription}}" label="Description de l'activité"> </paper-textarea>
                 </div>
             </div>
             <div style="float:left" class="card-actions">
-                <paper-button class="cafe-reserve">Save</paper-button>
+                <paper-button on-click="saveMLG" class="cafe-reserve">Save</paper-button>
                 <paper-button class="cafe-reserve">Cancel</paper-button>
             </div>
         </div>
@@ -102,6 +102,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.ajaxLoader.generateRequest();
                 }.bind(this));
 
+            },
+            saveMLG:function(){
+                this.fire('saveMLG',null)
             },
             showDialog: function() {
                 this.$.mediaviewer.genReq();

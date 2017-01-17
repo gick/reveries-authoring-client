@@ -16,16 +16,11 @@
 
         </style>
         <form style="display:flex" id="mlgform" is="iron-form" method="post" action="/mlg">
-            <explanation-unit explanation-generic="{{expGen}}" activity-description="{{activityDescription}}" start-image="{{startImage}}" feedback-text="{{item.feedbackText}}">
+            <explanation-unit id="explanationUnit" explanation-generic="{{expGen}}" activity-description="{{activityDescription}}" start-image="{{startImage}}" feedback-text="{{item.feedbackText}}">
             </explanation-unit>
             <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
                 <posted-game style="display: flex;align-items: flex-end;" id="listItems" game-unit="{{item}}" mlg-position="{{index}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></posted-game>
             </template>
-            <input style="display:none" name="objectivesDescription" value="{{expGen}}">
-            <input style="display:none" name="activityDescription" value="{{activityDescription}}">
-            <input style="display:none" name="unitGamesIds" value="{{unitGamesIds}}">
-            <input style="display:none" name="mlgName" value="{{mlgName}}">
-            <input style="display:none" name="activityPicture" value="{{startImage}}">
         </form>
     </template>
     <script>
@@ -37,16 +32,21 @@
             ready: function() {
                 this.unitGamesIds = "";
                 this.items = [];
-                this.$.mlgform.addEventListener('removeGameUnit',function(event){this.alert(event.detail)})
+                this.$.explanationUnit.addEventListener('saveMLG', function() {
+                    this.$.mlgform.submit()
+                }.bind(this))
+                this.$.mlgform.addEventListener('removeGameUnit', function(event) {
+                    console.log("remove game" + event.detail)
+                    this.splice('items', event.detail, 1)
+                    console.log(this.items)
+                }.bind(this))
             },
-            addItem: function(item) {
-                this.push('items', item)
-                var unitGameId = item._id;
-                if (this.unitGamesIds) {
-                    this.unitGamesIds = this.unitGamesIds + ',' + unitGameId;
-                } else {
-                    this.unitGamesIds = unitGameId
+            addItem: function(event) {
+                var item = event.detail;
+                if (this.items.indexOf(item) < 0) {
+                    this.push('items', item)
                 }
+
             },
             getUnitActivityAsJSON: function() {
                 if (this.items) {

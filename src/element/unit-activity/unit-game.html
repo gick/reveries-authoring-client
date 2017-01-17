@@ -50,17 +50,13 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
     </style>
     <template>
         <div id="notes">
-            <paper-card class="header" heading="{{activityName}}">
+            <paper-card class="header" heading="GU:{{activityName}}">
                 <div class="card-content cardFlex">
                     <paper-icon-button icon="icons:info"></paper-icon-button>
                     <span>{{startText}}</span>
                 </div>
                 <div class="card-actions">
-                    <paper-icon-button icon="icons:feedback"></paper-icon-button>
-                    <span>{{feedbackText}}</span>
-                    <hr> Add to MLG
                     <paper-icon-button on-click="saveGame" icon="icons:cloud-upload"></paper-icon-button>
-                    <hr> Delete
                     <paper-icon-button on-click="removeGame" icon="icons:clear"></paper-icon-button>
                 </div>
             </paper-card>

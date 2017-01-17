@@ -23,7 +23,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
-
 <dom-module id="posted-game">
     <style is="custom-style">
     #notes {
@@ -31,35 +30,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         flex-direction: row;
         flex-wrap: wrap;
     }
-
-    .card-content{background-color: #ffffff}
-        .card-actions{background-color: #ffffff}
-
+    
+    .card-content {
+        background-color: #ffffff
+    }
+    
+    .card-actions {
+        background-color: #ffffff
+    }
+    
     .cardFlex {
         flex-direction: column;
     }
     
     paper-fab {
         display: inline-flex;
-        --paper-card-background-color   : #eee;
+        --paper-card-background-color: #eee;
         color: #757575;
     }
     
     paper-card.header {
-        --paper-card-background-color  : #eee;    
+        --paper-card-background-color: #eee;
         margin: 5px
     }
     </style>
     <template>
         <div id="notes">
-            <paper-card class="header" heading="POSTED">
+        <paper-input hidden name='unitGameId' value={{gameUnit._id}}></paper-input>
+            <paper-card>
                 <div class="card-content cardFlex">
                     <paper-icon-button icon="icons:info"></paper-icon-button>
-                    <span>{{startText}}</span>
+                    <span>{{activityName}}</span>
                 </div>
                 <div class="card-actions">
-                    <hr> Remove
-                    <paper-icon-button on-click="remove" icon="icons:cloud-upload"></paper-icon-button>
+                    <span>Remove</span>
+                    <paper-icon-button on-click="removing" icon="icons:clear"></paper-icon-button>
                 </div>
             </paper-card>
         </div>
@@ -69,11 +74,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'use strict';
         Polymer({
             is: 'posted-game',
-            ready: function() {
-            },
+            ready: function() {},
             removing: function() {
-                this.fire('removeGameUnit',this.mlgPosition);
-           },
+                this.fire('removeGameUnit', this.mlgPosition);
+            },
             properties: {
                 startText: {
                     type: String,
@@ -103,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Number,
                     notify: true,
                     value: 0
-                }   
+                }
 
             },
         });
