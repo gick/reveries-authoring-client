@@ -3,11 +3,13 @@
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="./google-map-marker-icons.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
-
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <dom-module id="poi-map-representation">
     <template>
@@ -45,6 +47,13 @@
             padding: 0.42em 0.57em;
         }
         
+        .formTitleWithButton {
+            display: inline-flex;
+            width: 93%;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        
         .innerdiv>paper-button {
             margin-bottom: 20px;
             margin-top: 20px;
@@ -53,7 +62,6 @@
         .smallh3 {
             display: inline-flex;
             align-self: center;
-            margin-bottom: 3px;
         }
         
         .innerdiv>* {
@@ -64,7 +72,12 @@
         <akc-meta key="newPOI" value={{newPOICreated}}></akc-meta>
         <paper-material class="flexible" elevation="2">
             <form id="poimap" is="iron-form" method="POST" action="/poimap" class="innerdiv">
-                <h3 class="smallh3">Edit POI</h3>
+                <div class="formTitleWithButton">
+                    <h3 class="smallh3">Edit POI</h3>
+                    <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
+                    <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
+                    <input type="hidden" value="{{statusString}}" name="status"/>
+                </div>
                 <paper-input style="display:inline-flex;" required name="name" value={{title}} label="Title"></paper-input>
                 <paper-input style="display:inline-flex;" required name="comment" value={{info}} label="Information"></paper-input>
                 <div class="insideflex" style="">
@@ -165,13 +178,13 @@
             },
             submitForm: function() {
                 this.$.poimap.submit();
-                this.set("newPOICreated","newOne" + this.latitude);
+                this.set("newPOICreated", "newOne" + this.latitude);
             },
             removeMark: function() {
                 this.fire('remove-marker', {
                     latitude: this.latitude,
                     longitude: this.longitude,
-                    id:this.ident,
+                    id: this.ident,
                 })
             },
             _mapiconobs: function(newval, oldval) {
@@ -180,7 +193,7 @@
             },
 
             ready: function() {
-                this.set("newPOICreated",null);
+                this.set("newPOICreated", null);
                 if (this.get('radius') !== 0) {
                     this.set('hasArea', true);
                 }
@@ -224,6 +237,8 @@
                     type: Number,
                     notify: true,
                 },
+                status:{type :Boolean,observer:'_statusChanged'},
+
 
                 mapLongitude: {
                     type: Number,
@@ -276,6 +291,20 @@
                 }
 
 
+            },
+            _statusChanged:function(newval,oldval){
+                if(!newval){
+                    this.statusText="Private content, not visible for other users"
+                    this.statusString="Private"
+                    this.statusIcon="visibility-off"
+                }
+                else
+                {
+                    this.statusText="Public content, shared with other users"
+                    this.statusString="Public"
+                    this.statusIcon="visibility"
+
+                }
             }
         })
     })();

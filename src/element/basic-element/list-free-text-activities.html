@@ -20,18 +20,19 @@
             margin: 10px;
         }
         </style>
-            <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-            <akc-meta-query key="newquestion" value="{{newquestion}}"></akc-meta-query>
-
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <akc-meta-query key="changeFreeTextQuestion" value="{{changeFreeTextQuestion}}"></akc-meta-query>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
-        <template is="dom-repeat" items="{{items}}" as="item">
-            <template is=dom-if if="{{hasImage(item.imageId)}}">
-                <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" question="{{item.question}}" media-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+        <div id="listenChange">
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <template is=dom-if if="{{hasImage(item.imageId)}}">
+                    <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" question="{{item.question}}" media-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                </template>
+                <template is=dom-if if="{{!hasImage(item.imageId)}}">
+                    <free-text-question class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                </template>
             </template>
-            <template is=dom-if if="{{!hasImage(item.imageId)}}">
-                <free-text-question class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-            </template>
-        </template>
+        </div>
     </template>
     <script>
     (function() {
@@ -40,7 +41,7 @@
         Polymer({
             is: 'list-free-text-activities',
             ready: function() {
-
+                this.$.listenChange.addEventListener('free-text-removed',function(){this.$.ajaxLoader.generateRequest()}.bind(this))
             },
             requestElements: function() {
                 this.$.ajaxLoader.generateRequest();
@@ -57,7 +58,7 @@
             },
             observers: [
                 'statusChanged(status)',
-                'newquestionChanged(newquestion)'
+                'changeFreeTextQuestionChanged(changeFreeTextQuestion)'
             ],
             statusChanged: function(stat) {
                 if (stat.logged) {
@@ -65,10 +66,10 @@
 
                 }
             },
-            newquestionChanged: function(newquestion){
-                if(newquestion){
+            changeFreeTextQuestionChanged: function(changeFreeTextQuestion) {
+                if (changeFreeTextQuestion) {
                     this.$.ajaxLoader.generateRequest();
-    
+
                 }
             },
             properties: {

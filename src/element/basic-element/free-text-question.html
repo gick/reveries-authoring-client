@@ -67,7 +67,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <div style="display:inline-flex">
-            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
+            <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
+            <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
                 <div class="question" name="question">{{question}}</div>
                 <template is="dom-if" if={{mediaId}}>
@@ -90,6 +91,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'free-text-question',
             ready: function() {
+                this.freeTextQuestionRemoved = function() {
+                    this.fire('free-text-removed',null)
+                }.bind(this)
                 var validator = {
                     validatorName: 'free-text-validator',
                     validatorType: 'validator',
@@ -105,7 +109,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.wrong.open();
                 }
             },
-
             removeElement: function() {
                 this.$.remover.genRequest();
             },

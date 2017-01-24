@@ -19,7 +19,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../src/element/auth-manager/auth-manager.html">
 <link rel="import" href="../bower_components/akc-meta/akc-meta.html">
-
 <dom-module id="login-view">
     <template>
         <style>
@@ -96,25 +95,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
             </div>
         </template>
+            <div hidden={{status.logged}} class="card">
+                <form class="insidePaper" id="signupForm" is="iron-form" method="post" action="/signup">
+                    <h1>Sign-up</h1>
+                    <paper-input on-keydown="checkEnter" name="name" value={{signupName}} label="Name" required></paper-input>
+                    <paper-input on-keydown="checkEnter" type="password" value="{{signupPass}}" name="password" label="password" required></paper-input>
+                    <paper-input on-keydown="checkEnter" type="email" value="{{signupMail}}" name="email" label="Email" required></paper-input>
+
+                    <paper-button raised on-click="_signup">Submit</paper-button>
+                    <paper-button raised on-click="_reset">Reset</paper-button>
+                </form>
+            </div>
     </template>
     <script>
     Polymer({
+        ready:function(){
+            this.$.signupForm.addEventListener('iron-form-response', function(){this.$.manager.getUserInfo()}.bind(this))
+        },
         logout: function() {
             this.$.manager.logout();
         },
         _submit: function() {
-            this.$.manager.authenticate(this.nameVal,this.passVal);
+            this.$.manager.authenticate(this.nameVal, this.passVal);
         },
-        checkEnter:function(evt){
-        	if(evt.keyCode===13){
-        		this._submit()
-        	}
+        _signup:function(){
+            this.$.signupForm.submit()
+        }
+        ,
+        checkEnter: function(evt) {
+            if (evt.keyCode === 13) {
+                this._submit()
+            }
         },
 
         is: 'login-view',
         property: {
-        status:{
-        }
+            status: {}
 
         }
     });

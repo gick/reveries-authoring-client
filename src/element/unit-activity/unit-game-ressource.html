@@ -49,6 +49,7 @@
             <paper-tab name="POI">POI</paper-tab>
             <paper-tab name="freetext">Free text activities</paper-tab>
             <paper-tab name="mcq">MCQ</paper-tab>
+            <paper-tab name="qrcode">QR codes</paper-tab>
         </paper-tabs>
         <iron-pages attr-for-selected="name" selected="{{selected}}">
             <div style="display:flex;flex-direction:row" name="POI">
@@ -69,13 +70,16 @@
             </div>
             <div class="container" name="freetext">
                 <iron-ajax id="ajaxLoaderActivities" url="/freetextactivity" handle-as="json" last-response="{{freetextitems}}"></iron-ajax>
-                <item-list id="freeTextList" list-id='freeText' heading="Free Text Activities" class="creatorList" 
-                items="{{freetextitems}}" as='item'>
+                <item-list id="freeTextList" list-id='freeText' heading="Free Text Activities" class="creatorList" items="{{freetextitems}}" as='item'>
                 </item-list>
             </div>
             <div class="container" name="mcq">
                 <iron-ajax id="ajaxLoaderMcq" url="/mcq" handle-as="json" last-response="{{mcqitems}}"></iron-ajax>
                 <item-list id="mcqlist" list-id='mcq' heading="MCQ activities" class="creatorList" items={{mcqitems}}></item-list>
+            </div>
+            <div class="container" name="qrcode">
+                <iron-ajax id="ajaxLoaderQrcodes" url="/listUserQrcode" handle-as="json" last-response="{{qrcodeitems}}"></iron-ajax>
+                <item-list id="qrcodeList" list-id='qrcode' heading="QR codes" class="creatorList" items="{{qrcodeitems}}"></item-list>
             </div>
         </iron-pages>
     </template>
@@ -87,7 +91,7 @@
             is: 'unit-game-ressource',
             ready: function() {
                 this.mapHidden = true;
-                this.selectMedia="startMedia"
+                this.selectMedia = "startMedia"
             },
             showMap: function() {
                 this.mapHidden = !this.mapHidden;
@@ -110,6 +114,7 @@
                     this.$.ajaxLoaderMedia.generateRequest();
                     this.$.ajaxLoaderActivities.generateRequest();
                     this.$.ajaxLoaderMcq.generateRequest();
+                    this.$.ajaxLoaderQrcodes.generateRequest();
 
                 }
             },

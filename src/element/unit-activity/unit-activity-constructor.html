@@ -154,6 +154,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-radio-group>
                     <label class="subtitle" id="label2">POI reached validation:</label>
                     <paper-radio-group selected="QR" aria-labelledby="label2">
+                    <item-post-list id="qrCodes" max-element=1 list-id="qrcode" listname="QR-Code"></item-post-list>
                         <paper-radio-button   name="QR">QR code scan</paper-radio-button>
                         <paper-radio-button name="gps">Device GPS</paper-radio-button>
                     </paper-radio-group>
@@ -206,8 +207,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             addMcq:function(item){
                 this.$.pedagogicActivities.addItem(item)
             },
-
-
+            addQRCode:function(item){
+                this.$.qrCodes.addItem(item)
+            }
+            ,
             addMedia: function(item, position) {
                 if (item && position === 'startMedia') {
                     this.$.startMedia.addItem(item)

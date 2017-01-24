@@ -69,6 +69,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         event.detail.item.activityType='mcq';
                         this.$.unitGame.addMcq(event.detail.item)
                         break
+                    case "qrcode":
+                        event.detail.item.itemType='qrcode';
+                        this.$.unitGame.addQRCode(event.detail.item)
+                        break
+
 
 
                 }

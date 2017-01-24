@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
@@ -29,10 +30,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         justify-content: space-between;
         flex-direction: column;
     }
+    
+    .formTitleWithButton {
+        display: inline-flex;
+        width: 93%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .smallh3 {
+        display: inline-flex;
+        align-self: center;
+    }
     </style>
     <template>
         <akc-meta key="newmcq" value="{{save_question}}"></akc-meta>
         <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcq">
+            <div class="formTitleWithButton">
+                <h3 class="smallh3">Edit MCQ question</h3>
+                <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
+                <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
+                <input type="hidden" value="{{statusString}}" name="status" />
+            </div>
             <paper-dialog style="left:269px" id="selectImage">
                 <h2> Select image</h2>
                 <paper-dialog-scrollable>
@@ -87,8 +106,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
 
                 for (var i = 0; i < inputList.length; i++) {
-                    if(inputList[i].name!="imageId")
-                    inputList[i].value = this.$.randomSentence.getRandomSentence(5);
+                    if (inputList[i].name != "imageId")
+                        inputList[i].value = this.$.randomSentence.getRandomSentence(5);
                 }
             },
 
@@ -96,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             logout: function() {},
             _submit: function(event) {
                 this.$.freeTextForm.submit();
-                this.save_question=this.question;
+                this.save_question = this.question;
             },
             _reset: function(event) {},
             properties: {
@@ -146,8 +165,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     notify: true,
                     value: false,
                 },
+                status: {
+                    type: Boolean,
+                    observer: '_statusChanged'
+                }
 
+
+            },
+            _statusChanged: function(newval, oldval) {
+                if (!newval) {
+                    this.statusText = "Private content, not visible for other users"
+                    this.statusString = "Private"
+                    this.statusIcon = "visibility-off"
+                } else {
+                    this.statusText = "Public content, shared with other users"
+                    this.statusString = "Public"
+                    this.statusIcon = "visibility"
+
+                }
             }
+
+
         });
     })();
     </script>
