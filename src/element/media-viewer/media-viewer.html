@@ -10,8 +10,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item-body.html">
 <dom-module id="media-viewer">
     <template>
         <style include="shared-styles">
@@ -77,113 +83,139 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             opacity: 0.5;
             background-color: lightgrey;
         }
+        .custom-header{
+            background-color: lightgreen;
+            display:block;
+        }
         </style>
         <akc-meta-query key="status" value={{status}}></akc-meta-query>
         <div class="innerdiv">
             <iron-ajax id="ajaxLoader" url="{{mediaUrl}}" handle-as="json" last-response="{{items}}"></iron-ajax>
-                <template is="dom-repeat" items="{{items}}" as="item">
-                    <template is="dom-if" if="{{_ismedia(item)}}">
-                        <paper-card class="drag" heading="{{item.filename}}">
-                            <div class=card-content>
-                                <template is="dom-if" if="{{_isimage(item)}}">
-                                    <div class="mediablock">
-                                        <img class="mediaimg" src="/file/{{item._id}}">
-                                    </div>
-                                </template>
-                                <template is="dom-if" if="{{_isvideo(item)}}">
-                                    <div class="mediablock">
-                                        <video preload width="300px" controls>
-                                            <source src="/file/{{item._id}}" type="{{item.contentType}}">
-                                        </video>
-                                    </div>
-                                </template>
-                                <div>Filename :
-                                    <div class="info">{{item.filename}}</div>
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <template is="dom-if" if="{{_ismedia(item)}}">
+                    <paper-card class="drag">
+                        <!--<paper-icon-item class="card-header custom-header">
+                          {{item.filename}}                 <paper-icon-button id="setStatus" toggles raised active={{publicstatus}} icon="{{statusIcon}}"></paper-icon-button>
+
+                        </paper-icon-item>!-->
+                        <resource-header resource-url="/file" resource-id="{{item._id}}" resource-readonly="{{item.metadata.readonly}}" resource-status="{{item.metadata.status}}" resource-label="{{item.filename}}"></resource-header>
+                        <div class=card-content>
+                            <template is="dom-if" if="{{_isimage(item)}}">
+                                <div class="mediablock">
+                                    <img class="mediaimg" src="/file/{{item._id}}">
                                 </div>
-                                <div>Type :
-                                    <div class="info">{{item.contentType}}</div>
+                            </template>
+                            <template is="dom-if" if="{{_isvideo(item)}}">
+                                <div class="mediablock">
+                                    <video preload width="300px" controls>
+                                        <source src="/file/{{item._id}}" type="{{item.contentType}}">
+                                    </video>
                                 </div>
-                                <div>Upload date :
-                                    <div class="info">{{item.uploadDate}}</div>
-                                </div>
-                                <div>Size :
-                                    <div class="info">{{_getSize(item)}} Ko</div>
-                                </div>
-                                <div>Public :
-                                    <div class="info">{{item.metadata.public}}</div>
-                                </div>
+                            </template>
+                            <div>Filename :
+                                <div class="info">{{item.filename}}</div>
                             </div>
-                            <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
-                                <paper-button on-click='genRequest'>Remove</paper-button>
-                                <remove-ressource ressource-url='/file' callbackfunction="{{callbackRemove}}" ressource-id={{item._id}}></remove-ressource>
+                            <div>Type :
+                                <div class="info">{{item.contentType}}</div>
                             </div>
-                        </paper-card>
-                    </template>
+                            <div>Upload date :
+                                <div class="info">{{item.uploadDate}}</div>
+                            </div>
+                            <div>Size :
+                                <div class="info">{{_getSize(item)}} Ko</div>
+                            </div>
+                        </div>
+                        <template is="dom-if" if="{{!_isReadonly(item)}}">
+                        <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
+                            <paper-button on-click='genRequest'>Remove</paper-button>
+                            <remove-ressource ressource-url='/file' callbackfunction="{{callbackRemove}}" ressource-id={{item._id}}></remove-ressource>
+                        </div>
+                        </template>
+                    </paper-card>
                 </template>
+            </template>
         </div>
     </template>
     <script>
-        Polymer({
-            is: 'media-viewer',
+    Polymer({
+        is: 'media-viewer',
 
-            ready: function() {
-                this.callbackRemove=this.updateMedia.bind(this)
+        ready: function() {
+            this.callbackRemove = this.updateMedia.bind(this)
 
 
 
-            },
-            updateMedia:function(){
-                this.$.ajaxLoader.generateRequest();
+        },
+        updateMedia: function() {
+            this.$.ajaxLoader.generateRequest();
 
-            },
-            genRequest: function(event) {
-                event.srcElement.nextElementSibling.genRequest();
-            },
-            _mediaRemoved: function(response) {
-                console.log(response);
-            },
-            _getSize: function(item) {
-                return (item.length / 1024).toPrecision(2);
-            },
-            _ismedia: function(item) {
-                return this._isaudio(item) + this._isvideo(item) + this._isimage(item);
-            },
+        },
+        genRequest: function(event) {
+            event.srcElement.nextElementSibling.genRequest();
+        },
+        _mediaRemoved: function(response) {
+            console.log(response);
+        },
+        _getSize: function(item) {
+            return (item.length / 1024).toPrecision(2);
+        },
+        _ismedia: function(item) {
+            return this._isaudio(item) + this._isvideo(item) + this._isimage(item);
+        },
 
-            _isaudio: function(item) {
-                var result = item.contentType == 'audio/mp3';
-                return result;
-            },
+        _isaudio: function(item) {
+            var result = item.contentType == 'audio/mp3';
+            return result;
+        },
 
-            _isvideo: function(item) {
-                var supported = item.contentType == 'video/webm';
-                return supported
-            },
-            _isimage: function(item) {
-                var image = (item.contentType == 'image/png' | item.contentType=='image/jpeg' |item.contentType =='image/bmp'| item.contentType =='image/gif') && item.metadata.type!=="qrcode"
-                return image;
-            },
-            _statusObserver:function(newval){
-                this.$.ajaxLoader.generateRequest();
+        _isvideo: function(item) {
+            var supported = item.contentType == 'video/webm';
+            return supported
+        },
+        _isimage: function(item) {
+            var image = (item.contentType == 'image/png' | item.contentType == 'image/jpeg' | item.contentType == 'image/bmp' | item.contentType == 'image/gif') && item.metadata.type !== "qrcode"
+            return image;
+        },
+        _isReadonly:function(item){
+            var readonly = (item.metadata.readonly=='readonly')
+            return readonly
+        },
+        _statusObserver: function(newval) {
+            this.$.ajaxLoader.generateRequest();
 
+        },
+        properties: {
+            callback: {
+                type: Object,
+                value: {}
             },
-            properties: {
-                callback: {
-                    type: Object,
-                    value: {}
-                },
-                mediaUrl: {
-                    type: String,
-                    notify: true,
-                    default:'listUserImage'
-                },
-                status:{
-                    type:Object,
-                    notify:true,
-                    observer:'_statusObserver'
+            mediaUrl: {
+                type: String,
+                notify: true,
+                default: 'listUserImage'
+            },
+            status: {
+                type: Object,
+                notify: true,
+                observer: '_statusObserver'
+            },
+            publicstatus:{
+                type:Boolean,
+                observer:'_publicstatusObserver'
+            }
+
+
+        },
+        _publicstatusObserver:function(newval,oldval){
+            if (!newval) {
+                    this.statusIcon = "visibility-off"
+                } else {
+                    this.statusIcon = "visibility"
+
                 }
 
-            }
-        });
+        }
+
+    });
     </script>
 </dom-module>
-

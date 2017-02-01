@@ -40,18 +40,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <li> You can add metadata to an image such as keywords or title</li>
                 <li> You can also remove images</li>
             </ul>
-            Images can be public or private,
-            <ul>
-                <li>if public, other users can see and use your images</li>
-                <li>if private only the user that uploaded the image can see it. </li>
-            </ul>
         </div>
         <div class="card">
             <h2>Media uploader</h2>
-            <paper-checkbox style="display:inline-block;" raised checked={{setpublic}}>Make image public</paper-checkbox>
             <file-upload id="uploader" on-success="updateMedia" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
             </file-upload>
-            <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="{{this.clearList}}">Clear uploaded list</paper-icon-button>
+            <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
             <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
         </div>
         <div class="card">

@@ -1,0 +1,103 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="./share-resource.html">
+<dom-module id="resource-header">
+    <style>
+    .resourceReadwrite {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: lightblue;
+        width: 100%;
+    }
+    
+    .resourceReadonly {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: lightgreen;
+        width: 100%;
+    }
+    
+    .headerText {
+        padding-left: 10px;
+        display: inline-flex;
+        align-self: center;
+    }
+    </style>
+    <template>
+        <share-resource id="sharingElement" request-params="{{requestParams}}" resource-url="{{resourceUrl}}" resource-id="{{resourceId}}"></share-resource>
+        <div class$="{{resourceClass}}">
+            <h3 class="headerText">{{resourceLabel}}</h3>
+            <template is="dom-if" if="{{!isReadOnly}}">
+                <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'resource-header',
+
+            ready: function() {
+                //  this.sharedIcon="visibility-off"
+                this.requestParams = '{"Status":"Public"}'
+            },
+            setStatus: function() {
+                if (this.resourceStatus == "Private") {
+                    this.sharedIcon = "visibility"
+                } else {
+                    this.sharedIcon = "visibility-off"
+                }
+            },
+            _resourceSharedObserver: function(newval, oldval) {
+                console.log(newval)
+                if (newval == "Private") {
+                    this.sharedIcon = "visibility-off"
+                } else {
+                    this.sharedIcon = "visibility"
+                }
+            },
+            _resourceReadonlyObserver: function(newval, oldval) {
+                if (newval == "readonly") {
+                    this.isReadOnly = true
+                    this.resourceClass="resourceReadonly"
+
+                } else {
+                    this.isReadOnly = false
+                    this.resourceClass="resourceReadwrite"
+                }
+            },
+            properties: {
+                ressourceId: {
+                    type: String,
+                    notify: true,
+                },
+                ressourceUrl: {
+                    type: String,
+                    notify: true
+                },
+                resourceLabel: {
+                    type: String,
+                    notify: true
+                },
+                resourceReadonly: {
+                    type: String,
+                    notify: true,
+                    observer: '_resourceReadonlyObserver',
+                },
+                resourceStatus: {
+                    type: String,
+                    notify: true,
+                    observer: '_resourceSharedObserver'
+                },
+            },
+
+        });
+    })();
+    </script>
+</dom-module>

@@ -43,7 +43,8 @@
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
     "iron-ajax": "^1.4.3",
     "iron-form": "^1.1.4",
-    "geo-location": "^1.0.6"
+    "geo-location": "^1.0.6",
+    "iron-a11y-announcer": "PolymerElements/iron-a11y-announcer#^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

@@ -26,10 +26,10 @@
         <div id="listenChange">
             <template is="dom-repeat" items="{{items}}" as="item">
                 <template is=dom-if if="{{hasImage(item.imageId)}}">
-                    <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" question="{{item.question}}" media-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" question="{{item.question}}" media-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                 </template>
                 <template is=dom-if if="{{!hasImage(item.imageId)}}">
-                    <free-text-question class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                 </template>
             </template>
         </div>

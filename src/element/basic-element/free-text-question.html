@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel="import" href="../helper/resource-header.html">
 <dom-module id="free-text-question">
     <style include="shared-styles">
     .insideflex {
@@ -70,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
             <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
-                <div class="question" name="question">{{question}}</div>
+                <resource-header resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <template is="dom-if" if={{mediaId}}>
                     <img src="/file/{{mediaId}}" class="mediaimg">
                 </template>
@@ -92,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'free-text-question',
             ready: function() {
                 this.freeTextQuestionRemoved = function() {
-                    this.fire('free-text-removed',null)
+                    this.fire('free-text-removed', null)
                 }.bind(this)
                 var validator = {
                     validatorName: 'free-text-validator',
@@ -102,6 +103,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }.bind(this)
                 };
             },
+            _resourceReadonlyObserver: function(newval, oldval) {
+                if (newval == "readonly") {
+                    this.isReadOnly = true
+
+                } else {
+                    this.isReadOnly = false
+                }
+            },
+
             validate: function() {
                 if (this.response === this.userResponse) {
                     this.$.correct.open();
@@ -150,6 +160,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 itemId: {
                     type: String,
                 },
+                resourceStatus: {
+                    type: String,
+                    notify: true,
+                },
+                resourceLabel: {
+                    type: String,
+                    notify: true,
+                },
+                resourceReadonly: {
+                    type: String,
+                    notify: true,
+                    observer: "_resourceReadonlyObserver",
+                }
+
             }
         });
     })();
