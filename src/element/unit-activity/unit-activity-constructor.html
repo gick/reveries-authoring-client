@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
@@ -150,14 +151,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
                         <paper-radio-button name="map">POI map</paper-radio-button>
                         <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
-                        <paper-radio-button name="media_information">Media element</paper-radio-button>
+                        <paper-radio-button name="media_information">Clue (Media element)</paper-radio-button>
                     </paper-radio-group>
                     <label class="subtitle" id="label2">POI reached validation:</label>
                     <paper-radio-group selected="QR" aria-labelledby="label2">
-                    <item-post-list id="qrCodes" max-element=1 list-id="qrcode" listname="QR-Code"></item-post-list>
                         <paper-radio-button   name="QR">QR code scan</paper-radio-button>
                         <paper-radio-button name="gps">Device GPS</paper-radio-button>
                     </paper-radio-group>
+                    <br>
+                    <label class="subtitle" id="label2">POI reached events:</label>
+                    <paper-toggle-button>On success events</paper-toggle-button>
+                        <div>
+                            
+                        </div>
+                    <paper-toggle-button>On failled events</paper-toggle-button>
+                        <div>
+                            
+                        </div>
                 </iron-collapse>
             </div>
             <div class="contain">

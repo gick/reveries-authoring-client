@@ -14,10 +14,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../src/element/media-viewer/qr-code-viewer.html">
 <link rel="import" href="./styles/common-styles.html">
-<link rel="import" href="./element/qr-code/qr-code-generator.html">
-<dom-module id="qrcode-view">
+<link rel="import" href="./element/static-media/staticmedia-viewer.html">
+<link rel="import" href="./element/static-media/staticmedia-generator.html">
+<link rel="import" href="./element/static-media/list-staticmedia.html">
+<dom-module id="staticmedia-view">
     <template>
         <style include="common-styles">
         :host {
@@ -32,37 +33,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <div class="card">
-            <h1>My QR-codes ressources</h1>
-            <b>A QR-code is a 2d barcode that encode textual information (ex : an id, a name, a date, an url...). 
+            <h1>My static medias ressources</h1>
+            <b>Static medias are composed of text and uploaded images. The templating is based on the markdown templating language 
             <br> In this section :
             <ul>
-                <li> you can generate a QR-code corresponding to a given string, having a qr-code repository ensure that each qr-code correspond to an unique string</li>
+                <li> you can create and save static media using the media generator</li>
                 <li> you can associate annotations to the qr-code, to specify for instance that a given code will be used as a location validator</li>
             </ul>
         </div>
         <div class="card">
-            <h2>Qr-code generator</h2>
-            <qrcode-generator id="qrGenerator"></qrcode-generator>
-            <paper-checkbox style="display:inline-block;" raised checked={{setpublic}}>Make QR-code public</paper-checkbox>
-         <paper-icon-button icon="backup" on-click="save" title="Save"></paper-icon-button>
-
+            <h2>Static media generator</h2>
+            <staticmedia-generator style="display:inline-flex;" mkdown="{{MK}}" id="qrGenerator"></staticmedia-generator>
+            <staticmedia-viewer style="float:right;" mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
-            <qr-code-viewer id="qrcodeviewer"></qr-code-viewer>
+            <list-staticmedia url="/staticmedia" id="staticmedialist"></list-staticmedia>
         </div>
     </template>
     <script>
     Polymer({
 
-        is: 'qrcode-view',
+        is: 'staticmedia-view',
         ready: function() {
-            this.$.qrGenerator.addEventListener('qr-code-changed',function(){this.updateMedia()}.bind(this))
-        },
-        save:function(){
-          this.$.qrGenerator.postCanvasAsFile();
+            this.$.staticmedialist.addEventListener('qr-code-changed',function(){this.updateMedia()}.bind(this))
         },
         updateMedia: function() {
-            this.$.qrcodeviewer.updateMedia();
+            this.$.staticmedialist.updateMedia();
         }
     });
     </script>
