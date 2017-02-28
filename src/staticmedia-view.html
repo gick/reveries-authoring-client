@@ -31,6 +31,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             margin: 16px 0;
             color: #212121;
         }
+        
+        .constructorCard {
+            display: flex;
+            justify-content: space-between;
+        }
         </style>
         <div class="card">
             <h1>My static medias ressources</h1>
@@ -41,10 +46,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <li> you can associate annotations to the qr-code, to specify for instance that a given code will be used as a location validator</li>
             </ul>
         </div>
-        <div class="card">
-            <h2>Static media generator</h2>
-            <staticmedia-generator style="display:inline-flex;" mkdown="{{MK}}" id="qrGenerator"></staticmedia-generator>
-            <staticmedia-viewer style="float:right;" mkdown="{{MK}}"></staticmedia-viewer>
+        <div class="card constructorCard">
+            <staticmedia-generator style="display:inline-flex;" mkdown="{{MK}}" id="staticGenerator"></staticmedia-generator>
+            <staticmedia-viewer style="display:inline-flex;" mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
             <list-staticmedia url="/staticmedia" id="staticmedialist"></list-staticmedia>
@@ -55,10 +59,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'staticmedia-view',
         ready: function() {
-            this.$.staticmedialist.addEventListener('qr-code-changed',function(){this.updateMedia()}.bind(this))
+            this.$.staticGenerator.addEventListener('static-media-changed',function(){this.updateMedia()}.bind(this))
         },
         updateMedia: function() {
-            this.$.staticmedialist.updateMedia();
+            this.$.staticmedialist.requestElements();
         }
     });
     </script>

@@ -19,15 +19,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../helper/resource-header.html">
 <dom-module id="staticmedia-viewer">
     <style include="shared-styles">
-    
     .resourceElement {
-        display:inline-flex;
+        display: inline-flex;
+        flex-direction: column;
         min-width: 250px;
         border-radius: 3px;
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-        padding: 10px;  
     }
-    
     
     .element {
         align-self: stretch;
@@ -37,24 +35,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: #eeeeee;
     }
     
+    .header {
+        width: 100%;
+    }
+    
+    .suppress-action {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        padding: 10px;
+    }
+    
+    .markdown-html img {
+        max-width: 500px;
+        max-height: 500px;
+    }
+    
     .inner {
         display: inline-flex;
         flex-flow: column;
         align-items: baseline;
         flex-wrap: wrap;
         justify-content: space-between;
+        width: 100%;
     }
     </style>
     <template>
         <div class="resourceElement">
-            <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
-            <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
+            <remove-ressource id="remover" callbackfunction="{{staticMediaRemoved}}" ressource-id={{itemId}} ressource-url='/staticmedia'></remove-ressource>
             <form class="inner">
-                <resource-header resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
+                <resource-header class="header" resource-url="/staticmedia" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <marked-element markdown="{{mkdown}}">
                     <div class="markdown-html"></div>
                 </marked-element>
             </form>
+            <div style="margin-top:40px" class="card-actions suppress-action">
+                <template is="dom-if" if="{{!isReadOnly}}">
+                    <paper-button on-click="removeElement" raised>Suppress</paper-button>
+                </template>
+            </div>
         </div>
     </template>
     <script>
@@ -63,16 +81,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'staticmedia-viewer',
             ready: function() {
-                this.freeTextQuestionRemoved = function() {
-                    this.fire('free-text-removed', null)
+                this.staticMediaRemoved = function() {
+                    this.fire('static-media-changed', null);
                 }.bind(this)
-                var validator = {
-                    validatorName: 'free-text-validator',
-                    validatorType: 'validator',
-                    validate: function() {
-                        return this.response === this.userResponse
-                    }.bind(this)
-                };
             },
             _resourceReadonlyObserver: function(newval, oldval) {
                 if (newval == "readonly") {

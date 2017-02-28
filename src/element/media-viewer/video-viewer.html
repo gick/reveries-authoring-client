@@ -3,10 +3,15 @@
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <dom-module id="video-viewer">
     <style>
-
+    .audiovid {
+        display: inline-flex;
+        flex-direction: column;
+        padding: 0;
+    }
     </style>
     <template>
         <akc-meta-query key="status" value={{status}}></akc-meta-query>
@@ -14,13 +19,15 @@
             <iron-ajax id="ajaxLoader" url="/listUserAudioVideo" handle-as="json" last-response="{{items}}"></iron-ajax>
             <template is="dom-repeat" items="{{items}}" as="item">
                 <paper-card>
-                    <div class=card-content>
+                    <div class="card-content audiovid">
                         <template is="dom-if" if="{{_isAudio(item)}}">
-                            <img src='/file/57f78beb4c22d562745e69ae' style="height:150px">
+                            <resource-header resource-url="/file" resource-id="{{item._id}}" resource-readonly="{{item.metadata.readonly}}" resource-status="{{item.metadata.status}}" resource-label="{{item.filename}}"></resource-header>
+                            <img src='/file/57f78beb4c22d562745e69ae' style="height:300px">
                             <paper-audio-player src="/file/{{item._id}}"></paper-audio-player>
                         </template>
                         <template is="dom-if" if="{{_isVideo(item)}}">
-                            <video controls height="150" src="/file/{{item._id}}"></video>
+                            <resource-header resource-url="/file" resource-id="{{item._id}}" resource-readonly="{{item.metadata.readonly}}" resource-status="{{item.metadata.status}}" resource-label="{{item.filename}}"></resource-header>
+                            <video controls height="300" src="/file/{{item._id}}"></video>
                         </template>
                     </div>
                     <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
@@ -41,7 +48,15 @@
                 console.log(resp)
 
             },
-            genReq: function() {
+            ready: function() {
+                this.callbackRemove = this.updateMedia.bind(this)
+
+            },
+            genRequest: function(event) {
+                event.srcElement.nextElementSibling.genRequest();
+            },
+
+            updateMedia: function() {
                 this.$.ajaxLoader.generateRequest();
             },
             _statusObserver: function(newval) {

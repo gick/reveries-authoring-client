@@ -21,7 +21,6 @@
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <akc-meta-query key="changeFreeTextQuestion" value="{{changeFreeTextQuestion}}"></akc-meta-query>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <div id="listenChange">
             <template is="dom-repeat" items="{{items}}" as="item">
@@ -36,7 +35,7 @@
         Polymer({
             is: 'list-staticmedia',
             ready: function() {
-                this.$.listenChange.addEventListener('free-text-removed', function() {
+                this.$.listenChange.addEventListener('static-media-changed', function() {
                     this.$.ajaxLoader.generateRequest()
                 }.bind(this))
             },

@@ -49,7 +49,6 @@
             <paper-tab name="POI">POI</paper-tab>
             <paper-tab name="freetext">Free text activities</paper-tab>
             <paper-tab name="mcq">MCQ</paper-tab>
-            <paper-tab name="qrcode">QR codes</paper-tab>
         </paper-tabs>
         <iron-pages attr-for-selected="name" selected="{{selected}}">
             <div style="display:flex;flex-direction:row" name="POI">
@@ -59,7 +58,7 @@
                 </div>
             </div>
             <div class="container" name="media">
-                <iron-ajax id="ajaxLoaderMedia" url="/listUserImages" handle-as="json" last-response="{{mediaitems}}"></iron-ajax>
+                <iron-ajax id="ajaxLoaderMedia" url="/staticmedia" handle-as="json" last-response="{{mediaitems}}"></iron-ajax>
                 <item-list heading="Your Medias" list-id="media" class="creatorList" items={{mediaitems}}></item-list>
                 <div>
                     <paper-radio-group attr-for-selected="name" selected="{{selectMedia}}">

@@ -78,7 +78,7 @@
                     <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                     <input type="hidden" value="{{statusString}}" name="status"/>
                 </div>
-                <paper-input style="display:inline-flex;" required name="name" value={{title}} label="Title"></paper-input>
+                <paper-input style="display:inline-flex;" required name="label" value={{title}} label="Label"></paper-input>
                 <paper-input style="display:inline-flex;" required name="comment" value={{info}} label="Information"></paper-input>
                 <div class="insideflex" style="">
                     <paper-button noink on-click="openDialog" raised class="small" style="align-self: center;margin-right: 15px;" name="Iconpick">Change icon</paper-button><img style="display:inline-flex" src="{{mapicon}}">

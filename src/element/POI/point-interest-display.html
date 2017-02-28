@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="./map-display.html">
 <dom-module id="point-interest-display">
     <template>
@@ -92,7 +93,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="innerdiv">
             <template is="dom-repeat" items="{{items}}" as="item">
-                <paper-card class="generalflex" heading="{{item.name}}">
+                <paper-card class="generalflex">
+                    <resource-header resource-url="/poi" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource-label="{{item.label}}"></resource-header>
                     <div style="flex-grow:1" class=card-content>
                         <template is="dom-if" if={{item.photo}}>
                             <div class="mediablock">
@@ -140,8 +142,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready: function() {
                 this.itemsOnMap = [];
-                    this.$.ajaxLoader.generateRequest();
-                
+                this.$.ajaxLoader.generateRequest();
+
 
                 this.addEventListener('poi-changed', function() {
                     this.$.ajaxLoader.generateRequest();
@@ -162,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             genRemove: function(event) {
-                this.itemid=event.model.item._id;
+                this.itemid = event.model.item._id;
                 this.$.remover.genRequest();
             },
 
@@ -209,9 +211,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
             },
-            newpoiChanged:function(newpoi){
-                if(newpoi){
-                this.$.ajaxLoader.generateRequest();
+            newpoiChanged: function(newpoi) {
+                if (newpoi) {
+                    this.$.ajaxLoader.generateRequest();
 
                 }
             },

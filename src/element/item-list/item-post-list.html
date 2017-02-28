@@ -84,7 +84,7 @@ Copyright Pierre-Yves Gicquel ReVeRIES project-->
                 <div class="sortable">
                     <template is="dom-repeat" items="{{postItem}}" as="item">
                         <div class="inner">
-                            <div>{{item.name}} {{item.filename}} {{item.question}} {{item.activityType}}</div>
+                            <div>{{item.name}} {{item.filename}} {{item.activityType}} {{item.label}}</div>
                             <paper-input hidden name='{{item.itemType}}' value="{{item._id}},{{item.activityType}}" game-unit={{item}}>{{item._id}},{{item.activityType}}</paper-input>
                             <paper-icon-button on-click="removeItem" class="innerIcon" icon="delete"></paper-icon-button>
                         </div>

@@ -17,7 +17,8 @@
             },
             _shared:function(event){
                 if(event){
-                    console.log(event)
+                    if(event.detail.__data__.response && event.detail.__data__.response.success)
+                        this.fire('shift_ressource_sharing_status',null);
                 }
             },
             genRequest:function(){

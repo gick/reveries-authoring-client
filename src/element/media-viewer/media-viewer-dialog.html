@@ -32,6 +32,7 @@
             },
             openDialog: function() {
                 this.$.mediaDialog.open()
+                this.fire('imageConfirmed',null)
             },
             properties: {
                 heading: {
