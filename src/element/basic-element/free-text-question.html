@@ -9,11 +9,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
 <dom-module id="free-text-question">
@@ -58,6 +62,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: #eeeeee;
     }
     
+    .correct {
+        color: green;
+    }
+    
+    .wrong {
+        color: red;
+    }
+    
     .inner {
         display: inline-flex;
         flex-flow: column;
@@ -67,21 +79,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
+        <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
         <div style="display:inline-flex">
+            {{mkdown}}
             <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
             <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
                 <resource-header resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
-                <template is="dom-if" if={{mediaId}}>
-                    <img src="/file/{{mediaId}}" class="mediaimg">
-                </template>
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}" required></paper-input>
-                <paper-toast id="correct" class="fit-bottom" text="{{correctMessage}}"></paper-toast>
-                <paper-toast id="wrong" class="fit-bottom" text="{{wrongMessage}}"></paper-toast>
+                <iron-collapse id="clue">
+                    <div class="">
+                        <marked-element markdown="{{staticElement.mkdown}}">
+                            <div class="markdown-html"></div>
+                        </marked-element>
+                    </div>
+                </iron-collapse>
+                <iron-collapse id="correct">
+                    <paper-input class="correct" text="">
+                        <iron-icon icon="check-circle" prefix></iron-icon>
+                        <div prefix> {{correctMessage}}</div>
+                    </paper-input>
+                </iron-collapse>
+                <iron-collapse id="wrong">
+                    <paper-input class="wrong">
+                        <iron-icon icon="cancel" prefix></iron-icon>
+                        <div prefix> {{wrongMessage}}</div>
+                    </paper-input>
+                </iron-collapse>
                 <div style="" class="insideflex">
                     <paper-button raised on-click="validate">Validate</paper-button>
-                    <paper-button raised>Dismiss</paper-button>
-                    <paper-button raised class="remove" on-click="removeElement">Remove question</paper-button>
+                    <template is="dom-if" if="{{mediaId}}" restamp=true>
+                        <paper-button raised on-click="showClue">Show clue</paper-button>
+                    </template>
+                    <paper-button raised class="remove" on-click="removeElement">Remove</paper-button>
                 </div>
             </form>
         </div>
@@ -92,6 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'free-text-question',
             ready: function() {
+                this.showMediaButton = false;
                 this.freeTextQuestionRemoved = function() {
                     this.fire('free-text-removed', null)
                 }.bind(this)
@@ -103,6 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }.bind(this)
                 };
             },
+
             _resourceReadonlyObserver: function(newval, oldval) {
                 if (newval == "readonly") {
                     this.isReadOnly = true
@@ -111,12 +143,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.isReadOnly = false
                 }
             },
+            _mediaIdObserver: function(newval) {
+                if (newval) {
+                    var temp=true
+                    this.set('showMediaButton',true)
+                    this.$.ajaxLoader.generateRequest();
+                } else {
+                    this.set('showMediaButton',false)
+                    this.showMediaButton = false
 
+                }
+            },
+            showClue: function() {
+                this.$.clue.toggle()
+            },
             validate: function() {
                 if (this.response === this.userResponse) {
-                    this.$.correct.open();
+                    this.$.correct.show();
+                    this.$.wrong.hide();
                 } else {
-                    this.$.wrong.open();
+                    this.$.wrong.show();
+                    this.$.correct.hide();
                 }
             },
             removeElement: function() {
@@ -155,10 +202,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 mediaId: {
                     type: String,
-                    notify: true
+                    notify: true,
+                    observer: "_mediaIdObserver"
                 },
                 itemId: {
                     type: String,
+                    notify: true,
                 },
                 resourceStatus: {
                     type: String,

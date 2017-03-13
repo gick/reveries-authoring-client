@@ -17,7 +17,14 @@
         flex-wrap: wrap;
         flex-direction: row;
     }
+        .correct {
+        color: green;
+    }
     
+    .wrong {
+        color: red;
+    }
+
     .inner {
         display: inline-flex;
         flex-wrap: wrap;
@@ -29,26 +36,42 @@
     }
     </style>
     <template>
+        <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
         <remove-ressource id="remover" callbackfunction="{{mcqRemoved}}" ressource-id={{itemId}} ressource-url='/mcq'></remove-ressource>
         <div class=outer>
             <div class="inner">
                 <resource-header resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <div id="mcqbody" class="mcq-body">
-                    <template is="dom-if" if="{{needClue}}">
-                        <img height="260px" src="/file/{{imageId}}">
-                    </template>
+                    <iron-collapse id="clue">
+                        <div class="">
+                            <marked-element markdown="{{staticElement.mkdown}}">
+                                <div class="markdown-html"></div>
+                            </marked-element>
+                        </div>
+                    </iron-collapse>
                     <div class="question" name="question">{{question}}</div>
                     <paper-radio-group id="mcq" class="layout vertical wrap">
                         <paper-radio-button name="resp1">{{correctAnswer}}</paper-radio-button>
                         <paper-radio-button name="resp2">{{wrongAnswer1}}</paper-radio-button>
                         <paper-radio-button name="resp3">{{wrongAnswer2}}</paper-radio-button>
                     </paper-radio-group>
-                    <paper-toast always-on-top id="correct" duration="0" class="fit-bottom" text="{{correctAnswerMessage}}"></paper-toast>
-                    <paper-toast always-on-top id="wrong" duration="0" class="fit-bottom" text="{{wrongAnswerMessage}}"></paper-toast>
+                    <iron-collapse id="correct">
+                        <paper-input class="correct" text="">
+                            <iron-icon icon="check-circle" prefix></iron-icon>
+                            <div prefix> {{correctAnswerMessage}}</div>
+                        </paper-input>
+                    </iron-collapse>
+                    <iron-collapse id="wrong">
+                        <paper-input class="wrong">
+                            <iron-icon icon="cancel" prefix></iron-icon>
+                            <div prefix> {{wrongAnswerMessage}}</div>
+                        </paper-input>
+                    </iron-collapse>
                     <div style="margin-top:40px" class="card-actions">
                         <paper-button raised on-click="validate">Validate</paper-button>
-                        <paper-button disabled$="{{!imageId}}" raised on-click="getClue">Clue</paper-button>
-
+                        <template is="dom-if" if="{{mediaId}}" restamp=true>
+                            <paper-button raised on-click="showClue">Show clue</paper-button>
+                        </template>
                         <template is="dom-if" if="{{!isReadOnly}}">
                             <paper-button on-click="removeElement" raised>Suppress</paper-button>
                         </template>
@@ -67,7 +90,7 @@
                 this.mcqRemoved = function() {
                     this.fire('mcq-removed', null)
                 }.bind(this)
-                this.correctIndex=Math.floor((Math.random() * 2));
+                this.correctIndex = Math.floor((Math.random() * 2));
             },
 
             removeElement: function() {
@@ -80,12 +103,26 @@
 
             validate: function() {
 
-                    if (this.$.mcq.selectedItem && this.$.mcq.selectedItem.innerText && this.$.mcq.selectedItem.innerText== this.correctAnswer) {
-                        this.$.correct.open();
-                    } else {
-                        this.$.wrong.open();
-                    }
+                if (this.$.mcq.selectedItem && this.$.mcq.selectedItem.innerText && this.$.mcq.selectedItem.innerText.trim() == this.correctAnswer.trim()) {
+                    this.$.correct.show();
+                    this.$.wrong.hide();
+                } else {
+                    this.$.wrong.show();
+                    this.$.correct.hide();
+                }
             },
+            _mediaIdObserver: function(newval) {
+                if (newval) {
+                    var temp = true
+                    this.set('showMediaButton', true)
+                    this.$.ajaxLoader.generateRequest();
+                } else {
+                    this.set('showMediaButton', false)
+                    this.showMediaButton = false
+
+                }
+            },
+
             _resourceReadonlyObserver: function(newval, oldval) {
                 if (newval == "readonly") {
                     this.isReadOnly = true
@@ -100,6 +137,10 @@
 
                 }
             },
+            showClue: function() {
+                this.$.clue.toggle()
+            },
+
 
 
             properties: {
@@ -138,10 +179,10 @@
                     notify: true
                 },
 
-                imageId: {
+                mediaId: {
                     type: String,
                     notify: true,
-                    observer: "_resourceClueObserver",
+                    observer: "_mediaIdObserver",
                 },
                 resourceLabel: {
                     type: String,

@@ -22,6 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
+
 <dom-module id="mcq-constructor">
     <style>
     .flexForm {
@@ -55,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-dialog style="left:269px" id="selectImage">
                 <h2> Select image</h2>
                 <paper-dialog-scrollable>
-                    <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+                    <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
                 </paper-dialog-scrollable>
                 <div class="buttons">
                     <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
@@ -69,11 +71,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="response" label="Valid choice" value={{correctChoice}} required></paper-input>
             <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
-            <paper-button id="addImage" on-click="setImage">Set clue image</paper-button>
-            <template is="dom-if" if="{{imageId}}" restamp>
-                <paper-input name="filename" editable=false value="{{fileName}}" label="File"></paper-input>
-                <paper-input name="imageId" style="display:none" editable=false value="{{imageId}}" label="File"></paper-input>
-                <paper-button id="removeImage" on-click="removeImage">Remove clue</paper-button>
+            <paper-button raised on-click="showMediaDialog">Set media</paper-button>
+            <template is="dom-if" if="{{mediaId}}" restamp=true>
+                <div class="mediablock">
+                    <div> src="/file/{{mediaId}}"</div>
+                </div>
+                <paper-input style="display:none" name="mediaId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
+                <paper-button raised on-click="removeMedia">Remove media</paper-button>
             </template>
             <div class="card-actions ">
                 <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
@@ -90,16 +94,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready: function() {
                 //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
             },
-            removeImage: function() {
-                this.set('imageId', null);
+            removeMedia: function() {
+                this.set('mediaId', null);
                 this.set('fileName', null);
 
             },
             setValues: function() {
-                this.set('imageId', this.currentid);
+                this.set('mediaId', this.mediaId );
                 this.set('fileName', this.currentname);
             },
-            setImage: function() {
+            showMediaDialog: function() {
                 this.$.mediaviewer.genReq();
                 this.$.selectImage.open();
             },
@@ -120,7 +124,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _reset: function(event) {},
             properties: {
-                imageId: {
+                mediaId: {
                     type: String,
                     notify: true,
                     reflectToAttribute: true,

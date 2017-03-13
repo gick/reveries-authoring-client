@@ -12,9 +12,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
-<link rel=import href="../media-viewer/media-viewer-dialog.html">
+<link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <dom-module id="explanation-unit">
@@ -66,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-dialog style="left:269px" id="selectImage">
             <h2> Select image</h2>
             <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+                <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
@@ -80,8 +85,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <div>
                     <paper-textarea style="width:300px" name="label" value="{{mlgName}}" label="Label"></paper-textarea>
-                    <paper-textarea style="width:300px" name="objectivesDescription" value="{{explanationGeneric}}" label="Objectives short description"></paper-textarea>
-                    <paper-textarea style="width:300px" name="activityDescription" value="{{activityDescription}}" label="Activity short description"> </paper-textarea>
+                    <paper-button raised on-click="showMediaDialog">Set media</paper-button>
+                    <paper-input style="width:300px"  name="staticMedia" value="{{mediaId}}" label="Game start page"> </paper-input>
                 </div>
             </div>
             <div style="float:left" class="card-actions">
@@ -103,14 +108,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }.bind(this));
 
             },
-            saveMLG:function(){
-                this.fire('saveMLG',null)
+            saveMLG: function() {
+                this.fire('saveMLG', null)
             },
-            showDialog: function() {
+            setValues: function() {
+                this.set('mediaId', this.mediaId );
+                this.set('fileName', this.currentname);
+            },
+            showMediaDialog: function() {
                 this.$.mediaviewer.genReq();
                 this.$.selectImage.open();
             },
-
             itemInArray: function(item) {
                 for (var i = 0; i < this.itemsOnMap.length; i++) {
                     if (this.itemsOnMap[i] == item._id) {
@@ -139,12 +147,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             properties: {
-                startImage: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true,
-                    default: "57b6f0ca0c86c10927563ea1h"
-                },
                 callbackfunction: {
                     type: Object,
                 },

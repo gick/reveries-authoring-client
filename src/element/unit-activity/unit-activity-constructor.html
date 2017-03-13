@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
@@ -26,6 +27,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../item-list/item-post-list.html">
 <link rel="import" href="../helper/word-list.html">
 <dom-module id="unit-activity-constructor">
@@ -116,16 +121,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
-
-    div.unitActions{
-    border: none;
-    box-shadow: none;
-    background-color: white;
+    
+    div.unitActions {
+        border: none;
+        box-shadow: none;
+        background-color: white;
     }
     </style>
     <template>
+        <paper-dialog style="left:269px" id="selectImage">
+            <h2> Select image</h2>
+            <paper-dialog-scrollable>
+                <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
+            </paper-dialog-scrollable>
+            <div class="buttons">
+                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+            </div>
+        </paper-dialog>
         <word-list id="randomSentence"></word-list>
-        <akc-meta key="newUnitGame" value="{{unitGameName}}"></akc-meta>
         <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
             <paper-input style="width:100%" name="activityName" value={{quest}} label="Game unit name"></paper-input>
             <hr>
@@ -150,24 +163,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
                         <paper-radio-button name="map">POI map</paper-radio-button>
                         <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
-                        <paper-radio-button name="media_information">Clue (Media element)</paper-radio-button>
+                        <paper-radio-button checked="{{cluePOISelected}}" name="media_information">Clue (Media element)</paper-radio-button>
+                        <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised id="clueMediaPOI">Pick Media </paper-button>
                     </paper-radio-group>
+                    <template is="dom-if" if="{{cluePOISelected}}" restamp=true>
+                        <div class="mediablock">
+                            <div>Element id : {{cluePOIId}}</div>
+                        </div>
+                        <paper-input style="display:none" name="cluePOIId" editable="false" value="{{cluePOIId}}" label="Image id"></paper-input>
+                    </template>
                     <label class="subtitle" id="label2">POI reached validation:</label>
                     <paper-radio-group selected="QR" aria-labelledby="label2">
-                        <paper-radio-button   name="QR">QR code scan</paper-radio-button>
+                        <paper-radio-button name="QR">QR code scan</paper-radio-button>
                         <paper-radio-button name="gps">Device GPS</paper-radio-button>
                     </paper-radio-group>
                     <br>
-                    <label class="subtitle" id="label2">POI reached events:</label>
-                    <paper-toggle-button>On success events</paper-toggle-button>
-                        <div>
-                            
-                        </div>
-                    <paper-toggle-button>On failled events</paper-toggle-button>
-                        <div>
-                            
-                        </div>
                 </iron-collapse>
+            </div>
+            <div class="contain">
+                <div class="insideflex">
+                    <h3>POI Post action</h3>
+                </div>
+                <iron-collapse opened class="shadow-2dp">
+                    <label class="subtitle" id="label2">POI reached :</label>
+                    <paper-input label="Change score" name="poiScorePA"></paper-input>
+                    <paper-toggle-button checked="{{poiPA}}" name="media_information">Set Media element</paper-toggle-button>
+                    <template is="dom-if" if="{{poiPA}}" restamp=true>
+                        <paper-button on-click="setPOIPA" raised id="poiPA">Show media</paper-button>
+                        <div class="mediablock">
+                            <div>Element id : {{poiPA}}</div>
+                        </div>
+                        <paper-input style="display:none" name="poiPA" editable="false" value="{{poiPA}}" label="Image id"></paper-input>
+                    </template>
+                </iron-collapse>
+            </div>
             </div>
             <div class="contain">
                 <div class="insideflex">
@@ -176,11 +205,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <iron-collapse id="activities" opened class="shadow-2dp">
                     <item-post-list id="pedagogicActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
-                    <label class="subtitle" id="label1">Activities skip:</label>
-                    <paper-radio-group selected="passActivities" aria-labelledby="label1">
-                        <paper-radio-button name="passActivities">Allowed</paper-radio-button>
-                        <paper-radio-button  name="noPassActivities">Not allowed</paper-radio-button>
-                    </paper-radio-group>
+                </iron-collapse>
+            </div>
+            <div class="contain">
+                <div class="insideflex">
+                    <h3>Activities Post action</h3>
+                </div>
+                <iron-collapse opened class="shadow-2dp">
+                    <label class="subtitle" id="label2">Activity 1 success:</label>
+                    <paper-input label="Change score" name="act1successScore"></paper-input>
+                    <paper-input id="act1successMed" name="act1successMed" editable="true" label="Elem id"></paper-input>
+                    <label class="subtitle" id="label2">Activity 2 success:</label>
+                    <paper-input label="Change score" name="act2success"></paper-input>
+                    <paper-input name="act2successMed" id="act2successMed" editable="true" label="Elem id"></paper-input>
                 </iron-collapse>
             </div>
             <div class="contain">
@@ -205,23 +242,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'unit-activity-constructor',
             ready: function() {
+                this.actPA = [];
+                this.currentActivities = [];
+                this.activityCount = null;
 
             },
-            addFreetext:function(item){
+            _getPA: function(value) {
+                if (this.stepPA >= 0)
+                    return value.base[this.stepPA]
+            },
+            addFreetext: function(item) {
                 this.$.pedagogicActivities.addItem(item)
+                if (this.currentActivities.length < 4) {
+                    this.push('currentActivities', item)
+                } else {
+                    this.pop('currentActivities')
+                    this.push('currentActivities', item)
+                }
+
+
+            },
+            _activityCount: function(number) {
+                if (this.currentActivities)
+                    return number > this.currentActivities.length
+                else return false
+            },
+            setValues: function(e) {
+
+                if (this.currentStep == "cluePOI") {
+                    this.cluePOIId = this.mediaId;
+                }
+                if (this.currentStep == "poiPA") {
+                    this.poiPA = this.mediaId;
+                }
+
+
+
+            },
+            setCluePOIValue: function() {
+                this.currentStep = "cluePOI";
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
+
+            },
+            setPOIPA: function() {
+                this.currentStep = "poiPA";
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
+
+            },
+            setActPA: function(e) {
+                console.log(e)
+                var actIndex = e.model.__data__.index
+                this.stepPA = actIndex
+                this.currentStep = "actPA"
+                this.$.mediaviewer.genReq();
+                this.$.selectImage.open();
+
             },
 
-
-            addMcq:function(item){
+            addMcq: function(item) {
                 this.$.pedagogicActivities.addItem(item)
+                if (this.currentActivities.length < 3) {
+                    this.push('currentActivities', item)
+                } else {
+                    this.pop('currentActivities')
+                    this.push('currentActivities', item)
+                }
             },
-            addQRCode:function(item){
+            addQRCode: function(item) {
                 this.$.qrCodes.addItem(item)
-            }
-            ,
+            },
             addMedia: function(item, position) {
                 if (item && position === 'startMedia') {
                     this.$.startMedia.addItem(item)
+                } else if (item && position === 'act1') {
+                    this.$.act1successMed.value = item._id
+                } else if (item && position === 'act2') {
+                    this.$.act2successMed.value = item._id
                 } else {
                     this.$.fbMedia.addItem(item)
                 }
@@ -232,7 +330,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.poi.addItem(item);
             },
 
-          
+
             dummyFill: function() {
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
@@ -264,7 +362,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _submit: function(event) {
                 this.$.unitActivityForm.submit();
                 this.fire('unitGameSaved', null);
-                this.unitGameName=this.quest;
+                this.unitGameName = this.quest;
             },
             _reset: function(event) {},
             properties: {

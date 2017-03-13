@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./element/basic-element/free-text-question.html">
 <link rel="import" href="./element/basic-element/free-text-constructor.html">
 <link rel="import" href="./element/basic-element/list-free-text-activities.html">
-<link rel="import" href="./element/media-viewer/media-viewer-activity.html">
+<link rel="import" href="./element/media-viewer/static-media-dialog-activity.html">
 <dom-module id="freetext-view">
     <template>
         <style include="common-styles">
@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-dialog style="left:269px" id="selectImage">
             <h2> Select image</h2>
             <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
+                <static-media-dialog-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></static-media-dialog-activity>
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
@@ -66,9 +66,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <div class='flexQuestion'>
-                <free-text-constructor id="questionConstructor" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{mediaId}}" response-label="{{rLabel}}">
+                <free-text-constructor id="questionConstructor" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}">
                 </free-text-constructor>
-                <free-text-question question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{mediaId}}" response-label="{{rLabel}}" class="previewquestion">
+                <free-text-question question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}" class="previewquestion">
                 </free-text-question>
             </div>
         </div>
@@ -89,6 +89,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.mediaviewer.genReq();
                 this.$.selectImage.open();
             },
+            setValues:function(){
+
+            }
 
     });
     </script>

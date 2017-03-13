@@ -16,7 +16,7 @@
 
         </style>
         <form style="display:flex" id="mlgform" is="iron-form" method="post" action="/mlg">
-            <explanation-unit id="explanationUnit" explanation-generic="{{expGen}}" activity-description="{{activityDescription}}" start-image="{{startImage}}" feedback-text="{{item.feedbackText}}">
+            <explanation-unit id="explanationUnit" explanation-generic="{{expGen}}" static-media="{{staticmedia}}" activity-description="{{activityDescription}}" start-image="{{startImage}}" feedback-text="{{item.feedbackText}}">
             </explanation-unit>
             <template id="listItem" is="dom-repeat" items="{{items}}" as="item">
                 <posted-game style="display: flex;align-items: flex-end;" id="listItems" game-unit="{{item}}" mlg-position="{{index}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></posted-game>

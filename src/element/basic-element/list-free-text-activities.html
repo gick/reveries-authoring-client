@@ -25,13 +25,8 @@
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <div id="listenChange">
             <template is="dom-repeat" items="{{items}}" as="item">
-                <template is=dom-if if="{{hasImage(item.imageId)}}">
-                    <free-text-question image-style="height:300px;align-self:center;" class="previewquestion" resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" question="{{item.question}}" media-id={{item.imageId}} wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-                </template>
-                <template is=dom-if if="{{!hasImage(item.imageId)}}">
-                    <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-answer="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" correct-answer="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-                </template>
-            </template>
+                <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+             </template>
         </div>
     </template>
     <script>
@@ -41,7 +36,9 @@
         Polymer({
             is: 'list-free-text-activities',
             ready: function() {
-                this.$.listenChange.addEventListener('free-text-removed',function(){this.$.ajaxLoader.generateRequest()}.bind(this))
+                this.$.listenChange.addEventListener('free-text-removed', function() {
+                    this.$.ajaxLoader.generateRequest()
+                }.bind(this))
             },
             requestElements: function() {
                 this.$.ajaxLoader.generateRequest();

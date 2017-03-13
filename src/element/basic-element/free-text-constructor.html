@@ -128,13 +128,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input style=";" name="response" label="Response" value={{response}} required></paper-input>
             <paper-input style=";" name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
-            <paper-button on-click="showImageDialog">Set image</paper-button>
+            <paper-button raised on-click="showImageDialog">Set media</paper-button>
             <template is="dom-if" if="{{mediaId}}" restamp=true>
                 <div class="mediablock">
-                    <img class="mediaimg" src="/file/{{mediaId}}">
+                    <div> src="/file/{{mediaId}}"</div>
                 </div>
-                <paper-input style="display:none" name="imageId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
-                <paper-button raised on-click="removeImage">Remove Image</paper-button>
+                <paper-input style="display:none" name="mediaId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
+                <paper-button raised on-click="removeImage">Remove media</paper-button>
             </template>
             <div class="insideflex">
                 <paper-button raised on-click="_submit">Save</paper-button>
@@ -214,6 +214,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 status: {
                     type: Boolean,
                     observer: '_statusChanged'
+                },
+                mediaId: {
+                    type: String,
+                    notify: true,
+                    value: null,
                 },
 
                 mediaName: {
