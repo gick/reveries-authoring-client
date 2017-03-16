@@ -111,6 +111,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.set('mediaId', model.get('item._id'));
                     this.set('mediaName', model.get('item.filename'))
                 }
+                model.__data__.item.type = 'page'
+                this.fire('itemPicked', model)
+
             },
             ready: function() {
                 this.addEventListener('authentification-changed', function(event) {

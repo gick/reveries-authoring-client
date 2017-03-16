@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-label/iron-label.html">
 <link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
@@ -28,7 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
-<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
+<link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../item-list/item-post-list.html">
@@ -36,19 +38,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="unit-activity-constructor">
     <style>
     .freeTextCreator {
-        border-radius: 3px;
         padding: 15px;
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        flex-direction: column;
-        width: 400px;
-        margin-left: 20px;
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+        flex-direction: row;
+        flex-wrap: wrap;
     }
     
     .shadow-2dp {
         @apply(--shadow-elevation-2dp);
-        padding: 10px;
     }
     
     hr {
@@ -104,7 +102,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     
     .contain {
-        margin-bottom: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        margin-right: 15px;
+        margin-left: 15px;
         display: flex;
         flex-direction: column;
         align-self: stretch;
@@ -122,6 +123,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
     
+    .resourceViewer {
+        margin-top: 10px;
+    }
+    
+    .inputfield {
+        width: 90%;
+        display: inline-flex;
+        align-self: center;
+    }
+    
     div.unitActions {
         border: none;
         box-shadow: none;
@@ -129,112 +140,88 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
-        <paper-dialog style="left:269px" id="selectImage">
-            <h2> Select image</h2>
-            <paper-dialog-scrollable>
-                <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
-            </paper-dialog-scrollable>
-            <div class="buttons">
-                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-            </div>
-        </paper-dialog>
         <word-list id="randomSentence"></word-list>
+        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="startingMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
+
+        <resource-picker-dialog poi media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiMediaPicker"></resource-picker-dialog>
         <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
-            <paper-input style="width:100%" name="activityName" value={{quest}} label="Game unit name"></paper-input>
-            <hr>
-            <div class="contain">
+            <div class="contain shadow-2dp">
                 <div class="insideflex">
-                    <h3>Game unit starting screen</h3>
-                    <paper-icon-button icon="icons:expand-more" on-click="toggleIntroduction"></paper-icon-button>
+                    <h3>Game unit start</h3>
                 </div>
-                <iron-collapse id="startingScreen" opened class="shadow-2dp">
-                    <item-post-list max-element=1 id="startMedia" list-id="startMedia" listname="Starting media"></item-post-list>
-                </iron-collapse>
+                <paper-input class="inputfield" name="activityName" value={{quest}} label="Game unit name"></paper-input>
+                <paper-button on-click="setMedia" raised>Set media</paper-button>
+                <generic-resource-viewer image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
-            <div class="contain">
+            <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Place and guiding</h3>
-                    <paper-icon-button icon="icons:expand-more" on-click="togglePOI"></paper-icon-button>
                 </div>
-                <iron-collapse id="poiguide" opened class="shadow-2dp">
-                    <item-post-list list-type='dest' max-element=5 id="poi" list-id='poi' listname="POI"></item-post-list>
-                    <label class="subtitle" id="label1">User guidance:</label>
-                    <paper-radio-group selected="compass">
-                        <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
-                        <paper-radio-button name="map">POI map</paper-radio-button>
-                        <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
-                        <paper-radio-button checked="{{cluePOISelected}}" name="media_information">Clue (Media element)</paper-radio-button>
-                        <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised id="clueMediaPOI">Pick Media </paper-button>
-                    </paper-radio-group>
-                    <template is="dom-if" if="{{cluePOISelected}}" restamp=true>
-                        <div class="mediablock">
-                            <div>Element id : {{cluePOIId}}</div>
-                        </div>
-                        <paper-input style="display:none" name="cluePOIId" editable="false" value="{{cluePOIId}}" label="Image id"></paper-input>
-                    </template>
-                    <label class="subtitle" id="label2">POI reached validation:</label>
-                    <paper-radio-group selected="QR" aria-labelledby="label2">
-                        <paper-radio-button name="QR">QR code scan</paper-radio-button>
-                        <paper-radio-button name="gps">Device GPS</paper-radio-button>
-                    </paper-radio-group>
-                    <br>
-                </iron-collapse>
+                <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
+                <generic-resource-viewer poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
+                <label class="subtitle" id="label1">User guidance:</label>
+                <paper-radio-group selected="compass">
+                    <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
+                    <paper-radio-button name="map">POI map</paper-radio-button>
+                    <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
+                    <paper-radio-button checked="{{cluePOISelected}}" name="media_information">Clue (Media element)</paper-radio-button>
+                    <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
+                    <generic-resource-viewer image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
+                </paper-radio-group>
+                <label class="subtitle" id="label2">POI reached validation:</label>
+                <paper-radio-group selected="QR" aria-labelledby="label2">
+                    <paper-radio-button name="QR">QR code scan</paper-radio-button>
+                    <paper-radio-button name="gps">Device GPS</paper-radio-button>
+                </paper-radio-group>
             </div>
-            <div class="contain">
+            <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>POI Post action</h3>
                 </div>
-                <iron-collapse opened class="shadow-2dp">
-                    <label class="subtitle" id="label2">POI reached :</label>
-                    <paper-input label="Change score" name="poiScorePA"></paper-input>
-                    <paper-toggle-button checked="{{poiPA}}" name="media_information">Set Media element</paper-toggle-button>
-                    <template is="dom-if" if="{{poiPA}}" restamp=true>
-                        <paper-button on-click="setPOIPA" raised id="poiPA">Show media</paper-button>
-                        <div class="mediablock">
-                            <div>Element id : {{poiPA}}</div>
-                        </div>
-                        <paper-input style="display:none" name="poiPA" editable="false" value="{{poiPA}}" label="Image id"></paper-input>
-                    </template>
-                </iron-collapse>
+                <label class="subtitle" id="label2">POI reached :</label>
+                <paper-input label="Change score" name="poiScorePA"></paper-input>
+                <paper-toggle-button checked="{{poiPA}}" name="media_information">Set Media element</paper-toggle-button>
+                <template is="dom-if" if="{{poiPA}}" restamp=true>
+                    <paper-button on-click="setPOIPA" raised id="poiPA">Show media</paper-button>
+                    <div class="mediablock">
+                        <div>Element id : {{poiPA}}</div>
+                    </div>
+                    <paper-input style="display:none" name="poiPA" editable="false" value="{{poiPA}}" label="Image id"></paper-input>
+                </template>
             </div>
             </div>
-            <div class="contain">
+            <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Situated activities</h3>
                     <paper-icon-button icon="icons:expand-more" on-click="toggleActivities"></paper-icon-button>
                 </div>
-                <iron-collapse id="activities" opened class="shadow-2dp">
-                    <item-post-list id="pedagogicActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
-                </iron-collapse>
+                <item-post-list id="pedagogicActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
             </div>
-            <div class="contain">
+            <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Activities Post action</h3>
                 </div>
-                <iron-collapse opened class="shadow-2dp">
-                    <label class="subtitle" id="label2">Activity 1 success:</label>
-                    <paper-input label="Change score" name="act1successScore"></paper-input>
-                    <paper-input id="act1successMed" name="act1successMed" editable="true" label="Elem id"></paper-input>
-                    <label class="subtitle" id="label2">Activity 2 success:</label>
-                    <paper-input label="Change score" name="act2success"></paper-input>
-                    <paper-input name="act2successMed" id="act2successMed" editable="true" label="Elem id"></paper-input>
-                </iron-collapse>
+                <label class="subtitle" id="label2">Activity 1 success:</label>
+                <paper-input label="Change score" name="act1successScore"></paper-input>
+                <paper-input id="act1successMed" name="act1successMed" editable="true" label="Elem id"></paper-input>
+                <label class="subtitle" id="label2">Activity 2 success:</label>
+                <paper-input label="Change score" name="act2success"></paper-input>
+                <paper-input name="act2successMed" id="act2successMed" editable="true" label="Elem id"></paper-input>
             </div>
-            <div class="contain">
+            <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Pedagogical feedback</h3>
                     <paper-icon-button icon="icons:expand-more" on-click="toggleFeedback"></paper-icon-button>
                 </div>
-                <iron-collapse id="endingScreen" opened class="shadow-2dp">
-                    <item-post-list id="fbMedia" list-type='dest' list-id="fbMedia" listname="Feedback media"></item-post-list>
-                </iron-collapse>
-            </div>
-            <div class="insideflex unitActions">
-                <paper-button raised on-click="_submit">Save</paper-button>
-                <paper-button raised on-click="_reset">Reset</paper-button>
-                <paper-button raised on-click="dummyFill">Dummy Fill</paper-button>
+                <item-post-list id="fbMedia" list-type='dest' list-id="fbMedia" listname="Feedback media"></item-post-list>
             </div>
         </form>
+        <div class="unitActions">
+            <paper-button raised on-click="_submit">Save</paper-button>
+            <paper-button raised on-click="_reset">Reset</paper-button>
+            <paper-button raised on-click="dummyFill">Dummy Fill</paper-button>
+        </div>
     </template>
     <script>
     (function() {
@@ -242,11 +229,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'unit-activity-constructor',
             ready: function() {
+                this.$.startingMediaPicker.addEventListener('itemPicked', this.startingMediaPicked.bind(this))
+                this.$.cluePOIMediaPicker.addEventListener('itemPicked', this.cluePOIPicked.bind(this))
+                this.$.poiMediaPicker.addEventListener('itemPicked', this.poiPicked.bind(this))
+
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
 
             },
+            startingMediaPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    switch (newItem.type) {
+                        case "image":
+                            this.$.startMediaViewer.setImage(newItem)
+                            break;
+                        case "page":
+                            this.$.startMediaViewer.setPage(newItem)
+                            break;
+
+                    }
+                }
+            },
+            poiPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    switch (newItem.type) {
+                        case "poi":
+                            this.$.poiViewer.setPOI(newItem)
+                            break;
+
+                    }
+                }
+            },
+
             _getPA: function(value) {
                 if (this.stepPA >= 0)
                     return value.base[this.stepPA]
@@ -277,27 +294,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
 
-
             },
+            setMedia: function() {
+                this.$.startingMediaPicker.open();
+            },
+            setPOI: function() {
+                this.$.poiMediaPicker.open();
+            },
+
             setCluePOIValue: function() {
                 this.currentStep = "cluePOI";
-                this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
-
-            },
-            setPOIPA: function() {
-                this.currentStep = "poiPA";
-                this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
-
-            },
-            setActPA: function(e) {
-                console.log(e)
-                var actIndex = e.model.__data__.index
-                this.stepPA = actIndex
-                this.currentStep = "actPA"
-                this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
+                this.$.mediaPicker.open();
 
             },
 

@@ -1,0 +1,143 @@
+<link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../media-viewer/video-viewer-activity.html">
+<link rel="import" href="../media-viewer/poi-viewer-activity.html">
+<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
+<link rel="import" href="../media-viewer/mcq-viewer-activity.html">
+<link rel="import" href="../media-viewer/freetext-viewer-activity.html">
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<dom-module id="resource-picker-dialog">
+    <template>
+        <paper-dialog dynamic-align style="left:269px; min-width:500px;width:100%;height:50%" id="selectorDialog">
+            <paper-tabs selected="{{selected}}" scrollable>
+                <template is="dom-if" if="{{image}}">
+                    <paper-tab>Images</paper-tab>
+                </template>
+                <template is="dom-if" if="{{video}}">
+                    <paper-tab>Video</paper-tab>
+                </template>
+                <template is="dom-if" if="{{page}}">
+                    <paper-tab>Pages</paper-tab>
+                </template>
+                <template is="dom-if" if="{{poi}}">
+                    <paper-tab>POI</paper-tab>
+                </template>
+                <template is="dom-if" if="{{mcq}}">
+                    <paper-tab>MCQ</paper-tab>
+                </template>
+                <template is="dom-if" if="{{freetext}}">
+                    <paper-tab>Freetext</paper-tab>
+                </template>
+            </paper-tabs>
+            <iron-pages id="resourcePicker" selected="{{selected}}">
+                <template is="dom-if" if="{{image}}">
+                    <div>
+                        <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></media-viewer-activity>
+                        <div class="buttons">
+                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                        </div>
+                    </div>
+                </template>
+                <template is="dom-if" if="{{video}}">
+                    <div>
+                        <video-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></video-viewer-activity>
+                        <div class="buttons">
+                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                        </div>
+                    </div>
+                </template>
+                <template is="dom-if" if="{{page}}">
+                    <div>
+                        <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
+                        <div class="buttons">
+                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                        </div>
+                    </div>
+                </template>
+                <template is="dom-if" if="{{poi}}">
+                    <div>
+                        <poi-viewer-activity media-name={{currentname}} media-id="{{mediaId}}" id="poiviewer"></poi-viewer-activity>
+                        <div class="buttons">
+                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                        </div>
+                    </div>
+                </template>
+                <div>
+                    <mcq-viewer-activity media-name={{currentname}} url='/mcq' media-id="{{mediaId}}" id="mcqviewer"></mcq-viewer-activity>
+                    <div class="buttons">
+                        <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                    </div>
+                </div>
+                <div>
+                    <freetext-viewer-activity media-name={{currentname}} url='/freetextactivity' media-id="{{mediaId}}" id="freetextviewer"></freetext-viewer-activity>
+                    <div class="buttons">
+                        <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                    </div>
+                </div>
+            </iron-pages>
+        </paper-dialog>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+        Polymer({
+            is: 'resource-picker-dialog',
+            ready: function() {},
+            setValues: function() {
+
+            },
+            open: function() {
+                if (this.image) {
+                    this.$.mediaviewer.genReq();
+                }
+                if (this.freetext) {
+                    this.$.freetextviewer.genReq();
+                }
+
+                this.$.selectorDialog.open();
+            },
+            properties: {
+                poi: {
+                    type: Boolean,
+                    notify: true,
+                },
+                mcq: {
+                    type: Boolean,
+                    notify: true,
+                },
+                image: {
+                    type: Boolean,
+                    notify: true,
+                },
+                video: {
+                    type: Boolean,
+                    notify: true,
+                },
+                page: {
+                    type: Boolean,
+                    notify: true,
+                },
+                freetext: {
+                    type: Boolean,
+                    notify: true,
+                },
+
+                mediaId: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                    reflectToAttribute: true,
+                },
+                mediaName: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                    reflectToAttribute: true,
+                },
+            }
+        });
+    })();
+    </script>
+</dom-module>

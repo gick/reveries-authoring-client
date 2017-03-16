@@ -1,0 +1,205 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../basic-element/mcq-activity.html">
+<link rel="import" href="../POI/one-poi-display.html">
+<dom-module id="generic-resource-viewer">
+    <template>
+        <style>
+        :host {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        
+        .previewquestion {
+            display: inline-flex;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            margin: 10px;
+        }
+        
+        .markdown-html img {
+            max-width: 200px;
+            max-height: 200px;
+        }
+        
+        .markdown-html video {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .image {
+            width: 300px;
+            max-height: 300px;
+        }
+        
+        .deleteIcon {
+            color: red;
+            right: 30px;
+        }
+        
+        .markdownblock {
+            width: 300px;
+            height: 300px;
+            overflow: auto;
+            float: left;
+            margin-bottom: 15px;
+            margin-left: 24px;
+            box-shadow: 6px 5px 26px #CECEB9;
+            -moz-box-shadow: 6px 5px 2px #CECEB9;
+            -webkit-box-shadow: 6px 5px 2px #CECEB9;
+            -o-box-shadow: 6px 5px 2px #CECEB9;
+            box-shadow: 6px 5px 26px #CECEB9;
+        }
+        
+        .mediablock {
+            display: inline-flex;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 15px;
+            margin-left: 24px;
+            box-shadow: 6px 5px 26px #CECEB9;
+            -moz-box-shadow: 6px 5px 2px #CECEB9;
+            -webkit-box-shadow: 6px 5px 2px #CECEB9;
+            -o-box-shadow: 6px 5px 2px #CECEB9;
+            box-shadow: 6px 5px 26px #CECEB9;
+        }
+        </style>
+        <template is="dom-if" if="{{item}}">
+            <template is="dom-if" if="{{poi}}">
+                    <one-poi-display item="{{item}}"></one-poi-display>
+                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="{{page}}">
+                <div class="markdownblock">
+                    <marked-element markdown="{{item.mkdown}}">
+                        <div class="markdown-html"></div>
+                    </marked-element>
+                </div>
+                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="{{image}}">
+                <div class="mediablock">
+                    <img class="image" src="/file/{{item._id}}">
+                </div>
+                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="{{video}}">
+                <div class="mediablock">
+                    <video controls height="300" src="/file/{{item._id}}"></video>
+                </div>
+                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="{{mcq}}">
+                <mcq-activity class="previewquestion" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
+                </mcq-activity>
+            </template>
+        </template>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'generic-resource-viewer',
+            ready: function() {},
+            isImage: function() {
+                this.image = true;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+            },
+            isPage: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = true;
+            },
+            isPoi: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = true;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+            },
+
+            setPage: function(newItem) {
+                this.isPage();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+            setPOI: function(newItem) {
+                this.isPoi();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+
+            setImage: function(newItem) {
+                this.isImage();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+            removeResource: function() {
+                var oldItem;
+                this.item = oldItem;
+            },
+            hasImage: function(imageId) {
+                if (!imageId) {
+                    return false
+                }
+                if (imageId.length === 0) {
+                    return false
+                }
+                return true;
+            },
+            observers: [
+                'statusChanged(status)',
+                'mcqChanged(newmcq)'
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            mcqChanged: function(newquestion) {
+                if (newquestion) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            properties: {
+                image: {
+                    type: Boolean,
+                    notify: true,
+                },
+                page: {
+                    type: Boolean,
+                    notify: true,
+
+                },
+                mcq: {
+                    type: Boolean,
+                    notify: true,
+                },
+
+                item: {
+                    type: Object,
+                    notify: true,
+                }
+            }
+        });
+    })();
+    </script>
+</dom-module>
