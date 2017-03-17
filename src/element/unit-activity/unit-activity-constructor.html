@@ -75,7 +75,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom-left-radius: 0px;
     }
     
-    ,
+    .unitActions {
+        margin-bottom: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 5px;
+        box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    
     .insideflexOption {
         display: inline-flex;
         flex-direction: row;
@@ -142,8 +151,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
         <word-list id="randomSentence"></word-list>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="startingMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog mcq freetext media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="situatedQuestionPicker"></resource-picker-dialog>
+        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiPAMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
-
+        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog poi media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiMediaPicker"></resource-picker-dialog>
         <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
             <div class="contain shadow-2dp">
@@ -167,8 +178,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
                     <paper-radio-button checked="{{cluePOISelected}}" name="media_information">Clue (Media element)</paper-radio-button>
                     <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
-                    <generic-resource-viewer image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
                 </paper-radio-group>
+                <template is="dom-if" if="{{cluePOISelected}}">
+                    <generic-resource-viewer image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
+                </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
                 <paper-radio-group selected="QR" aria-labelledby="label2">
                     <paper-radio-button name="QR">QR code scan</paper-radio-button>
@@ -181,40 +194,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <label class="subtitle" id="label2">POI reached :</label>
                 <paper-input label="Change score" name="poiScorePA"></paper-input>
-                <paper-toggle-button checked="{{poiPA}}" name="media_information">Set Media element</paper-toggle-button>
-                <template is="dom-if" if="{{poiPA}}" restamp=true>
-                    <paper-button on-click="setPOIPA" raised id="poiPA">Show media</paper-button>
-                    <div class="mediablock">
-                        <div>Element id : {{poiPA}}</div>
-                    </div>
-                    <paper-input style="display:none" name="poiPA" editable="false" value="{{poiPA}}" label="Image id"></paper-input>
-                </template>
+                <paper-button on-click="setPOIPaMedia" raised>Set POI Reached Media</paper-button>
+                <generic-resource-viewer image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
             </div>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Situated activities</h3>
-                    <paper-icon-button icon="icons:expand-more" on-click="toggleActivities"></paper-icon-button>
                 </div>
-                <item-post-list id="pedagogicActivities" max-element=3 list-id="activities" listname="Activities"></item-post-list>
-            </div>
-            <div class="contain shadow-2dp">
-                <div class="insideflex">
-                    <h3>Activities Post action</h3>
+                <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
+                <div style="display:inline-flex;flex-direction:row">
+                    <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                    <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                    <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                 </div>
-                <label class="subtitle" id="label2">Activity 1 success:</label>
-                <paper-input label="Change score" name="act1successScore"></paper-input>
-                <paper-input id="act1successMed" name="act1successMed" editable="true" label="Elem id"></paper-input>
-                <label class="subtitle" id="label2">Activity 2 success:</label>
-                <paper-input label="Change score" name="act2success"></paper-input>
-                <paper-input name="act2successMed" id="act2successMed" editable="true" label="Elem id"></paper-input>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Pedagogical feedback</h3>
-                    <paper-icon-button icon="icons:expand-more" on-click="toggleFeedback"></paper-icon-button>
                 </div>
-                <item-post-list id="fbMedia" list-type='dest' list-id="fbMedia" listname="Feedback media"></item-post-list>
+                <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
+                <generic-resource-viewer image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
         </form>
         <div class="unitActions">
@@ -232,6 +232,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.startingMediaPicker.addEventListener('itemPicked', this.startingMediaPicked.bind(this))
                 this.$.cluePOIMediaPicker.addEventListener('itemPicked', this.cluePOIPicked.bind(this))
                 this.$.poiMediaPicker.addEventListener('itemPicked', this.poiPicked.bind(this))
+                this.$.poiPAMediaPicker.addEventListener('itemPicked', this.poiPaPicked.bind(this))
+                this.$.situatedQuestionPicker.addEventListener('itemPicked', this.situatedQuestionPicked.bind(this))
+                this.$.feedbackMediaPicker.addEventListener('itemPicked', this.feedbackMediaPicked.bind(this))
 
                 this.actPA = [];
                 this.currentActivities = [];
@@ -252,6 +255,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }
             },
+            feedbackMediaPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    switch (newItem.type) {
+                        case "image":
+                            this.$.feedbackMediaViewer.setImage(newItem)
+                            break;
+                        case "page":
+                            this.$.feedbackMediaViewer.setPage(newItem)
+                            break;
+
+                    }
+                }
+            },
+
+            poiPaPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    switch (newItem.type) {
+                        case "image":
+                            this.$.poiPaMedia.setImage(newItem)
+                            break;
+                        case "page":
+                            this.$.poiPaMedia.setPage(newItem)
+                            break;
+
+                    }
+                }
+            },
+
+            situatedQuestionPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    if (!this.$.situatedActivityMedia.item) {
+                        switch (newItem.type) {
+                            case "mcq":
+                                this.$.situatedActivityMedia.setMcq(newItem)
+                                break;
+                            case "freetext":
+                                this.$.situatedActivityMedia.setFreetext(newItem)
+                                break;
+
+                        }
+                        return
+                    }
+
+                    if (!this.$.situatedActivityMedia2.item) {
+                        switch (newItem.type) {
+                            case "mcq":
+                                this.$.situatedActivityMedia2.setMcq(newItem)
+                                break;
+                            case "freetext":
+                                this.$.situatedActivityMedia2.setFreetext(newItem)
+                                break;
+
+                        }
+                        return
+                    }
+                    if (!this.$.situatedActivityMedia3.item) {
+                        switch (newItem.type) {
+                            case "mcq":
+                                this.$.situatedActivityMedia3.setMcq(newItem)
+                                break;
+                            case "freetext":
+                                this.$.situatedActivityMedia3.setFreetext(newItem)
+                                break;
+
+                        }
+                        return
+                    }
+
+                }
+            },
+
+            cluePOIPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    switch (newItem.type) {
+                        case "image":
+                            this.$$('#cluePOIMedia').setImage(newItem)
+                            break;
+                        case "page":
+                            this.$$('#cluePOIMedia').setPage(newItem)
+                            break;
+
+                    }
+                }
+            },
+
             poiPicked: function(item) {
                 if (item && item.detail && item.detail.__data__) {
                     var newItem = item.detail.__data__.item;
@@ -268,16 +360,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 if (this.stepPA >= 0)
                     return value.base[this.stepPA]
             },
-            addFreetext: function(item) {
-                this.$.pedagogicActivities.addItem(item)
-                if (this.currentActivities.length < 4) {
-                    this.push('currentActivities', item)
-                } else {
-                    this.pop('currentActivities')
-                    this.push('currentActivities', item)
-                }
+            setFeedbackMedia: function() {
+                this.$.feedbackMediaPicker.open();
+            },
 
-
+            addSituatedActivity: function() {
+                this.$.situatedQuestionPicker.open();
             },
             _activityCount: function(number) {
                 if (this.currentActivities)
@@ -295,17 +383,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
             },
+            setPOIPaMedia: function() {
+                this.$.poiPAMediaPicker.open();
+            },
+
+
             setMedia: function() {
                 this.$.startingMediaPicker.open();
             },
-            setPOI: function() {
-                this.$.poiMediaPicker.open();
-            },
-
             setCluePOIValue: function() {
-                this.currentStep = "cluePOI";
-                this.$.mediaPicker.open();
-
+                this.$.cluePOIMediaPicker.open();
             },
 
             addMcq: function(item) {

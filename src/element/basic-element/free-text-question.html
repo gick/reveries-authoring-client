@@ -106,13 +106,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div prefix> {{wrongMessage}}</div>
                     </paper-input>
                 </iron-collapse>
-                <div style="" class="insideflex">
-                    <paper-button raised on-click="validate">Validate</paper-button>
-                    <template is="dom-if" if="{{mediaId}}" restamp=true>
-                        <paper-button raised on-click="showClue">Show clue</paper-button>
-                    </template>
-                    <paper-button raised class="remove" on-click="removeElement">Remove</paper-button>
-                </div>
+                <template is="dom-if" if="{{preview}}">
+                    <div style="" class="insideflex">
+                        <paper-button raised on-click="validate">Validate</paper-button>
+                        <template is="dom-if" if="{{mediaId}}" restamp=true>
+                            <paper-button raised on-click="showClue">Show clue</paper-button>
+                        </template>
+                        <paper-button raised class="remove" on-click="removeElement">Remove</paper-button>
+                    </div>
+                </template>
             </form>
         </div>
     </template>
@@ -145,11 +147,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             _mediaIdObserver: function(newval) {
                 if (newval) {
-                    var temp=true
-                    this.set('showMediaButton',true)
+                    var temp = true
+                    this.set('showMediaButton', true)
                     this.$.ajaxLoader.generateRequest();
                 } else {
-                    this.set('showMediaButton',false)
+                    this.set('showMediaButton', false)
                     this.showMediaButton = false
 
                 }
@@ -199,6 +201,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 responseLabel: {
                     type: String,
                     notify: true,
+                },
+                preview :{
+                    type:Boolean,
+                    notify:true,
                 },
                 mediaId: {
                     type: String,

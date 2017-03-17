@@ -90,9 +90,11 @@
             },
             open: function() {
                 if (this.image) {
-                    this.$.mediaviewer.genReq();
+                	this.set('image',true)
+                    this.$$('#mediaviewer').genReq();
                 }
                 if (this.freetext) {
+                	this.set('freetext',true)
                     this.$.freetextviewer.genReq();
                 }
 

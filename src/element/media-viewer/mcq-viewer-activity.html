@@ -30,7 +30,7 @@
         <div id="mcqListen">
             <template is="dom-repeat" items="{{items}}" as="item">
                 <div class$="{{computeClass(item.selected)}}" on-click="select">
-                    <mcq-activity question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
+                    <mcq-activity preview question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
                     </mcq-activity>
                 </div>
             </template>
@@ -106,6 +106,9 @@
                     this.set('mediaId', model.get('item._id'));
                     this.set('mediaName', model.get('item.filename'))
                 }
+                model.__data__.item.type = 'mcq'
+                this.fire('itemPicked', model)
+
             },
 
             properties: {

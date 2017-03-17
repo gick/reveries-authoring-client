@@ -67,6 +67,7 @@
                             <div prefix> {{wrongAnswerMessage}}</div>
                         </paper-input>
                     </iron-collapse>
+                    <template is="dom-if" if="!{{preview}}">
                     <div style="margin-top:40px" class="card-actions">
                         <paper-button raised on-click="validate">Validate</paper-button>
                         <template is="dom-if" if="{{mediaId}}" restamp=true>
@@ -76,6 +77,7 @@
                             <paper-button on-click="removeElement" raised>Suppress</paper-button>
                         </template>
                     </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -178,7 +180,10 @@
                     type: String,
                     notify: true
                 },
-
+                preview:{
+                    type:Boolean,
+                    notify:true,
+                },
                 mediaId: {
                     type: String,
                     notify: true,

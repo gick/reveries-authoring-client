@@ -105,6 +105,9 @@
                     this.set('mediaId', model.get('item._id'));
                     this.set('mediaName', model.get('item.filename'))
                 }
+                model.__data__.item.type = 'freetext'
+                this.fire('itemPicked', model)
+
             },
 
             properties: {

@@ -6,6 +6,7 @@
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../basic-element/mcq-activity.html">
+<link rel="import" href="../basic-element/free-text-question.html">
 <link rel="import" href="../POI/one-poi-display.html">
 <dom-module id="generic-resource-viewer">
     <template>
@@ -70,7 +71,7 @@
         </style>
         <template is="dom-if" if="{{item}}">
             <template is="dom-if" if="{{poi}}">
-                    <one-poi-display item="{{item}}"></one-poi-display>
+                <one-poi-display item="{{item}}"></one-poi-display>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
             <template is="dom-if" if="{{page}}">
@@ -94,8 +95,13 @@
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
             <template is="dom-if" if="{{mcq}}">
-                <mcq-activity class="previewquestion" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
+                <mcq-activity preview class="previewquestion" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
                 </mcq-activity>
+                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="{{freetext}}">
+                <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
         </template>
     </template>
@@ -130,6 +136,30 @@
                 this.mcq = false;
                 this.page = false;
             },
+            isVideo: function() {
+                this.image = false;
+                this.video = true;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+            },
+            isMcq: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = true;
+                this.page = false;
+            },
+            isFreetext: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = true;
+                this.mcq = false;
+                this.page = false;
+            },
 
             setPage: function(newItem) {
                 this.isPage();
@@ -139,6 +169,18 @@
             },
             setPOI: function(newItem) {
                 this.isPoi();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+            setMcq: function(newItem) {
+                this.isMcq();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+            setFreetext: function(newItem) {
+                this.isFreetext();
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
