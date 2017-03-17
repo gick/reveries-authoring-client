@@ -28,12 +28,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
-<link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../item-list/item-post-list.html">
+<link rel="import" href="../basic-element/post-action.html">
 <link rel="import" href="../helper/word-list.html">
 <dom-module id="unit-activity-constructor">
     <style>
@@ -205,6 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
                 <div style="display:inline-flex;flex-direction:row">
                     <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                    <post-action></post-action>
                     <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
                     <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                 </div>
