@@ -87,6 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
                 <resource-header resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
+                {{question}}
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}" required></paper-input>
                 <iron-collapse id="clue">
                     <div class="">
@@ -107,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div prefix> {{wrongMessage}}</div>
                     </paper-input>
                 </iron-collapse>
-                <template is="dom-if" if="{{preview}}">
+                <template is="dom-if" if="{{conceptionMode}}">
                     <div style="" class="insideflex">
                         <paper-button raised on-click="validate">Validate</paper-button>
                         <template is="dom-if" if="{{mediaId}}" restamp=true>
@@ -220,6 +221,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: String,
                     notify: true,
                 },
+                conceptionMode:{
+                    type : Boolean,
+                    notify:true,
+                }
+                ,
                 resourceLabel: {
                     type: String,
                     notify: true,
