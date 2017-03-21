@@ -56,18 +56,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <auth-manager id="manager"></auth-manager>
         <akc-meta-query key="status" value={{status}}></akc-meta-query>
-        <template is="dom-if" if="{{!status.logged}}">
-            <div class="card">
-                <form class="insidePaper" id="authform" is="iron-form" method="post" action="/login">
-                    <h1>Log in</h1>
-                    <paper-input on-keydown="checkEnter" name="name" value={{nameVal}} label="Name" required></paper-input>
-                    <paper-input on-keydown="checkEnter" type="password" value="{{passVal}}" name="password" label="password" required></paper-input>
-                    <paper-button raised on-click="_submit">Submit</paper-button>
-                    <paper-button raised on-click="_reset">Reset</paper-button>
-                    <div class="output"></div>
-                </form>
-            </div>
-        </template>
+        <div hidden="{{status.logged}}" class="card">
+            <form class="insidePaper" id="authform" is="iron-form" method="post" action="/login">
+                <h1>Log in</h1>
+                <paper-input on-keydown="checkEnter" name="name" value={{nameVal}} label="Name" required></paper-input>
+                <paper-input on-keydown="checkEnter" type="password" value="{{passVal}}" name="password" label="password" required></paper-input>
+                <paper-button raised on-click="_submit">Submit</paper-button>
+                <paper-button raised on-click="_reset">Reset</paper-button>
+                <div class="output"></div>
+            </form>
+        </div>
+        {{status.logged}}
         <template is="dom-if" if="{{status.logged}}">
             <div class="card">
                 <h1 class="insidePaper">User profile</h1>
@@ -86,33 +85,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
             </div>
         </template>
-            <div hidden={{status.logged}} class="card">
-                <form class="insidePaper" id="signupForm" is="iron-form" method="post" action="/signup">
-                    <h1>Sign-up</h1>
-                    <paper-input on-keydown="checkEnter" name="name" value={{signupName}} label="Name" required></paper-input>
-                    <paper-input on-keydown="checkEnter" type="password" value="{{signupPass}}" name="password" label="password" required></paper-input>
-                    <paper-input on-keydown="checkEnter" type="email" value="{{signupMail}}" name="email" label="Email" required></paper-input>
-
-                    <paper-button raised on-click="_signup">Submit</paper-button>
-                    <paper-button raised on-click="_reset">Reset</paper-button>
-                </form>
-            </div>
+        <div hidden={{status.logged}} class="card">
+            <form class="insidePaper" id="signupForm" is="iron-form" method="post" action="/signup">
+                <h1>Sign-up</h1>
+                <paper-input on-keydown="checkEnter" name="name" value={{signupName}} label="Name" required></paper-input>
+                <paper-input on-keydown="checkEnter" type="password" value="{{signupPass}}" name="password" label="password" required></paper-input>
+                <paper-input on-keydown="checkEnter" type="email" value="{{signupMail}}" name="email" label="Email" required></paper-input>
+                <paper-button raised on-click="_signup">Submit</paper-button>
+                <paper-button raised on-click="_reset">Reset</paper-button>
+            </form>
+        </div>
     </template>
     <script>
     Polymer({
-        ready:function(){
-            this.$.signupForm.addEventListener('iron-form-response', function(){this.$.manager.getUserInfo()}.bind(this))
-        },
+        ready: function() {},
         logout: function() {
             this.$.manager.logout();
+        },
+        handleAuth: function() {
+            console.log('resp')
         },
         _submit: function() {
             this.$.manager.authenticate(this.nameVal, this.passVal);
         },
-        _signup:function(){
+        _signup: function() {
             this.$.signupForm.submit()
-        }
-        ,
+        },
         checkEnter: function(evt) {
             if (evt.keyCode === 13) {
                 this._submit()
