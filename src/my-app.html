@@ -78,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .drawer-list a.subroute {}
         </style>
         <app-location use-hash-as-path route="{{route}}"></app-location>
-        <auth-manager id="manager"></auth-manager>
+        <auth-manager id="manager" status="{{ustat}}"></auth-manager>
         <akc-meta key="media" value=0></akc-meta>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
         <app-route route="{{route}}" pattern="#/page" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -87,6 +87,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <app-drawer>
                 <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
                     <paper-menu>
+                        <paper-item class="menu-content firstLevelMenu">
+                            <a class='' name="intro" href="#intro">
+                                <span>{{status.name}}</span>
+                            </a>
+                        </paper-item>
                         <paper-item class="menu-content firstLevelMenu">
                             <a class='' name="intro" href="#intro">
                                 <iron-icon icon="icons:home"></iron-icon> <span>ReVeRieS</span>
@@ -180,7 +185,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
+            this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
+
             this.$.manager.getUserInfo();
+            this.logged = false;
+        },
+        authChanged: function(arg) {
+            console.log('change')
+                /* if (arg && arg.detail) {
+                     if (arg.detail == '') {
+                         this.logged = false;
+                         this.username = ''
+                     } else {
+                         this.logged=true;
+                         this.username = arg.detail;
+                     }
+                 } else{
+                     this.logged=false;
+                     this.username='';
+                 }*/
         },
         properties: {
             meta: {
@@ -192,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 type: String,
                 reflectToAttribute: true,
                 observer: '_pageChanged'
-            }
+            },
 
         },
 

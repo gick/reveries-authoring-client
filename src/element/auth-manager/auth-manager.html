@@ -43,6 +43,7 @@
                 status.logged = false;
                 status.name = '';
                 status.status = '';
+
             } else {
                 status.logged = true;
                 status.name = response.user.name;
@@ -50,17 +51,17 @@
                 status.email = response.user.email;
             }
             this.status = status
+            this.fire('authChanged', status)
         },
         validateAuthLogin: function(resp) {
             var status = {}
             var response = resp.detail.__data__.response;
             if (!response.success) {
-                this.authProblem="Username pass mismatch"
+                this.authProblem = "Username pass mismatch"
                 status.logged = false;
                 status.name = '';
                 status.status = '';
                 this.$.loginFailed.open();
-                console.log('failed')
             } else {
                 status.logged = true;
                 status.name = response.user.name;
@@ -68,6 +69,8 @@
                 status.email = response.user.email;
             }
             this.status = status
+            this.fire('authChanged', status)
+
         },
 
         authenticate: function(username, pass) {
