@@ -172,8 +172,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <freetext-view name="freetext"></freetext-view>
                     <image-view name="image"></image-view>
                     <mcq-view name="mcq"></mcq-view>
-                    <constructor-view name="constructor"></constructor-view>
-                    <mlg-view name="mlg"></mlg-view>
+                    <constructor-view id="constructorView" name="constructor"></constructor-view>
+                    <mlg-view id="mlgView" name="mlg"></mlg-view>
                 </iron-pages>
             </app-header-layout>
         </app-drawer-layout>
@@ -186,9 +186,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
-
+            this.$.constructorView.addEventListener('unitGameSaved',this.unitGameSaved.bind(this))
             this.$.manager.getUserInfo();
             this.logged = false;
+        },
+        unitGameSaved:function(){
+            console.log('saved')
+            if(this.$.mlgView && this.$.mlgView.unitGameChanged){
+                this.$.mlgView.unitGameChanged();
+            }
         },
         authChanged: function(arg) {
             console.log('change')

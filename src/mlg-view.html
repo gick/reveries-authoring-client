@@ -35,13 +35,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </ul>
         </div>
         <div class="card">
-            <list-posted-games new-game="{{games}}" id="gameStart"></list-posted-games>
+            <list-posted-games new-game="{{games}}" id="mlgCreator"></list-posted-games>
         </div>
         <div class="card">
-            <list-unit-game id="gameToSave" game-saved="{{currentList}}"></list-unit-game>
+            <list-unit-game id="unitGameList" game-saved="{{currentList}}"></list-unit-game>
         </div>
         <div class="card">
-            <unit-mlg-display id="gameToSave" game-saved="{{currentList}}"></unit-mlg-display>
+            <unit-mlg-display id="mlgList" game-saved="{{currentList}}"></unit-mlg-display>
         </div>
     </template>
     <script>
@@ -50,12 +50,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'mlg-view',
         ready: function() {
             this.addEventListener('newgame', this.analyse.bind(this))
+            this.$.mlgCreator.addEventListener('saveMLG',this.saveMLG.bind(this))
                 //    this.push('games',this.returnItem   )
         },
+        saveMLG:function(){
+            this.$.mlgList.mlgChanged()
+        },
+        unitGameChanged:function(){
+            console.log('save MLG')
+            this.$.unitGameList.unitGameChanged();
+        }
+        ,
         analyse: function(item) {
             console.log(item)
             if (item.detail) {
-                this.$.gameStart.addItem(item.detail)
+                this.$.mlgCreator.addItem(item.detail)
             }
         }
     })

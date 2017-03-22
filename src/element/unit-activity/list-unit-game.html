@@ -64,6 +64,10 @@
 
             }
         },
+        unitGameChanged: function() {
+            this.$.ajaxLoader.generateRequest();
+
+        },
         newUnitGame: function(newquestion) {
             if (newquestion) {
                 this.$.ajaxLoader.generateRequest();
