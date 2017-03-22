@@ -125,6 +125,7 @@ TODO : propose different CSS associated with the markdown
             </paper-dialog-scrollable>
             <div class="buttons">
                 <paper-button raised style="background-color: lightgreen" on-click="appendImage" dialog-confirm>Accept</paper-button>
+                <paper-button raised style="background-color: lightgreen" dialog-confirm>Cancel</paper-button>
             </div>
         </paper-dialog>
         <word-list id="randomSentence"></word-list>
@@ -132,14 +133,13 @@ TODO : propose different CSS associated with the markdown
             <div class="formTitleWithButton">
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                 <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
-                <input type="hidden" value="{{statusString}}" name="status" />
+                <input id="status" type="hidden" value="{{statusString}}" name="status" />
             </div>
-            <paper-input name="label" value={{label}} label="Resource label"></paper-input>
+            <paper-input id="label" name="label" value={{label}} label="Resource label"></paper-input>
             <paper-textarea id="mkdownCode" name="mkdown" value={{mkdown}} rows="5" label="Markdown code"></paper-textarea>
             <paper-button on-click="showImageDialog">Set image</paper-button>
             <div class="insideflex">
                 <paper-button raised on-click="_submit">Save</paper-button>
-                <paper-button raised on-click="_reset">Reset</paper-button>
             </div>
         </form>
     </template>
@@ -181,6 +181,9 @@ TODO : propose different CSS associated with the markdown
             _submit: function(event) {
                 this.$.freeTextForm.submit();
                 this.fire('static-media-changed',null)
+                this.statusString=""
+                this.label=""
+                this.mkdown=""
             },
             _reset: function(event) {},
             properties: {
