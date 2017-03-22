@@ -16,6 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="./styles/common-styles.html">
+<link rel="import" href="./helper/resource-picker-dialog.html">
+
 <link rel="import" href="./element/basic-element/free-text-question.html">
 <link rel="import" href="./element/basic-element/free-text-constructor.html">
 <link rel="import" href="./element/basic-element/list-free-text-activities.html">
@@ -47,6 +49,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
+        <resource-picker-dialog image page video media-id="{{currentid}}" media-name="{{currentname}}" id="selectImage"></resource-picker-dialog>
+        <!--
         <paper-dialog style="left:269px" id="selectImage">
             <h2> Select image</h2>
             <paper-dialog-scrollable>
@@ -56,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
             </div>
         </paper-dialog>
-
+        !-->
         <div class="card">
             <h1>Free text questions</h1> Free text questions are questions where the answer is not limited to a set of choice. The user can give any string as an answer. It can be usefull for open question for instance.
             <br> In this section :
@@ -86,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.questionConstructor.addEventListener('selectImage', this.setImage.bind(this));
         },
             setImage: function() {
-                this.$.mediaviewer.genReq();
+                //this.$.mediaviewer.genReq();
                 this.$.selectImage.open();
             },
             setValues:function(){

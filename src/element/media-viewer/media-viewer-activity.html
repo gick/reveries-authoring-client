@@ -40,7 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             outline-offset: -4px;
         }
         </style>
-        <iron-ajax id="ajaxLoader" url="/listUserMediaFiles" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <iron-ajax id="ajaxLoader" url="/listUserImages" handle-as="json" last-response="{{items}}"></iron-ajax>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
         <template is="dom-repeat" id="models" items="{{items}}" as="item">
             <template is="dom-if" if="{{_ismedia(item)}}">
