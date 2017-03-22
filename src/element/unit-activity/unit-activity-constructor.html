@@ -204,7 +204,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
                 <div style="display:inline-flex;flex-direction:row">
                     <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
-                    <post-action></post-action>
                     <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
                     <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                 </div>
@@ -235,11 +234,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.poiPAMediaPicker.addEventListener('itemPicked', this.poiPaPicked.bind(this))
                 this.$.situatedQuestionPicker.addEventListener('itemPicked', this.situatedQuestionPicked.bind(this))
                 this.$.feedbackMediaPicker.addEventListener('itemPicked', this.feedbackMediaPicked.bind(this))
-
+                this.$.unitActivityForm.addEventListener('iron-form-error',this.handleResponse.bind(this))
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
 
+            },
+            handleResponse:function(event){
+                console.log(response)
             },
             startingMediaPicked: function(item) {
                 if (item && item.detail && item.detail.__data__) {
@@ -457,6 +459,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.fire("showImageDialog", "show");
             },
             _submit: function(event) {
+                console.log(this.$.unitActivityForm.serialize())
+                console.log(this.$.unitActivityForm.validate())
+
                 this.$.unitActivityForm.submit();
                 this.fire('unitGameSaved', null);
                 this.unitGameName = this.quest;
