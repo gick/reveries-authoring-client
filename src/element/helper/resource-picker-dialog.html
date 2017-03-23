@@ -11,73 +11,73 @@
 <dom-module id="resource-picker-dialog">
     <template>
         <paper-dialog dynamic-align style="overflow:auto;left:269px; min-width:500px;width:100%;height:50%" id="selectorDialog">
-        <paper-dialog-scrollable>
-            <paper-tabs selected="{{selected}}" scrollable>
-                <template is="dom-if" if="{{image}}">
-                    <paper-tab>Images</paper-tab>
-                </template>
-                <template is="dom-if" if="{{video}}">
-                    <paper-tab>Video</paper-tab>
-                </template>
-                <template is="dom-if" if="{{page}}">
-                    <paper-tab>Pages</paper-tab>
-                </template>
-                <template is="dom-if" if="{{poi}}">
-                    <paper-tab>POI</paper-tab>
-                </template>
-                <template is="dom-if" if="{{mcq}}">
-                    <paper-tab>MCQ</paper-tab>
-                </template>
-                <template is="dom-if" if="{{freetext}}">
-                    <paper-tab>Freetext</paper-tab>
-                </template>
-            </paper-tabs>
-            <iron-pages id="resourcePicker" selected="{{selected}}">
-                <template is="dom-if" if="{{image}}">
+            <paper-dialog-scrollable>
+                <paper-tabs selected="{{selected}}" scrollable>
+                    <template is="dom-if" if="{{image}}">
+                        <paper-tab>Images</paper-tab>
+                    </template>
+                    <template is="dom-if" if="{{video}}">
+                        <paper-tab>Video</paper-tab>
+                    </template>
+                    <template is="dom-if" if="{{page}}">
+                        <paper-tab>Pages</paper-tab>
+                    </template>
+                    <template is="dom-if" if="{{poi}}">
+                        <paper-tab>POI</paper-tab>
+                    </template>
+                    <template is="dom-if" if="{{mcq}}">
+                        <paper-tab>MCQ</paper-tab>
+                    </template>
+                    <template is="dom-if" if="{{freetext}}">
+                        <paper-tab>Freetext</paper-tab>
+                    </template>
+                </paper-tabs>
+                <iron-pages id="resourcePicker" selected="{{selected}}">
+                    <template is="dom-if" if="{{image}}">
+                        <div>
+                            <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></media-viewer-activity>
+                            <div class="buttons">
+                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
+                            </div>
+                        </div>
+                    </template>
+                    <template is="dom-if" if="{{video}}">
+                        <div>
+                            <video-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></video-viewer-activity>
+                            <div class="buttons">
+                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
+                            </div>
+                        </div>
+                    </template>
+                    <template is="dom-if" if="{{page}}">
+                        <div>
+                            <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
+                            <div class="buttons">
+                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
+                            </div>
+                        </div>
+                    </template>
+                    <template is="dom-if" if="{{poi}}">
+                        <div>
+                            <poi-viewer-activity media-name={{currentname}} media-id="{{mediaId}}" id="poiviewer"></poi-viewer-activity>
+                            <div class="buttons">
+                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
+                            </div>
+                        </div>
+                    </template>
                     <div>
-                        <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></media-viewer-activity>
+                        <mcq-viewer-activity media-name={{currentname}} url='/mcq' media-id="{{mediaId}}" id="mcqviewer"></mcq-viewer-activity>
                         <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                         </div>
                     </div>
-                </template>
-                <template is="dom-if" if="{{video}}">
                     <div>
-                        <video-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></video-viewer-activity>
+                        <freetext-viewer-activity media-name={{currentname}} url='/freetextactivity' media-id="{{mediaId}}" id="freetextviewer"></freetext-viewer-activity>
                         <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
+                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                         </div>
                     </div>
-                </template>
-                <template is="dom-if" if="{{page}}">
-                    <div>
-                        <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-                        </div>
-                    </div>
-                </template>
-                <template is="dom-if" if="{{poi}}">
-                    <div>
-                        <poi-viewer-activity media-name={{currentname}} media-id="{{mediaId}}" id="poiviewer"></poi-viewer-activity>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-                        </div>
-                    </div>
-                </template>
-                <div>
-                    <mcq-viewer-activity media-name={{currentname}} url='/mcq' media-id="{{mediaId}}" id="mcqviewer"></mcq-viewer-activity>
-                    <div class="buttons">
-                        <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-                    </div>
-                </div>
-                <div>
-                    <freetext-viewer-activity media-name={{currentname}} url='/freetextactivity' media-id="{{mediaId}}" id="freetextviewer"></freetext-viewer-activity>
-                    <div class="buttons">
-                        <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-                    </div>
-                </div>
-            </iron-pages>
+                </iron-pages>
             </paper-dialog-scrollable>
         </paper-dialog>
     </template>
@@ -91,12 +91,13 @@
 
             },
             open: function() {
-                if (this.image) {
-                	this.set('image',true)
+                if (this.page) {
+                    this.set('page', true)
                     this.$$('#mediaviewer').genReq();
+                    this.$$('#mediaviewer').unSelect();
                 }
                 if (this.freetext) {
-                	this.set('freetext',true)
+                    this.set('freetext', true)
                     this.$.freetextviewer.genReq();
                 }
 

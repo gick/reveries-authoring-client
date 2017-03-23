@@ -18,7 +18,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./element/basic-element/mcq-constructor.html">
 <link rel="import" href="./element/basic-element/mcq-activity.html">
 <link rel="import" href="./element/basic-element/list-mcq-activity.html">
-
 <link rel="import" href="./element/media-viewer/media-viewer-activity.html">
 <dom-module id="mcq-view">
     <template>
@@ -35,16 +34,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             margin: 10px;
         }
         
-        .flexQuestion{
-            display:flex;
+        .flexQuestion {
+            display: flex;
             justify-content: space-between;
         }
-
-
+        
         mcq-constructor {
             display: inline-flex;
             flex-direction: row;
-            padding:5px;
+            padding: 5px;
             align-items: flex-start;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
         }
@@ -55,6 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
+        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <div class="card">
             <h1>MCQ Question</h1> MCQ question offers one correct choice amongs three.
             <br> In this section :
@@ -64,9 +63,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <div class='flexQuestion'>
-                <mcq-constructor class="" id="mcqConstructor" question={{question}} media-id={{mediaId}} distractor1={{dist1}} distractor2={{dist2}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
+                <mcq-constructor class="" id="mcqConstructor" question={{question}}  distractor1={{dist1}} distractor2={{dist2}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
                 </mcq-constructor>
-
                 <mcq-activity class="previewquestion" question="{{question}}" correct-answer={{response}} wrong-answer2={{dist2}} wrong-answer1={{dist1}} correct-answer-message={{correct}} wrong-answer-message={{wrong}} media-id={{mediaId}}>
                 </mcq-activity>
             </div>
@@ -82,7 +80,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'mcq-view',
         ready: function() {
+            this.$.mcqConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
+            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
+            this.$.mcqConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
+
         },
+
+        selectMedia: function() {
+            this.mediaDeleted();
+            //this.$.mediaviewer.genReq();
+            this.$.selectMedia.open();
+        },
+        mediaDeleted: function() {
+            this.set('mediaId', null)
+        },
+        mediaPicked: function(item) {
+            if (item && item.detail && item.detail.__data__) {
+                var newItem = item.detail.__data__.item;
+                switch (newItem.type) {
+                    case "page":
+                        this.$.mcqConstructor.setPage(newItem)
+                        this.set('mediaId', newItem._id);
+                        break;
+
+                }
+            }
+        },
+
     });
     </script>
 </dom-module>

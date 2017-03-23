@@ -70,36 +70,41 @@
         }
         </style>
         <template is="dom-if" if="{{item}}">
-            <template is="dom-if" if="{{poi}}">
+            <template is="dom-if" if="{{poi}}" restamp>
                 <one-poi-display item="{{item}}"></one-poi-display>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
-            <template is="dom-if" if="{{page}}">
+            <template is="dom-if" if="{{page}}" restamp>
                 <div class="markdownblock">
                     <marked-element markdown="{{item.mkdown}}">
                         <div class="markdown-html"></div>
                     </marked-element>
                 </div>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                <template is="dom-if" if="{{item}}">
+                    <template is="dom-if" if="{{item._id}}">
+                        <paper-input hidden class="inputfield" name="mediaId" value={{item._id}}></paper-input>
+                    </template>
+                </template>
             </template>
-            <template is="dom-if" if="{{image}}">
+            <template is="dom-if" if="{{image}}" restamp>
                 <div class="mediablock">
                     <img class="image" src="/file/{{item._id}}">
                 </div>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
-            <template is="dom-if" if="{{video}}">
+            <template is="dom-if" if="{{video}}" restamp>
                 <div class="mediablock">
                     <video controls height="300" src="/file/{{item._id}}"></video>
                 </div>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
-            <template is="dom-if" if="{{mcq}}">
+            <template is="dom-if" if="{{mcq}}" restamp>
                 <mcq-activity preview class="previewquestion" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
                 </mcq-activity>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
-            <template is="dom-if" if="{{freetext}}">
+            <template is="dom-if" if="{{freetext}}" restamp>
                 <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
@@ -112,6 +117,15 @@
         Polymer({
             is: 'generic-resource-viewer',
             ready: function() {},
+            isEmpty: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+
+            },
             isImage: function() {
                 this.image = true;
                 this.video = false;
@@ -193,8 +207,9 @@
                 this.item = newItem;
             },
             removeResource: function() {
-                var oldItem;
-                this.item = oldItem;
+             //   this.isEmpty();
+             this.item=null
+                this.fire('mediaDeleted',null)
             },
             hasImage: function(imageId) {
                 if (!imageId) {

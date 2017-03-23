@@ -24,8 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="./free-text-question.html">
-<link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../helper/word-list.html">
+<link rel="import" href="../helper/generic-resource-viewer.html">
+
 <dom-module id="free-text-constructor">
     <style>
     :host {
@@ -128,14 +129,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input style=";" name="response" label="Response" value={{response}} required></paper-input>
             <paper-input style=";" name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
-            <paper-button raised on-click="showImageDialog">Set media</paper-button>
-            <template is="dom-if" if="{{mediaId}}" restamp=true>
-                <div class="mediablock">
-                    <div> src="/file/{{mediaId}}"</div>
-                </div>
-                <paper-input style="display:none" name="mediaId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
-                <paper-button raised on-click="removeImage">Remove media</paper-button>
-            </template>
+            <paper-button raised on-click="showMediaDialog">Set a clue (page)</paper-button>
+            <generic-resource-viewer image page video class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
             <div class="insideflex">
                 <paper-button raised on-click="_submit">Save</paper-button>
                 <paper-button raised on-click="_reset">Reset</paper-button>
@@ -155,9 +150,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 }.bind(this))
             },
-            setValues: function() {
-                this.set('mediaId', this.currentid)
+            setImage: function(item) {
+                this.$.freetextMediaViewer.setImage(item)
             },
+            setPage: function(item) {
+                this.$.freetextMediaViewer.setPage(item)
+            },
+
+
             dummyFill: function() {
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
@@ -171,8 +171,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.set('mediaId', null);
                 this.set('mediaName', null);
             },
-            showImageDialog: function() {
-                this.fire('selectImage', null)
+            showMediaDialog: function() {
+                this.$.freetextMediaViewer.removeResource()
+                this.fire('selectMedia', null)
 
             },
             _submit: function(event) {

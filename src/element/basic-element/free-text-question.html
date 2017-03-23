@@ -55,6 +55,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: black;
     }
     
+    .markdown-html img {
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    .markdown-html video {
+        width: 200px;
+        height: 200px;
+    }
+    
     .element {
         align-self: stretch;
     }
@@ -86,7 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
             <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
-                <resource-header resource-url="/freetext" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
+                <resource-header style="width:100%" resource-url="/freetext" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 {{question}}
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}" required></paper-input>
                 <iron-collapse id="clue">
@@ -204,9 +214,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: String,
                     notify: true,
                 },
-                preview :{
-                    type:Boolean,
-                    notify:true,
+                preview: {
+                    type: Boolean,
+                    notify: true,
                 },
                 mediaId: {
                     type: String,
@@ -221,11 +231,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: String,
                     notify: true,
                 },
-                conceptionMode:{
-                    type : Boolean,
-                    notify:true,
-                }
-                ,
+                conceptionMode: {
+                    type: Boolean,
+                    notify: true,
+                },
                 resourceLabel: {
                     type: String,
                     notify: true,

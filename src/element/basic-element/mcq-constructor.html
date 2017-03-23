@@ -23,7 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../media-viewer/static-media-dialog-activity.html">
-
+<link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../helper/generic-resource-viewer.html">
 <dom-module id="mcq-constructor">
     <style>
     .flexForm {
@@ -54,15 +55,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                 <input type="hidden" value="{{statusString}}" name="status" />
             </div>
-            <paper-dialog style="left:269px" id="selectImage">
-                <h2> Select image</h2>
-                <paper-dialog-scrollable>
-                    <static-media-dialog-activity media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
-                </paper-dialog-scrollable>
-                <div class="buttons">
-                    <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-                </div>
-            </paper-dialog>
             <word-list id="randomSentence"></word-list>
             <paper-input name="label" label="Label" required></paper-input>
             <paper-input name="question" value={{question}} label="Question" required></paper-input>
@@ -72,13 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
             <paper-button raised on-click="showMediaDialog">Set media</paper-button>
-            <template is="dom-if" if="{{mediaId}}" restamp=true>
-                <div class="mediablock">
-                    <div> src="/file/{{mediaId}}"</div>
-                </div>
-                <paper-input style="display:none" name="mediaId" editable="false" value="{{mediaId}}" label="Image id"></paper-input>
-                <paper-button raised on-click="removeMedia">Remove media</paper-button>
-            </template>
+            <generic-resource-viewer image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="card-actions ">
                 <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
                 <paper-button raised on-click="_reset">Reset</paper-button>
@@ -94,18 +80,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready: function() {
                 //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
             },
-            removeMedia: function() {
-                this.set('mediaId', null);
-                this.set('fileName', null);
-
+            setPage: function(item) {
+                this.$.mcqMediaViewer.setPage(item)
             },
+
+
             setValues: function() {
-                this.set('mediaId', this.mediaId );
+                this.set('mediaId', this.mediaId);
                 this.set('fileName', this.currentname);
             },
             showMediaDialog: function() {
-                this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
+                this.$.mcqMediaViewer.removeResource()
+                this.fire('selectMedia', null)
             },
             dummyFill: function() {
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');

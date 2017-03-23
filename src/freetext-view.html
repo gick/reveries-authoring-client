@@ -16,8 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="./styles/common-styles.html">
-<link rel="import" href="./helper/resource-picker-dialog.html">
-
+<link rel="import" href="./element/helper/resource-picker-dialog.html">
 <link rel="import" href="./element/basic-element/free-text-question.html">
 <link rel="import" href="./element/basic-element/free-text-constructor.html">
 <link rel="import" href="./element/basic-element/list-free-text-activities.html">
@@ -49,7 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
-        <resource-picker-dialog image page video media-id="{{currentid}}" media-name="{{currentname}}" id="selectImage"></resource-picker-dialog>
+        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <!--
         <paper-dialog style="left:269px" id="selectImage">
             <h2> Select image</h2>
@@ -65,14 +64,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <h1>Free text questions</h1> Free text questions are questions where the answer is not limited to a set of choice. The user can give any string as an answer. It can be usefull for open question for instance.
             <br> In this section :
             <ul>
-                <li> you can generate free text questions, associate a correct answer, and an optionnal media file</li>
+                <li> you can generate free text questions, associate a correct answer, and an optional media item (image, video or page)</li>
             </ul>
         </div>
         <div class="card">
             <div class='flexQuestion'>
-                <free-text-constructor id="questionConstructor" label="{{label}}" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}">
+                <free-text-constructor id="questionConstructor" label="{{label}}" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" response-label="{{rLabel}}">
                 </free-text-constructor>
-                <free-text-question question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}" class="previewquestion">
+                <free-text-question conception-mode question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}" class="previewquestion" id="previewQuestion">
                 </free-text-question>
             </div>
         </div>
@@ -87,15 +86,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'freetext-view',
         ready: function() {
-            this.$.questionConstructor.addEventListener('selectImage', this.setImage.bind(this));
-        },
-            setImage: function() {
-                //this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
-            },
-            setValues:function(){
+            this.$.questionConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
+            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
+            this.$.selectMedia.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
 
+        },
+        selectMedia: function() {
+            this.mediaDeleted();
+            //this.$.mediaviewer.genReq();
+            this.$.selectMedia.open();
+        },
+        mediaDeleted:function(){
+            this.set('currentid',null)
+        }
+        ,
+        mediaPicked: function(item) {
+            if (item && item.detail && item.detail.__data__) {
+                var newItem = item.detail.__data__.item;
+                switch (newItem.type) {
+                    case "page":
+                        this.$.questionConstructor.setPage(newItem)
+                        this.set('currentid',newItem._id);
+                        break;
+
+                }
             }
+        },
+
+        setValues: function() {
+
+        }
 
     });
     </script>
