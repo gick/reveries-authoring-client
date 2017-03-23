@@ -122,11 +122,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <div>Info :
                                 <div class="info"> {{item.comment}}</div>
                             </div>
-                            <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
-                                <paper-button on-click='genRemove'>Remove</paper-button>
-                                <paper-button data="{{items}}" info="itemsOnMap.length" on-click="showOnMap">{{getPhrase(item,itemsOnMap.length)}}</paper-button>
-                            </div>
                         </template>
+                        <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
+                            <paper-button raised on-click='genRemove'>Remove</paper-button>
+                            <paper-button raised data="{{items}}" info="itemsOnMap.length" on-click="showOnMap">{{getPhrase(item,itemsOnMap.length)}}</paper-button>
+                        </div>
                     </div>
                 </paper-card>
             </template>
