@@ -48,6 +48,11 @@
                 }
 
             },
+            setPage: function(item) {
+                this.$.explanationUnit.setPage(item)
+
+            },
+
             getUnitActivityAsJSON: function() {
                 if (this.items) {
                     var exp = JSON.stringify(this.items);
