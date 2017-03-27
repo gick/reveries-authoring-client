@@ -89,17 +89,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     return 'mediablock selected'
                 }
             },
-            unSelect: function() {
-                
-                for (var item in this.items) {
-                    if (item.selected) {
-                        item.selected = false
-                    }
-                    this.set('mediaId', null);
-                    this.set('mediaName', null)
-
-                }
-            },
             select: function(elem) {
 
                 var model = elem.model;

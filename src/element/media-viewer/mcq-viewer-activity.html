@@ -25,7 +25,6 @@
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <akc-meta-query key="newmcq" value="{{newmcq}}"></akc-meta-query>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <div id="mcqListen">
             <template is="dom-repeat" items="{{items}}" as="item">

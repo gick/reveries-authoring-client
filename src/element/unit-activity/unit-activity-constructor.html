@@ -115,6 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-right: 15px;
         margin-left: 15px;
         display: flex;
+        width: 100%;
         flex-direction: column;
         align-self: stretch;
     }
@@ -160,7 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="insideflex">
                     <h3>Game unit start</h3>
                 </div>
-                <paper-input class="inputfield" name="activityName" value={{quest}} label="Game unit name"></paper-input>
+                <paper-input name="activityName" value={{quest}} label="Game unit name"></paper-input>
                 <paper-button on-click="setMedia" raised>Set media</paper-button>
                 <generic-resource-viewer image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
@@ -202,10 +203,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <h3>Situated activities</h3>
                 </div>
                 <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
-                <div style="display:inline-flex;flex-direction:row">
-                    <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
-                    <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
-                    <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                <div style="display:inline-flex;flex-direction:column">
+                    <div style="width:100%;display:flex;">
+                        <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                        <template is="dom-if" if="{{pa1}}">
+                            <post-action id="pa1"></post-action>
+                        </template>
+                    </div>
+                    <div style="width:100%;display:flex;">
+                        <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                        <template is="dom-if" if="{{pa2}}">
+                            <post-action id="pa2"></post-action>
+                        </template>
+                    </div>
+                    <div style="width:100%;display:flex;">
+                        <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                        <template is="dom-if" if="{{pa3}}">
+                            <post-action id="pa3"></post-action>
+                        </template>
+                    </div>
                 </div>
             </div>
             <div class="contain shadow-2dp">
@@ -234,16 +250,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.poiPAMediaPicker.addEventListener('itemPicked', this.poiPaPicked.bind(this))
                 this.$.situatedQuestionPicker.addEventListener('itemPicked', this.situatedQuestionPicked.bind(this))
                 this.$.feedbackMediaPicker.addEventListener('itemPicked', this.feedbackMediaPicked.bind(this))
-                this.$.unitActivityForm.addEventListener('iron-form-response',this.handleResponse.bind(this))
+                this.$.unitActivityForm.addEventListener('iron-form-response', this.handleResponse.bind(this))
+                this.$.situatedActivityMedia.addEventListener('mediaDeleted',this.sa1Deleted.bind(this))
+                this.$.situatedActivityMedia2.addEventListener('mediaDeleted',this.sa2Deleted.bind(this))
+                this.$.situatedActivityMedia3.addEventListener('mediaDeleted',this.sa3Deleted.bind(this))
+
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
 
             },
-            handleResponse:function(event){
-                if(event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status===200){
-                console.log('GU saved')
-                this.fire('unitGameSaved', null);}
+            sa1Deleted:function(){
+                this.pa1=false
+            },
+            sa2Deleted:function(){
+                this.pa2=false
+            },
+            sa3Deleted:function(){
+                this.pa3=false
+            },
+
+            handleResponse: function(event) {
+                if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
+                    console.log('GU saved')
+                    this.fire('unitGameSaved', null);
+                }
             },
             startingMediaPicked: function(item) {
                 if (item && item.detail && item.detail.__data__) {
@@ -296,9 +327,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.$.situatedActivityMedia.setMcq(newItem)
+                                this.pa1 = true
                                 break;
                             case "freetext":
                                 this.$.situatedActivityMedia.setFreetext(newItem)
+                                this.pa1 = true
                                 break;
 
                         }
@@ -309,9 +342,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.$.situatedActivityMedia2.setMcq(newItem)
+                                this.pa2=true
                                 break;
                             case "freetext":
                                 this.$.situatedActivityMedia2.setFreetext(newItem)
+                                this.pa2=true
                                 break;
 
                         }
@@ -321,9 +356,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.$.situatedActivityMedia3.setMcq(newItem)
+                                this.pa3=true
                                 break;
                             case "freetext":
                                 this.$.situatedActivityMedia3.setFreetext(newItem)
+                                this.pa3=true
                                 break;
 
                         }
@@ -390,10 +427,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             setPOIPaMedia: function() {
                 this.$.poiPAMediaPicker.open();
             },
-            setPOI:function(){
+            setPOI: function() {
                 this.$.poiMediaPicker.open()
-            }
-            ,
+            },
 
             setMedia: function() {
                 this.$.startingMediaPicker.open();

@@ -1,0 +1,14 @@
+{
+"login_button": {
+    "description": "login Logout button",
+    "message": "connection Deconection"
+  },
+  "resources_button": {
+    "description": "...",
+    "message": "heures"
+  },
+  "minutes": {
+    "description": "...",
+    "message": "minutes"
+  }
+}
