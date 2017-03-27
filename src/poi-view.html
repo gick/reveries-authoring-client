@@ -41,12 +41,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </paper-tabs>
             <iron-pages attr-for-selected="activity" selected="{{selected}}">
                 <point-interest-register activity="POIREG"> </point-interest-register>
-                <poi-from-map activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
+                <poi-from-map id="poimap" activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
                 <div activity="CUSTOMMAP"><h1>TO DO</h1></div>
             </iron-pages>
             </div>
         <div class="card">
-            <point-interest-display></point-interest-display>
+            <point-interest-display id='poiDisplay'></point-interest-display>
         </div>
         </div>
     </template>
@@ -55,10 +55,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'poi-view',
         ready: function() {
-
+            this.$$('#poimap').addEventListener('save-poi',this.updatePOI.bind(this))
         },
-        updateMedia: function() {
-            this.$.mediaviewer.updateMedia();
+        updatePOI:function(){
+            console.log('update poi')
+            this.$.poiDisplay.genrequest();
         },
         clearList: function() {
             this.$.uploader.clear();

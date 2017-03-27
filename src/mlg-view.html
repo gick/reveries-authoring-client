@@ -25,7 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <form is="iron-form" id="mlgform" method="post" action="/mlg">
-            <input type="text" name="mlg" value="{{mlgList}}">
+            <input hidden type="text" name="mlg" value="{{mlgList}}">
         </form>
         <akc-meta type="gameListUnit" value="{{cards}}"></akc-meta>
         <div class="card">

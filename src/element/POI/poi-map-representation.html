@@ -178,7 +178,7 @@
             },
             submitForm: function() {
                 this.$.poimap.submit();
-                this.set("newPOICreated", "newOne" + this.latitude);
+                this.fire("save-poi", null);
             },
             removeMark: function() {
                 this.fire('remove-marker', {

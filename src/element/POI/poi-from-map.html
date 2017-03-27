@@ -48,8 +48,6 @@
                 </template>
             </div>
         </div>
-
-        <paper-toast id="poiadded" class="fit-bottom" text="POI added correctly"></paper-toast>
     </template>
     <script>
     (function() {
@@ -63,10 +61,6 @@
                 this.$.gmap.addEventListener('google-map-click', this.addMarker.bind(this))
                 this.addEventListener('remove-area',this.removeArea.bind(this))
                 this.addEventListener('remove-marker', this.removeMarker.bind(this))
-                this.addEventListener('poi-saved', function() {
-                    this.fire('poi-changed', null);
-                    this.$.poiadded.open();
-                }.bind(this));
             },
 
 
