@@ -163,14 +163,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <paper-input name="activityName" value={{quest}} label="Game unit name"></paper-input>
                 <paper-button on-click="setMedia" raised>Set media</paper-button>
-                <generic-resource-viewer image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="startMedia" image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Place and guiding</h3>
                 </div>
                 <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
-                <generic-resource-viewer poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="poi" poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
                 <label class="subtitle" id="label1">User guidance:</label>
                 <paper-radio-group selected="compass">
                     <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
@@ -180,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
                 </paper-radio-group>
                 <template is="dom-if" if="{{cluePOISelected}}">
-                    <generic-resource-viewer image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
+                    <generic-resource-viewer input-name="poi-media" image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
                 <paper-radio-group selected="QR" aria-labelledby="label2">
@@ -195,7 +195,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <label class="subtitle" id="label2">POI reached :</label>
                 <paper-input label="Change score" name="poiScorePA"></paper-input>
                 <paper-button on-click="setPOIPaMedia" raised>Set POI Reached Media</paper-button>
-                <generic-resource-viewer image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
+                <generic-resource-viewer input-name="poipa-media" image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
             </div>
             </div>
             <div class="contain shadow-2dp">
@@ -205,19 +205,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
                 <div style="display:inline-flex;flex-direction:column">
                     <div style="width:100%;display:flex;">
-                        <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="situatedAct1" mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
                         <template is="dom-if" if="{{pa1}}">
                             <post-action id="pa1"></post-action>
                         </template>
                     </div>
                     <div style="width:100%;display:flex;">
-                        <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="situatedAct2" mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
                         <template is="dom-if" if="{{pa2}}">
                             <post-action id="pa2"></post-action>
                         </template>
                     </div>
                     <div style="width:100%;display:flex;">
-                        <generic-resource-viewer mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="situatedAct3" mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                         <template is="dom-if" if="{{pa3}}">
                             <post-action id="pa3"></post-action>
                         </template>
@@ -229,7 +229,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <h3>Pedagogical feedback</h3>
                 </div>
                 <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
-                <generic-resource-viewer image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
         </form>
         <div class="unitActions">

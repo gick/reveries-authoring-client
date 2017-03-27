@@ -64,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
             <paper-button raised on-click="showMediaDialog">Set media</paper-button>
-            <generic-resource-viewer image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="mediaId" image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="card-actions ">
                 <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
                 <paper-button raised on-click="_reset">Reset</paper-button>

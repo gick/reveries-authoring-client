@@ -130,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input style=";" name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
             <paper-button raised on-click="showMediaDialog">Set a clue (page)</paper-button>
-            <generic-resource-viewer image page video class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="mediaId" image page video class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
             <div class="insideflex">
                 <paper-button raised on-click="_submit">Save</paper-button>
                 <paper-button raised on-click="_reset">Reset</paper-button>
