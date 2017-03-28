@@ -95,6 +95,8 @@
                 <div class="mediablock">
                     <video controls height="300" src="/file/{{item._id}}"></video>
                 </div>
+                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
             <template is="dom-if" if="{{mcq}}" restamp>
@@ -105,7 +107,7 @@
             </template>
             <template is="dom-if" if="{{freetext}}" restamp>
                 <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-                <paper-input class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
             </template>
         </template>
