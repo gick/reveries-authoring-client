@@ -171,7 +171,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
                 <generic-resource-viewer input-name="poi" poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
-                <label class="subtitle" id="label1">User guidance:</label>
+                {{poiid}}
+                <label class="subtitle" id="label1">User guidance: </label>
                 <paper-radio-group selected="compass">
                     <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
                     <paper-radio-button name="map">POI map</paper-radio-button>
@@ -183,10 +184,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <generic-resource-viewer input-name="poi-media" image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
-                <paper-radio-group selected="QR" aria-labelledby="label2">
-                    <paper-radio-button name="QR">QR code scan</paper-radio-button>
+                <paper-radio-group selected="gps" aria-labelledby="label2">
+                    <paper-radio-button active='{{active}}' name="QR">QR code scan</paper-radio-button>
                     <paper-radio-button name="gps">Device GPS</paper-radio-button>
                 </paper-radio-group>
+                <button class="heading" disabled="{{!active}}" aria-controls="collapse1" on-click="toggleQr">QR code</button>
+                <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
+                        <div class="content">
+                            <img src='/qrcode/{{poiid}}'>
+                        </div>
+                </iron-collapse>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
@@ -251,23 +258,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.situatedQuestionPicker.addEventListener('itemPicked', this.situatedQuestionPicked.bind(this))
                 this.$.feedbackMediaPicker.addEventListener('itemPicked', this.feedbackMediaPicked.bind(this))
                 this.$.unitActivityForm.addEventListener('iron-form-response', this.handleResponse.bind(this))
-                this.$.situatedActivityMedia.addEventListener('mediaDeleted',this.sa1Deleted.bind(this))
-                this.$.situatedActivityMedia2.addEventListener('mediaDeleted',this.sa2Deleted.bind(this))
-                this.$.situatedActivityMedia3.addEventListener('mediaDeleted',this.sa3Deleted.bind(this))
-
+                this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
+                this.$.situatedActivityMedia2.addEventListener('mediaDeleted', this.sa2Deleted.bind(this))
+                this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))
+                this.$.poiViewer.addEventListener('mediaDeleted',this.poiDeleted.bind(this))
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
 
             },
-            sa1Deleted:function(){
-                this.pa1=false
+            toggleQr: function(selector) {
+                this.$.collapse1.toggle();
             },
-            sa2Deleted:function(){
-                this.pa2=false
+            poiDeleted:function(){
+                this.poiid=null;
+            }
+
+            ,
+            sa1Deleted: function() {
+                this.pa1 = false
             },
-            sa3Deleted:function(){
-                this.pa3=false
+            sa2Deleted: function() {
+                this.pa2 = false
+            },
+            sa3Deleted: function() {
+                this.pa3 = false
             },
 
             handleResponse: function(event) {
@@ -342,11 +357,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.$.situatedActivityMedia2.setMcq(newItem)
-                                this.pa2=true
+                                this.pa2 = true
                                 break;
                             case "freetext":
                                 this.$.situatedActivityMedia2.setFreetext(newItem)
-                                this.pa2=true
+                                this.pa2 = true
                                 break;
 
                         }
@@ -356,11 +371,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.$.situatedActivityMedia3.setMcq(newItem)
-                                this.pa3=true
+                                this.pa3 = true
                                 break;
                             case "freetext":
                                 this.$.situatedActivityMedia3.setFreetext(newItem)
-                                this.pa3=true
+                                this.pa3 = true
                                 break;
 
                         }
@@ -390,6 +405,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var newItem = item.detail.__data__.item;
                     switch (newItem.type) {
                         case "poi":
+                            this.poiid=newItem._id
                             this.$.poiViewer.setPOI(newItem)
                             break;
 

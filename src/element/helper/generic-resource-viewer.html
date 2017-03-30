@@ -126,6 +126,7 @@
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
+                this.poiId=null
 
             },
             isImage: function() {
@@ -188,6 +189,7 @@
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
+                this.poiId=this.item._id
             },
             setMcq: function(newItem) {
                 this.isMcq();
@@ -239,6 +241,10 @@
                 }
             },
             properties: {
+                poiId:{
+                    type:String,
+                    reflectToAttribute:true,
+                },
                 inputName: {
                     type: String,
                     notify: true,

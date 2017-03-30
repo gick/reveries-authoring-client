@@ -16,7 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../src/element/media-viewer/media-viewer.html">
 <link rel="import" href="./styles/common-styles.html">
-
 <dom-module id="image-view">
     <template>
         <style include="common-styles">
@@ -24,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
         }
-                
+        
         h1 {
             font-size: 22px;
             margin: 16px 0;
@@ -43,8 +42,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <h2>Media uploader</h2>
+
             <file-upload id="uploader" on-success="updateMedia" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
             </file-upload>
+
             <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
             <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
         </div>
