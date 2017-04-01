@@ -197,9 +197,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="insideflex">
                     <h3>POI Post action</h3>
                 </div>
+                <iron-collapse opened='{{active}}'>
+                <label class="subtitle" id="label2">POI failure (incorrect QR code scanned) :</label>
+                                <paper-input label="Incorrect QR code message" name="poiIncorrectMessage"></paper-input>
+                </iron-collapse>
                 <label class="subtitle" id="label2">POI reached :</label>
-                <paper-input label="Change score" name="poiScorePA"></paper-input>
-                <paper-button on-click="setPOIPaMedia" raised>Set POI Reached Media</paper-button>
+                <paper-input label="POI reached message" name="poiReachedMessage"></paper-input>
+                <paper-button hidden on-click="setPOIPaMedia" raised>Set POI Reached Media</paper-button>
                 <generic-resource-viewer input-name="poiPAId" image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
             </div>
             </div>
