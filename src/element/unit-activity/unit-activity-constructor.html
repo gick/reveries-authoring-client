@@ -171,17 +171,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
                 <generic-resource-viewer input-name="poi" poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
-                {{poiid}}
                 <label class="subtitle" id="label1">User guidance: </label>
-                <paper-radio-group selected="compass">
-                    <paper-radio-button checked=true name="compass">Device compass</paper-radio-button>
+                <paper-radio-group selected="folia">
+                    <paper-radio-button  name="folia">Folia image analysis</paper-radio-button>
                     <paper-radio-button name="map">POI map</paper-radio-button>
-                    <paper-radio-button name="map_compass">Device compass and POI map</paper-radio-button>
-                    <paper-radio-button checked="{{cluePOISelected}}" name="media_information">Clue (Media element)</paper-radio-button>
+                    <paper-radio-button checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
                     <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
                 </paper-radio-group>
                 <template is="dom-if" if="{{cluePOISelected}}">
-                    <generic-resource-viewer input-name="poi-media" image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
+                    <generic-resource-viewer input-name="cluePOIId" image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
                 <paper-radio-group selected="gps" aria-labelledby="label2">
@@ -202,7 +200,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <label class="subtitle" id="label2">POI reached :</label>
                 <paper-input label="Change score" name="poiScorePA"></paper-input>
                 <paper-button on-click="setPOIPaMedia" raised>Set POI Reached Media</paper-button>
-                <generic-resource-viewer input-name="poipa-media" image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
+                <generic-resource-viewer input-name="poiPAId" image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
             </div>
             </div>
             <div class="contain shadow-2dp">
