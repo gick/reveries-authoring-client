@@ -173,7 +173,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <generic-resource-viewer input-name="poi" poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
                 <label class="subtitle" id="label1">User guidance: </label>
                 <paper-radio-group selected="folia">
-                    <paper-radio-button  name="folia">Folia image analysis</paper-radio-button>
                     <paper-radio-button name="map">POI map</paper-radio-button>
                     <paper-radio-button checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
                     <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
@@ -183,14 +182,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
                 <paper-radio-group selected="gps" aria-labelledby="label2">
+                                    <paper-radio-button name="folia">Folia image analysis</paper-radio-button>
+
                     <paper-radio-button active='{{active}}' name="QR">QR code scan</paper-radio-button>
                     <paper-radio-button name="gps">Device GPS</paper-radio-button>
                 </paper-radio-group>
                 <button class="heading" disabled="{{!active}}" aria-controls="collapse1" on-click="toggleQr">QR code</button>
                 <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
-                        <div class="content">
-                            <img src='/qrcode/{{poiid}}'>
-                        </div>
+                    <div class="content">
+                        <img src='/qrcode/{{poiid}}'>
+                    </div>
                 </iron-collapse>
             </div>
             <div class="contain shadow-2dp">
@@ -198,8 +199,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <h3>POI Post action</h3>
                 </div>
                 <iron-collapse opened='{{active}}'>
-                <label class="subtitle" id="label2">POI failure (incorrect QR code scanned) :</label>
-                                <paper-input label="Incorrect QR code message" name="poiIncorrectMessage"></paper-input>
+                    <label class="subtitle" id="label2">POI failure (incorrect QR code scanned) :</label>
+                    <paper-input label="Incorrect QR code message" name="poiIncorrectMessage"></paper-input>
                 </iron-collapse>
                 <label class="subtitle" id="label2">POI reached :</label>
                 <paper-input label="POI reached message" name="poiReachedMessage"></paper-input>
@@ -263,7 +264,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
                 this.$.situatedActivityMedia2.addEventListener('mediaDeleted', this.sa2Deleted.bind(this))
                 this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))
-                this.$.poiViewer.addEventListener('mediaDeleted',this.poiDeleted.bind(this))
+                this.$.poiViewer.addEventListener('mediaDeleted', this.poiDeleted.bind(this))
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
@@ -272,8 +273,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             toggleQr: function(selector) {
                 this.$.collapse1.toggle();
             },
-            poiDeleted:function(){
-                this.poiid=null;
+            poiDeleted: function() {
+                this.poiid = null;
             }
 
             ,
@@ -407,7 +408,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     var newItem = item.detail.__data__.item;
                     switch (newItem.type) {
                         case "poi":
-                            this.poiid=newItem._id
+                            this.poiid = newItem._id
                             this.$.poiViewer.setPOI(newItem)
                             break;
 
