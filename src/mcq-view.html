@@ -84,9 +84,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
             this.$.mcqConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
             this.$.mcqConstructor.addEventListener('mcq_saved',this.mcqSaved.bind(this))
+            this.$.mcqList.addEventListener('editMCQQuestion',this.editMCQ.bind(this))
         },
         mcqSaved:function(){
             this.$.mcqList.mcqChanged() //call an update on mcq list
+        },
+        editMCQ:function(question){
+            var question=question.detail.__data__
+            this.$.mcqConstructor.editQuestion(question)
         },
         selectMedia: function() {
             this.mediaDeleted();

@@ -47,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
-        <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcq">
+        <form class="flexForm" id="mcqForm" is="iron-form" method="post" action="/mcq">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Edit MCQ question</h3>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
@@ -55,7 +55,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <input type="hidden" value="{{statusString}}" name="status" />
             </div>
             <word-list id="randomSentence"></word-list>
-            <paper-input name="label" label="Label" required></paper-input>
+            <template is="dom-if" if="{{updating}}" restamp>
+                <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
+            </template>
+            <paper-input name="label" label="Label" value="{{resourceLabel}}" required></paper-input>
             <paper-input name="question" value={{question}} label="Question" required></paper-input>
             <paper-input name="distractor1" label="First distracor(wrong choice)" value={{distractor1}} required></paper-input>
             <paper-input name="distractor2" label="Second distractor (wrong choice)" value={{distractor2}} required></paper-input>
@@ -65,9 +68,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-button raised on-click="showMediaDialog">Set clue media (optionnal)</paper-button>
             <generic-resource-viewer input-name="mediaId" image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="card-actions ">
-                <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
-                <paper-button raised on-click="_reset">Reset</paper-button>
-                <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                <template is="dom-if" if="{{updating}}" restamp>
+                    <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
+                    <paper-button raised on-click="_reset">Cancel update</paper-button>
+                </template>
+                <template is="dom-if" if="{{!updating}}" restamp>
+                    <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
+                    <paper-button raised on-click="_reset">Reset</paper-button>
+                    <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                </template>
             </div>
         </form>
     </template>
@@ -78,12 +87,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'mcq-constructor',
             ready: function() {
                 //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
+                this.$.mcqForm.addEventListener('iron-form-response', this.formSubmited.bind(this))
             },
             setPage: function(item) {
                 this.$.mcqMediaViewer.setPage(item)
             },
+            formSubmited: function() {
+                this.resetFields()
+                this.fire('mcq_saved')
 
-
+            },
             setValues: function() {
                 this.set('mediaId', this.mediaId);
                 this.set('fileName', this.currentname);
@@ -100,21 +113,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         inputList[i].value = this.$.randomSentence.getRandomSentence(5);
                 }
             },
-
+            resetFields: function() {
+                this.itemId=false
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                for (var i = 0; i < inputList.length; i++) {
+                    inputList[i].value = ""
+                }
+            },
 
             logout: function() {},
             _submit: function(event) {
-                this.$.freeTextForm.submit();
-                this.fire('mcq_saved')
+                this.$.mcqForm.submit();
             },
-            _reset: function(event) {},
+            editQuestion: function(question) {
+                this.updating = true
+
+                this.resourceLabel = question.resourceLabel
+                this.question = question.question
+                this.mediaId = question.mediaId
+                this.distractor1 = question.wrongAnswer1
+                this.distractor2 = question.wrongAnswer2
+                this.correctChoice = question.correctAnswer
+                this.wrongMessage = question.wrongAnswerMessage
+                this.correctMessage = question.correctAnswerMessage
+                this.itemId = question.itemId
+            },
+            _reset: function(event) {
+                this.resetFields()
+
+            },
             properties: {
                 mediaId: {
                     type: String,
                     notify: true,
                     reflectToAttribute: true,
                 },
-
+                itemId: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
                 distractor1: {
                     type: String,
                     notify: true,
@@ -126,6 +164,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     reflectToAttribute: true,
                 },
                 correctChoice: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                resourceLabel: {
                     type: String,
                     notify: true,
                     reflectToAttribute: true,
@@ -151,6 +194,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     value: null,
                 },
                 hasImage: {
+                    type: Boolean,
+                    notify: true,
+                    value: false,
+                },
+                updating: {
                     type: Boolean,
                     notify: true,
                     value: false,

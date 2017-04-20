@@ -98,6 +98,9 @@
                 }.bind(this)
                 this.correctIndex = Math.floor((Math.random() * 2));
             },
+            editElement:function(){
+                this.fire('editMCQQuestion',this)
+            },
 
             removeElement: function() {
                 this.$.remover.genRequest();
