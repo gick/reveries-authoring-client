@@ -76,6 +76,10 @@
                         <template is="dom-if" if="{{!isReadOnly}}">
                             <paper-button on-click="removeElement" raised>Suppress</paper-button>
                         </template>
+                        <template is="dom-if" if="{{!isReadOnly}}">
+                            <paper-button on-click="editElement" raised>Edit</paper-button>
+                        </template>
+
                     </div>
                     </template>
                 </div>

@@ -166,6 +166,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             genRemove: function(event) {
                 this.itemid = event.model.item._id;
                 this.$.remover.genRequest();
+                if (this.itemInArray(event.model.__data__.item)) {
+                    this.$.gmap.removePOI(event.model.__data__.item);
+                    this.splice('itemsOnMap', this.itemIndex(event.model.__data__.item), 1)
+
+                }
             },
 
             genrequest: function() {

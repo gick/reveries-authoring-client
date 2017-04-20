@@ -47,7 +47,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
-        <akc-meta key="newmcq" value="{{save_question}}"></akc-meta>
         <form class="flexForm" id="freeTextForm" is="iron-form" method="post" action="/mcq">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Edit MCQ question</h3>
@@ -63,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="response" label="Valid choice" value={{correctChoice}} required></paper-input>
             <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
-            <paper-button raised on-click="showMediaDialog">Set media</paper-button>
+            <paper-button raised on-click="showMediaDialog">Set clue media (optionnal)</paper-button>
             <generic-resource-viewer input-name="mediaId" image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="card-actions ">
                 <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
@@ -106,7 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             logout: function() {},
             _submit: function(event) {
                 this.$.freeTextForm.submit();
-                this.save_question = this.question;
+                this.fire('mcq_saved')
             },
             _reset: function(event) {},
             properties: {
