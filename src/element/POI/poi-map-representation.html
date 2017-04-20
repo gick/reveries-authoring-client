@@ -76,7 +76,7 @@
                     <h3 class="smallh3">Edit POI</h3>
                     <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                     <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
-                    <input type="hidden" value="{{statusString}}" name="status"/>
+                    <input type="hidden" value="{{statusString}}" name="status" />
                 </div>
                 <paper-input style="display:inline-flex;" required name="label" value={{title}} label="Label"></paper-input>
                 <paper-input style="display:inline-flex;" required name="comment" value={{info}} label="Information"></paper-input>
@@ -191,12 +191,16 @@
                 this.set('icon', newval);
                 this.$.icons.close();
             },
+          formSubmited: function() {
+                this.removeMark()
 
+            },
             ready: function() {
                 this.set("newPOICreated", null);
                 if (this.get('radius') !== 0) {
                     this.set('hasArea', true);
                 }
+                this.$.poimap.addEventListener('iron-form-submit', this.formSubmited.bind(this))
             },
 
 
@@ -237,7 +241,10 @@
                     type: Number,
                     notify: true,
                 },
-                status:{type :Boolean,observer:'_statusChanged'},
+                status: {
+                    type: Boolean,
+                    observer: '_statusChanged'
+                },
 
 
                 mapLongitude: {
@@ -292,17 +299,15 @@
 
 
             },
-            _statusChanged:function(newval,oldval){
-                if(!newval){
-                    this.statusText="Private content, not visible for other users"
-                    this.statusString="Private"
-                    this.statusIcon="visibility-off"
-                }
-                else
-                {
-                    this.statusText="Public content, shared with other users"
-                    this.statusString="Public"
-                    this.statusIcon="visibility"
+            _statusChanged: function(newval, oldval) {
+                if (!newval) {
+                    this.statusText = "Private content, not visible for other users"
+                    this.statusString = "Private"
+                    this.statusIcon = "visibility-off"
+                } else {
+                    this.statusText = "Public content, shared with other users"
+                    this.statusString = "Public"
+                    this.statusIcon = "visibility"
 
                 }
             }

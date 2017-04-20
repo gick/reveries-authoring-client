@@ -182,8 +182,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
                 <paper-radio-group selected="gps" aria-labelledby="label2">
-                                    <paper-radio-button name="folia">Folia image analysis</paper-radio-button>
-
+                    <paper-radio-button name="folia">Folia image analysis</paper-radio-button>
                     <paper-radio-button active='{{active}}' name="QR">QR code scan</paper-radio-button>
                     <paper-radio-button name="gps">Device GPS</paper-radio-button>
                 </paper-radio-group>
@@ -244,7 +243,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </form>
         <div class="unitActions">
             <paper-button raised on-click="_submit">Save</paper-button>
-            <paper-button raised on-click="_reset">Reset</paper-button>
+            <paper-button raised on-click="resetFields">Reset</paper-button>
             <paper-button raised on-click="dummyFill">Dummy Fill</paper-button>
         </div>
     </template>
@@ -287,10 +286,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             sa3Deleted: function() {
                 this.pa3 = false
             },
+            resetFields: function() {
+                this.poiDeleted();
+                this.sa1Deleted();
+                this.sa2Deleted();
+                this.sa3Deleted();
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                for (var i = 0; i < inputList.length; i++) {
+                    inputList[i].value = ""
+                }
+                var inputList2 = Polymer.dom(this.root).querySelectorAll('paper-textarea');
+                for (var j = 0; j < inputList2.length; j++) {
+                    inputList2[j].value = ""
+                }
 
+
+            },
             handleResponse: function(event) {
                 if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
-                    console.log('GU saved')
+                    this.resetFields();
                     this.fire('unitGameSaved', null);
                 }
             },

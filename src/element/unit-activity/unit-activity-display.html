@@ -137,6 +137,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 return false;
             },
+            resetList:function(){
+                this.$.ajaxLoader.generateRequest()
+            },
             itemIndex: function(item) {
                 for (var i = 0; i < this.itemsOnMap.length; i++) {
                     if (this.itemsOnMap[i] == item._id) {
