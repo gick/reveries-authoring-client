@@ -46,7 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </ul>
         </div>
         <div class="card constructorCard">
-            <staticmedia-generator style="display:inline-flex;" mkdown="{{MK}}" id="staticGenerator"></staticmedia-generator>
+            <staticmedia-generator style="display:inline-flex;" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
             <staticmedia-viewer style="display:inline-flex;" mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
@@ -58,8 +58,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'staticmedia-view',
         ready: function() {
-            this.$.staticGenerator.addEventListener('static-media-changed',function(){this.updateMedia()}.bind(this))
+            this.$.staticConstructor.addEventListener('static-media-changed',function(){this.updateMedia()}.bind(this))
+            this.$.staticConstructor.addEventListener('staticMediaSaved',function(){this.updateMedia()}.bind(this))
+
+            this.$.staticmedialist.addEventListener('editPage',this.editPage.bind(this))
+
         },
+        editPage:function(staticpage){
+            var page=staticpage.detail.__data__
+            this.$.staticConstructor.editPage(page)
+        }
+        ,
         updateMedia: function() {
             this.$.staticmedialist.requestElements();
         }

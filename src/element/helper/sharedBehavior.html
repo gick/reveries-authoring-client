@@ -1,0 +1,24 @@
+<script>
+sharedBehavior = {
+
+    properties: {
+        resourceReadonly: {
+            type: String,
+            notify: true,
+            observer: "_resourceReadonlyObserver",
+        }
+    },
+    removeElement: function() {
+        this.$.remover.genRequest();
+    },
+
+    _resourceReadonlyObserver: function(newval, oldval) {
+        if (newval == "readonly") {
+            this.isReadOnly = true
+
+        } else {
+            this.isReadOnly = false
+        }
+    },
+};
+</script>

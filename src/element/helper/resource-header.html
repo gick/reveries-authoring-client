@@ -31,8 +31,11 @@
         <share-ressource id="sharingElement" request-params="{{requestParams}}" ressource-url="{{resourceUrl}}" ressource-id="{{resourceId}}"></share-ressource>
         <div class$="{{resourceClass}}">
             <h3 class="headerText">{{resourceLabel}}</h3>
-            <!-- Read belonging to the user can be set public or private --> 
+            <!-- Read belonging to the user can be set public or private -->
             <template is="dom-if" if="{{!isReadOnly}}">
+                <template is="dom-if" if="{{editable}}">
+                    <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="editQuestion" icon="icons:create"></paper-icon-button>
+                </template>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
             </template>
             <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
@@ -53,7 +56,10 @@
                 this.addEventListener('shift_ressource_sharing_status', this.shiftShareStatus.bind(this))
                 this.requestParams = '{"Status":"Public"}'
             },
-            cloneResource:function(){
+            editQuestion: function() {
+                this.fire('edit', null)
+            },
+            cloneResource: function() {
 
             },
             setStatus: function() {
@@ -93,6 +99,9 @@
                 }
             },
             properties: {
+                editable: {
+                    type: Boolean,
+                },
                 ressourceId: {
                     type: String,
                     notify: true,

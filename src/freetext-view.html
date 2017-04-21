@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <div class="card">
-                <list-free-text-activities url="/freetextactivity"></list-free-text-activities>
+                <list-free-text-activities id='freetextList' url="/freetextactivity"></list-free-text-activities>
             </div>
         </div>
     </template>
@@ -89,24 +89,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.questionConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
             this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
             this.$.selectMedia.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
+            this.$.freetextList.addEventListener('editFreetext', this.editFreetext.bind(this))
+            this.$.questionConstructor.addEventListener('freetext_saved', this.updateList.bind(this))
 
+
+        },
+        updateList:function(){
+            this.$.freetextList.requestElements()
         },
         selectMedia: function() {
             this.mediaDeleted();
             //this.$.mediaviewer.genReq();
             this.$.selectMedia.open();
         },
-        mediaDeleted:function(){
-            this.set('currentid',null)
-        }
-        ,
+        editFreetext: function(question) {
+            var question = question.detail.__data__
+            this.$.questionConstructor.editQuestion(question)
+        },
+
+        mediaDeleted: function() {
+            this.set('currentid', null)
+        },
         mediaPicked: function(item) {
             if (item && item.detail && item.detail.__data__) {
                 var newItem = item.detail.__data__.item;
                 switch (newItem.type) {
                     case "page":
                         this.$.questionConstructor.setPage(newItem)
-                        this.set('currentid',newItem._id);
+                        this.set('currentid', newItem._id);
                         break;
 
                 }

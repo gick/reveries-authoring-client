@@ -1,0 +1,21 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
+<dom-module id="message-notification">
+    <template>
+        <paper-toast id="toast0" text="{{currentMessage}}"></paper-toast>
+    </template>
+    <script type="text/javascript">
+    Polymer({
+
+        is: 'message-notification',
+        ready: function() {
+            //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
+        },
+        showToast:function(message){
+        	this.currentMessage=message.detail
+        	this.$.toast0.open();
+        },
+
+    })
+    </script>
+</dom-module>

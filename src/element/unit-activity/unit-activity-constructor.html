@@ -304,8 +304,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             handleResponse: function(event) {
                 if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
-                    this.resetFields();
-                    this.fire('unitGameSaved', null);
+                    this.resetFields(); 
+                    this.fire('unitGameSaved', 'New unit game saved');
                 }
             },
             startingMediaPicked: function(item) {

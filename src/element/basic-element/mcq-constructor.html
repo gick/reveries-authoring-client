@@ -93,8 +93,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.mcqMediaViewer.setPage(item)
             },
             formSubmited: function() {
+                if(this.updating){
+                    this.fire('mcq_saved','MCQ updated')
+                } else{
+                    this.fire('mcq_saved','MCQ saved')                    
+                }
                 this.resetFields()
-                this.fire('mcq_saved')
 
             },
             setValues: function() {
@@ -114,7 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             resetFields: function() {
-                this.itemId=false
+                this.updating=false
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""

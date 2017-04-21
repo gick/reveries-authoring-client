@@ -9,6 +9,7 @@
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
+<link rel="import" href="../helper/sharedBehavior.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <dom-module id="mcq-activity">
     <style is="custom-style" include="iron-flex iron-flex-alignment">
@@ -40,7 +41,7 @@
         <remove-ressource id="remover" callbackfunction="{{mcqRemoved}}" ressource-id={{itemId}} ressource-url='/mcq'></remove-ressource>
         <div class=outer>
             <div class="inner">
-                <resource-header resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
+                <resource-header editable id='header' resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <div id="mcqbody" class="mcq-body">
                     <iron-collapse id="clue">
                         <div class="">
@@ -76,10 +77,6 @@
                         <template is="dom-if" if="{{!isReadOnly}}">
                             <paper-button on-click="removeElement" raised>Suppress</paper-button>
                         </template>
-                        <template is="dom-if" if="{{!isReadOnly}}">
-                            <paper-button on-click="editElement" raised>Edit</paper-button>
-                        </template>
-
                     </div>
                     </template>
                 </div>
@@ -91,19 +88,18 @@
         'use strict';
         Polymer({
             is: 'mcq-activity',
+            behaviors: [sharedBehavior],
+
             ready: function() {
                 // this.hasClue=false
                 this.mcqRemoved = function() {
                     this.fire('mcq-removed', null)
                 }.bind(this)
+                this.$.header.addEventListener('edit',this.editElement.bind(this))
                 this.correctIndex = Math.floor((Math.random() * 2));
             },
             editElement:function(){
                 this.fire('editMCQQuestion',this)
-            },
-
-            removeElement: function() {
-                this.$.remover.genRequest();
             },
 
             getClue: function() {
@@ -132,14 +128,6 @@
                 }
             },
 
-            _resourceReadonlyObserver: function(newval, oldval) {
-                if (newval == "readonly") {
-                    this.isReadOnly = true
-
-                } else {
-                    this.isReadOnly = false
-                }
-            },
             _resourceClueObserver: function(newval, oldval) {
                 if (newval) {
                     this.set('hasClue', true)
@@ -200,11 +188,6 @@
                     type: String,
                     notify: true,
                 },
-                resourceReadonly: {
-                    type: String,
-                    notify: true,
-                    observer: "_resourceReadonlyObserver",
-                }
             }
         });
     })();

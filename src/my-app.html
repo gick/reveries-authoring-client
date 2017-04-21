@@ -29,6 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
 <link rel="import" href="../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../src/element/helper/messageNotification.html">
+
 <dom-module id="my-app">
     <template>
         <style>
@@ -87,6 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         .drawer-list a.subroute {}
         </style>
         <app-location use-hash-as-path route="{{route}}"></app-location>
+        <message-notification id="toaster"></message-notification>
         <auth-manager id="manager" status="{{ustat}}"></auth-manager>
         <akc-meta key="media" value=0></akc-meta>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
@@ -115,7 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-menu class="menu-content sublist">
                             <paper-submenu>
                                 <paper-item class="menu-trigger menuLink">
-                                <i18n-msg msgid="media_button">     My media</i18n-msg>
+                                <i18n-msg msgid="media_button">My media</i18n-msg>
                                 </paper-item>
                                 <paper-menu class="menu-content">
                                     <paper-item>
@@ -176,10 +179,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <login-view name="login"></login-view>
                     <video-view name="video"></video-view>
                     <poi-view name="poi"></poi-view>
-                    <staticmedia-view name="staticmedia"></staticmedia-view>
-                    <freetext-view name="freetext"></freetext-view>
+                    <staticmedia-view id='staticmedia' name="staticmedia"></staticmedia-view>
+                    <freetext-view id='freetext' name="freetext"></freetext-view>
                     <image-view name="image"></image-view>
-                    <mcq-view name="mcq"></mcq-view>
+                    <mcq-view id="mcq" name="mcq"></mcq-view>
                     <constructor-view id="constructorView" name="constructor"></constructor-view>
                     <mlg-view id="mlgView" name="mlg"></mlg-view>
                 </iron-pages>
@@ -193,7 +196,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             I18nMsg.lang = 'en';
             Platform.performMicrotaskCheckpoint();
-
+            this.$$('#mcq').addEventListener('mcq_saved',this.resourceSaved.bind(this))
+            this.$$('#freetext').addEventListener('freetext_saved',this.resourceSaved.bind(this))
+            this.$$('#staticmedia').addEventListener('staticMediaSaved',this.resourceSaved.bind(this))
+            this.$$('#constructorView').addEventListener('unitGameSaved',this.resourceSaved.bind(this))
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
@@ -201,6 +207,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.manager.getUserInfo();
             this.logged = false;
         },
+        resourceSaved:function(message){
+            this.$.toaster.showToast(message)
+        }
+        ,
         unitGameSaved: function() {
             console.log('saved')
             if (this.$.mlgView && this.$.mlgView.unitGameChanged) {

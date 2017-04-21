@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../helper/word-list.html">
 <dom-module id="staticmedia-generator">
-<!--
+    <!--
 An element to design static web page using markdown. An helper button allow to pick an image from user image
 gallery.
 TODO : propose different CSS associated with the markdown
@@ -129,7 +129,10 @@ TODO : propose different CSS associated with the markdown
             </div>
         </paper-dialog>
         <word-list id="randomSentence"></word-list>
-        <form class="freeTextCreator" id="freeTextForm" is="iron-form" method="post" action="/staticmedia">
+        <form class="freeTextCreator" id="staticmediaConstructor" is="iron-form" method="post" action="/staticmedia">
+            <template is="dom-if" if="{{updating}}" restamp>
+                <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
+            </template>
             <div class="formTitleWithButton">
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                 <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
@@ -139,7 +142,13 @@ TODO : propose different CSS associated with the markdown
             <paper-textarea id="mkdownCode" name="mkdown" value={{mkdown}} rows="5" label="Markdown code"></paper-textarea>
             <paper-button on-click="showImageDialog">Set image</paper-button>
             <div class="insideflex">
-                <paper-button raised on-click="_submit">Save</paper-button>
+                <template is="dom-if" if="{{!updating}}" restamp>
+                    <paper-button raised on-click="_submit">Save</paper-button>
+                </template>
+                <template is="dom-if" if="{{updating}}" restamp>
+                    <paper-button raised on-click="_submit">Update page</paper-button>
+                    <paper-button raised on-click="_reset">Cancel update</paper-button>
+                </template>
             </div>
         </form>
     </template>
@@ -149,11 +158,26 @@ TODO : propose different CSS associated with the markdown
         Polymer({
             is: 'staticmedia-generator',
             ready: function() {
-                /* this.$.freeTextForm.addEventListener('iron-form-response', function() {
-                     this.changeFreeTextQuestion = "newQuestion" + this.question;
-
-                 }.bind(this))*/
+                this.$.staticmediaConstructor.addEventListener('iron-form-response', this.submited.bind(this))
+                this.updating=false 
             },
+            submited: function() {
+                if (!this.updating) {
+                    this.fire('staticMediaSaved', 'New page saved')
+                } else {
+                    this.fire('staticMediaSaved', 'Page updated')
+
+                }
+                this._reset()
+
+            },
+            editPage: function(page) {
+                this.updating = true
+                this.mkdown = page.mkdown
+                this.itemId = page.itemId
+                this.label = page.resourceLabel
+            },
+
             setValues: function() {
                 this.set('mediaId', this.currentid)
             },
@@ -172,20 +196,28 @@ TODO : propose different CSS associated with the markdown
                 var imageURL = '/file/' + this.currentid;
                 var toAppend = '![alt text](' + imageURL + ')'
                 if (this.mkdown) {
-                    this.mkdown = this.mkdown + "\n" +"\n" +toAppend ;
-                }
-                else {
-                    this.mkdown=toAppend;
+                    this.mkdown = this.mkdown + "\n" + "\n" + toAppend;
+                } else {
+                    this.mkdown = toAppend;
                 }
             },
+            resetFields: function() {
+                this.updating = false
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                for (var i = 0; i < inputList.length; i++) {
+                    inputList[i].value = ""
+                }
+            },
+
             _submit: function(event) {
-                this.$.freeTextForm.submit();
-                this.fire('static-media-changed',null)
-                this.statusString=""
-                this.label=""
-                this.mkdown=""
+                this.$.staticmediaConstructor.submit();
+                this.statusString = ""
+                this.label = ""
+                this.mkdown = ""
             },
-            _reset: function(event) {},
+            _reset: function() {
+                this.resetFields()
+            },
             properties: {
                 mkdown: {
                     type: String,
