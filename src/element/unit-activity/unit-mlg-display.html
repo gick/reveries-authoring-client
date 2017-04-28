@@ -1,4 +1,5 @@
-e<!--
+
+<!--
 @license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -11,9 +12,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../remove-ressource-element/remove-ressource.html">
+<link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
-<dom-module id="unit-activity-display">
+<dom-module id="unit-mlg-display">
     <template>
         <style include="shared-styles">
         :host {
@@ -62,17 +63,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             flex-direction: column;
         }
         
-        .mediaimg {
-            height: 300px;
-            display: flex;
-            border-radius: 3px;
-            -moz-box-shadow: 6px 5px 2px #CECEB9;
-            -webkit-box-shadow: 6px 5px 2px #CECEB9;
-            -o-box-shadow: 6px 5px 2px #CECEB9;
-            box-shadow: 6px 5px 2px #CECEB9;
-            margin-bottom: 15px;
-        }
-        
         .innerdiv {
             position: relative;
             overflow: visible;
@@ -83,21 +73,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
         <div class="outer">
-            <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
+            <remove-ressource id="remover" ressource-id={{toRemove}} callbackfunction="{{callback}}" ressource-url='/mlg'></remove-ressource>
+            <iron-ajax id="ajaxLoader" url="/mlg" handle-as="json" last-response="{{items}}"></iron-ajax>
         </div>
-        <div class="innerdiv">
+        <div id="unitMlg" class="innerdiv">
             <template is="dom-repeat" items="{{items}}" as="item">
-                <paper-card class="generalflex" heading="{{item.name}}">
+                <paper-card class="generalflex" heading="{{item.label}}">
                     <div class=card-content style="flex-grow:1">
-                        <div>Activity name :
-                            <div class="info"> {{item.activityName}}</div>
+                        <div>Mobile Learning Game Name :
+                            <div class="info"> {{item._id}}</div>
                         </div>
                     </div>
                     <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
-                        <paper-button on-click='genrequest'>Remove</paper-button>
-                        <remove-ressource ressource-id={{item._id}} callbackfunction="{{callback}}" ressource-url='/unitGame'></remove-ressource>
+                        <paper-button on-click='removeMLG'>Remove</paper-button>
                     </div>
                 </paper-card>
             </template>
@@ -108,46 +97,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'use strict';
 
         Polymer({
-            is: 'unit-activity-display',
+            is: 'unit-mlg-display',
 
             ready: function() {
-                this.addEventListener('authentification-changed', function(event) {
-                    if (event.detail.logged)
-                        this.$.ajaxLoader.generateRequest();
+                this.$.unitMlg.addEventListener('newMLG', function() {
+                    this.ajaxLoader.generateRequest().bind(this)
                 })
 
-                this.addEventListener('unit-game-changed', function() {
-                    this.$.ajaxLoader.generateRequest();
-                })
                 this.set('callback', function() {
                     this.$.ajaxLoader.generateRequest();
                 }.bind(this));
 
             },
-            genrequest: function(event) {
-                event.srcElement.nextElementSibling.genRequest();
-            },
-
-            itemInArray: function(item) {
-                for (var i = 0; i < this.itemsOnMap.length; i++) {
-                    if (this.itemsOnMap[i] == item._id) {
-                        return true;
-                    }
-                }
-                return false;
-            },
-            itemIndex: function(item) {
-                for (var i = 0; i < this.itemsOnMap.length; i++) {
-                    if (this.itemsOnMap[i] == item._id) {
-                        return i;
-                    }
-                }
-                return -1;
+            mlgChanged: function() {
+                this.$.ajaxLoader.generateRequest();
 
             },
+            removeMLG: function(event) {
+                this.toRemove = event.model.__data__.item._id
+                this.$.remover.genRequest();
+            },
+
             observers: [
-                'statusChanged(status)',
-                'newpoiChanged(newpoi)'
+                'statusChanged(status)'
             ],
             statusChanged: function(status) {
                 if (status.logged) {

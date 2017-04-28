@@ -1,0 +1,124 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="./styles/common-styles.html">
+<link rel="import" href="./element/helper/resource-picker-dialog.html">
+<link rel="import" href="./element/inventory/inventoryitem-constructor.html">
+<link rel="import" href="./element/inventory/inventory-element.html">
+<link rel="import" href="./element/inventory/list-inventory-element.html">
+<dom-module id="inventory-view">
+    <template>
+        <style include="common-styles">
+        :host {
+            display: block;
+            padding: 10px;
+        }
+        
+        .previewquestion {
+            display: inline-table;
+            padding: 10px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            margin: 10px;
+        }
+        
+        .flexQuestion {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        badge-element {
+            margin: auto;
+            margin-top: 0;
+        }
+
+        badge-constructor {
+            display: inline-flex;
+            flex-direction: row;
+            padding: 5px;
+            align-items: flex-start;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+        }
+        
+        h1 {
+            font-size: 22px;
+            margin: 16px 0;
+            color: #212121;
+        }
+        </style>
+        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
+        <div class="card">
+            <h1>Inventory element</h1> Inventory element are non permanent item that are added to the user inventory during a serious game session.
+            <br> In this section :
+            <ul>
+                <li> you can create new inventory items</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class='flexQuestion'>
+                <inventoryitem-constructor class="" id="inventoryConstructor" label="{{inventoryname}}" item-text="{{itemText}}">
+                </inventoryitem-constructor>
+                <inventory-element class="" id="" label={{inventoryname}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
+                </inventory-element>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card">
+                <list-inventory-element id="inventoryList" url="/inventory"></list-inventory-element>
+            </div>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'inventory-view',
+        ready: function() {
+            this.$.inventoryConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
+            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
+            this.$.inventoryConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
+            this.$.inventoryConstructor.addEventListener('inventoryitem_saved', this.inventorySaved.bind(this))
+            this.$.inventoryList.addEventListener('editInventory', this.editInventory.bind(this))
+        },
+        inventorySaved: function() {
+            this.$.inventoryList.inventoryChanged() //call an update on mcq list
+        },
+        editInventory: function(inventory) {
+            var inventory= inventorydetail.__data__
+            this.$.inventoryConstructor.editInventory()
+        },
+        selectMedia: function() {
+            this.mediaDeleted();
+            //this.$.mediaviewer.genReq();
+            this.$.selectMedia.open();
+        },
+        mediaDeleted: function() {
+            this.set('mediaId', null)
+        },
+        mediaPicked: function(item) {
+            if (item && item.detail && item.detail.__data__) {
+                var newItem = item.detail.__data__.item;
+                switch (newItem.type) {
+                    case "page":
+                        this.$.inventoryConstructor.setPage(newItem)
+                        this.set('mediaId', newItem._id);
+                        break;
+
+                }
+            }
+        },
+
+    });
+    </script>
+</dom-module>

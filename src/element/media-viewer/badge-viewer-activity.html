@@ -1,0 +1,137 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../badges/badge-element.html">
+<dom-module id="badge-viewer-activity">
+    <template>
+        <style>
+        :host {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        
+        .selected {
+            opacity: 1;
+            outline: 4px solid blue;
+            outline-offset: -4px;
+        }
+        
+        .previewquestion {
+            display: inline-flex;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            margin: 10px;
+        }
+        </style>
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <div id="badgeListen">
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <div class$="{{computeClass(item.selected)}}" on-click="select">
+                    <badge-element resource-status="{{item.status}}" badge-pageid="{{item.badgePageId}}" badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}" class="previewquestion">
+                    </badge-element>
+                </div>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'badge-viewer-activity',
+            ready: function() {
+                this.$.badgeListen.addEventListener('mcq-removed', function() {
+                        this.$.ajaxLoader.generateRequest()
+                    }.bind(this))
+                    //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
+            },
+            requestElements: function() {
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            genReq: function() {
+                this.$.ajaxLoader.generateRequest();
+            },
+
+            hasImage: function(imageId) {
+                if (!imageId) {
+                    return false
+                }
+                if (imageId.length === 0) {
+                    return false
+                }
+                return true;
+            },
+            observers: [
+                'statusChanged(status)',
+                'mcqChanged(newmcq)'
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            mcqChanged: function(newquestion) {
+                if (newquestion) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+            computeClass: function(elem) {
+                if (!elem) {
+                    return 'previewquestion'
+                } else {
+                    return 'previewquestion selected'
+                }
+            },
+            select: function(elem) {
+
+                var model = elem.model;
+                if (model.get('item.selected')) {
+                    model.set('item.selected', false);
+                    this.set('mediaId', null);
+                    this.set('mediaName', null)
+                    return
+                }
+
+                for (var i = 0; i < this.items.length; i++) {
+                    this.set('items.#' + i + '.selected', false);
+
+                }
+                if (!model.get('item.selected')) {
+                    model.set('item.selected', true)
+                        //model.set('item.class', 'mediablock selected')
+                }
+                if (model.get('item.selected')) {
+                    this.set('mediaId', model.get('item._id'));
+                    this.set('mediaName', model.get('item.filename'))
+                }
+                model.__data__.item.type = 'mcq'
+                this.fire('itemPicked', model)
+
+            },
+
+            properties: {
+                url: {
+                    type: String,
+                    notify: true
+                },
+                mediaId: {
+                    type: String,
+                    reflectToAttribute: true,
+                    notify: true
+                },
+                mediaName: {
+                    type: String,
+                    reflectToAttribute: true,
+                    notify: true
+                },
+
+            }
+        });
+    })();
+    </script>
+</dom-module>

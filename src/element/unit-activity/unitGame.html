@@ -1,0 +1,249 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../helper/generic-resource-viewer.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../basic-element/post-action.html">
+<link rel="import" href="../helper/word-list.html">
+<dom-module id="unitgame-resource">
+    <style>
+    .insideflex {
+        display: inline-flex;
+        flex-direction: row;
+        align-self: stretch;
+        justify-content: space-between;
+        margin-top: 16px;
+        margin-bottom: 10px;
+    }
+    
+    .mediaimg {
+        align-self: center;
+        display: flex;
+        max-width: 250px;
+        max-height: 250px;
+        border-radius: 3px;
+        -moz-box-shadow: 6px 5px 2px #CECEB9;
+        -webkit-box-shadow: 6px 5px 2px #CECEB9;
+        -o-box-shadow: 6px 5px 2px #CECEB9;
+        box-shadow: 6px 5px 2px #CECEB9;
+    }
+    
+    .question {
+        display: inline-flex;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 24px;
+        max-width: 300px;
+        color: black;
+    }
+    
+    .markdown-html img {
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    .markdown-html video {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .element {
+        align-self: stretch;
+    }
+    
+    .remove {
+        background-color: #eeeeee;
+    }
+    
+    .correct {
+        color: green;
+    }
+    
+    .wrong {
+        color: red;
+    }
+    
+    .inner {
+        display: inline-flex;
+        flex-flow: column;
+        align-items: baseline;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    </style>
+    <template>
+        <div style="display:inline-flex">
+            <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
+            <form class="inner">
+                <resource-header id="header" editable style="width:100%" resource-url="/unitGame" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{activityName}}"></resource-header>
+                <div>
+                    Activities : {{activities.length}}
+                </div>
+                <template is="dom-if" if="{{poiGuidClue}}">
+                    <div>
+                        POI guidance : Clue
+                    </div>
+                </template>
+                <template is="dom-if" if="{{poiGuidMap}}">
+                    <div>
+                        POI guidance : Map
+                    </div>
+                </template>
+                <template is="dom-if" if="{{poiGPSValidation}}">
+                    <div>
+                        POI reached validation : GPS
+                    </div>
+                </template>
+                <template is="dom-if" if="{{poiQRValidation}}">
+                    <div>
+                        POI reached validation : QR-Code
+                    </div>
+                </template>
+                <template is="dom-if" if="{{poiGuidFolia}}">
+                    <div>
+                        POI reached validation : Folia
+                    </div>
+                </template>
+                <template is="dom-if" if="{{conceptionMode}}">
+                    <div style="" class="insideflex">
+                        <template is="dom-if" if="{{mediaId}}" restamp=true>
+                            <paper-button raised on-click="showClue">Show clue</paper-button>
+                        </template>
+                        <paper-button raised class="remove" on-click="removeElement">Remove</paper-button>
+                    </div>
+                </template>
+            </form>
+        </div>
+    </template>
+    <script>
+    (function() {
+            'use strict';
+            Polymer({
+                    is: 'unitgame-resource',
+                    ready: function() {
+
+                    },
+
+                properties: {
+                    activityName: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    startMediaId: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    activities: {
+                        type: Array,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    POIId: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiGuidFolia: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    feedbackMediaId: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiScorePA: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiPAId: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    cluePOIId: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiGuidFolia: {
+                        type: Boolean,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiGuidMap: {
+                        type: Boolean,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiGuidClue: {
+                        type: Boolean,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiGPSValidation: {
+                        type: Boolean,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiQRValidation: {
+                        type: Boolean,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiIncorrectMessage: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    poiReachedMessage: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    mediaName: {
+                        type: String,
+                        notify: true,
+                        value: null,
+                    },
+
+                }
+            });
+    })();
+    </script>
+</dom-module>

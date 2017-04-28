@@ -127,6 +127,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     <paper-item>
                                         <a class='menuLink' name="video" href="#video">My audio/videos</a>
                                     </paper-item>
+                                    <paper-item>
+                                        <a class='menuLink' name="badge" href="#badge">My badges</a>
+                                    </paper-item>
+                                    <paper-item>
+                                        <a class='menuLink' name="inventory" href="#inventory">My inventory items</a>
+                                    </paper-item>
+
                                 </paper-menu>
                             </paper-submenu>
                             <paper-item>
@@ -183,6 +190,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <freetext-view id='freetext' name="freetext"></freetext-view>
                     <image-view name="image"></image-view>
                     <mcq-view id="mcq" name="mcq"></mcq-view>
+                    <badge-view id="badge" name="badge"></badge-view>
+                    <inventory-view id="inventoryView" name="inventory"></inventory-view>
+
                     <constructor-view id="constructorView" name="constructor"></constructor-view>
                     <mlg-view id="mlgView" name="mlg"></mlg-view>
                 </iron-pages>
@@ -200,6 +210,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$$('#freetext').addEventListener('freetext_saved',this.resourceSaved.bind(this))
             this.$$('#staticmedia').addEventListener('staticMediaSaved',this.resourceSaved.bind(this))
             this.$$('#constructorView').addEventListener('unitGameSaved',this.resourceSaved.bind(this))
+            this.$$('#badge').addEventListener('badge_saved',this.resourceSaved.bind(this))
+    
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))

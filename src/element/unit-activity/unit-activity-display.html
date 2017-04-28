@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="./unitGame.html">
 <dom-module id="unit-activity-display">
     <template>
         <style include="shared-styles">
@@ -83,8 +84,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
-        <akc-meta key="games" value="{{items}}"></akc-meta>
         <div class="outer">
             <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
         </div>
@@ -98,7 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
                     <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
                         <paper-button on-click='genrequest'>Remove</paper-button>
-                        <remove-ressource resso urce-id={{item._id}} callbackfunction="{{callback}}" ressource-url='/unitGame'></remove-ressource>
+                        <remove-ressource resource-id={{item._id}} callbackfunction="{{callback}}" ressource-url='/unitGame'></remove-ressource>
                     </div>
                 </paper-card>
             </template>

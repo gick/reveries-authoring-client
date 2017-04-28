@@ -1,0 +1,88 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../helper/sharedBehavior.html">
+<link rel="import" href="../helper/resource-header.html">
+<dom-module id="inventory-element">
+    <template>
+        <style type="text/css">
+        .image {
+            width: 150px;
+            height: 150px;
+        }
+        
+        .markdown-html img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+        }
+        
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        </style>
+        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{item}}"></iron-ajax>
+        <remove-ressource id="remover" callbackfunction="{{itemRemoved}}" ressource-id={{itemId}} ressource-url='/inventory'></remove-ressource>
+        <div class="badge">
+            <resource-header style="width:100%" editable id='header' resource-url="/badge" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{label}}"></resource-header>
+            <marked-element markdown="{{itemMkdown}}">
+                <div class="markdown-html"></div>
+            </marked-element>
+            <div>{{itemText}}</div>
+            <template is="dom-if" if="{{!isReadOnly}}">
+                <paper-button on-click="removeElement" raised>Suppress</paper-button>
+            </template>
+        </div>
+    </template>
+</dom-module>
+<script>
+(function() {
+    'use strict';
+    Polymer({
+        is: 'inventory-element',
+        behaviors: [sharedBehavior],
+
+
+        _loadPage: function(itemMediaId) {
+            if (itemMediaId) {
+                this.url = '/staticmedia/' + itemMediaId
+                this.$.ajaxLoader.generateRequest()
+            }
+        },
+        handleResponse: function(response) {
+            this.itemMkdown = response.detail.__data__.response.mkdown
+        },
+        ready: function() {
+            this.itemRemoved = function() {
+                this.fire('inventoryitem_removed', null)
+            }
+            this.$.ajaxLoader.addEventListener('iron-ajax-response', this.handleResponse.bind(this))
+            if (!this.itemMediaId) {
+                this.itemMkdown = "<img src='../../src/element/image/carrot.png'>"
+            }
+
+        },
+        properties: {
+            inventoryMediaid: {
+                type: String,
+                notify: true,
+                observer: '_loadPage',
+            },
+            label: {
+                type: String,
+                notify: true,
+            },
+            itemText: {
+                type: String,
+                notify: true,
+            },
+            itemId: {
+                type: String,
+                notify: true,
+            }
+        }
+    })
+})();
+</script>

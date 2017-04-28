@@ -39,6 +39,7 @@
         
         .deleteIcon {
             color: red;
+            float: right;
             right: 30px;
         }
         
@@ -46,9 +47,7 @@
             width: 300px;
             height: 300px;
             overflow: auto;
-            float: left;
-            margin-bottom: 15px;
-            margin-left: 24px;
+            margin-top: 15px;
             box-shadow: 6px 5px 26px #CECEB9;
             -moz-box-shadow: 6px 5px 2px #CECEB9;
             -webkit-box-shadow: 6px 5px 2px #CECEB9;
@@ -69,48 +68,56 @@
             box-shadow: 6px 5px 26px #CECEB9;
         }
         </style>
-        <template is="dom-if" if="{{item}}">
-            <template is="dom-if" if="{{poi}}" restamp>
-                <one-poi-display item="{{item}}"></one-poi-display>
-                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
-                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+        <div style="display:flex;flex-direction: column;align-items: center;width:100%;">
+            <template is="dom-if" if="{{item}}">
+                <template is="dom-if" if="{{poi}}" restamp>
+                    <one-poi-display item="{{item}}"></one-poi-display>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </template>
+                <template is="dom-if" if="{{page}}" restamp>
+                    <div class="markdownblock">
+                        <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                        <marked-element markdown="{{item.mkdown}}">
+                            <div class="markdown-html"></div>
+                        </marked-element>
+                    </div>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </template>
+                <template is="dom-if" if="{{badge}}" restamp>
+                    <badge-element class="" id="" label={{badgeName}} badge-pageid={{mediaId}} badge-text={{badgeText}}>
+                    </badge-element>
+                    {{item._id}}
+                    <paper-input class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="{{image}}" restamp>
+                    <div class="mediablock">
+                        <img class="image" src="/file/{{item._id}}">
+                    </div>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="{{video}}" restamp>
+                    <div class="mediablock">
+                        <video controls height="300" src="/file/{{item._id}}"></video>
+                    </div>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="{{mcq}}" restamp>
+                    <mcq-activity preview class="previewquestion" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
+                    </mcq-activity>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="{{freetext}}" restamp>
+                    <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                </template>
             </template>
-            <template is="dom-if" if="{{page}}" restamp>
-                <div class="markdownblock">
-                    <marked-element markdown="{{item.mkdown}}">
-                        <div class="markdown-html"></div>
-                    </marked-element>
-                </div>
-                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
-                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
-            </template>
-            <template is="dom-if" if="{{image}}" restamp>
-                <div class="mediablock">
-                    <img class="image" src="/file/{{item._id}}">
-                </div>
-                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
-                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
-            </template>
-            <template is="dom-if" if="{{video}}" restamp>
-                <div class="mediablock">
-                    <video controls height="300" src="/file/{{item._id}}"></video>
-                </div>
-                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
-
-                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
-            </template>
-            <template is="dom-if" if="{{mcq}}" restamp>
-                <mcq-activity preview class="previewquestion" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
-                </mcq-activity>
-                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
-                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
-            </template>
-            <template is="dom-if" if="{{freetext}}" restamp>
-                <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="previewquestion" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
-                <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
-                <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
-            </template>
-        </template>
+        </div>
     </template>
     <script>
     (function() {
@@ -126,7 +133,8 @@
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
-                this.poiId=null
+                this.poiId = null
+                this.badge = false
 
             },
             isImage: function() {
@@ -136,7 +144,19 @@
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
+                this.badge = false
+
             },
+            isBadge: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+                this.badge = true
+            },
+
             isPage: function() {
                 this.image = false;
                 this.video = false;
@@ -144,6 +164,8 @@
                 this.freetext = false;
                 this.mcq = false;
                 this.page = true;
+                this.badge = false
+
             },
             isPoi: function() {
                 this.image = false;
@@ -152,6 +174,8 @@
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
+                this.badge = false
+
             },
             isVideo: function() {
                 this.image = false;
@@ -160,6 +184,8 @@
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
+                this.badge = false
+
             },
             isMcq: function() {
                 this.image = false;
@@ -168,6 +194,8 @@
                 this.freetext = false;
                 this.mcq = true;
                 this.page = false;
+                this.badge = false
+
             },
             isFreetext: function() {
                 this.image = false;
@@ -176,6 +204,14 @@
                 this.freetext = true;
                 this.mcq = false;
                 this.page = false;
+                this.badge = false
+
+            },
+            setBadge: function(newItem) {
+                this.isBadge();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
             },
 
             setPage: function(newItem) {
@@ -189,7 +225,7 @@
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
-                this.poiId=this.item._id
+                this.poiId = this.item._id
             },
             setMcq: function(newItem) {
                 this.isMcq();
@@ -241,9 +277,9 @@
                 }
             },
             properties: {
-                poiId:{
-                    type:String,
-                    reflectToAttribute:true,
+                poiId: {
+                    type: String,
+                    reflectToAttribute: true,
                 },
                 inputName: {
                     type: String,

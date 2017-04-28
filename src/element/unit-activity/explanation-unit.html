@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
+<link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
@@ -74,6 +75,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div style="display:inline-flex;flex-direction: column;">
                     <paper-textarea style="width:300px" name="label" value="{{mlgName}}" label="Label"></paper-textarea>
                     <paper-button raised on-click="showMediaDialog">Set start page</paper-button>
+                    <paper-button raised on-click="showBadgeDialog">Set reward badge</paper-button>
+                    <generic-resource-viewer input-name="badgeId" badge class="resourceViewer" id="badgeViewer"></generic-resource-viewer>
                     <generic-resource-viewer input-name="mediaId" image page video class="resourceViewer" id="mediaViewer"></generic-resource-viewer>
                 </div>
             </div>
@@ -94,12 +97,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.set('callback', function() {
                     this.$.ajaxLoader.generateRequest();
                 }.bind(this));
-
             },
+
             setPage: function(item) {
                 this.$.mediaViewer.setPage(item)
 
             },
+            setBadge: function(item) {
+                this.$.badgeViewer.setBadge(item)
+
+            },
+
             saveMLG: function() {
                 this.fire('saveMLG', null)
             },
@@ -109,6 +117,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             showMediaDialog: function() {
                 this.fire('selectMedia', null)
+            },
+            showBadgeDialog: function() {
+                this.fire('selectBadge', null)
             },
             itemInArray: function(item) {
                 for (var i = 0; i < this.itemsOnMap.length; i++) {

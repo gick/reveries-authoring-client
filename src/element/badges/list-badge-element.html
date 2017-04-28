@@ -1,0 +1,74 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="./badge-element.html">
+<dom-module id="list-badge-element">
+    <template>
+        <style>
+        :host {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+        
+        .previewquestion {
+            display: inline-flex;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            margin: 10px;
+        }
+        </style>
+        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <div id="badgeListen">
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <badge-element resource-status="{{item.status}}" badge-pageid="{{item.badgePageId}}" badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}" class="previewquestion">
+                </badge-element>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'list-badge-element',
+            ready: function() {
+                this.$.badgeListen.addEventListener('badge-removed', function() {
+                    this.$.ajaxLoader.generateRequest()
+                }.bind(this))
+                this.$.badgeListen.addEventListener('badge_saved', function() {
+                    this.$.ajaxLoader.generateRequest()
+                }.bind(this))
+
+                this.$.ajaxLoader.generateRequest();
+
+                //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
+            },
+            requestElements: function() {
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            badgeChanged: function() {
+                this.$.ajaxLoader.generateRequest();
+            },
+            observers: [
+                'statusChanged(status)',
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.ajaxLoader.generateRequest();
+
+                }
+            },
+
+            properties: {
+                url: {
+                    type: String,
+                    notify: true
+                }
+            }
+        });
+    })();
+    </script>
+</dom-module>
