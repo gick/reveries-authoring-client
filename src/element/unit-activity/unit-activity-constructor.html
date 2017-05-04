@@ -155,6 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiPAMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="feedbackMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog inventory media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiInventoryMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog poi media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiMediaPicker"></resource-picker-dialog>
         <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
             <div class="contain shadow-2dp">
@@ -203,8 +204,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </iron-collapse>
                 <label class="subtitle" id="label2">POI reached :</label>
                 <paper-input label="POI reached message" name="poiReachedMessage"></paper-input>
-                <paper-button hidden on-click="setPOIPaMedia" raised>Set POI Reached Media</paper-button>
-                <generic-resource-viewer input-name="poiPAId" image page video class="resourceViewer" id="poiPaMedia"></generic-resource-viewer>
+                <paper-button on-click="setPOIInventory" raised>Set POI Reached Item (inventory)</paper-button>
+                <generic-resource-viewer input-name="poiPAId" inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
             </div>
             </div>
             <div class="contain shadow-2dp">
@@ -258,6 +259,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.poiMediaPicker.addEventListener('itemPicked', this.poiPicked.bind(this))
                 this.$.poiPAMediaPicker.addEventListener('itemPicked', this.poiPaPicked.bind(this))
                 this.$.situatedQuestionPicker.addEventListener('itemPicked', this.situatedQuestionPicked.bind(this))
+                this.$.poiInventoryMediaPicker.addEventListener('itemPicked', this.poiInventoryMediaPicked.bind(this))
+
                 this.$.feedbackMediaPicker.addEventListener('itemPicked', this.feedbackMediaPicked.bind(this))
                 this.$.unitActivityForm.addEventListener('iron-form-response', this.handleResponse.bind(this))
                 this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
@@ -304,7 +307,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             handleResponse: function(event) {
                 if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
-                    this.resetFields(); 
+                    this.resetFields();
                     this.fire('unitGameSaved', 'New unit game saved');
                 }
             },
@@ -322,6 +325,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     }
                 }
             },
+            poiInventoryMediaPicked: function(item) {
+                if (item && item.detail && item.detail.__data__) {
+                    var newItem = item.detail.__data__.item;
+                    this.$.poiInventoryResourceViewer.setInventory(newItem)
+                }
+            },
+
             feedbackMediaPicked: function(item) {
                 if (item && item.detail && item.detail.__data__) {
                     var newItem = item.detail.__data__.item;
@@ -469,6 +479,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             setCluePOIValue: function() {
                 this.$.cluePOIMediaPicker.open();
+            },
+            setPOIInventory: function() {
+                this.$.poiInventoryMediaPicker.open();
             },
 
             addMcq: function(item) {

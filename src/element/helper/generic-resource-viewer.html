@@ -85,10 +85,9 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{badge}}" restamp>
-                    <badge-element class="" id="" label={{badgeName}} badge-pageid={{mediaId}} badge-text={{badgeText}}>
+                    <badge-element class="" id="" badge-pageid="{{item.badgePageId}}" badge-text="{{item.badgeText}}" no-header resource-readonly="readonly" item-id="{{item._id}}" label="{{item.label}}">
                     </badge-element>
-                    {{item._id}}
-                    <paper-input class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                     <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
                 </template>
                 <template is="dom-if" if="{{image}}" restamp>
@@ -102,6 +101,12 @@
                     <div class="mediablock">
                         <video controls height="300" src="/file/{{item._id}}"></video>
                     </div>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                    <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
+                </template>
+                <template is="dom-if" if="{{inventory}}" restamp>
+                    <inventory-element class="" id="" label={{inventoryname}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
+                    </inventory-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                     <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
                 </template>
@@ -135,6 +140,7 @@
                 this.page = false;
                 this.poiId = null
                 this.badge = false
+                this.inventory=false
 
             },
             isImage: function() {
@@ -145,6 +151,7 @@
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
+                this.inventory=false
 
             },
             isBadge: function() {
@@ -155,7 +162,21 @@
                 this.mcq = false;
                 this.page = false;
                 this.badge = true
+                this.inventory=false
+
             },
+            isInventory: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+                this.badge = false
+                this.inventory=true
+            
+            },
+
 
             isPage: function() {
                 this.image = false;
@@ -165,6 +186,7 @@
                 this.mcq = false;
                 this.page = true;
                 this.badge = false
+                this.inventory=false
 
             },
             isPoi: function() {
@@ -175,6 +197,7 @@
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
+                this.inventory=false
 
             },
             isVideo: function() {
@@ -185,6 +208,7 @@
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
+                this.inventory=false
 
             },
             isMcq: function() {
@@ -194,6 +218,7 @@
                 this.freetext = false;
                 this.mcq = true;
                 this.page = false;
+                this.inventory=false
                 this.badge = false
 
             },
@@ -205,6 +230,7 @@
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
+                this.inventory=false
 
             },
             setBadge: function(newItem) {
@@ -239,6 +265,13 @@
                 this.item = oldItem;
                 this.item = newItem;
             },
+            setInventory: function(newItem) {
+                this.isInventory();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+
 
             setImage: function(newItem) {
                 this.isImage();

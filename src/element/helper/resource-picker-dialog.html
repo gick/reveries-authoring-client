@@ -5,6 +5,7 @@
 <link rel="import" href="../media-viewer/mcq-viewer-activity.html">
 <link rel="import" href="../media-viewer/freetext-viewer-activity.html">
 <link rel="import" href="../media-viewer/badge-viewer-activity.html">
+<link rel="import" href="../media-viewer/inventory-viewer-activity.html">
 
 <link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
@@ -21,6 +22,10 @@
                     <template is="dom-if" if="{{video}}">
                         <paper-tab>Video</paper-tab>
                     </template>
+                    <template is="dom-if" if="{{inventory}}">
+                        <paper-tab>Inventory</paper-tab>
+                    </template>
+
                     <template is="dom-if" if="{{badge}}">
                         <paper-tab>Badges</paper-tab>
                     </template>
@@ -46,6 +51,15 @@
                             </div>
                         </div>
                     </template>
+                    <template is="dom-if" if="{{inventory}}" restamp>
+                        <div>
+                            <inventory-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="inventoryViewer"></inventory-viewer-activity>
+                            <div class="buttons">
+                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
+                            </div>
+                        </div>
+                    </template>
+
                     <template is="dom-if" if="{{video}}">
                         <div>
                             <video-viewer-activity media-name={{currentname}} media-id="{{currentid}}"></video-viewer-activity>
@@ -122,6 +136,13 @@
                 if (this.badge) {
                     console.log(this.$$('#badgeViewer'))
                     this.$$('#badgeViewer').genReq();
+
+                    //  this.set('freetext', true)
+                    //  this.$.freetextviewer.genReq();
+                }
+                if (this.inventory) {
+                    console.log(this.$$('#badgeViewer'))
+                    this.$$('#inventoryViewer').genReq();
 
                     //  this.set('freetext', true)
                     //  this.$.freetextviewer.genReq();

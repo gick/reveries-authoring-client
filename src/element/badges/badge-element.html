@@ -27,7 +27,7 @@
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{item}}"></iron-ajax>
         <remove-ressource id="remover" callbackfunction="{{badgeRemoved}}" ressource-id={{itemId}} ressource-url='/badge'></remove-ressource>
         <div class="badge">
-            <resource-header style="width:100%" editable id='header' resource-url="/badge" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{label}}"></resource-header>
+            <resource-header hidden="{{noHeader}}" style="width:100%" editable id='header' resource-url="/badge" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{label}}"></resource-header>
             <marked-element markdown="{{badgeMkdown}}">
                 <div class="markdown-html"></div>
             </marked-element>
@@ -82,6 +82,10 @@
             itemId: {
                 type: String,
                 notify: true,
+            },
+            noHeader:{
+                type:Boolean,
+                notify:true,
             }
         }
     })
