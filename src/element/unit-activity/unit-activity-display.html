@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
-<link rel="import" href="./unitGame.html">
+<link rel="import" href="./unit-game.html">
 <dom-module id="unit-activity-display">
     <template>
         <style include="shared-styles">
@@ -84,27 +84,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <remove-ressource id="remover" callbackfunction="cleanRemove" ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
         <div class="outer">
             <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
         </div>
-        <div class="innerdiv">
+        <div class="innerdiv" id="handler">
             <template is="dom-repeat" items="{{items}}" as="item">
-                <paper-card class="generalflex" heading="{{item.name}}">
-                    <div class=card-content style="flex-grow:1">
-                        <div>Activity name :
-                            <div class="info"> {{item.activityName}}</div>
-                        </div>
-                    </div>
-                    <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
-                        <paper-button on-click='genrequest'>Remove</paper-button>
-                        <remove-ressource resource-id={{item._id}} callbackfunction="{{callback}}" ressource-url='/unitGame'></remove-ressource>
-                    </div>
-                </paper-card>
+                <unit-game game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
             </template>
         </div>
     </template>
     <script>
-  (function() {
+    (function() {
         'use strict';
 
         Polymer({
@@ -115,7 +106,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (event.detail.logged)
                         this.$.ajaxLoader.generateRequest();
                 })
-
+                this.$.handler.addEventListener('removeGame', function(event) {
+                    this.removeGame(event);
+                }.bind(this))
                 this.addEventListener('unit-game-changed', function() {
                     this.$.ajaxLoader.generateRequest();
                 })
@@ -124,6 +117,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }.bind(this));
 
             },
+            removeGame: function(event) {
+                this.itemId = event.detail._id;
+                this.$.remover.genRequest();
+                this.$.ajaxLoader.generateRequest();
+
+            },
+
             genrequest: function(event) {
                 event.srcElement.nextElementSibling.genRequest();
             },
@@ -136,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 return false;
             },
-            resetList:function(){
+            resetList: function() {
                 this.$.ajaxLoader.generateRequest()
             },
             itemIndex: function(item) {

@@ -24,17 +24,23 @@
 
             ready: function() {
                 this.$.remove.addEventListener('removed', function() {
+                    console.log(this.ressourceUrl)
+
                     this.$.remove.generateRequest()
                 })
                 this.set('genRequest', function() {
+                    console.log(this)
+                    console.log(this.ressourceId)
                     this.$.remove.generateRequest()
                 })
                 this.set('_removed', function() {
-                    if (typeof(this.callbackfunction) === "function")
-                        {this.callbackfunction()}
+                    if (typeof(this.callbackfunction) === "function") {
+                        this.callbackfunction()
+                    }
                 })
             },
             _callbackObserver: function(newval, oldval) {
+                console.log(newval)
                 this.set('callbackfunction', newval);
             },
             properties: {
