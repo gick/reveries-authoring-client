@@ -53,7 +53,7 @@
                     </template>
                     <template is="dom-if" if="{{inventory}}" restamp>
                         <div>
-                            <inventory-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="inventoryViewer"></inventory-viewer-activity>
+                            e<inventory-viewer-activity url='inventoryItm' media-name={{currentname}} media-id="{{currentid}}" id="inventoryViewer"></inventory-viewer-activity>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -151,10 +151,16 @@
                 this.$.selectorDialog.open();
             },
             properties: {
+
                 opened: {
                     type: Boolean,
                     value: false,
                 },
+                inventory: {
+                    type: Boolean,
+                    value: false,
+                },
+
                 poi: {
                     type: Boolean,
                     notify: true,

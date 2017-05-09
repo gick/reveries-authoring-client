@@ -40,7 +40,7 @@
         'use strict';
 
         Polymer({
-            is: 'badge-viewer-activity',
+            is: 'inventory-viewer-activity',
             ready: function() {
                 this.$.badgeListen.addEventListener('mcq-removed', function() {
                         this.$.ajaxLoader.generateRequest()
@@ -131,7 +131,7 @@
                 },
 
             }
-        });
-    })();
+        })
+    }())
     </script>
 </dom-module>

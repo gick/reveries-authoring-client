@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-radio-button active='{{active}}' name="QR">QR code scan</paper-radio-button>
                     <paper-radio-button name="gps">Device GPS</paper-radio-button>
                 </paper-radio-group>
-                <button class="heading" disabled="{{!active}}" aria-controls="collapse1" on-click="toggleQr">QR code</button>
+                <paper-button class="heading" disabled="{{!active}}" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
                 <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
                     <div class="content">
                         <img src='/qrcode/{{poiid}}'>
@@ -272,7 +272,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.activityCount = null;
 
             },
-            toggleQr: function(selector) {
+           toggleQr: function(selector) {
                 this.$.collapse1.toggle();
             },
             poiDeleted: function() {
@@ -306,6 +306,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             },
             handleResponse: function(event) {
+                console.log(event)
                 if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
                     this.resetFields();
                     this.fire('unitGameSaved', 'New unit game saved');
