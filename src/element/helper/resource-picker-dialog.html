@@ -53,7 +53,7 @@
                     </template>
                     <template is="dom-if" if="{{inventory}}" restamp>
                         <div>
-                            e<inventory-viewer-activity url='inventoryItm' media-name={{currentname}} media-id="{{currentid}}" id="inventoryViewer"></inventory-viewer-activity>
+                            <inventory-viewer-activity url='/inventory' media-name={{currentname}} media-id="{{currentid}}" id="inventoryViewer"></inventory-viewer-activity>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
