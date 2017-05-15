@@ -26,7 +26,7 @@
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{item}}"></iron-ajax>
         <remove-ressource id="remover" callbackfunction="{{itemRemoved}}" ressource-id={{itemId}} ressource-url='/inventory'></remove-ressource>
         <div class="badge">
-            <resource-header style="width:100%" editable id='header' resource-url="/badge" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{label}}"></resource-header>
+            <resource-header style="width:100%" editable id='header' resource-url="/inventory" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{label}}"></resource-header>
             <marked-element markdown="{{itemMkdown}}">
                 <div class="markdown-html"></div>
             </marked-element>
