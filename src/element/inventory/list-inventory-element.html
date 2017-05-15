@@ -21,8 +21,10 @@
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <div id="badgeListen">
             <template is="dom-repeat" items="{{items}}" as="item">
-                <inventory-element resource-status="{{item.status}}" badge-pageid="{{item.badgePageId}}" badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}" class="previewquestion">
+                <inventory-element resource-status="{{item.status}}" inventory-mediaid="{{item.itemPageId}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}" class="previewquestion">
                 </inventory-element>
+                </inventory-element>
+
             </template>
         </div>
     </template>

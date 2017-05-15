@@ -59,6 +59,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
+        <resource-picker-dialog page media-id="{{currentdocid}}" media-name="{{currentdocname}}" id="selectDocMedia"></resource-picker-dialog>
+
         <div class="card">
             <h1>Inventory element</h1> Inventory element are non permanent item that are added to the user inventory during a serious game session.
             <br> In this section :
@@ -70,7 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class='flexQuestion'>
                 <inventoryitem-constructor class="" id="inventoryConstructor" label="{{inventoryname}}" item-text="{{itemText}}">
                 </inventoryitem-constructor>
-                <inventory-element class="" id="" label={{inventoryname}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
+                <inventory-element class="" id="" label={{inventoryname}}  inventory-docmediaid={{docMediaId}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
                 </inventory-element>
             </div>
         </div>
@@ -86,6 +88,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'inventory-view',
         ready: function() {
             this.$.inventoryConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
+            this.$.inventoryConstructor.addEventListener('selectDocMedia', this.selectDocMedia.bind(this));
+            this.$.selectDocMedia.addEventListener('itemPicked', this.docMediaPicked.bind(this));
+
             this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
             this.$.inventoryConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
             this.$.inventoryConstructor.addEventListener('inventoryitem_saved', this.inventorySaved.bind(this))
@@ -103,9 +108,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             //this.$.mediaviewer.genReq();
             this.$.selectMedia.open();
         },
+        selectDocMedia: function() {
+            this.docMediaDeleted();
+            //this.$.mediaviewer.genReq();
+            this.$.selectDocMedia.open();
+        },
+        docMediaDeleted: function() {
+            this.set('docMediaId', null)
+        },
+
         mediaDeleted: function() {
             this.set('mediaId', null)
         },
+        docMediaPicked: function(item) {
+            if (item && item.detail && item.detail.__data__) {
+                var newItem = item.detail.__data__.item;
+                switch (newItem.type) {
+                    case "page":
+                        this.$.inventoryConstructor.setDocPage(newItem)
+                        this.set('docMediaId', newItem._id);
+                        break;
+
+                }
+            }
+        },
+
         mediaPicked: function(item) {
             if (item && item.detail && item.detail.__data__) {
                 var newItem = item.detail.__data__.item;

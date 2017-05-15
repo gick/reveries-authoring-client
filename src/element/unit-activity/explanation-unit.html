@@ -74,6 +74,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <div style="display:inline-flex;flex-direction: column;">
                     <paper-textarea style="width:300px" name="label" value="{{mlgName}}" label="Label"></paper-textarea>
+                    <paper-input name="gameDifficulty" label="Difficulty" value="3"></paper-input>
+                    <paper-input name="gameDuration" label="Duration" value="5"></paper-input>
+                    <paper-input hidden name="gameProximity" label="Proximity" value="5"></paper-input>
+
                     <paper-button raised on-click="showMediaDialog">Set start page</paper-button>
                     <paper-button raised on-click="showBadgeDialog">Set reward badge</paper-button>
                     <generic-resource-viewer no-header input-name="badgeId" badge class="resourceViewer" id="badgeViewer"></generic-resource-viewer>

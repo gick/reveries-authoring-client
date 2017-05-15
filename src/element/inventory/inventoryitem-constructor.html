@@ -127,7 +127,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="label" value={{label}} label="Inventory item label"></paper-input>
             <paper-input name="itemText" value={{itemText}} label="Inventory item text"></paper-input>
             <paper-button raised on-click="showMediaDialog">Set inventory image</paper-button>
-            <generic-resource-viewer input-name="badgePageId" page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="itemPageId" page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
+            <paper-button raised on-click="showMediaDialog">Set inventory (optionnal) doc </paper-button>
+
+            <generic-resource-viewer input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>
+
             <div class="insideflex">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update</paper-button>
@@ -155,6 +159,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.inventoryMediaViewer.setPage(item)
                 this.set('bid', item._id)
             },
+
+            setDocPage: function(item) {
+                this.$.inventoryDocPageViewer.setPage(item)
+                this.set('bid', item._id)
+            },
+
             formSubmited: function() {
                 if (this.updating) {
                     this.fire('inventoryitem_saved', 'Inventory item updated')
@@ -184,6 +194,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.fire('selectMedia', null)
 
             },
+
+            showDocMediaDialog: function() {
+                this.$.inventoryDocPageViewer.removeResource()
+                this.fire('selectDocMedia', null)
+
+            },
+
             resetFields: function() {
                 this.updating = false
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');

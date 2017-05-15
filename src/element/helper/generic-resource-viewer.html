@@ -105,7 +105,7 @@
                     <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
-                    <inventory-element class="" id="" label={{inventoryname}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
+                    <inventory-element class="" id="" resource-status="{{item.status}}" inventory-mediaid="{{item.itemPageId}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}" >
                     </inventory-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                     <paper-icon-button on-click="removeResource" class="deleteIcon" icon="delete"></paper-icon-button>
