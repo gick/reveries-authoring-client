@@ -30,7 +30,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
 <link rel="import" href="../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../src/element/helper/messageNotification.html">
-
 <dom-module id="my-app">
     <template>
         <style>
@@ -109,7 +108,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </a>
                     </paper-item>
                     <paper-item>
-                        <a class='menuLink' name="login" href="#login"> <i18n-msg msgid="login_button">Login/logout</i18n-msg></a>
+                        <a class='menuLink' name="login" href="#login">
+                            <i18n-msg msgid="login_button">Login/logout</i18n-msg>
+                        </a>
                     </paper-item>
                     <paper-submenu>
                         <paper-item class="menu-trigger firstLevelMenu">
@@ -118,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-menu class="menu-content sublist">
                             <paper-submenu>
                                 <paper-item class="menu-trigger menuLink">
-                                <i18n-msg msgid="media_button">My media</i18n-msg>
+                                    <i18n-msg msgid="media_button">My media</i18n-msg>
                                 </paper-item>
                                 <paper-menu class="menu-content">
                                     <paper-item>
@@ -133,7 +134,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                     <paper-item>
                                         <a class='menuLink' name="inventory" href="#inventory">My inventory items</a>
                                     </paper-item>
-
                                 </paper-menu>
                             </paper-submenu>
                             <paper-item>
@@ -168,6 +168,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <paper-item>
                                 <a class='menuLink' name="mlg" href="#mlg">Mobile Learning Games</a>
                             </paper-item>
+                            <paper-item>
+                                <a class='menuLink' name="multiMLG" href="#multiMLG">Mobile Learning Games</a>
+                            </paper-item>
                         </paper-menu>
                     </paper-submenu>
                     </paper-menu>
@@ -192,9 +195,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <mcq-view id="mcq" name="mcq"></mcq-view>
                     <badge-view id="badge" name="badge"></badge-view>
                     <inventory-view id="inventoryView" name="inventory"></inventory-view>
-
                     <constructor-view id="constructorView" name="constructor"></constructor-view>
                     <mlg-view id="mlgView" name="mlg"></mlg-view>
+                    <mlg-view id="multiMLG" name="multiMLG"></mlg-view>
+
                 </iron-pages>
             </app-header-layout>
         </app-drawer-layout>
@@ -206,12 +210,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             I18nMsg.lang = 'en';
             Platform.performMicrotaskCheckpoint();
-            this.$$('#mcq').addEventListener('mcq_saved',this.resourceSaved.bind(this))
-            this.$$('#freetext').addEventListener('freetext_saved',this.resourceSaved.bind(this))
-            this.$$('#staticmedia').addEventListener('staticMediaSaved',this.resourceSaved.bind(this))
-            this.$$('#constructorView').addEventListener('unitGameSaved',this.resourceSaved.bind(this))
-            this.$$('#badge').addEventListener('badge_saved',this.resourceSaved.bind(this))
-    
+            this.$$('#mcq').addEventListener('mcq_saved', this.resourceSaved.bind(this))
+            this.$$('#freetext').addEventListener('freetext_saved', this.resourceSaved.bind(this))
+            this.$$('#staticmedia').addEventListener('staticMediaSaved', this.resourceSaved.bind(this))
+            this.$$('#constructorView').addEventListener('unitGameSaved', this.resourceSaved.bind(this))
+            this.$$('#badge').addEventListener('badge_saved', this.resourceSaved.bind(this))
+
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
@@ -219,10 +223,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.manager.getUserInfo();
             this.logged = false;
         },
-        resourceSaved:function(message){
+        resourceSaved: function(message) {
             this.$.toaster.showToast(message)
-        }
-        ,
+        },
         unitGameSaved: function() {
             console.log('saved')
             if (this.$.mlgView && this.$.mlgView.unitGameChanged) {

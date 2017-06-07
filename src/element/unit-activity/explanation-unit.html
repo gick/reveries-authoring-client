@@ -77,7 +77,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-input name="gameDifficulty" label="Difficulty" value="3"></paper-input>
                     <paper-input name="gameDuration" label="Duration" value="5"></paper-input>
                     <paper-input hidden name="gameProximity" label="Proximity" value="5"></paper-input>
-
+                    <paper-radio-button name='multi' active='{{multi}}'>Multiplayer</paper-radio-button>
+                    <template is='dom-if' if='{{multi}}' restamp>
+                        <paper-input type='number' value='2' name='playerNbr' label="Player number"></paper-input>
+                    </template>
                     <paper-button raised on-click="showMediaDialog">Set start page</paper-button>
                     <paper-button raised on-click="showBadgeDialog">Set reward badge</paper-button>
                     <generic-resource-viewer no-header input-name="badgeId" badge class="resourceViewer" id="badgeViewer"></generic-resource-viewer>
