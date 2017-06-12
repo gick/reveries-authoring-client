@@ -94,8 +94,8 @@
                 <template is="dom-if" restamp=true if="{{!_noarea(hasArea)}}">
                     <paper-input style="display:inline-flex;" name="radius" value={{radius}} label="Trigger area radius (m)"></paper-input>
                     <paper-button name class="small" raised on-click="_removeArea">Remove trigger area</paper-button>
-                    <input type="hidden" value={{areaLat}} name="areaLat" />
-                    <input type="hidden" value={{areaLong}} name="areaLong" />
+                    <input type="" value={{areaLat}} name="areaLat" />
+                    <input type="" value={{areaLong}} name="areaLong" />
                 </template>
                 <template is="dom-if" if="{{_noImage(hasImage)}}">
                     <paper-button name class="small" raised on-click="setImage">Set image</paper-button>
