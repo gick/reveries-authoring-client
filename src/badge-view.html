@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./element/helper/resource-picker-dialog.html">
 <link rel="import" href="./element/badges/badge-constructor.html">
 <link rel="import" href="./element/badges/badge-element.html">
-<link rel="import" href="./element/badges/list-badge-element.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
 <dom-module id="badge-view">
     <template>
         <style include="common-styles">
@@ -61,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <div class="card">
             <h1>Badges</h1> Badges are permanent rewards that user receive after completing a game. Badges can be associated with a page to give additional pedagogical information
-            <br> In this section :{{bid}}{{badgeName}}
+            <br> In this section :
             <ul>
                 <li> you can create new badges</li>
             </ul>
@@ -75,9 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </div>
         <div class="card">
-            <div class="card">
-                <list-badge-element id="badgeList" url="/badge"></list-badge-element>
-            </div>
+            <list-generic-resource id='badgeList' share-url="/badge" resource-type='badge' url='/badge'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -90,9 +88,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.badgeConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
             this.$.badgeConstructor.addEventListener('badge_saved', this.badgeSaved.bind(this))
             this.$.badgeList.addEventListener('editBadge', this.editBadge.bind(this))
+            this.$.badgeList.requestElements()
         },
         badgeSaved: function() {
-            this.$.badgeList.badgeChanged() //call an update on mcq list
+            this.$.badgeList.requestElements() //call an update on mcq list
         },
         editBadge: function(badge) {
             var badge = badge.detail.__data__

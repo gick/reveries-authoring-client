@@ -12,7 +12,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../helper/resource-header.html">
@@ -88,7 +87,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display:block;
         }
         </style>
-        <akc-meta-query key="status" value={{status}}></akc-meta-query>
         <div class="innerdiv">
             <iron-ajax id="ajaxLoader" url="{{mediaUrl}}" handle-as="json" last-response="{{items}}"></iron-ajax>
             <template is="dom-repeat" items="{{items}}" as="item">

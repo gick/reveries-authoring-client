@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/file-upload/file-upload.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../src/element/media-viewer/media-viewer.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
 <link rel="import" href="./styles/common-styles.html">
 <dom-module id="image-view">
     <template>
@@ -50,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
         </div>
         <div class="card">
-            <media-viewer media-url="/listUserImages" id="mediaviewer"></media-viewer>
+            <list-generic-resource share-url='/file' id='mediaviewer' resource-type='image' url='/listUserImages'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -61,7 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         },
         updateMedia: function() {
-            this.$.mediaviewer.updateMedia();
+            this.$.mediaviewer.requestElements();
         },
         clearList: function() {
             this.$.uploader.clear();

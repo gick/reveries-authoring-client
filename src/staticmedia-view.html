@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/static-media/staticmedia-viewer.html">
 <link rel="import" href="./element/static-media/staticmedia-generator.html">
-<link rel="import" href="./element/static-media/list-staticmedia.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
 <dom-module id="staticmedia-view">
     <template>
         <style include="common-styles">
@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <staticmedia-viewer style="display:inline-flex;" mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
-            <list-staticmedia url="/staticmedia" id="staticmedialist"></list-staticmedia>
+            <list-generic-resource share-url='/staticmedia' id='staticmedialist' resource-type='staticmedia' url='/staticmedia'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -60,6 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             this.$.staticConstructor.addEventListener('static-media-changed',function(){this.updateMedia()}.bind(this))
             this.$.staticConstructor.addEventListener('staticMediaSaved',function(){this.updateMedia()}.bind(this))
+            this.$.staticmedialist.requestElements();
 
             this.$.staticmedialist.addEventListener('editPage',this.editPage.bind(this))
 

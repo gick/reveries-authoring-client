@@ -19,7 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./element/helper/resource-picker-dialog.html">
 <link rel="import" href="./element/basic-element/free-text-question.html">
 <link rel="import" href="./element/basic-element/free-text-constructor.html">
-<link rel="import" href="./element/basic-element/list-free-text-activities.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
 <link rel="import" href="./element/media-viewer/static-media-dialog-activity.html">
 <dom-module id="freetext-view">
     <template>
@@ -76,9 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </div>
         <div class="card">
-            <div class="card">
-                <list-free-text-activities id='freetextList' url="/freetextactivity"></list-free-text-activities>
-            </div>
+            <list-generic-resource share-url='/freetext' id='freetextList' resource-type='freetext' url='/freetextactivity'></list-generic-resource>
         </div>
     </template>
     <script>

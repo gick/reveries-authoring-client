@@ -184,7 +184,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div title>ReVeRIeS 1.0</div>
                     </app-toolbar>
                 </app-header>
-                <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+                <iron-pages id="pages" role="main" selected="[[page]]" attr-for-selected="name">
                     <intro-view name="intro"></intro-view>
                     <login-view name="login"></login-view>
                     <video-view name="video"></video-view>
@@ -215,7 +215,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$$('#staticmedia').addEventListener('staticMediaSaved', this.resourceSaved.bind(this))
             this.$$('#constructorView').addEventListener('unitGameSaved', this.resourceSaved.bind(this))
             this.$$('#badge').addEventListener('badge_saved', this.resourceSaved.bind(this))
-
+            this.$$('#pages').addEventListener('removed',this.resourceRemoved.bind(this))
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
@@ -224,13 +224,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.logged = false;
         },
         resourceSaved: function(message) {
-            this.$.toaster.showToast(message)
+            this.$.toaster.showToast(message + ' ' + 'deleted.')
         },
         unitGameSaved: function() {
             console.log('saved')
             if (this.$.mlgView && this.$.mlgView.unitGameChanged) {
                 this.$.mlgView.unitGameChanged();
             }
+        },
+        resourceRemoved:function(message){
+            this.$.toaster.showToast(message)
         },
         authChanged: function(arg) {
             console.log('change')

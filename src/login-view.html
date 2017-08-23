@@ -101,9 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         logout: function() {
             this.$.manager.logout();
         },
-        handleAuth: function() {
-            console.log('resp')
-        },
         _submit: function() {
             this.$.manager.authenticate(this.nameVal, this.passVal);
         },

@@ -15,8 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/file-upload/file-upload.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../src/element/media-viewer/media-viewer.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
 <link rel="import" href="./styles/common-styles.html">
-
 <dom-module id="media-view">
     <template>
         <style include="common-styles">
@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: block;
             padding: 10px;
         }
-                
+        
         h1 {
             font-size: 22px;
             margin: 16px 0;
@@ -53,8 +53,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="{{this.clearList}}">Clear uploaded list</paper-icon-button>
             <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
         </div>
-        <div class="card">
+        <!--         <div class="card">
             <media-viewer media-url="/listUserMediaFiles" id="mediaviewer"></media-viewer>
+        </div>
+ -->
+        <div class="card">
+            <list-generic-resource resource-type="image" url='/listUserMediaFiles'></list-generic-resource>
         </div>
     </template>
     <script>

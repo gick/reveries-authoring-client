@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="./share-ressource.html">
+
 <dom-module id="resource-header">
     <style>
     .resourceReadwrite {
@@ -12,7 +13,7 @@
         background-color: lightgreen;
         width: 100%;
     }
-    
+
     .resourceReadonly {
         display: inline-flex;
         flex-direction: row;
@@ -20,7 +21,7 @@
         background-color: lightgrey;
         width: 100%;
     }
-    
+
     .headerText {
         padding-left: 10px;
         display: inline-flex;
@@ -28,14 +29,16 @@
     }
     </style>
     <template>
+        <remove-ressource id="remover" resource-id={{resourceId}} resource-url='{{resourceUrl}}'></remove-ressource>
         <share-ressource id="sharingElement" request-params="{{requestParams}}" ressource-url="{{resourceUrl}}" ressource-id="{{resourceId}}"></share-ressource>
-        <div class$="{{resourceClass}}">
+        <div class="resourceReadwrite">
             <h3 class="headerText">{{resourceLabel}}</h3>
             <!-- Read belonging to the user can be set public or private -->
             <template is="dom-if" if="{{!isReadOnly}}">
                 <template is="dom-if" if="{{editable}}">
                     <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="editQuestion" icon="icons:create"></paper-icon-button>
                 </template>
+                <paper-icon-button id="delete" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="remove" icon="icons:delete"></paper-icon-button>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
             </template>
             <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
@@ -61,6 +64,10 @@
             },
             cloneResource: function() {
 
+            },
+            remove: function() {
+                this.$.remover.removeResource()
+                this.fire('removed', this.resourceLabel)
             },
             setStatus: function() {
                 /* if (this.resourceStatus == "Private") {

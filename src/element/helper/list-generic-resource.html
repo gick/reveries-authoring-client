@@ -1,0 +1,80 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="./generic-resource-viewer.html">
+<link rel="import" href="./resource-header.html">
+
+<dom-module id="list-generic-resource">
+    <template>
+        <style>
+         :host {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+
+        .resourceList {
+            margin: 10px;
+        }
+        </style>
+        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
+        <div id="genericListener">
+            <template is="dom-repeat" items="{{items}}" as="item">
+                <paper-card class="resourceList">
+                    <resource-header resource-url="{{shareUrl}}" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource-label="{{item.label}}"></resource-header>
+                    <div class=card-content>
+                        <generic-resource-viewer resource-type="{{resourceType}}" item={{item}}>
+                        </generic-resource-viewer>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'list-generic-resource',
+            ready: function() {
+                this.addEventListener('resource-removed', function() {
+                    this.requestElements()
+                }.bind(this))
+                this.requestElements()
+
+                //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
+            },
+            requestElements: function() {
+                this.$.ajaxLoader.generateRequest();
+
+            },
+            observers: [
+                'statusChanged(status)',
+            ],
+            statusChanged: function(stat) {
+                if (stat.logged) {
+                    this.$.requestElements()
+
+                }
+            },
+            _resourceTypeChanged: function(rc) {},
+            properties: {
+                url: {
+                    type: String,
+                    notify: true
+                },
+                resourceType: {
+                    type: String,
+                    notify: true,
+                    observer: '_resourceTypeChanged'
+                },
+                shareUrl:{
+                    type:String,
+                    notify:true,
+                },
+            }
+        });
+    })();
+    </script>
+</dom-module>

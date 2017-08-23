@@ -95,7 +95,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
             <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
-                <resource-header id="header" editable style="width:100%" resource-url="/freetext" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 {{question}}
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}"></paper-input>
                 <iron-collapse id="clue">
@@ -138,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready: function() {
                 this.showMediaButton = false;
-                this.$.header.addEventListener('edit', this.editElement.bind(this))
+              //  this.$.header.addEventListener('edit', this.editElement.bind(this))
 
                 this.freeTextQuestionRemoved = function() {
                     this.fire('free-text-removed', null)

@@ -1,19 +1,8 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <dom-module id="remove-ressource">
     <template>
-        <style>
-        :host {
-            display: block;
-        }
-        
-        span {
-            @apply(--paper-font-body1);
-        }
-        </style>
-        <iron-ajax id="remove" url="{{ressourceUrl}}/{{ressourceId}}" method="DELETE" on-response="_removed"></iron-ajax>
+        <iron-ajax id="remove" url="{{resourceUrl}}/{{resourceId}}" method="DELETE" on-response="_removed"></iron-ajax>
     </template>
     <script>
     (function() {
@@ -23,56 +12,24 @@
             is: 'remove-ressource',
 
             ready: function() {
-                this.$.remove.addEventListener('removed', function() {
-                    console.log(this.ressourceUrl)
-
-                    this.$.remove.generateRequest()
-                })
-                this.set('genRequest', function() {
-                    console.log(this)
-                    console.log(this.ressourceId)
-                    this.$.remove.generateRequest()
-                })
-                this.set('_removed', function() {
-                    if (typeof(this.callbackfunction) === "function") {
-                        this.callbackfunction()
-                    }
-                })
             },
-            _callbackObserver: function(newval, oldval) {
-                console.log(newval)
-                this.set('callbackfunction', newval);
+            removeResource:function(){
+                this.set('ressourceId',this.resourceId)
+                this.set('ressourceURL',this.resourceUrl)                
+                this.$.remove.generateRequest()
+            },
+            _removed: function() {
+                this.fire('resource-removed', null);
             },
             properties: {
-                ressourceTooltip: {
-                    type: String,
-                    value: "Remove element"
-                },
-                ressourceButton: {
-                    type: Boolean,
-                    value: true
-                },
-                ressourceIcon: {
-                    type: String,
-                    value: "icons:delete"
-                },
-                ressourceId: {
+                resourceId: {
                     type: String,
                     notify: true,
                 },
-                ressourceUrl: {
+                resourceUrl: {
                     type: String,
                     notify: true
                 },
-                callbackfunction: {
-                    type: Object,
-                    notify: true,
-                    observer: '_callbackObserver',
-                },
-                genRequest: {
-                    type: Object,
-                    readonly: true,
-                }
             },
 
         });
