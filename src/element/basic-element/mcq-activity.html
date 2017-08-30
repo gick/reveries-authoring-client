@@ -38,10 +38,8 @@
     </style>
     <template>
         <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
-        <remove-ressource id="remover" callbackfunction="{{mcqRemoved}}" ressource-id={{itemId}} ressource-url='/mcq'></remove-ressource>
         <div class=outer>
             <div class="inner">
-                <resource-header editable id='header' resource-url="/mcq" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <div id="mcqbody" class="mcq-body">
                     <iron-collapse id="clue">
                         <div class="">
@@ -95,7 +93,6 @@
                 this.mcqRemoved = function() {
                     this.fire('mcq-removed', null)
                 }.bind(this)
-                this.$.header.addEventListener('edit',this.editElement.bind(this))
                 this.correctIndex = Math.floor((Math.random() * 2));
             },
             editElement:function(){

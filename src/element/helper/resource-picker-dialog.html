@@ -1,11 +1,4 @@
-<link rel="import" href="../media-viewer/media-viewer-activity.html">
-<link rel="import" href="../media-viewer/video-viewer-activity.html">
-<link rel="import" href="../media-viewer/poi-viewer-activity.html">
-<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
-<link rel="import" href="../media-viewer/mcq-viewer-activity.html">
-<link rel="import" href="../media-viewer/freetext-viewer-activity.html">
-<link rel="import" href="../media-viewer/badge-viewer-activity.html">
-<link rel="import" href="../media-viewer/inventory-viewer-activity.html">
+<link rel="import" href="./list-generic-resource.html">
 
 <link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
@@ -59,24 +52,16 @@
                     </template>
                     <template is="dom-if" if="{{inventory}}" restamp>
                         <div>
-                            <inventory-viewer-activity  class="flexible" url='/inventory' media-name={{currentname}} media-id="{{currentid}}" id="inventoryViewer"></inventory-viewer-activity>
+                         <list-generic-resource picker share-url='/inventory' id='inventoryList' resource-type='inventory' url='/inventory'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
                         </div>
                     </template>
 
-                    <template is="dom-if" if="{{video}}">
-                        <div>
-                            <video-viewer-activity  class="flexible" media-name={{currentname}} media-id="{{currentid}}"></video-viewer-activity>
-                            <div class="buttons">
-                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                            </div>
-                        </div>
-                    </template>
                     <template is="dom-if" if="{{page}}">
                         <div>
-                            <static-media-dialog-activity class="flexible" media-name={{currentname}} media-id="{{mediaId}}" id="mediaviewer"></static-media-dialog-activity>
+                     <list-generic-resource share-url='/staticmedia' id='staticmedia' resource-type='page' url='/staticmedia'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -128,31 +113,7 @@
 
             },
             open: function() {
-                if (this.page) {
-                    this.$$('#mediaviewer').genReq();
-                    //  this.$$('#mediaviewer').unSelect();
-                }
-                if (this.image) {
-                    this.$$('#imageViewer').genReq();
-                }
-                if (this.freetext) {
-                    //  this.set('freetext', true)
-                    //  this.$.freetextviewer.genReq();
-                }
-                if (this.badge) {
-                    console.log(this.$$('#badgeViewer'))
-                    this.$$('#badgeViewer').genReq();
-
-                    //  this.set('freetext', true)
-                    //  this.$.freetextviewer.genReq();
-                }
-                if (this.inventory) {
-                    console.log(this.$$('#badgeViewer'))
-                    this.$$('#inventoryViewer').genReq();
-
-                    //  this.set('freetext', true)
-                    //  this.$.freetextviewer.genReq();
-                }
+            
 
                 this.$.selectorDialog.open();
             },

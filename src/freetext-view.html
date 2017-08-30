@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </ul>
         </div>
         <div class="card">
-            <div class='flexQuestion'>
+            <div class='flexQuestion' id='constructors'>
                 <free-text-constructor id="questionConstructor" label="{{label}}" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" response-label="{{rLabel}}">
                 </free-text-constructor>
                 <free-text-question conception-mode question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}" class="previewquestion" id="previewQuestion">
@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.questionConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
             this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
             this.$.selectMedia.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.freetextList.addEventListener('editFreetext', this.editFreetext.bind(this))
+            this.$.freetextList.addEventListener('edit', this.editFreetext.bind(this))
             this.$.questionConstructor.addEventListener('freetext_saved', this.updateList.bind(this))
 
 
@@ -101,8 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.selectMedia.open();
         },
         editFreetext: function(question) {
-            var question = question.detail.__data__
-            this.$.questionConstructor.editQuestion(question)
+            var questiondata = question.detail
+            this.$.constructors.scrollIntoView()
+            this.$.questionConstructor.editQuestion(questiondata)
         },
 
         mediaDeleted: function() {

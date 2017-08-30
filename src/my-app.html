@@ -33,58 +33,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="my-app">
     <template>
         <style>
-        :host {
+         :host {
             display: block;
             --app-primary-color: #4285f4;
             --app-secondary-color: black;
         }
-        
+
         app-header {
             background-color: #8D99AE;
             color: #fff;
         }
-        
+
         app-header paper-icon-button {
             --paper-icon-button-ink-color: white;
         }
-        
+
         .drawer-list {
             margin: 0 20px;
         }
-        
+
         a.firstLevel {
             color: black;
             text-decoration: none;
         }
-        
+
         .drawer-list a {
             display: block;
             line-height: 40px;
             text-decoration: none;
             color: var(--app-secondary-color);
         }
-        
+
         .sublist paper-item {
             padding-left: 30px;
         }
-        
+
         .sublist2 paper-item {
             padding-left: 50px;
         }
-        
+
         a.menuLink {
             padding-left: 30px !important;
         }
-        
+
         .firstLevelMenu {
             font-weight: bold;
         }
-        
+
         .drawer-list a.iron-selected {
             color: black;
             font-weight: bold;
         }
-        
+
         .drawer-list a.subroute {}
         </style>
         <app-location use-hash-as-path route="{{route}}"></app-location>
@@ -114,62 +114,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-item>
                     <paper-submenu>
                         <paper-item class="menu-trigger firstLevelMenu">
-                            <i18n-msg msgid="resources_button"> My Resources </i18n-msg>
+                            <i18n-msg msgid="resources_button"> My Documents & medias </i18n-msg>
                         </paper-item>
-                        <paper-menu class="menu-content sublist">
-                            <paper-submenu>
-                                <paper-item class="menu-trigger menuLink">
-                                    <i18n-msg msgid="media_button">My media</i18n-msg>
-                                </paper-item>
-                                <paper-menu class="menu-content">
-                                    <paper-item>
-                                        <a class='menuLink' name="image" href="#image">My images</a>
-                                    </paper-item>
-                                    <paper-item>
-                                        <a class='menuLink' name="video" href="#video">My audio/videos</a>
-                                    </paper-item>
-                                    <paper-item>
-                                        <a class='menuLink' name="badge" href="#badge">My badges</a>
-                                    </paper-item>
-                                    <paper-item>
-                                        <a class='menuLink' name="inventory" href="#inventory">My inventory items</a>
-                                    </paper-item>
-                                </paper-menu>
-                            </paper-submenu>
+                        <paper-menu class="menu-content">
                             <paper-item>
-                                <a class='' name="staticmedia" href="#staticmedia">My pages</a>
+                                <a class='menuLink' name="image" href="#image">My images</a>
                             </paper-item>
-                            <paper-submenu>
-                                <paper-item class="menu-trigger">
-                                    Questions
-                                </paper-item>
-                                <paper-menu class="menu-content">
-                                    <paper-item>
-                                        <a class='menuLink' name="freetext" href="#freetext" My>My Free Text Questions</a>
-                                    </paper-item>
-                                    <paper-item>
-                                        <a class='menuLink' name="mcq" href="#mcq">My MCQ</a>
-                                    </paper-item>
-                                </paper-menu>
-                            </paper-submenu>
                             <paper-item>
-                                <a class='' name="poi" href="#poi">My POI</a>
+                                <a class='menuLink' name="video" href="#video">My audio/videos</a>
+                            </paper-item>
+                            <paper-item>
+                                <a class='menuLink' name="staticmedia" href="#staticmedia">My multimédias documents</a>
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
                     <paper-submenu>
                         <paper-item class="menu-trigger firstLevelMenu">
-                            My Games
+                            My Games Components
                         </paper-item>
                         <paper-menu class="menu-content">
                             <paper-item>
-                                <a class='menuLink' name="constructor" href="#constructor">Game unit</a>
+                                <a class='menuLink' name="freetext" href="#freetext" My>My Free Text Questions</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="mlg" href="#mlg">Mobile Learning Games</a>
+                                <a class='menuLink' name="mcq" href="#mcq">My MCQ</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="multiMLG" href="#multiMLG">Mobile Learning Games</a>
+                                <a class='menuLink' name="badge" href="#badge">My badges</a>
+                            </paper-item>
+                            <paper-item>
+                                <a class='menuLink' name="inventory" href="#inventory">My inventory items</a>
+                            </paper-item>
+                        </paper-menu>
+                    </paper-submenu>
+                    <paper-item>
+                        <a class='menu-trigger firstLevelMenu' name="poi" href="#poi">My Maps and POI</a>
+                    </paper-item>
+                    </paper-menu>
+                    </paper-submenu>
+                    <paper-submenu>
+                        <paper-item class="menu-trigger firstLevelMenu">
+                            My Games Scenarios
+                        </paper-item>
+                        <paper-menu class="menu-content">
+                            <paper-item>
+                                <a class='menuLink' name="constructor" href="#constructor">My Games units</a>
+                            </paper-item>
+                            <paper-item>
+                                <a class='menuLink' name="mlg" href="#mlg">My Mobile Learning Games</a>
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
@@ -198,7 +190,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <constructor-view id="constructorView" name="constructor"></constructor-view>
                     <mlg-view id="mlgView" name="mlg"></mlg-view>
                     <mlg-view id="multiMLG" name="multiMLG"></mlg-view>
-
                 </iron-pages>
             </app-header-layout>
         </app-drawer-layout>
@@ -215,7 +206,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$$('#staticmedia').addEventListener('staticMediaSaved', this.resourceSaved.bind(this))
             this.$$('#constructorView').addEventListener('unitGameSaved', this.resourceSaved.bind(this))
             this.$$('#badge').addEventListener('badge_saved', this.resourceSaved.bind(this))
-            this.$$('#pages').addEventListener('removed',this.resourceRemoved.bind(this))
+            this.$$('#pages').addEventListener('removed', this.resourceRemoved.bind(this))
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
@@ -232,23 +223,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.mlgView.unitGameChanged();
             }
         },
-        resourceRemoved:function(message){
+        resourceRemoved: function(message) {
             this.$.toaster.showToast(message)
         },
         authChanged: function(arg) {
             console.log('change')
-                /* if (arg && arg.detail) {
-                     if (arg.detail == '') {
-                         this.logged = false;
-                         this.username = ''
-                     } else {
-                         this.logged=true;
-                         this.username = arg.detail;
-                     }
-                 } else{
-                     this.logged=false;
-                     this.username='';
-                 }*/
+            /* if (arg && arg.detail) {
+                 if (arg.detail == '') {
+                     this.logged = false;
+                     this.username = ''
+                 } else {
+                     this.logged=true;
+                     this.username = arg.detail;
+                 }
+             } else{
+                 this.logged=false;
+                 this.username='';
+             }*/
         },
         properties: {
             meta: {

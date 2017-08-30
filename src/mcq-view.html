@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/basic-element/mcq-constructor.html">
 <link rel="import" href="./element/basic-element/mcq-activity.html">
-<link rel="import" href="./element/basic-element/list-mcq-activity.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
 <link rel="import" href="./element/media-viewer/media-viewer-activity.html">
 <dom-module id="mcq-view">
     <template>
@@ -70,9 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </div>
         <div class="card">
-            <div class="card">
-                <list-mcq-activity id="mcqList" url="/mcq"></list-mcq-activity>
-            </div>
+            <list-generic-resource share-url='/mcq' id='mcqList' resource-type='mcq' url='/mcq'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -87,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.mcqList.addEventListener('editMCQQuestion',this.editMCQ.bind(this))
         },
         mcqSaved:function(){
-            this.$.mcqList.mcqChanged() //call an update on mcq list
+            this.$.mcqList.requestElements() //call an update on mcq list
         },
         editMCQ:function(question){
             var question=question.detail.__data__

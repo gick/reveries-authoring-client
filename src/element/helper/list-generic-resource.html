@@ -5,7 +5,6 @@
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="./generic-resource-viewer.html">
 <link rel="import" href="./resource-header.html">
-
 <dom-module id="list-generic-resource">
     <template>
         <style>
@@ -14,17 +13,22 @@
             flex-wrap: wrap;
         }
 
+        .selected {
+            border: solid black 1px;
+        }
+
         .resourceList {
             margin: 10px;
         }
         </style>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <div id="genericListener">
-            <template is="dom-repeat" items="{{items}}" as="item">
-                <paper-card class="resourceList">
-                    <resource-header resource-url="{{shareUrl}}" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource-label="{{item.label}}"></resource-header>
+            <array-selector id="selector" items="{{items}}" selected="{{selected}}" toggle></array-selector>
+            <template is="dom-repeat" id='list' items="{{items}}" as="item">
+                <paper-card class="resourceList" on-click='selectItem'>
+                    <resource-header hidden={{picker}} resource-url="{{shareUrl}}" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource="{{item}}" resource-label="{{item.label}}"></resource-header>
                     <div class=card-content>
-                        <generic-resource-viewer resource-type="{{resourceType}}" item={{item}}>
+                        <generic-resource-viewer class$={{setStyleValue(item,selected)}} resource-type="{{resourceType}}" item={{item}}>
                         </generic-resource-viewer>
                     </div>
                 </paper-card>
@@ -42,8 +46,23 @@
                     this.requestElements()
                 }.bind(this))
                 this.requestElements()
-
+                this
+                //  this.$.selector.addEventListener('selected-changed',this.setStyleValue.bind(this))
                 //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
+            },
+            setStyleValue: function(item, selected) {
+                if(!this.picker)
+                    return
+                if (this.selected && item._id == this.selected._id) {
+                    this.set('resourceId', this.selected._id)
+                    return 'selected'
+                }
+                this.set('resourceId', null)
+                return ''
+            },
+            selectItem: function(e) {
+                var item = this.$.list.itemForElement(e.target);
+                this.$.selector.select(item);
             },
             requestElements: function() {
                 this.$.ajaxLoader.generateRequest();
@@ -64,14 +83,22 @@
                     type: String,
                     notify: true
                 },
+                picker: {
+                    type: Boolean,
+                    value: false,
+                },
+                ressourceId: {
+                    type: String,
+                    reflectToAttribute: true,
+                },
                 resourceType: {
                     type: String,
                     notify: true,
                     observer: '_resourceTypeChanged'
                 },
-                shareUrl:{
-                    type:String,
-                    notify:true,
+                shareUrl: {
+                    type: String,
+                    notify: true,
                 },
             }
         });

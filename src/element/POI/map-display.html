@@ -12,6 +12,8 @@
         .mymap {width:500px;height:500px;display: inline-flex;
         }
         </style>
+            <google-maps-api api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" version="3.exp"></google-maps-api>
+
             <google-map class="mymap" api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="poimapgmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{lat}}" longitude="{{long}}" click-events>
                 <template is="dom-repeat" items={{markers}} as="marker">
                     <google-map-marker click-events title="{{marker.title}}" on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
