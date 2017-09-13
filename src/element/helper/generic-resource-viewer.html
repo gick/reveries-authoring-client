@@ -136,7 +136,7 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{isTemp}}" restamp>
-                    <paper-button id="delete" style="display:inline-flex;align-self: center;" on-click="remove">Remove</paper-button>
+                    <paper-button id="delete" style="display:inline-flex;align-self: center;" on-click="removeResource">Remove</paper-button>
                 </template>
             </template>
         </div>
@@ -333,7 +333,7 @@
                 if (resourceType == 'badge') {
                     this.setBadge(this.item)
                 }
-                if (resourceType == 'staticmedia') {
+                if (resourceType == 'staticmedia' || resourceType=='page') {
                     this.setPage(this.item)
                 }
                 if (resourceType == 'inventory') {
