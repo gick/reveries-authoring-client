@@ -43,11 +43,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         flex-direction: row;
         flex-wrap: wrap;
     }
-    
+
     .shadow-2dp {
         @apply(--shadow-elevation-2dp);
     }
-    
+
     hr {
         display: block;
         margin-top: 0.5em;
@@ -57,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-style: inset;
         border-width: 1px;
     }
-    
+
     .insideflex {
         background-color: #f3f3f3;
         height: 43px;
@@ -73,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom-right-radius: 0px;
         border-bottom-left-radius: 0px;
     }
-    
+
     .unitActions {
         margin-bottom: 10px;
         padding-left: 5px;
@@ -83,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom-right-radius: 0px;
         border-bottom-left-radius: 0px;
     }
-    
+
     .insideflexOption {
         display: inline-flex;
         flex-direction: row;
@@ -92,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-top: 16px;
         margin-bottom: 10px;
     }
-    
+
     ,
     .toggleMedia {
         margin-top: 15px;
@@ -100,15 +100,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         color: #333;
     }
-    
+
     .titleone {
         font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
-    
+
     .namefield: {
         width: 100%;
     }
-    
+
     .contain {
         margin-top: 15px;
         margin-bottom: 15px;
@@ -119,29 +119,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         flex-direction: column;
         align-self: stretch;
     }
-    
+
     .subtitle {
         font-weight: bold;
         font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
-    
+
     .previewquestion {
         display: inline-flex;
         flex-grow: 2;
         padding: 10px;
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
-    
+
     .resourceViewer {
         margin-top: 10px;
     }
-    
+
     .inputfield {
         width: 90%;
         display: inline-flex;
         align-self: center;
     }
-    
+
     div.unitActions {
         border: none;
         box-shadow: none;
@@ -150,13 +150,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <word-list id="randomSentence"></word-list>
-        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="startingMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog mcq freetext media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="situatedQuestionPicker"></resource-picker-dialog>
+        <resource-picker-dialog image page video resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiPAMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="feedbackMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog inventory media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiInventoryMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog poi media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog image page video resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog poi resource-viewer="poiViewer" id="poiMediaPicker"></resource-picker-dialog>
         <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
             <div class="contain shadow-2dp">
                 <div class="insideflex">
@@ -164,14 +164,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <paper-input name="activityName" value={{quest}} label="Game unit name"></paper-input>
                 <paper-button on-click="setMedia" raised>Set media</paper-button>
-                <generic-resource-viewer input-name="startMedia" image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Place and guiding</h3>
                 </div>
                 <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
-                <generic-resource-viewer input-name="poi" poi class="resourceViewer" id="poiViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="poi" poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
                 <label class="subtitle" id="label1">User guidance: </label>
                 <paper-radio-group selected="folia">
                     <paper-radio-button name="map">POI map</paper-radio-button>
@@ -207,7 +207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <label class="subtitle" id="label2">POI reached :</label>
                 <paper-input label="POI reached message" name="poiReachedMessage"></paper-input>
                 <paper-button on-click="setPOIInventory" raised>Set POI Reached Item (inventory)</paper-button>
-                <generic-resource-viewer input-name="poiReachedInventory" inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="poiReachedInventory" is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
             </div>
             </div>
             <div class="contain shadow-2dp">
@@ -217,19 +217,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
                 <div style="display:inline-flex;flex-direction:column">
                     <div style="width:100%;display:flex;">
-                        <generic-resource-viewer input-name="situatedAct1" mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="situatedAct1" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
                         <template is="dom-if" if="{{pa1}}">
                             <post-action score-success='act1success' score-fail='act1fail' id="pa1"></post-action>
                         </template>
                     </div>
                     <div style="width:100%;display:flex;">
-                        <generic-resource-viewer input-name="situatedAct2" mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="situatedAct2" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
                         <template is="dom-if" if="{{pa2}}">
                             <post-action score-success='act2success' score-fail='act2fail' id="pa2"></post-action>
                         </template>
                     </div>
                     <div style="width:100%;display:flex;">
-                        <generic-resource-viewer input-name="situatedAct3" mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="situatedAct3" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                         <template is="dom-if" if="{{pa3}}">
                             <post-action score-success='act3success' score-fail='act3fail' id="pa3"></post-action>
                         </template>
@@ -241,7 +241,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <h3>Pedagogical feedback</h3>
                 </div>
                 <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
-                <generic-resource-viewer input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
         </form>
         <div class="unitActions">
@@ -256,14 +256,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'unit-activity-constructor',
             ready: function() {
-                this.$.startingMediaPicker.addEventListener('itemPicked', this.startingMediaPicked.bind(this))
-                this.$.cluePOIMediaPicker.addEventListener('itemPicked', this.cluePOIPicked.bind(this))
-                this.$.poiMediaPicker.addEventListener('itemPicked', this.poiPicked.bind(this))
-                this.$.poiPAMediaPicker.addEventListener('itemPicked', this.poiPaPicked.bind(this))
-                this.$.situatedQuestionPicker.addEventListener('itemPicked', this.situatedQuestionPicked.bind(this))
-                this.$.poiInventoryMediaPicker.addEventListener('itemPicked', this.poiInventoryMediaPicked.bind(this))
-
-                this.$.feedbackMediaPicker.addEventListener('itemPicked', this.feedbackMediaPicked.bind(this))
+                this.addEventListener('resourcePicked', this.setPickedResource.bind(this))
+                // this.$.startingMediaPicker.addEventListener('resourcePicked', this.setResource.bind(this))
                 this.$.unitActivityForm.addEventListener('iron-form-response', this.handleResponse.bind(this))
                 this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
                 this.$.situatedActivityMedia2.addEventListener('mediaDeleted', this.sa2Deleted.bind(this))
@@ -274,14 +268,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.activityCount = null;
 
             },
-           toggleQr: function(selector) {
+            setPickedResource: function(evt) {
+                if (evt && evt.detail && evt.detail.resourceType && evt.detail.resourceItem && evt.detail.resourceViewer) {
+                    switch (evt.detail.resourceType) {
+                        case "image":
+                            this.$[evt.detail.resourceViewer].setImage(evt.detail.resourceItem)
+                            break;
+                        case "page":
+                            this.$[evt.detail.resourceViewer].setPage(evt.detail.resourceItem)
+                            break;
+                        case "inventory":
+                            this.$[evt.detail.resourceViewer].setInventory(evt.detail.resourceItem)
+                            break;
+                        case "poi":
+                            this.$[evt.detail.resourceViewer].setPOI(evt.detail.resourceItem)
+                            break;
+                        case "mcq":
+                            this.situatedQuestionPicked(evt)
+                            break;
+                        case "freetext":
+                            this.situatedQuestionPicked(evt);
+                            break;
+                    }
+                }
+            },
+
+            toggleQr: function(selector) {
                 this.$.collapse1.toggle();
             },
             poiDeleted: function() {
-                this.poiid = null;
-            }
+                    this.poiid = null;
+                }
 
-            ,
+                ,
             sa1Deleted: function() {
                 this.pa1 = false
             },
@@ -310,45 +329,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             handleResponse: function(event) {
                 console.log(event)
                 if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
-                   // this.resetFields();
+                    // this.resetFields();
                     this.fire('unitGameSaved', 'New unit game saved');
                 }
             },
-            startingMediaPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "image":
-                            this.$.startMediaViewer.setImage(newItem)
-                            break;
-                        case "page":
-                            this.$.startMediaViewer.setPage(newItem)
-                            break;
 
-                    }
-                }
-            },
-            poiInventoryMediaPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    this.$.poiInventoryResourceViewer.setInventory(newItem)
-                }
-            },
-
-            feedbackMediaPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "image":
-                            this.$.feedbackMediaViewer.setImage(newItem)
-                            break;
-                        case "page":
-                            this.$.feedbackMediaViewer.setPage(newItem)
-                            break;
-
-                    }
-                }
-            },
 
             poiPaPicked: function(item) {
                 if (item && item.detail && item.detail.__data__) {
@@ -366,8 +351,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             situatedQuestionPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
+                if (item && item.detail && item.detail.resourceType) {
+                    var newItem = item.detail.resourceItem
                     if (!this.$.situatedActivityMedia.item) {
                         switch (newItem.type) {
                             case "mcq":

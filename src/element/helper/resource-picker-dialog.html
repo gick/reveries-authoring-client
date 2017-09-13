@@ -1,12 +1,11 @@
 <link rel="import" href="./list-generic-resource.html">
-
 <link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <style>
-.flexible{
-    display:inline-flex;
+.flexible {
+    display: inline-flex;
     flex-wrap: wrap;
 }
 </style>
@@ -18,18 +17,17 @@
                     <template is="dom-if" if="{{image}}">
                         <paper-tab>Images</paper-tab>
                     </template>
-                    <template is="dom-if" if="{{video}}">
-                        <paper-tab>Video</paper-tab>
+                    <template is="dom-if" if="{{page}}">
+                        <paper-tab>Page</paper-tab>
                     </template>
                     <template is="dom-if" if="{{inventory}}">
                         <paper-tab>Inventory</paper-tab>
                     </template>
-
                     <template is="dom-if" if="{{badge}}">
                         <paper-tab>Badges</paper-tab>
                     </template>
-                    <template is="dom-if" if="{{page}}">
-                        <paper-tab>Pages</paper-tab>
+                    <template is="dom-if" if="{{video}}">
+                        <paper-tab>Video</paper-tab>
                     </template>
                     <template is="dom-if" if="{{poi}}">
                         <paper-tab>POI</paper-tab>
@@ -44,7 +42,15 @@
                 <iron-pages id="resourcePicker" selected="{{selected}}">
                     <template is="dom-if" if="{{image}}" restamp>
                         <div>
-                            <media-viewer-activity class="flexible" media-name={{currentname}} media-id="{{currentid}}" id="imageViewer"></media-viewer-activity>
+                            <list-generic-resource picker share-url='/listUserImages' id='image' resource-id='{{mediaId}}' resource-type='image' url='/listUserImages'></list-generic-resource>
+                            <div class="buttons">
+                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
+                            </div>
+                        </div>
+                    </template>
+                    <template is="dom-if" if="{{page}}" restamp>
+                        <div>
+                            <list-generic-resource picker share-url='/staticmedia' id='staticmedia' resource-type='page' url='/staticmedia'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -52,16 +58,7 @@
                     </template>
                     <template is="dom-if" if="{{inventory}}" restamp>
                         <div>
-                         <list-generic-resource picker share-url='/inventory' id='inventoryList' resource-type='inventory' url='/inventory'></list-generic-resource>
-                            <div class="buttons">
-                                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template is="dom-if" if="{{page}}">
-                        <div>
-                     <list-generic-resource share-url='/staticmedia' id='staticmedia' resource-type='page' url='/staticmedia'></list-generic-resource>
+                            <list-generic-resource picker share-url='/inventory' id='inventoryList' resource-type='inventory' url='/inventory'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -69,7 +66,7 @@
                     </template>
                     <template is="dom-if" if="{{poi}}">
                         <div>
-                            <poi-viewer-activity  class="flexible" media-name={{currentname}} media-id="{{mediaId}}" id="poiviewer"></poi-viewer-activity>
+                            <list-generic-resource picker share-url='/poi' id='poiList' resource-type='poi' url='/poi'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -77,7 +74,7 @@
                     </template>
                     <template is="dom-if" if="{{mcq}}">
                         <div>
-                            <mcq-viewer-activity  class="flexible" media-name={{currentname}} url='/mcq' media-id="{{mediaId}}" id="mcqviewer"></mcq-viewer-activity>
+                            <list-generic-resource picker share-url='/mcq' id='mcqList' resource-type='mcq' url='/mcq'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -85,7 +82,7 @@
                     </template>
                     <template is="dom-if" if="{{freetext}}">
                         <div>
-                            <freetext-viewer-activity  class="flexible" media-name={{currentname}} url='/freetextactivity' media-id="{{mediaId}}" id="freetextviewer"></freetext-viewer-activity>
+                            <list-generic-resource picker share-url='/freetextactivity' id='freetextList' resource-type='freetext' url='/freetextActivity'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -93,7 +90,7 @@
                     </template>
                     <template is="dom-if" if="{{badge}}">
                         <div>
-                            <badge-viewer-activity  class="flexible" media-name={{currentname}} url='/badge' media-id="{{mediaId}}" id="badgeViewer"></badge-viewer-activity>
+                            <badge-viewer-activity class="flexible" media-name={{currentname}} url='/badge' media-id="{{mediaId}}" id="badgeViewer"></badge-viewer-activity>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>
@@ -108,14 +105,22 @@
         'use strict';
         Polymer({
             is: 'resource-picker-dialog',
-            ready: function() {},
+            ready: function() {
+                this.$.selectorDialog.addEventListener('resourcePickedFromList',this.resourcePicked.bind(this))
+            },
             setValues: function() {
 
             },
             open: function() {
-            
+
 
                 this.$.selectorDialog.open();
+            },
+            resourcePicked: function(evt) {
+                if (evt && evt.detail && evt.detail.resourceType && evt.detail.resourceItem && this.resourceViewer) {
+
+                    this.fire('resourcePicked', { resourceType:evt.detail.resourceType,resourceItem: evt.detail.resourceItem, resourceViewer: this.resourceViewer })
+                }
             },
             properties: {
 
@@ -169,6 +174,10 @@
                     notify: true,
                     value: null,
                     reflectToAttribute: true,
+                },
+                resourceViewer: {
+                    type: String,
+                    notify: true,
                 },
             }
         });

@@ -4,10 +4,14 @@
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../basic-element/mcq-activity.html">
+<link rel="import" href="../../../bower_components/marked-element/marked-element.html">
 <link rel="import" href="../basic-element/free-text-question.html">
 <link rel="import" href="../POI/one-poi-display.html">
+<link rel="import" href="../inventory/inventory-element.html">
+
 <link rel="import" href="../badges/badge-element.html">
 <dom-module id="generic-resource-viewer">
     <template>
@@ -75,18 +79,20 @@
             align-items: center;
             width: 100%;
         }
-                .pickedDiv {
+
+        .pickedDiv {
             display: flex;
             background-color: blue;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-
         </style>
         <div class$="{{pickedValue}}">
             <template is="dom-if" if="{{item}}">
+            {{item.type}}
                 <template is="dom-if" if="{{poi}}" restamp>
+                    set poi
                     <one-poi-display item="{{item}}"></one-poi-display>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -129,6 +135,9 @@
                     <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
+                <template is="dom-if" if="{{isTemp}}" restamp>
+                    <paper-button id="delete" style="display:inline-flex;align-self: center;" on-click="remove">Remove</paper-button>
+                </template>
             </template>
         </div>
     </template>
@@ -139,7 +148,7 @@
         Polymer({
             is: 'generic-resource-viewer',
             ready: function() {
-                this.pickedValue='mainDiv'
+                this.pickedValue = 'mainDiv'
             },
             isEmpty: function() {
                 this.image = false;
@@ -317,10 +326,14 @@
                 if (resourceType == 'image') {
                     this.setImage(this.item)
                 }
+                if (resourceType == 'poi') {
+                    this.setPOI(this.item)
+                }
+
                 if (resourceType == 'badge') {
                     this.setBadge(this.item)
                 }
-                if (resourceType == 'staticmedia') {
+                if (resourceType == 'page') {
                     this.setPage(this.item)
                 }
                 if (resourceType == 'inventory') {
@@ -349,10 +362,13 @@
                 }
             },
             properties: {
-                picked: { type: Boolean, observer: 'itemPicked', value: false, },
                 poiId: {
                     type: String,
                     reflectToAttribute: true,
+                },
+                isTemp: {
+                    type: Boolean,
+                    notify: true,
                 },
                 inputName: {
                     type: String,
