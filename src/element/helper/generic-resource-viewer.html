@@ -271,6 +271,7 @@
                 this.item = oldItem;
                 this.item = newItem;
                 this.poiId = this.item._id
+                this.set('active',false)
             },
             setMcq: function(newItem) {
                 this.isMcq();
@@ -289,6 +290,7 @@
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
+
             },
 
 
@@ -302,6 +304,7 @@
                 this.isEmpty();
                 this.item = null
                 this.fire('mediaDeleted', null)
+                this.set('active',true)
             },
             hasImage: function(imageId) {
                 if (!imageId) {
@@ -365,6 +368,7 @@
                 poiId: {
                     type: String,
                     reflectToAttribute: true,
+                    notify:true,
                 },
                 isTemp: {
                     type: Boolean,
@@ -377,6 +381,12 @@
                 image: {
                     type: Boolean,
                     notify: true,
+                },
+                active:{
+                    type:Boolean,
+                    value:true,
+                    notify:true,
+                    reflectToAttribute:true,
                 },
                 page: {
                     type: Boolean,

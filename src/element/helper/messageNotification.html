@@ -1,8 +1,13 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
 <dom-module id="message-notification">
+    <style type="text/css">
+    .notif:first-letter {
+        text-transform: capitalize;
+    }
+    </style>
     <template>
-        <paper-toast id="toast0" text="{{currentMessage}}"></paper-toast>
+        <paper-toast id="message" class="notif" text="{{currentMessage}}"></paper-toast>
     </template>
     <script type="text/javascript">
     Polymer({
@@ -11,9 +16,22 @@
         ready: function() {
             //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
         },
-        showToast:function(message){
-        	this.currentMessage=message.detail
-        	this.$.toast0.open();
+        showToast: function(message) {
+            switch (message.info.operation) {
+                case 'edit':
+                    this.currentMessage = "Editing " +message.info.resource.typeLabel+ " resource"
+                    this.$.message.show()
+                    break
+                case 'delete':
+                    this.currentMessage = message.info.resource.typeLabel + " resource removed"
+                    this.$.message.show()
+                    break
+                case 'create':
+                    this.currentMessage = "New " +message.info.resource.typeLabel + " created"
+                    this.$.message.show()
+                    break
+
+            }
         },
 
     })

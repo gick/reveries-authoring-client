@@ -22,6 +22,8 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
 <link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../helper/resource-header.html">
+
 <dom-module id="unit-game">
     <style is="custom-style">
     #notes {
@@ -30,36 +32,31 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
         flex-wrap: wrap;
     }
 
-    .card-content{background-color: #ffffff}
-        .card-actions{background-color: #ffffff}
+    .card-content {
+        background-color: #ffffff
+    }
+
+    .card-actions {
+        background-color: #ffffff
+    }
 
     .cardFlex {
         flex-direction: column;
     }
-    
+
     paper-fab {
         display: inline-flex;
-        --paper-card-background-color   : #eee;
+        --paper-card-background-color: #eee;
         color: #757575;
     }
-    
+
     paper-card.header {
-        --paper-card-background-color  : #eee;    
+        --paper-card-background-color: #eee;
         margin: 5px
     }
     </style>
     <template>
         <div id="notes">
-            <paper-card class="header" heading="GU:{{activityName}}">
-                <div class="card-content cardFlex">
-                    <paper-icon-button icon="icons:info"></paper-icon-button>
-                    <span>{{startText}}</span>
-                </div>
-                <div class="card-actions">
-                    <paper-icon-button on-click="saveGame" icon="icons:cloud-upload"></paper-icon-button>
-                    <paper-icon-button on-click="removeGame" icon="icons:clear"></paper-icon-button>
-                </div>
-            </paper-card>
         </div>
     </template>
     <script>
@@ -67,13 +64,12 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
         'use strict';
         Polymer({
             is: 'unit-game',
-            ready: function() {
+            ready: function() {},
+            saveGame: function() {
+                this.fire('saveGame', this.gameUnit)
             },
-            saveGame:function(){
-                this.fire('saveGame',this.gameUnit)
-            },
-            removeGame:function(){
-                this.fire('removeGame',this.gameUnit);
+            removeGame: function() {
+                this.fire('removeGame', this.gameUnit);
             },
             properties: {
                 startText: {
@@ -104,7 +100,7 @@ subject to an amarniemarning@gmail.comitional IP rights grant found at http://po
                     type: Number,
                     notify: true,
                     value: 0
-                }   
+                }
 
             },
         });

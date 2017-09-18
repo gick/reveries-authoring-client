@@ -61,7 +61,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <div class="resourceElement">
-            <remove-ressource id="remover" callbackfunction="{{staticMediaRemoved}}" ressource-id={{itemId}} ressource-url='/staticmedia'></remove-ressource>
+            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/staticmedia'></remove-ressource>
             <form class="inner">
                 <resource-header editable id="header" class="header" resource-url="/staticmedia" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <marked-element markdown="{{mkdown}}">
@@ -81,14 +81,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'staticmedia-viewer',
             ready: function() {
-                this.staticMediaRemoved = function() {
-                    this.fire('static-media-changed', null);
-                }.bind(this)
-                this.$.header.addEventListener('edit',this.editElement.bind(this))
-
-            },
-            editElement:function(){
-                this.fire('editPage',this)
             },
 
             _resourceReadonlyObserver: function(newval, oldval) {
@@ -110,7 +102,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             removeElement: function() {
                 this.$.remover.genRequest();
             },
-            handleResponse: function() {},
             _submit: function() {},
             properties: {
                 mkdown: {

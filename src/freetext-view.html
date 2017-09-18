@@ -76,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </div>
         <div class="card">
-            <list-generic-resource share-url='/freetext' id='freetextList' resource-type='freetext' url='/freetextactivity'></list-generic-resource>
+            <list-generic-resource share-url='/freetextactivity' id='freetextList' resource-type='freetext' url='/freetextactivity'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.questionConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
             this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
             this.$.selectMedia.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.freetextList.addEventListener('edit', this.editFreetext.bind(this))
+            this.$.freetextList.addEventListener('resource-edit', this.editFreetext.bind(this))
             this.$.questionConstructor.addEventListener('freetext_saved', this.updateList.bind(this))
 
 

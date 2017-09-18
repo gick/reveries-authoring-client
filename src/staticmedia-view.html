@@ -59,8 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'staticmedia-view',
         ready: function() {
-            this.$.staticConstructor.addEventListener('static-media-changed',function(){this.updateMedia()}.bind(this))
-            this.$.staticConstructor.addEventListener('staticMediaSaved',function(){this.updateMedia()}.bind(this))
+            this.$.staticConstructor.addEventListener('resource-operation',function(){this.updateMedia()}.bind(this))
             this.$.staticmedialist.requestElements();
 
             this.$.staticmedialist.addEventListener('editPage',this.editPage.bind(this))

@@ -98,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
         <div style="display:inline-flex">
             {{mkdown}}
-            <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
+            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
             <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
             <form class="inner">
                 {{question}}
@@ -144,9 +144,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.showMediaButton = false;
               //  this.$.header.addEventListener('edit', this.editElement.bind(this))
 
-                this.freeTextQuestionRemoved = function() {
-                    this.fire('free-text-removed', null)
-                }.bind(this)
                 var validator = {
                     validatorName: 'free-text-validator',
                     validatorType: 'validator',
@@ -154,9 +151,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         return this.response === this.userResponse
                     }.bind(this)
                 };
-            },
-            editElement: function() {
-                this.fire('edit', 'test')
             },
 
             _mediaIdObserver: function(newval) {

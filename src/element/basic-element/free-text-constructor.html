@@ -127,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <paper-input name="label" value={{label}} label="Resource label"></paper-input>
             <paper-input name="question" value={{question}} label="Question"></paper-input>
-            <paper-input name="responseFieldLabel" value={{responseLabel}} label="Response field label"></paper-input>
+            <paper-input name="responseLabel" value={{responseLabel}} label="Response field label"></paper-input>
             <paper-input style=";" name="response" label="Response" value={{response}} required></paper-input>
             <paper-input style=";" name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input style=";" name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
@@ -202,13 +202,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             editQuestion: function(question) {
                 this.updating = true
                 this.responseLabel=question.responseLabel
-                this.label = question.resourceLabel
+                this.label = question.label
                 this.question = question.question
                 this.mediaId = question.mediaId
                 this.response = question.response
                 this.wrongMessage = question.wrongMessage
                 this.correctMessage = question.correctMessage
-                this.itemId = question.itemId
+                this.itemId = question._id
             },
             _submit: function() {
                 this.$.freeTextForm.submit();

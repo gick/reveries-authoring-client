@@ -201,12 +201,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             I18nMsg.lang = 'en';
             Platform.performMicrotaskCheckpoint();
-            this.$$('#mcq').addEventListener('mcq_saved', this.resourceSaved.bind(this))
+           /* this.$$('#mcq').addEventListener('mcq_saved', this.resourceSaved.bind(this))
             this.$$('#freetext').addEventListener('freetext_saved', this.resourceSaved.bind(this))
             this.$$('#staticmedia').addEventListener('staticMediaSaved', this.resourceSaved.bind(this))
             this.$$('#constructorView').addEventListener('unitGameSaved', this.resourceSaved.bind(this))
-            this.$$('#badge').addEventListener('badge_saved', this.resourceSaved.bind(this))
-            this.$$('#pages').addEventListener('removed', this.resourceRemoved.bind(this))
+            this.$$('#badge').addEventListener('badge_saved', this.resourceSaved.bind(this))*/
+            this.$$('#pages').addEventListener('resource-operation', this.showMessage.bind(this))
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
             this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
@@ -214,17 +214,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.manager.getUserInfo();
             this.logged = false;
         },
-        resourceSaved: function(message) {
-            this.$.toaster.showToast(message + ' ' + 'deleted.')
-        },
         unitGameSaved: function() {
             console.log('saved')
             if (this.$.mlgView && this.$.mlgView.unitGameChanged) {
                 this.$.mlgView.unitGameChanged();
             }
         },
-        resourceRemoved: function(message) {
-            this.$.toaster.showToast(message)
+        showMessage: function(message) {
+            this.$.toaster.showToast(message.detail)
         },
         authChanged: function(arg) {
             console.log('change')

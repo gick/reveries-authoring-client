@@ -29,7 +29,7 @@
     }
     </style>
     <template>
-        <remove-ressource id="remover" resource-id={{resourceId}} resource-url='{{resourceUrl}}'></remove-ressource>
+        <remove-ressource id="remover" resource-id={{resourceId}} resource-type="{{resource.type}}" resource-url='{{resourceUrl}}'></remove-ressource>
         <share-ressource id="sharingElement" request-params="{{requestParams}}" ressource-url="{{resourceUrl}}" ressource-id="{{resourceId}}"></share-ressource>
         <div class="resourceReadwrite">
             <h3 class="headerText">{{resourceLabel}}</h3>
@@ -61,14 +61,13 @@
                 this.requestParams = '{"Status":"Public"}'
             },
             editQuestion: function() {
-                this.fire('edit', this.resource)
+                this.fire('resource-edit',this.resource)
             },
             cloneResource: function() {
 
             },
             remove: function() {
                 this.$.remover.removeResource()
-                this.fire('removed', this.resourceLabel)
             },
             setStatus: function() {
                 /* if (this.resourceStatus == "Private") {

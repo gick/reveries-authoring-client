@@ -26,6 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../helper/word-list.html">
+<link rel="import" href="../remove-ressource/create-resource.html">
+
 <dom-module id="staticmedia-generator">
     <!--
 An element to design static web page using markdown. An helper button allow to pick an image from user image
@@ -128,6 +130,7 @@ TODO : propose different CSS associated with the markdown
                 <paper-button raised style="background-color: lightgreen" dialog-confirm>Cancel</paper-button>
             </div>
         </paper-dialog>
+        <create-resource id="creator" resource-url="/staticmedia" resource="{{resource}}"></create-resource>
         <word-list id="randomSentence"></word-list>
         <form class="freeTextCreator" id="staticmediaConstructor" is="iron-form" method="post" action="/staticmedia">
             <template is="dom-if" if="{{updating}}" restamp>
@@ -158,18 +161,7 @@ TODO : propose different CSS associated with the markdown
         Polymer({
             is: 'staticmedia-generator',
             ready: function() {
-                this.$.staticmediaConstructor.addEventListener('iron-form-response', this.submited.bind(this))
                 this.updating=false 
-            },
-            submited: function() {
-                if (!this.updating) {
-                    this.fire('staticMediaSaved', 'New page saved')
-                } else {
-                    this.fire('staticMediaSaved', 'Page updated')
-
-                }
-                this._reset()
-
             },
             editPage: function(page) {
                 this.updating = true
@@ -210,7 +202,11 @@ TODO : propose different CSS associated with the markdown
             },
 
             _submit: function(event) {
-                this.$.staticmediaConstructor.submit();
+                var json=this.$.staticmediaConstructor.serialize()
+                console.log(json)
+                this.set('resource',json)
+                this.$.creator.createResource()
+             //   this.$.staticmediaConstructor.submit();
                 this.statusString = ""
                 this.label = ""
                 this.mkdown = ""

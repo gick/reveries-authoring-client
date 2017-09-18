@@ -1,7 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="./generic-resource-viewer.html">
 <link rel="import" href="./resource-header.html">
@@ -45,7 +44,7 @@
             is: 'list-generic-resource',
             ready: function() {
 
-                this.addEventListener('resource-removed', function() {
+                this.addEventListener('resource-operation', function() {
                     this.requestElements()
                 }.bind(this))
                 this.requestElements()

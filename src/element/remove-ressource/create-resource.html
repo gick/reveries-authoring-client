@@ -1,34 +1,34 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<dom-module id="remove-ressource">
+<dom-module id="create-resource">
     <template>
-        <iron-ajax id="remove" url="{{resourceUrl}}/{{resourceId}}" method="DELETE" on-response="confirmDelete"></iron-ajax>
+        <iron-ajax content-type="application/json" id="creator" url="{{resourceUrl}}" body="{{resource}}" method="POST" on-response="confirmCreate"></iron-ajax>
     </template>
     <script>
     (function() {
         'use strict';
 
         Polymer({
-            is: 'remove-ressource',
+            is: 'create-resource',
 
-            confirmDelete:function(message){
+            confirmCreate :function(message){
                 this.fire('resource-operation',{info:message.detail.__data__.response})
 
             },
             ready: function() {
             },
-            removeResource:function(){
-                this.set('ressourceId',this.resourceId)
-                this.set('ressourceURL',this.resourceUrl)                
-                this.$.remove.generateRequest()
+            createResource:function(){
+                this.set('resource',this.resource)
+                this.set('resourceURL',this.resourceUrl)                
+                this.$.creator.generateRequest()
             },
             properties: {
-                resourceId: {
+                resourceUrl: {
                     type: String,
                     notify: true,
                 },
-                resourceUrl: {
-                    type: String,
+                resource: {
+                    type: Object,
                     notify: true
                 },
             },

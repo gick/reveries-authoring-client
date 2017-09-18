@@ -17,16 +17,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="unit-activity-display">
     <template>
         <style include="shared-styles">
-        :host {
+         :host {
             display: inline-flex
         }
-        
+
         ;
         .outer {
             display: inline-flex;
             flex-wrap: wrap;
         }
-        
+
         paper-card {
             --paper-card-header: {
                 background-color: #b2ffa6;
@@ -48,7 +48,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             ;
         }
-        
+
+        .resourceReadwrite {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color: lightgreen;
+            width: 100%;
+        }
+
+        .resourceReadonly {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color: lightgrey;
+            width: 100%;
+        }
+
+        .headerText {
+            padding-left: 10px;
+            display: inline-flex;
+            align-self: center;
+        }
+
         .info {
             color: #737373;
             font-weight: 400;
@@ -56,13 +78,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-family: 'Roboto', 'Noto', sans-serif;
             display: inline-block;
         }
-        
+
         .generalflex {
             display: inline-flex;
             flex-wrap: wrap;
             flex-direction: column;
         }
-        
+
         .mediaimg {
             height: 300px;
             display: flex;
@@ -73,7 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             box-shadow: 6px 5px 2px #CECEB9;
             margin-bottom: 15px;
         }
-        
+
         .innerdiv {
             position: relative;
             overflow: visible;
@@ -84,13 +106,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <remove-ressource id="remover" callbackfunction="cleanRemove" ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
+        <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
         <div class="outer">
             <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
         </div>
         <div class="innerdiv" id="handler">
             <template is="dom-repeat" items="{{items}}" as="item">
-                <unit-game game-unit="{{item}}" activity-name="{{item.activityName}}" start-text="{{item.startText}}" feedback-text="{{item.feedbackText}}"></unit-game>
+                <paper-card class="header">
+                    <div class="resourceReadwrite">
+                        <h3 class="headerText">{{item.activityName}}</h3>
+                        <!-- Read belonging to the user can be set public or private -->
+                        <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="editQuestion" icon="icons:create"></paper-icon-button>
+                        <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="remove" icon="icons:delete"></paper-icon-button>
+                        <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
+                        <template is="dom-if" if="{{isReadOnly}}">
+                            <paper-icon-button id="cloneObject" style="display:inline-flex;align-self: center" raised on-click="cloneResource" icon="icons:content-copy"></paper-icon-button>
+                        </template>
+                    </div>
+                    <div class="card-content">
+                        <paper-icon-button on-click="saveGame" icon="icons:cloud-upload"></paper-icon-button>
+                        <paper-icon-button on-click="removeGame" icon="icons:clear"></paper-icon-button>
+                    </div>
+                </paper-card>
             </template>
         </div>
     </template>

@@ -152,7 +152,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <word-list id="randomSentence"></word-list>
         <resource-picker-dialog image page video resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
-        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="poiPAMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog image page video  id="poiPAMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
@@ -163,37 +163,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <h3>Game unit start</h3>
                 </div>
                 <paper-input name="activityName" value={{quest}} label="Game unit name"></paper-input>
-                <paper-button on-click="setMedia" raised>Set media</paper-button>
-                <generic-resource-viewer input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
+                <paper-button on-click="setMedia" raised>Set media :</paper-button>
+                <generic-resource-viewer input-name="startMedia"  is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
                     <h3>Place and guiding</h3>
                 </div>
                 <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
-                <generic-resource-viewer input-name="poi" poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
-                <label class="subtitle" id="label1">User guidance: </label>
-                <paper-radio-group selected="folia">
-                    <paper-radio-button name="map">POI map</paper-radio-button>
-                    <paper-radio-button name="ping">Ping</paper-radio-button>
-                    <paper-radio-button name="compass">Compass</paper-radio-button>
-                    <paper-radio-button checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
+                <generic-resource-viewer input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
+                <label class="subtitle" id="label1">User guidance:</label>
+                <paper-radio-group     allow-empty-selection>
+                    <paper-radio-button  disabled="[[poiActive]]" name="map">POI map</paper-radio-button>
+                    <paper-radio-button  disabled="[[poiActive]]" name="ping">Ping</paper-radio-button>
+                    <paper-radio-button  disabled="[[poiActive]]" name="compass">Compass</paper-radio-button>
+                    <paper-radio-button  disabled="[[poiActive]]" checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
                     <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
                 </paper-radio-group>
                 <template is="dom-if" if="{{cluePOISelected}}">
                     <generic-resource-viewer input-name="cluePOIId" image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
-                <paper-radio-group selected="gps" aria-labelledby="label2">
-                    <paper-radio-button name="folia">Folia image analysis</paper-radio-button>
-                    <paper-radio-button active='{{active}}' name="QR">QR code scan</paper-radio-button>
-                    <paper-radio-button name="gps">Device GPS</paper-radio-button>
+                <paper-radio-group allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
+                    <paper-radio-button  disabled="[[poiActive]]" name="folia">Folia image analysis</paper-radio-button>
+                    <paper-radio-button  active="{{qrActive}}" disabled="[[poiActive]]" name="QR">QR code scan</paper-radio-button>
+                    <paper-radio-button disabled="[[poiActive]]" name="gps">Device GPS</paper-radio-button>
                 </paper-radio-group>
-                <paper-button class="heading" disabled="{{!active}}" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
+                <paper-button class="heading" disabled="[[poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code [[poiid]]</paper-button>
                 <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
+                    <template is="dom-if" if="[[poiid]]" restamp>
                     <div class="content">
-                        <img src='/qrcode/{{poiid}}'>
+                        <img src='/qrcode/[[poiid]]'>
                     </div>
+                    </template>
                 </iron-collapse>
             </div>
             <div class="contain shadow-2dp">
@@ -261,8 +263,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.unitActivityForm.addEventListener('iron-form-response', this.handleResponse.bind(this))
                 this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
                 this.$.situatedActivityMedia2.addEventListener('mediaDeleted', this.sa2Deleted.bind(this))
-                this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))
-                this.$.poiViewer.addEventListener('mediaDeleted', this.poiDeleted.bind(this))
+                this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))      
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
@@ -296,11 +297,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             toggleQr: function(selector) {
                 this.$.collapse1.toggle();
             },
-            poiDeleted: function() {
-                    this.poiid = null;
-                }
-
-                ,
+    
             sa1Deleted: function() {
                 this.pa1 = false
             },
