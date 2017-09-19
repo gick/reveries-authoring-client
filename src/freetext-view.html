@@ -84,46 +84,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'freetext-view',
         ready: function() {
-            this.$.questionConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
-            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
-            this.$.selectMedia.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.freetextList.addEventListener('resource-edit', this.editFreetext.bind(this))
-            this.$.questionConstructor.addEventListener('freetext_saved', this.updateList.bind(this))
-
-
+            this.addEventListener('resource-operation',this.updateMedia.bind(this))
         },
-        updateList:function(){
+        updateMedia: function(message) {
+        switch(message.detail.info.operation){
+            case 'create':
             this.$.freetextList.requestElements()
-        },
-        selectMedia: function() {
-            this.mediaDeleted();
-            //this.$.mediaviewer.genReq();
-            this.$.selectMedia.open();
-        },
-        editFreetext: function(question) {
-            var questiondata = question.detail
-            this.$.constructors.scrollIntoView()
-            this.$.questionConstructor.editQuestion(questiondata)
-        },
+            break
+            case 'update':
+            this.$.freetextList.requestElements()
+            break
 
-        mediaDeleted: function() {
-            this.set('currentid', null)
-        },
-        mediaPicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                switch (newItem.type) {
-                    case "page":
-                        this.$.questionConstructor.setPage(newItem)
-                        this.set('currentid', newItem._id);
-                        break;
+            case 'delete':
+            this.$.freetextList.requestElements()
+            break
 
-                }
+            case 'edit':
+            this.$.questionConstructor.edit(message.detail.info.resource)
+            break
             }
-        },
-
-        setValues: function() {
-
         }
 
     });

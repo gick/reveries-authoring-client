@@ -18,6 +18,10 @@
         },
         showToast: function(message) {
             switch (message.info.operation) {
+                case 'update':
+                    this.currentMessage = message.info.resource.typeLabel + " updated"
+                    this.$.message.show()
+                    break
                 case 'edit':
                     this.currentMessage = "Editing " +message.info.resource.typeLabel+ " resource"
                     this.$.message.show()

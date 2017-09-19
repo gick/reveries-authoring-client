@@ -44,19 +44,16 @@
             is: 'list-generic-resource',
             ready: function() {
 
-                this.addEventListener('resource-operation', function() {
-                    this.requestElements()
-                }.bind(this))
                 this.requestElements()
                 //  this.$.selector.addEventListener('selected-changed',this.setStyleValue.bind(this))
                 //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
             },
             setStyleValue: function(item, selected) {
-                if(!this.picker)
+                if (!this.picker)
                     return
                 if (this.selected && item._id == this.selected._id) {
                     this.set('resourceId', this.selected._id)
-                    this.fire('resourcePickedFromList',{resourceType:this.resourceType,resourceItem:item})
+                    this.fire('resourcePickedFromList', { resourceType: this.resourceType, resourceItem: item })
                     return 'selected'
                 }
                 this.set('resourceId', null)
@@ -92,7 +89,7 @@
                 resourceId: {
                     type: String,
                     reflectToAttribute: true,
-                    value:'test',
+                    value: 'test',
                 },
                 resourceType: {
                     type: String,

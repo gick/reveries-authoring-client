@@ -20,11 +20,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="image-view">
     <template>
         <style include="common-styles">
-        :host {
+         :host {
             display: block;
             padding: 10px;
         }
-        
+
         h1 {
             font-size: 22px;
             margin: 16px 0;
@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="card">
             <h2>Media uploader</h2>
 
-            <file-upload id="uploader" on-success="updateMedia" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
+            <file-upload id="uploader" on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
             </file-upload>
 
             <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
@@ -59,10 +59,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'image-view',
         ready: function() {
+            this.addEventListener('resource-operation',this.updateMedia.bind(this))
+
+        }
+        ,
+        updateImages:function(message){
+            this.$.mediaviewer.requestElements()
+            this.fire('resource-operation',{info:JSON.parse(message.detail.xhr.responseText)})
 
         },
-        updateMedia: function() {
-            this.$.mediaviewer.requestElements();
+        updateMedia: function(message) {
+            console.log(message)
+        switch(message.detail.info.operation){
+
+            case 'delete':
+            this.$.mediaviewer.requestElements()
+            break
+
+            }
         },
         clearList: function() {
             this.$.uploader.clear();

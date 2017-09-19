@@ -20,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../helper/word-list.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../media-viewer/static-media-dialog-activity.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
@@ -47,6 +47,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
+        <create-resource id="creator" resource-url="/mcq" resource="{{resource}}"></create-resource>
+        <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
+
         <form class="flexForm" id="mcqForm" is="iron-form" method="post" action="/mcq">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Edit MCQ question</h3>
@@ -66,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
             <paper-button raised on-click="showMediaDialog">Set clue media (optionnal)</paper-button>
-            <generic-resource-viewer input-name="mediaId" image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="mediaId" is-temp image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="card-actions ">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
@@ -87,27 +90,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'mcq-constructor',
             ready: function() {
                 //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
-                this.$.mcqForm.addEventListener('iron-form-response', this.formSubmited.bind(this))
-            },
-            setPage: function(item) {
-                this.$.mcqMediaViewer.setPage(item)
-            },
-            formSubmited: function() {
-                if(this.updating){
-                    this.fire('mcq_saved','MCQ updated')
-                } else{
-                    this.fire('mcq_saved','MCQ saved')                    
-                }
-                this.resetFields()
+                this.updating=false
+                this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
 
+            },
+            setResource: function(message) {
+                switch (message.detail.resourceType) {
+                    case "page":
+                        this.$.mcqMediaViewer.setPage(message.detail.resourceItem)
+                }
             },
             setValues: function() {
                 this.set('mediaId', this.mediaId);
                 this.set('fileName', this.currentname);
             },
             showMediaDialog: function() {
-                this.$.mcqMediaViewer.removeResource()
-                this.fire('selectMedia', null)
+                this.$.pagePicker.open()
             },
             dummyFill: function() {
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
@@ -127,20 +125,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             logout: function() {},
             _submit: function(event) {
-                this.$.mcqForm.submit();
+                var json = this.$.mcqForm.serialize()
+                this.set('resource', json)
+                this.$.creator.createResource()
+                this.statusString = ""
+                this.label = ""
+                this.mkdown = ""
+                this.resetFields()
             },
-            editQuestion: function(question) {
+            edit: function(question) {
                 this.updating = true
 
-                this.resourceLabel = question.resourceLabel
+                this.resourceLabel = question.label
                 this.question = question.question
                 this.mediaId = question.mediaId
-                this.distractor1 = question.wrongAnswer1
-                this.distractor2 = question.wrongAnswer2
-                this.correctChoice = question.correctAnswer
-                this.wrongMessage = question.wrongAnswerMessage
-                this.correctMessage = question.correctAnswerMessage
-                this.itemId = question.itemId
+                this.distractor1 = question.distractor1
+                this.distractor2 = question.distractor2
+                this.correctChoice = question.correctChoice
+                this.wrongMessage = question.wrongMessage
+                this.correctMessage = question.correctMessage
+                this.itemId = question._id
             },
             _reset: function(event) {
                 this.resetFields()

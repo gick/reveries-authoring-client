@@ -96,11 +96,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
-        <div style="display:inline-flex">
-            {{mkdown}}
-            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
-            <akc-meta key="changeFreeTextQuestion" value={{changeFreeTextQuestion}}></akc-meta>
-            <form class="inner">
+        <div style="">
+dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
+            <form class="">
                 {{question}}
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}"></paper-input>
                 <iron-collapse id="clue">

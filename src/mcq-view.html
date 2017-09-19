@@ -78,37 +78,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'mcq-view',
         ready: function() {
-            this.$.mcqConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
-            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
-            this.$.mcqConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.mcqConstructor.addEventListener('mcq_saved',this.mcqSaved.bind(this))
-            this.$.mcqList.addEventListener('editMCQQuestion',this.editMCQ.bind(this))
+            this.addEventListener('resource-operation',this.updateMedia.bind(this))
         },
-        mcqSaved:function(){
-            this.$.mcqList.requestElements() //call an update on mcq list
-        },
-        editMCQ:function(question){
-            var question=question.detail.__data__
-            this.$.mcqConstructor.editQuestion(question)
-        },
-        selectMedia: function() {
-            this.mediaDeleted();
-            //this.$.mediaviewer.genReq();
-            this.$.selectMedia.open();
-        },
-        mediaDeleted: function() {
-            this.set('mediaId', null)
-        },
-        mediaPicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                switch (newItem.type) {
-                    case "page":
-                        this.$.mcqConstructor.setPage(newItem)
-                        this.set('mediaId', newItem._id);
-                        break;
+        updateMedia: function(message) {
+        switch(message.detail.info.operation){
+            case 'create':
+            this.$.mcqList.requestElements()
+            break
+            case 'update':
+            this.$.mcqList.requestElements()
+            break
 
-                }
+            case 'delete':
+            this.$.mcqList.requestElements()
+            break
+
+            case 'edit':
+            this.$.mcqConstructor.edit(message.detail.info.resource)
+            break
             }
         },
 

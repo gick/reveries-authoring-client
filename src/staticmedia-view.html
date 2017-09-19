@@ -22,17 +22,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="staticmedia-view">
     <template>
         <style include="common-styles">
-        :host {
+         :host {
             display: block;
             padding: 10px;
         }
-        
+
         h1 {
             font-size: 22px;
             margin: 16px 0;
             color: #212121;
         }
-        
+
         .constructorCard {
             display: flex;
             justify-content: space-between;
@@ -59,19 +59,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'staticmedia-view',
         ready: function() {
-            this.$.staticConstructor.addEventListener('resource-operation',function(){this.updateMedia()}.bind(this))
-            this.$.staticmedialist.requestElements();
+            this.addEventListener('resource-operation',this.updateMedia.bind(this))
 
-            this.$.staticmedialist.addEventListener('editPage',this.editPage.bind(this))
-
-        },
-        editPage:function(staticpage){
-            var page=staticpage.detail.__data__
-            this.$.staticConstructor.editPage(page)
         }
         ,
-        updateMedia: function() {
-            this.$.staticmedialist.requestElements();
+        updateMedia: function(message) {
+        switch(message.detail.info.operation){
+            case 'create':
+            this.$.staticmedialist.requestElements()
+            break
+            case 'update':
+            this.$.staticmedialist.requestElements()
+            break
+
+            case 'delete':
+            this.$.staticmedialist.requestElements()
+            break
+
+            case 'edit':
+            this.$.staticConstructor.edit(message.detail.info.resource)
+            break
+            }
         }
     });
     </script>

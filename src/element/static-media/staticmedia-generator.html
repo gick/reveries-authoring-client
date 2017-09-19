@@ -23,11 +23,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
-
+<link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../helper/generic-resource-viewer.html">
 <dom-module id="staticmedia-generator">
     <!--
 An element to design static web page using markdown. An helper button allow to pick an image from user image
@@ -35,7 +35,7 @@ gallery.
 TODO : propose different CSS associated with the markdown
 -->
     <style>
-    :host {
+     :host {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -43,7 +43,7 @@ TODO : propose different CSS associated with the markdown
         flex-wrap: nowrap;
         align-content: space-around;
     }
-    
+
     .freeTextCreator {
         border-radius: 3px;
         padding: 10px;
@@ -53,7 +53,7 @@ TODO : propose different CSS associated with the markdown
         margin-left: 20px;
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
-    
+
     .insideflex {
         display: inline-flex;
         flex-direction: row;
@@ -62,19 +62,19 @@ TODO : propose different CSS associated with the markdown
         margin-top: 16px;
         margin-bottom: 10px;
     }
-    
+
     .toggleMedia {
         margin-top: 15px;
         margin-bottom: 15px;
         font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         color: #333;
     }
-    
+
     .imagePicker {
         position: fixed left: 256px;
         right: 256px;
     }
-    
+
     .previewContainer {
         display: inline-flex;
         align-self: inherit;
@@ -82,7 +82,7 @@ TODO : propose different CSS associated with the markdown
         flex-direction: column;
         justify-content: space-between;
     }
-    
+
     .mediaimg {
         height: 250px;
         display: flex;
@@ -93,25 +93,25 @@ TODO : propose different CSS associated with the markdown
         box-shadow: 6px 5px 2px #CECEB9;
         margin-bottom: 15px;
     }
-    
+
     .mediablock {
         display: flex;
         align-items: center;
         align-self: center;
     }
-    
+
     .formTitleWithButton {
         display: inline-flex;
         width: 93%;
         flex-direction: row;
         justify-content: space-between;
     }
-    
+
     .smallh3 {
         display: inline-flex;
         align-self: center;
     }
-    
+
     .previewquestion {
         display: inline-flex;
         flex-grow: 2;
@@ -120,16 +120,7 @@ TODO : propose different CSS associated with the markdown
     }
     </style>
     <template>
-        <paper-dialog style="left:269px" id="selectImage">
-            <h2> Select image</h2>
-            <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
-            </paper-dialog-scrollable>
-            <div class="buttons">
-                <paper-button raised style="background-color: lightgreen" on-click="appendImage" dialog-confirm>Accept</paper-button>
-                <paper-button raised style="background-color: lightgreen" dialog-confirm>Cancel</paper-button>
-            </div>
-        </paper-dialog>
+        <resource-picker-dialog image id="imagePicker"></resource-picker-dialog>
         <create-resource id="creator" resource-url="/staticmedia" resource="{{resource}}"></create-resource>
         <word-list id="randomSentence"></word-list>
         <form class="freeTextCreator" id="staticmediaConstructor" is="iron-form" method="post" action="/staticmedia">
@@ -147,6 +138,7 @@ TODO : propose different CSS associated with the markdown
             <div class="insideflex">
                 <template is="dom-if" if="{{!updating}}" restamp>
                     <paper-button raised on-click="_submit">Save</paper-button>
+                    <paper-button raised on-click="resetFields">reset</paper-button>
                 </template>
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update page</paper-button>
@@ -161,13 +153,14 @@ TODO : propose different CSS associated with the markdown
         Polymer({
             is: 'staticmedia-generator',
             ready: function() {
-                this.updating=false 
+                this.updating = false
+                this.$.imagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
             },
-            editPage: function(page) {
+            edit: function(page) {
                 this.updating = true
                 this.mkdown = page.mkdown
-                this.itemId = page.itemId
-                this.label = page.resourceLabel
+                this.itemId = page._id
+                this.label = page.label
             },
 
             setValues: function() {
@@ -176,21 +169,20 @@ TODO : propose different CSS associated with the markdown
             _activateObs: function(newval, oldval) {
                 this.set('imageRequired', newval)
             },
-            removeImage: function() {
-                this.set('mediaId', null);
-                this.set('mediaName', null);
-            },
             showImageDialog: function() {
-                this.$.mediaviewer.genReq();
-                this.$.selectImage.open();
+                this.$.imagePicker.open()
             },
-            appendImage: function() {
-                var imageURL = '/file/' + this.currentid;
-                var toAppend = '![alt text](' + imageURL + ')'
-                if (this.mkdown) {
-                    this.mkdown = this.mkdown + "\n" + "\n" + toAppend;
-                } else {
-                    this.mkdown = toAppend;
+            setResource: function(message) {
+                switch (message.detail.resourceType) {
+                    case "image":
+                        var imageURL = '/file/' + message.detail.resourceItem._id;
+                        var toAppend = '![alt text](' + imageURL + ')'
+                        if (this.mkdown) {
+                            this.mkdown = this.mkdown + "\n" + "\n" + toAppend;
+                        } else {
+                            this.mkdown = toAppend;
+                        }
+                        break
                 }
             },
             resetFields: function() {
@@ -202,11 +194,9 @@ TODO : propose different CSS associated with the markdown
             },
 
             _submit: function(event) {
-                var json=this.$.staticmediaConstructor.serialize()
-                console.log(json)
-                this.set('resource',json)
+                var json = this.$.staticmediaConstructor.serialize()
+                this.set('resource', json)
                 this.$.creator.createResource()
-             //   this.$.staticmediaConstructor.submit();
                 this.statusString = ""
                 this.label = ""
                 this.mkdown = ""

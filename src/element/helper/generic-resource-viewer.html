@@ -74,9 +74,6 @@
         }
 
         .mainDiv {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             width: 100%;
         }
 
@@ -90,9 +87,7 @@
         </style>
         <div class$="{{pickedValue}}">
             <template is="dom-if" if="{{item}}">
-            {{item.type}}
                 <template is="dom-if" if="{{poi}}" restamp>
-                    set poi
                     <one-poi-display item="{{item}}"></one-poi-display>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -132,7 +127,7 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{freetext}}" restamp>
-                    <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" class="" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" style="display:block" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{isTemp}}" restamp>

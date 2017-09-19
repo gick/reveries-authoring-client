@@ -61,7 +61,7 @@
                 this.requestParams = '{"Status":"Public"}'
             },
             editQuestion: function() {
-                this.fire('resource-edit',this.resource)
+                this.fire('resource-operation',{info:{operation:'edit',resource:this.resource}})
             },
             cloneResource: function() {
 

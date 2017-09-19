@@ -106,7 +106,7 @@
         Polymer({
             is: 'resource-picker-dialog',
             ready: function() {
-                this.$.selectorDialog.addEventListener('resourcePickedFromList',this.resourcePicked.bind(this))
+                this.$.selectorDialog.addEventListener('resourcePickedFromList', this.resourcePicked.bind(this))
             },
             setValues: function() {
 
@@ -115,12 +115,23 @@
 
 
                 this.$.selectorDialog.open();
+                var res = Polymer.dom(this.root).querySelectorAll('list-generic-resource')
+                for (var i = 0; i < res.length; i++) {
+                    res[i].requestElements()
+                }
             },
             resourcePicked: function(evt) {
                 if (evt && evt.detail && evt.detail.resourceType && evt.detail.resourceItem && this.resourceViewer) {
 
-                    this.fire('resourcePicked', { resourceType:evt.detail.resourceType,resourceItem: evt.detail.resourceItem, resourceViewer: this.resourceViewer })
+                    this.fire('resourcePicked', { resourceType: evt.detail.resourceType, resourceItem: evt.detail.resourceItem, resourceViewer: this.resourceViewer })
+                    return
                 }
+                if (evt && evt.detail && evt.detail.resourceType && evt.detail.resourceItem) {
+
+                    this.fire('resourcePicked', { resourceType: evt.detail.resourceType, resourceItem: evt.detail.resourceItem })
+                    return
+                }
+
             },
             properties: {
 
