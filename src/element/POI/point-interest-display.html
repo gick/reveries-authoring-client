@@ -14,19 +14,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="./map-display.html">
+<link rel="import" href="./one-poi-display.html">
 <dom-module id="point-interest-display">
     <template>
         <style include="shared-styles">
-        :host {
+         :host {
             display: inline-flex
         }
-        
+
         ;
         .outer {
             display: inline-flex;
             flex-wrap: wrap;
         }
-        
+
         paper-card {
             --paper-card-header: {
                 background-color: #b2ffa6;
@@ -48,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             ;
         }
-        
+
         .info {
             color: #737373;
             font-weight: 400;
@@ -56,13 +57,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-family: 'Roboto', 'Noto', sans-serif;
             display: inline-block;
         }
-        
+
         .generalflex {
             display: inline-flex;
             flex-wrap: wrap;
             flex-direction: column;
         }
-        
+
         .mediaimg {
             height: 300px;
             display: flex;
@@ -73,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             box-shadow: 6px 5px 2px #CECEB9;
             margin-bottom: 15px;
         }
-        
+
         .innerdiv {
             position: relative;
             overflow: visible;
@@ -82,56 +83,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: inline-flex;
             flex-wrap: wrap;
         }
-        
+
         map-display: {}
         </style>
-        <div class="outer">
-            <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-            <akc-meta-query key="newPOI" value="{{newpoi}}"></akc-meta-query>
-            <iron-ajax id="ajaxLoader" url="/poi" handle-as="json" last-response="{{items}}"></iron-ajax>
-            <map-display id="gmap"></map-display>
+        <div class="card">
+            <list-generic-resource share-url='/poi' id='poiList' resource-type='poi' url='/poi'></list-generic-resource>
         </div>
-        <div class="innerdiv">
-            <template is="dom-repeat" items="{{items}}" as="item">
-                <paper-card class="generalflex">
-                    <resource-header resource-url="/poi" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource-label="{{item.label}}"></resource-header>
-                    <div style="flex-grow:1" class=card-content>
-                        <template is="dom-if" if={{item.photo}}>
-                            <div class="mediablock">
-                                <img class="mediaimg" src="/file/{{item.photo}}">
-                            </div>
-                        </template>
-                        <template is="dom-if" if={{item.creator}}>
-                            <div>Creator :
-                                <div class="info"> {{item.creator}}</div>
-                            </div>
-                        </template>
-                        <div>Longitude :
-                            <div class="info"> {{item.longitude}}</div>
-                        </div>
-                        <div>Latitude :
-                            <div class="info">{{item.latitude}}</div>
-                        </div>
-                        <div>Public :
-                            <div class="info">{{item.public}}</div>
-                        </div>
-                        <div>Date taken :
-                            <div class="info">{{item.date}}</div>
-                        </div>
-                        <template is="dom-if" if={{item.comment}}>
-                            <div>Info :
-                                <div class="info"> {{item.comment}}</div>
-                            </div>
-                        </template>
-                        <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
-                            <paper-button raised on-click='genRemove'>Remove</paper-button>
-                            <paper-button raised data="{{items}}" info="itemsOnMap.length" on-click="showOnMap">{{getPhrase(item,itemsOnMap.length)}}</paper-button>
-                        </div>
-                    </div>
-                </paper-card>
-            </template>
-        </div>
-        <remove-ressource id="remover" ressource-id={{itemid}} callbackfunction="{{callback}}" ressource-url='/poi'></remove-ressource>
     </template>
     <script>
     (function() {
@@ -141,17 +98,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'point-interest-display',
 
             ready: function() {
-                this.itemsOnMap = [];
-                this.$.ajaxLoader.generateRequest();
+                this.addEventListener('resource-operation', this.updateMedia.bind(this))
+            },
+            updateMedia: function(message) {
+                switch (message.detail.info.operation) {
+                    case 'create':
+                        this.$.poiList.requestElements()
+                        break
+                    case 'update':
+                        this.$.poiList.requestElements()
+                        break
 
+                    case 'delete':
+                        this.$.poiList.requestElements()
+                        break
 
-                this.addEventListener('poi-changed', function() {
-                    this.$.ajaxLoader.generateRequest();
-                })
-                this.set('callback', function() {
-                    this.$.ajaxLoader.generateRequest();
-                }.bind(this));
-
+                }
             },
             showOnMap: function(event) {
                 if (!(this.itemInArray(event.model.__data__.item))) {

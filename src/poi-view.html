@@ -15,13 +15,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../src/element/POI/point-interest-register.html">
-<link rel="import" href="../src/element/POI/point-interest-display.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
+<link rel="import" href="../src/element/POI/map-display.html">
 <link rel="import" href="../src/element/POI/poi-from-map.html">
 <link rel="import" href="./styles/common-styles.html">
 <dom-module id="poi-view">
     <template>
         <style include="common-styles">
-
+        .outer {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
         </style>
         <div class="card">
             <h1>Point of interest and maps</h1>
@@ -42,12 +46,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-pages attr-for-selected="activity" selected="{{selected}}">
                 <point-interest-register activity="POIREG"> </point-interest-register>
                 <poi-from-map id="poimap" activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
-                <div activity="CUSTOMMAP"><h1>TO DO</h1></div>
+                <div activity="CUSTOMMAP">
+                    <h1>TO DO</h1></div>
             </iron-pages>
-            </div>
-        <div class="card">
-            <point-interest-display id='poiDisplay'></point-interest-display>
         </div>
+        <div class="card">
+            <div class="outer">
+                <map-display id="gmap"></map-display>
+            </div>
+            <list-generic-resource share-url='/poi' id='poiList' resource-type='poi' url='/poi'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -55,11 +62,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'poi-view',
         ready: function() {
-            this.$$('#poimap').addEventListener('save-poi',this.updatePOI.bind(this))
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
+            this.$.poiList.addEventListener('change-poi-map', this.updateMap.bind(this))
         },
-        updatePOI:function(){
-            console.log('update poi')
-            this.$.poiDisplay.genrequest();
+        updateMedia: function(message) {
+            switch (message.detail.info.operation) {
+                case 'create':
+                    this.$.poiList.requestElements()
+                    break
+                case 'update':
+                    this.$.poiList.requestElements()
+                    break
+
+                case 'delete':
+                    this.$.poiList.requestElements()
+                    break
+
+            }
+        },
+        updateMap: function(event) {
+            var data = event.detail
+            if (data.show) {
+                this.$.gmap.showPOI(data.resource)
+            } else {
+                this.$.gmap.removePOI(data.resource)
+            }
         },
         clearList: function() {
             this.$.uploader.clear();

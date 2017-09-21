@@ -9,16 +9,16 @@
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="./google-map-marker-icons.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
+<link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../media-viewer/media-viewer-activity.html">
 <dom-module id="poi-map-representation">
     <template>
         <style>
-        :host {
+         :host {
             display: inline-flex;
             margin: 10px;
         }
-        
+
         ;
         .innerdiv {
             display: inline-flex;
@@ -26,13 +26,13 @@
             align-items: baseline;
             flex-wrap: wrap;
         }
-        
+
         paper-material.flexible {
             display: inline-flex;
             flex-wrap: wrap;
             flex-direction: column;
         }
-        
+
         .insideflex {
             display: inline-flex;
             flex-direction: row;
@@ -40,38 +40,38 @@
             justify-content: space-between;
             margin-left: 5px!important;
         }
-        
+
         paper-button.small {
             display: inline-flex;
             font-size: medium;
             padding: 0.42em 0.57em;
         }
-        
+
         .formTitleWithButton {
             display: inline-flex;
             width: 93%;
             flex-direction: row;
             justify-content: space-between;
         }
-        
+
         .innerdiv>paper-button {
             margin-bottom: 20px;
             margin-top: 20px;
         }
-        
+
         .smallh3 {
             display: inline-flex;
             align-self: center;
         }
-        
+
         .innerdiv>* {
             margin-left: 10px;
             margin-right: 10px;
         }
         </style>
-        <akc-meta key="newPOI" value={{newPOICreated}}></akc-meta>
+        <create-resource id="creator" resource-url="/poimap" resource="{{resource}}"></create-resource>
         <paper-material class="flexible" elevation="2">
-            <form id="poimap" is="iron-form" method="POST" action="/poimap" class="innerdiv">
+            <form id="poimap" is="iron-form" class="innerdiv">
                 <div class="formTitleWithButton">
                     <h3 class="smallh3">Edit POI</h3>
                     <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
@@ -89,24 +89,14 @@
                     <input type="hidden" value={{mapLongitude}} name="mapLongitude" />
                     <input type="hidden" value={{mapZoom}} name="mapZoom" />
                 </div>
-                <template is="dom-if" if="{{_noarea(hasArea)}}">
-                </template>
                 <template is="dom-if" restamp=true if="{{!_noarea(hasArea)}}">
                     <paper-input style="display:inline-flex;" name="radius" value={{radius}} label="Trigger area radius (m)"></paper-input>
                     <paper-button name class="small" raised on-click="_removeArea">Remove trigger area</paper-button>
                     <input type="" value={{areaLat}} name="areaLat" />
                     <input type="" value={{areaLong}} name="areaLong" />
                 </template>
-                <template is="dom-if" if="{{_noImage(hasImage)}}">
-                    <paper-button name class="small" raised on-click="setImage">Set image</paper-button>
-                </template>
-                <template is="dom-if" if="{{_hasImage(hasImage)}}">
-                    <paper-input style="display:inline-flex;" name="imagename" value={{currentname}} label="File name"></paper-input>
-                    <paper-button name class="small" raised on-click="removeImage">Remove Image</paper-button>
-                    <input type="hidden" value={{currentid}} name="imageId" />
-                </template>
                 <div class=insideflex style="margin-bottom: 10px">
-                    <paper-button noink style="background-color: #b2ffa6" name="save" class="small" on-click="submitForm" raised>Save POI</paper-button>
+                    <paper-button noink style="background-color: #b2ffa6" name="save" class="small" on-click="_submit" raised>Save POI</paper-button>
                     <paper-button noink style="background-color: rgba(231, 25, 25, 0.25)" name="delete" on-click="removeMark" class="small" raised>Remove POI</paper-button>
                 </div>
             </form>
@@ -176,9 +166,11 @@
                 this.set('currentname', '');
                 this.set('hasImage', false);
             },
-            submitForm: function() {
-                this.$.poimap.submit();
-                this.fire("save-poi", null);
+            _submit: function() {
+                var json = this.$.poimap.serialize()
+                this.set('resource', json)
+                this.$.creator.createResource()
+                this.resetFields()
             },
             removeMark: function() {
                 this.fire('remove-marker', {
@@ -191,17 +183,7 @@
                 this.set('icon', newval);
                 this.$.icons.close();
             },
-          formSubmited: function() {
-                this.removeMark()
-
-            },
-            ready: function() {
-                this.set("newPOICreated", null);
-                if (this.get('radius') !== 0) {
-                    this.set('hasArea', true);
-                }
-                this.$.poimap.addEventListener('iron-form-submit', this.formSubmited.bind(this))
-            },
+            ready: function() {},
 
 
             properties: {

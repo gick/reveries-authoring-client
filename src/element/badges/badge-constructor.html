@@ -22,10 +22,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="./badge-element.html">
 <link rel="import" href="../helper/word-list.html">
+<link rel="import" href="../remove-ressource/create-resource.html">
+<link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
+
 <dom-module id="badge-constructor">
     <style>
     :host {
@@ -114,7 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <word-list id="randomSentence"></word-list>
-        <form class="badgeCreator" id="badgeForm" is="iron-form" method="post" action="/badge">
+        <create-resource id="creator" resource-url="/badge" resource="{{resource}}"></create-resource>
+        <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
+
+        <form class="badgeCreator" id="badgeForm" is="iron-form">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Edit badge</h3>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
@@ -147,22 +152,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'badge-constructor',
             ready: function() {
-                this.changeFreeTextQuestion = null;
-                this.$.badgeForm.addEventListener('iron-form-response', this.formSubmited.bind(this))
-                this.updating = false
+                this.updating=false
+                this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
             },
-            setPage: function(item) {
-                this.$.badgeMediaViewer.setPage(item)
-                this.set('bid', item._id)
-            },
-            formSubmited: function() {
-                if (this.updating) {
-                    this.fire('badge_saved', 'Badge updated')
-                } else {
-                    this.fire('badge_saved', 'New badge saved')
+            setResource: function(message) {
+                switch (message.detail.resourceType) {
+                    case "page":
+                        this.$.resourceViewer.setPage(message.detail.resourceItem)
                 }
-                this.resetFields()
-
             },
 
 
@@ -175,28 +172,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _activateObs: function(newval, oldval) {
                 this.set('imageRequired', newval)
             },
-            removeImage: function() {
-                this.set('mediaId', null);
-                this.set('mediaName', null);
-            },
-            showMediaDialog: function() {
-                this.$.badgeMediaViewer.removeResource()
-                this.fire('selectMedia', null)
-
-            },
             resetFields: function() {
                 this.updating = false
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
                 }
+                this.$.badgeMediaViewer.removeResource()
             },
 
-            editBadge: function(badge) {
+            edit: function(badge) {
                 this.updating = true
+                this.label=badge.label
+                this.badgeText=badge.badgeText
+                this.itemId = badge._id
+
             },
-            _submit: function() {
-                this.$.badgeForm.submit();
+            _submit: function(event) {
+                var json = this.$.badgeForm.serialize()
+                this.set('resource', json)
+                this.$.creator.createResource()
+                this.resetFields()
             },
             _reset: function() {
                 this.resetFields()

@@ -22,23 +22,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="badge-view">
     <template>
         <style include="common-styles">
-        :host {
+         :host {
             display: block;
             padding: 10px;
         }
-        
+
         .previewquestion {
             display: inline-table;
             padding: 10px;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
             margin: 10px;
         }
-        
+
         .flexQuestion {
             display: flex;
             justify-content: space-between;
         }
-        
+
         badge-element {
             margin: auto;
             margin-top: 0;
@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             align-items: flex-start;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
         }
-        
+
         h1 {
             font-size: 22px;
             margin: 16px 0;
@@ -83,40 +83,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'badge-view',
         ready: function() {
-            this.$.badgeConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
-            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
-            this.$.badgeConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.badgeConstructor.addEventListener('badge_saved', this.badgeSaved.bind(this))
-            this.$.badgeList.addEventListener('editBadge', this.editBadge.bind(this))
-            this.$.badgeList.requestElements()
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
         },
-        badgeSaved: function() {
-            this.$.badgeList.requestElements() //call an update on mcq list
-        },
-        editBadge: function(badge) {
-            var badge = badge.detail.__data__
-            this.$.badgeConstructor.editBadge(badge)
-        },
-        selectMedia: function() {
-            this.mediaDeleted();
-            //this.$.mediaviewer.genReq();
-            this.$.selectMedia.open();
-        },
-        mediaDeleted: function() {
-            this.set('mediaId', null)
-        },
-        mediaPicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                switch (newItem.type) {
-                    case "page":
-                        this.$.badgeConstructor.setPage(newItem)
-                        this.set('mediaId', newItem._id);
-                        break;
+        updateMedia: function(message) {
+            switch (message.detail.info.operation) {
+                case 'create':
+                    this.$.badgeList.requestElements()
+                    break
+                case 'update':
+                    this.$.badgeList.requestElements()
+                    break
 
-                }
+                case 'delete':
+                    this.$.badgeList.requestElements()
+                    break
+
+                case 'edit':
+                    this.$.badgeConstructor.edit(message.detail.info.resource)
+                    break
             }
-        },
+        }
+    ,
 
     });
     </script>

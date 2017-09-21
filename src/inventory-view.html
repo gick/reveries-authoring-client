@@ -19,27 +19,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="./element/inventory/inventoryitem-constructor.html">
 <link rel="import" href="./element/inventory/inventory-element.html">
 <link rel="import" href="../src/element/helper/list-generic-resource.html">
-
 <dom-module id="inventory-view">
     <template>
         <style include="common-styles">
-        :host {
+         :host {
             display: block;
             padding: 10px;
         }
-        
+
         .previewquestion {
             display: inline-table;
             padding: 10px;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
             margin: 10px;
         }
-        
+
         .flexQuestion {
             display: flex;
             justify-content: space-between;
         }
-        
+
         badge-element {
             margin: auto;
             margin-top: 0;
@@ -52,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             align-items: flex-start;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
         }
-        
+
         h1 {
             font-size: 22px;
             margin: 16px 0;
@@ -61,7 +60,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <resource-picker-dialog page media-id="{{currentdocid}}" media-name="{{currentdocname}}" id="selectDocMedia"></resource-picker-dialog>
-
         <div class="card">
             <h1>Inventory element</h1> Inventory element are non permanent item that are added to the user inventory during a serious game session.
             <br> In this section :
@@ -73,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class='flexQuestion'>
                 <inventoryitem-constructor class="" id="inventoryConstructor" label="{{inventoryname}}" item-text="{{itemText}}">
                 </inventoryitem-constructor>
-                <inventory-element class="" id="" label={{inventoryname}}  inventory-docmediaid={{docMediaId}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
+                <inventory-element class="" id="" label={{inventoryname}} inventory-docmediaid={{docMediaId}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
                 </inventory-element>
             </div>
         </div>
@@ -86,62 +84,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'inventory-view',
         ready: function() {
-            this.$.inventoryConstructor.addEventListener('selectMedia', this.selectMedia.bind(this));
-            this.$.inventoryConstructor.addEventListener('selectDocMedia', this.selectDocMedia.bind(this));
-            this.$.selectDocMedia.addEventListener('itemPicked', this.docMediaPicked.bind(this));
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
+        },
+        updateMedia: function(message) {
+            switch (message.detail.info.operation) {
+                case 'create':
+                    this.$.inventoryList.requestElements()
+                    break
+                case 'update':
+                    this.$.inventoryList.requestElements()
+                    break
 
-            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
-            this.$.inventoryConstructor.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.inventoryConstructor.addEventListener('inventoryitem_saved', this.inventorySaved.bind(this))
-            this.$.inventoryList.addEventListener('editInventory', this.editInventory.bind(this))
-        },
-        inventorySaved: function() {
-            this.$.inventoryList.requestElements() //call an update on mcq list
-        },
-        editInventory: function(inventory) {
-            var inventory= inventorydetail.__data__
-            this.$.inventoryConstructor.editInventory()
-        },
-        selectMedia: function() {
-            this.mediaDeleted();
-            //this.$.mediaviewer.genReq();
-            this.$.selectMedia.open();
-        },
-        selectDocMedia: function() {
-            this.docMediaDeleted();
-            //this.$.mediaviewer.genReq();
-            this.$.selectDocMedia.open();
-        },
-        docMediaDeleted: function() {
-            this.set('docMediaId', null)
-        },
+                case 'delete':
+                    this.$.inventoryList.requestElements()
+                    break
 
-        mediaDeleted: function() {
-            this.set('mediaId', null)
-        },
-        docMediaPicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                switch (newItem.type) {
-                    case "page":
-                        this.$.inventoryConstructor.setDocPage(newItem)
-                        this.set('docMediaId', newItem._id);
-                        break;
-
-                }
-            }
-        },
-
-        mediaPicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                switch (newItem.type) {
-                    case "page":
-                        this.$.inventoryConstructor.setPage(newItem)
-                        this.set('mediaId', newItem._id);
-                        break;
-
-                }
+                case 'edit':
+                    this.$.inventoryConstructor.edit(message.detail.info.resource)
+                    break
             }
         },
 

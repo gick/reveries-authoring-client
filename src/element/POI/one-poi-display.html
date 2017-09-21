@@ -13,16 +13,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="one-poi-display">
     <template>
         <style include="shared-styles">
-        :host {
+         :host {
             display: inline-flex
         }
-        
+
         ;
         .outer {
             display: inline-flex;
             flex-wrap: wrap;
         }
-        
+
         paper-card {
             --paper-card-header: {
                 background-color: #b2ffa6;
@@ -44,7 +44,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             ;
         }
-        
+
         .info {
             color: #737373;
             font-weight: 400;
@@ -52,13 +52,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-family: 'Roboto', 'Noto', sans-serif;
             display: inline-block;
         }
-        
+
         .generalflex {
             display: inline-flex;
             flex-wrap: wrap;
             flex-direction: column;
         }
-        
+
         .mediaimg {
             height: 300px;
             display: flex;
@@ -69,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             box-shadow: 6px 5px 2px #CECEB9;
             margin-bottom: 15px;
         }
-        
+
         .innerdiv {
             position: relative;
             overflow: visible;
@@ -80,7 +80,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <paper-card class="generalflex">
-            <div>{{item.label}}</div>
             <div style="flex-grow:1" class=card-content>
                 <template is="dom-if" if={{item.photo}}>
                     <div class="mediablock">
@@ -109,6 +108,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div class="info"> {{item.comment}}</div>
                     </div>
                 </template>
+                <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
+                    <paper-button on-click="toggledMap">{{toggleMap}}</paper-button>
+                </div>
+            </div>
         </paper-card>
     </template>
     <script>
@@ -119,16 +122,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'one-poi-display',
 
             ready: function() {
-
+                this.toggleMap = "Show on map"
+                this.onMap=false
 
             },
+            toggledMap: function() {
+                this.onMap=!this.onMap
+                var val=this.onMap
+                if (val) {
+                    this.fire('change-poi-map', {show:true ,resource: this.item })
+                    this.toggleMap = "Hide on map"
+                } else {
+                    this.fire('change-poi-map', {show:false, resource: this.item })
+                    this.toggleMap = "Show on map"
+                }
+            },
             observers: [
-                'statusChanged(status)',
-                'newpoiChanged(newpoi)'
             ],
             properties: {
                 item: {
                     type: Object,
+                    notify: true,
+                },
+                onMap: {
+                    type: Boolean,
+                    value: false,
                     notify: true,
                 }
             },

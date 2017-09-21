@@ -21,8 +21,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
-<link rel="import" href="../media-viewer/media-viewer-activity.html">
-<link rel="import" href="../media-viewer/static-media-dialog-activity.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <dom-module id="mcq-constructor">
@@ -121,6 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
                 }
+                this.$.mcqMediaViewer.removeResource()
             },
 
             logout: function() {},
