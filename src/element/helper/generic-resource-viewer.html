@@ -11,8 +11,9 @@
 <link rel="import" href="../basic-element/free-text-question.html">
 <link rel="import" href="../POI/one-poi-display.html">
 <link rel="import" href="../inventory/inventory-element.html">
-
 <link rel="import" href="../badges/badge-element.html">
+<link rel="import" href="../static-media/staticmedia-viewer.html">
+
 <dom-module id="generic-resource-viewer">
     <template>
         <style>
@@ -75,6 +76,10 @@
 
         .mainDiv {
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: right;
+            align-items: center;
         }
 
         .pickedDiv {
@@ -100,7 +105,7 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{badge}}" restamp>
-                    <badge-element class="" id="" badge-pageid="{{item.badgePageId}}" badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
+                    <badge-element class="" id="" media="{{item.media}}" badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
                     </badge-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -117,17 +122,17 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
-                    <inventory-element class="" id="" resource-status="{{item.status}}" inventory-mediaid="{{item.itemPageId}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}">
+                    <inventory-element class="" id="" resource-status="{{item.status}}" media="{{item.media}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}">
                     </inventory-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mcq}}" restamp>
-                    <mcq-activity preview class="" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media-id={{item.mediaId}}>
+                    <mcq-activity preview class="" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media={{item.media}}>
                     </mcq-activity>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{freetext}}" restamp>
-                    <free-text-question resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" style="display:block" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" conception-mode item-id="{{item._id}}" media-id="{{item.mediaId}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <free-text-question resource-status="{{item.status}}" media={{item.media}} resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" style="display:block" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" item-id="{{item._id}}" media="{{item.media}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{isTemp}}" restamp>
@@ -266,7 +271,7 @@
                 this.item = oldItem;
                 this.item = newItem;
                 this.poiId = this.item._id
-                this.set('active',false)
+                this.set('active', false)
             },
             setMcq: function(newItem) {
                 this.isMcq();
@@ -299,7 +304,7 @@
                 this.isEmpty();
                 this.item = null
                 this.fire('mediaDeleted', null)
-                this.set('active',true)
+                this.set('active', true)
             },
             hasImage: function(imageId) {
                 if (!imageId) {
@@ -331,7 +336,7 @@
                 if (resourceType == 'badge') {
                     this.setBadge(this.item)
                 }
-                if (resourceType == 'staticmedia' || resourceType=='page') {
+                if (resourceType == 'staticmedia' || resourceType == 'page') {
                     this.setPage(this.item)
                 }
                 if (resourceType == 'inventory') {
@@ -363,7 +368,7 @@
                 poiId: {
                     type: String,
                     reflectToAttribute: true,
-                    notify:true,
+                    notify: true,
                 },
                 isTemp: {
                     type: Boolean,
@@ -377,11 +382,11 @@
                     type: Boolean,
                     notify: true,
                 },
-                active:{
-                    type:Boolean,
-                    value:true,
-                    notify:true,
-                    reflectToAttribute:true,
+                active: {
+                    type: Boolean,
+                    value: true,
+                    notify: true,
+                    reflectToAttribute: true,
                 },
                 page: {
                     type: Boolean,
@@ -396,6 +401,7 @@
                 item: {
                     type: Object,
                     notify: true,
+                    reflectToAttribute:true,
                 },
                 resourceType: {
                     type: String,

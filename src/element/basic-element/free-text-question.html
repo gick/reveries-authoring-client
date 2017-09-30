@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="../helper/sharedBehavior.html">
+<link rel="import" href="../static-media/staticmedia-viewer.html">
 <dom-module id="free-text-question">
     <style include="shared-styles">
     .insideflex {
@@ -30,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-top: 16px;
         margin-bottom: 10px;
     }
-    
+
     .mediaimg {
         align-self: center;
         display: flex;
@@ -42,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         -o-box-shadow: 6px 5px 2px #CECEB9;
         box-shadow: 6px 5px 2px #CECEB9;
     }
-    
+
     .question {
         display: inline-flex;
         font-family: 'Roboto', 'Noto', sans-serif;
@@ -53,39 +54,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-width: 300px;
         color: black;
     }
-    
+
     .markdown-html img {
         max-width: 200px;
         max-height: 200px;
     }
-    
+
     .markdown-html video {
         width: 200px;
         height: 200px;
     }
-    
+
     .element {
         align-self: stretch;
     }
-    
-    .validateButton{
-        display:block;
-        width:100%;
+
+    .validateButton {
+        display: block;
+        width: 100%;
         text-align: center;
     }
 
     .remove {
         background-color: #eeeeee;
     }
-    
+
     .correct {
         color: green;
     }
-    
+
     .wrong {
         color: red;
     }
-    
+
+    .headerText {
+        padding-left: 10px;
+        display: inline-flex;
+        align-self: center;
+    }
+
+    .resourceReadwrite {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: lightgreen;
+        width: 100%;
+    }
+
     .inner {
         display: inline-flex;
         flex-flow: column;
@@ -95,18 +110,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
-        <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
         <div style="">
-dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
+            <template is="dom-if" if="[[conceptionMode]]" restamp>
+                <div class="resourceReadwrite">
+                    <h3 class="headerText">{{resourceLabel}}</h3>
+                </div>
+            </template>
+            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/freetextactivity'></remove-ressource>
             <form class="">
                 {{question}}
                 <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}"></paper-input>
                 <iron-collapse id="clue">
-                    <div class="">
-                        <marked-element markdown="{{staticElement.mkdown}}">
-                            <div class="markdown-html"></div>
-                        </marked-element>
-                    </div>
+                    <staticmedia-viewer resource-label="[[media.label]]"  style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
                 </iron-collapse>
                 <iron-collapse id="correct">
                     <paper-input class="correct" text="">
@@ -120,14 +135,12 @@ dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource
                         <div prefix> {{wrongMessage}}</div>
                     </paper-input>
                 </iron-collapse>
-                <template is="dom-if" if="{{conceptionMode}}">
-                    <div style="" class="insideflex">
-                        <paper-button class="validateButton" raised on-click="validate">Validate</paper-button>
-                        <template is="dom-if" if="{{mediaId}}" restamp=true>
-                            <paper-button raised on-click="showClue">Show clue</paper-button>
-                        </template>
-                    </div>
-                </template>
+                <div style="" class="insideflex">
+                    <paper-button class="validateButton" raised on-click="validate">Validate</paper-button>
+                    <template is="dom-if" if="{{showMediaButton}}" restamp=true>
+                        <paper-button raised on-click="showClue">Show clue</paper-button>
+                    </template>
+                </div>
             </form>
         </div>
     </template>
@@ -139,8 +152,8 @@ dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource
             behaviors: [sharedBehavior],
 
             ready: function() {
-                this.showMediaButton = false;
-              //  this.$.header.addEventListener('edit', this.editElement.bind(this))
+               // this.showMediaButton = false;
+                //  this.$.header.addEventListener('edit', this.editElement.bind(this))
 
                 var validator = {
                     validatorName: 'free-text-validator',
@@ -151,11 +164,10 @@ dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource
                 };
             },
 
-            _mediaIdObserver: function(newval) {
+            _mediaObserver: function(newval) {
                 if (newval) {
                     var temp = true
                     this.set('showMediaButton', true)
-                    this.$.ajaxLoader.generateRequest();
                 } else {
                     this.set('showMediaButton', false)
                     this.showMediaButton = false
@@ -174,8 +186,9 @@ dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource
                     this.$.correct.hide();
                 }
             },
-            handleResponse: function() {},
-            _submit: function() {},
+            observers: [
+                '_mediaObserver(media._id)',
+            ],
             properties: {
                 question: {
                     type: String,
@@ -195,12 +208,6 @@ dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource
                     notify: true,
                 },
 
-                submit: {
-                    type: String
-                },
-                submitInvalid: {
-                    type: Boolean
-                },
                 responseLabel: {
                     type: String,
                     notify: true,
@@ -209,10 +216,9 @@ dedd            <remove-ressource id="remover" ressource-id={{itemId}} ressource
                     type: Boolean,
                     notify: true,
                 },
-                mediaId: {
-                    type: String,
+                media: {
+                    type: Object,
                     notify: true,
-                    observer: "_mediaIdObserver"
                 },
                 itemId: {
                     type: String,

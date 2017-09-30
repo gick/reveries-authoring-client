@@ -10,24 +10,40 @@
             width: 150px;
             height: 150px;
         }
-        
+
         .markdown-html img {
             width: 200px;
             height: 200px;
             border-radius: 50%;
         }
-        
+
         .badge {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
+        .headerText {
+            padding-left: 10px;
+            display: inline-flex;
+            align-self: center;
+        }
+
+        .resourceReadwrite {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color: lightgreen;
+            width: 100%;
+        }
         </style>
-        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{item}}"></iron-ajax>
+        <template is="dom-if" if="[[conceptionMode]]" restamp>
+            <div class="resourceReadwrite">
+                <h3 class="headerText">{{resourceLabel}}</h3>
+            </div>
+        </template>
         <div class="badge">
-            <marked-element markdown="{{badgeMkdown}}">
-                <div class="markdown-html"></div>
-            </marked-element>
+            <staticmedia-viewer resource-label="[[media.label]]" default-mkdown="[[defaultMkdown]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
             <div>{{badgeText}}</div>
         </div>
     </template>
@@ -39,33 +55,15 @@
         is: 'badge-element',
         behaviors: [sharedBehavior],
 
-
-        _loadPage: function(badgePageid) {
-            if (badgePageid) {
-                this.url = '/staticmedia/' + badgePageid
-                this.$.ajaxLoader.generateRequest()
-            }
-        },
-        handleResponse: function(response) {
-            this.badgeMkdown = response.detail.__data__.response.mkdown
-        },
         ready: function() {
-            this.badgeRemoved = function() {
-                this.fire('badge-removed', null)
-            }
-            this.$.ajaxLoader.addEventListener('iron-ajax-response', this.handleResponse.bind(this))
-            if (!this.badgePageid) {
-                this.badgeMkdown = "<img src='../../src/element/image/no_badge.png'>"
-            }
-
+            this.defaultMkdown= "<img src='../../src/element/image/no_badge.png'>"
         },
         properties: {
-            badgePageid: {
-                type: String,
+            media: {
+                type: Object,
                 notify: true,
-                observer: '_loadPage',
             },
-            label: {
+            resourceLabel: {
                 type: String,
                 notify: true,
             },
@@ -77,9 +75,9 @@
                 type: String,
                 notify: true,
             },
-            noHeader:{
-                type:Boolean,
-                notify:true,
+            conceptionMode: {
+                type: Boolean,
+                notify: true,
             }
         }
     })

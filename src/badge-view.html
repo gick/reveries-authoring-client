@@ -58,7 +58,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
-        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <div class="card">
             <h1>Badges</h1> Badges are permanent rewards that user receive after completing a game. Badges can be associated with a page to give additional pedagogical information
             <br> In this section :
@@ -68,9 +67,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <div class='flexQuestion'>
-                <badge-constructor class="" id="badgeConstructor" label="{{badgeName}}" badge-text="{{badgeText}}">
+                <badge-constructor class="" media={{media}} id="badgeConstructor" label="{{label}}" badge-text="{{badgeText}}">
                 </badge-constructor>
-                <badge-element class="" id="" label={{badgeName}} badge-pageid={{mediaId}} badge-text={{badgeText}}>
+                <badge-element class="" id="" resource-label=[[label]] conception-mode media=[[media]] badge-text={{badgeText}}>
                 </badge-element>
             </div>
         </div>
@@ -102,8 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.badgeConstructor.edit(message.detail.info.resource)
                     break
             }
-        }
-    ,
+        },
 
     });
     </script>

@@ -10,25 +10,39 @@
             width: 150px;
             height: 150px;
         }
-        
-        .markdown-html img {
+
+        img {
             width: 200px;
             height: 200px;
             border-radius: 50%;
         }
-        
-        .badge {
+        .headerText {
+            padding-left: 10px;
+            display: inline-flex;
+            align-self: center;
+        }
+
+        .resourceReadwrite {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background-color: lightgreen;
+            width: 100%;
+        }
+
+        .inventory {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         </style>
-        <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{item}}"></iron-ajax>
-        <remove-ressource id="remover" callbackfunction="{{itemRemoved}}" ressource-id={{itemId}} ressource-url='/inventory'></remove-ressource>
-        <div class="badge">
-            <marked-element markdown="{{itemMkdown}}">
-                <div class="markdown-html"></div>
-            </marked-element>
+        <template is="dom-if" if="[[conceptionMode]]" restamp>
+            <div class="resourceReadwrite">
+                <h3 class="headerText">{{resourceLabel}}</h3>
+            </div>
+        </template>
+        <div class="inventory">
+            <staticmedia-viewer resource-label="[[media.label]]" default-mkdown="[[defaultMkdown]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
             <div>{{itemText}}</div>
         </div>
     </template>
@@ -41,30 +55,14 @@
         behaviors: [sharedBehavior],
 
 
-        _loadPage: function(itemMediaId) {
-            if (itemMediaId) {
-                this.url = '/staticmedia/' + itemMediaId
-                this.$.ajaxLoader.generateRequest()
-            }
-        },
-        handleResponse: function(response) {
-            this.itemMkdown = response.detail.__data__.response.mkdown
-        },
         ready: function() {
-            this.itemRemoved = function() {
-                this.fire('inventoryitem_removed', null)
-            }
-            this.$.ajaxLoader.addEventListener('iron-ajax-response', this.handleResponse.bind(this))
-            if (!this.itemMediaId) {
-                this.itemMkdown = "<img src='../../src/element/image/carrot.png'>"
-            }
+            this.defaultMkdown = "<img style='width:150px;height:150px' src='../../src/element/image/carrot.png'>"
 
         },
         properties: {
-            inventoryMediaid: {
-                type: String,
+            media: {
+                type: Object,
                 notify: true,
-                observer: '_loadPage',
             },
             label: {
                 type: String,
@@ -77,6 +75,14 @@
             itemId: {
                 type: String,
                 notify: true,
+            },
+            resourceLabel:{
+                type:String,
+                notify:true,
+            },
+            conceptionMode:{
+                type:Boolean,
+                notify:true,
             }
         }
     })

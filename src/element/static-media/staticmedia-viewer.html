@@ -26,30 +26,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-radius: 3px;
         box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
-    
+
     .element {
         align-self: stretch;
     }
-    
+
     .remove {
         background-color: #eeeeee;
     }
-    
+
     .header {
         width: 100%;
     }
-    
+
+    .headerText {
+        padding-left: 10px;
+        display: inline-flex;
+        align-self: center;
+    }
+
+    .resourceReadwrite {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: lightgreen;
+        width: 100%;
+    }
+
     .suppress-action {
         display: inline-flex;
         flex-direction: row-reverse;
         padding: 10px;
     }
-    
+
     .markdown-html img {
         max-width: 500px;
         max-height: 500px;
     }
-    
+
     .inner {
         display: inline-flex;
         flex-flow: column;
@@ -61,12 +75,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <div class="resourceElement">
-            <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/staticmedia'></remove-ressource>
+            <template is="dom-if" if="[[conceptionMode]]" restamp>
+                <div class="resourceReadwrite">
+                    <h3 class="headerText">{{resourceLabel}}</h3>
+                </div>
+            </template>
             <form class="inner">
-                <resource-header editable id="header" class="header" resource-url="/staticmedia" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{resourceLabel}}"></resource-header>
                 <marked-element markdown="{{mkdown}}">
                     <div class="markdown-html"></div>
                 </marked-element>
+                <template is="dom-if" if="[[showDefaultMkdown]]" restamp>
+                    <marked-element markdown="{{defaultMkdown}}">
+                        <div class="markdown-html"></div>
+                    </marked-element>
+                </template>
             </form>
             <div style="margin-top:40px" class="card-actions suppress-action">
                 <template is="dom-if" if="{{!isReadOnly}}">
@@ -80,9 +102,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'use strict';
         Polymer({
             is: 'staticmedia-viewer',
-            ready: function() {
+            ready: function() {},
+            noMkdown(defaultMkdown) {
+                if (defaultMkdown) {
+                    if (this.mkdown == null) {
+                        return true
+                    }
+                }
+                return false
             },
-
             _resourceReadonlyObserver: function(newval, oldval) {
                 if (newval == "readonly") {
                     this.isReadOnly = true
@@ -92,21 +120,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
 
-            validate: function() {
-                if (this.response === this.userResponse) {
-                    this.$.correct.open();
-                } else {
-                    this.$.wrong.open();
-                }
-            },
             removeElement: function() {
                 this.$.remover.genRequest();
             },
             _submit: function() {},
+            _defaultMkdownExists: function(defaultMkdown) {
+                this.showDefaultMkdown = !this.mkdownExists
+            },
+            _mkdownExists: function(mkdown) {
+                if (mkdown) {
+                    this.mkdownExists = true
+                    this.showDefaultMkdown = false
+                } else {
+                    this.mkdownExists = false
+                    this.showDefaultMkdown = true
+
+                }
+
+            },
             properties: {
                 mkdown: {
                     type: String,
                     notify: true,
+                    observer: '_mkdownExists',
+                },
+                defaultMkdown: {
+                    type: String,
+                    notify: true,
+                    observer: '_defaultMkdownExists',
+
                 },
                 resourceStatus: {
                     type: String,
@@ -120,6 +162,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: String,
                     notify: true,
                     observer: "_resourceReadonlyObserver",
+                },
+                conceptionMode: {
+                    type: Boolean,
+                    notify: true,
                 }
 
             }

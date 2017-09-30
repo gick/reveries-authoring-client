@@ -31,24 +31,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <h1>Point of interest and maps</h1>
             <b>Point of interest</b> (POI) represents <b>physical location</b> within the mobile game area.
             <br> Point of interest are fundamental for the design of mobile activities : most activities being situated, they must be associated with a point of interest.
-            <br> There are two way of adding a new POI :
             <ul>
-                <li>The POI can be added using the <b> POI mobile tool</b>. This tool is designed to be used with a mobile phone where GPS is activated. Using this tool with your mobile phone, you can add new POI directly, and take an optionnal photo of the POI </li>
-                <li> <b>The POI can be added using a map.</b> In that case, you have to select on the map the location of the POI and associate optional comments. The map can be Google Map or another map as long as the map reflects well the game area</li>
+                <li> <b>The POI are added using a map.</b> You have to select on the map the location of the POI and associate optional comments. The map can be Google Map or another map as long as the map reflects well the game area</li>
             </ul>
         </div>
         <div class="card">
-            <paper-tabs attr-for-selected="activity" selected={{selected}}>
-                <paper-tab activity="POIREG">Add POI from mobile</paper-tab>
-                <paper-tab activity="POIMAP">Add POI from map</paper-tab>
-                <paper-tab activity="CUSTOMMAP">Create custom map</paper-tab>
-            </paper-tabs>
-            <iron-pages attr-for-selected="activity" selected="{{selected}}">
-                <point-interest-register activity="POIREG"> </point-interest-register>
-                <poi-from-map id="poimap" activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
-                <div activity="CUSTOMMAP">
-                    <h1>TO DO</h1></div>
-            </iron-pages>
+            <poi-from-map id="poimap" activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
         </div>
         <div class="card">
             <div class="outer">
@@ -62,7 +50,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'poi-view',
         ready: function() {
-            this.addEventListener('resource-operation', this.updateMedia.bind(this))
+            this.$.poimap.addEventListener('resource-operation', this.updateMedia.bind(this))
+            this.$.poiList.addEventListener('resource-operation',this.updateMedia.bind(this))
             this.$.poiList.addEventListener('change-poi-map', this.updateMap.bind(this))
         },
         updateMedia: function(message) {
@@ -88,9 +77,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.gmap.removePOI(data.resource)
             }
         },
-        clearList: function() {
-            this.$.uploader.clear();
-        }
     });
     </script>
 </dom-module>

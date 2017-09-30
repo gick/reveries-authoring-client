@@ -17,7 +17,7 @@
             ;
             width: 100%;
         }
-        
+
         .innerdiv {
             display: inline-flex;
             flex-flow: initial;
@@ -29,7 +29,7 @@
             flex-grow: 1;
             width: 50%
         }
-        
+
         google-map {
             width: 40%;
             height: 700px;
@@ -39,15 +39,13 @@
         <geo-location id="geoloc" watch-pos latitude="{{lat}}" longitude="{{long}}"></geo-location>
         <div class="outerdiv">
             <google-map api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="gmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{latitude}}" longitude="{{longitude}}" click-events>
-                <template is="dom-repeat" items={{markers}} as="marker">
+                <template is="dom-if" if="[[hasMarker]]" restamp>
                     <google-map-marker click-events draggable="true" title="POI" icon={{marker.icon}} on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
                 </template>
             </google-map>
             <div class=innerdiv>
-                <paper-button on-click="centerMap">Center Map</paper-button>
-                <template is="dom-repeat" items={{markers}} as="marker">
-                    <poi-map-representation map-zoom="{{mapZoom}}" area-lat={{marker.areaLat}} area-long={{marker.areaLong}} ident="{{marker.id}}" map-latitude="{{lat}}" map-longitude="{{long}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}" radius={{marker.radius}} icon={{marker.icon}} info={{marker.info}} title="{{marker.title}}"></poi-map-representation>
-                </template>
+                <!--<paper-button on-click="centerMap">Center Map</paper-button> !-->
+                <poi-map-representation map-zoom="{{mapZoom}}" area-lat={{marker.areaLat}} area-long={{marker.areaLong}} ident="{{marker.id}}" map-latitude="{{lat}}" map-longitude="{{long}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}" radius={{marker.radius}} icon={{marker.icon}} info={{marker.info}} title="{{marker.title}}"></poi-map-representation>
             </div>
         </div>
     </template>
@@ -60,14 +58,15 @@
             ready: function() {
                 this.latitude = 48.085206
                 this.longitude = -0.755491
-                this.set('markers', [])
-                this.set('circles', [])
-                this.$.gmap.addEventListener('google-map-click', this.addMarker.bind(this))
-                this.addEventListener('remove-area', this.removeArea.bind(this))
+                this.set('marker', {})
+                this.set('circle', {})
+                this.set('hasMarker', false)
+                this.$.gmap.addEventListener('google-map-click', this.setMarker.bind(this))
                 this.addEventListener('remove-marker', this.removeMarker.bind(this))
+                this.addEventListener('resource-operation', function(e) { console.log(e) })
             },
             centerMap: function() {
-               var  myLatLng = new google.maps.LatLng({
+                var myLatLng = new google.maps.LatLng({
                     lat: this.lat,
                     lng: this.long
                 });
@@ -78,22 +77,16 @@
             },
 
             removeMarker: function(event) {
-                var i = this.findIndex(event.detail);
-                this.splice('markers', i, 1);
-                this.removeArea(event);
+                this.set('marker', {})
+                this.circle.setMap(null)
+                this.set('hasMarker', false)
+
             },
 
-            findIndex: function(coord) {
-                for (var i = 0; i < this.markers.length; i++) {
-                    if (this.markers[i].latitude === coord.latitude) {
-                        if (this.markers[i].longitude === coord.longitude) {
-                            return i
-                        }
-                    }
+            setMarker: function(event) {
+                if (this.circle.setMap) {
+                    this.circle.setMap(null)
                 }
-                return -1
-            },
-            addMarker: function(event) {
                 var map = this.get('mapsAPI')
                 var date = new Date();
                 var id = date.getTime();
@@ -117,7 +110,7 @@
                 google.maps.event.addDomListener(circle, 'radius_changed', function() {
                     this.updateRadius(circle)
                 }.bind(this))
-                this.push('markers', {
+                this.set('marker', {
                     latitude: lat,
                     draggable: true,
                     longitude: long,
@@ -126,33 +119,11 @@
                     radius: 100,
                     id: id,
                 });
-                this.push('circles', circle);
-                console.log(map)
+                this.set('circle', circle);
+                this.set('hasMarker', true)
             },
-            _getMarkeIndexById: function(id) {
-
-                for (var i = 0; i < this.markers.length; i++) {
-                    if (id == this.markers[i].id) return i;
-                }
-                return -1;
-
-            },
-            removeArea: function(event) {
-                var id = event.detail.id;
-                var circles = this.get('circles')
-                for (var i = 0; i < circles.length; i++) {
-                    if (circles[i].id === id) {
-                        circles[i].setMap(null);
-                        var markerIndex = this._getMarkeIndexById(id);
-                        this.set('markers.#' + markerIndex + '.radius', 0);
-
-                    }
-                }
-            },
-
             updateRadius: function(circle) {
-                var index = this._getMarkeIndexById(circle.id);
-                this.set('markers.#' + index + '.radius', circle.radius.toFixed(2));
+                this.set('marker.radius', circle.radius.toFixed(2));
 
             },
             properties: {

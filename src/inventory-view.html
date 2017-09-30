@@ -58,8 +58,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
-        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
-        <resource-picker-dialog page media-id="{{currentdocid}}" media-name="{{currentdocname}}" id="selectDocMedia"></resource-picker-dialog>
         <div class="card">
             <h1>Inventory element</h1> Inventory element are non permanent item that are added to the user inventory during a serious game session.
             <br> In this section :
@@ -69,9 +67,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <div class='flexQuestion'>
-                <inventoryitem-constructor class="" id="inventoryConstructor" label="{{inventoryname}}" item-text="{{itemText}}">
+                <inventoryitem-constructor class="" media="{{media}}" inventory-document="{{inventoryDocument}}" id="inventoryConstructor" label="{{label}}" item-text="{{itemText}}">
                 </inventoryitem-constructor>
-                <inventory-element class="" id="" label={{inventoryname}} inventory-docmediaid={{docMediaId}} inventory-mediaid={{mediaId}} item-text={{itemText}}>
+                <inventory-element class="" conception-mode resource-label=[[label]] inventory-document=[[inventoryDocument]] media=[[media]] item-text=[[itemText]]>
                 </inventory-element>
             </div>
         </div>

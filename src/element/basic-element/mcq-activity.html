@@ -10,6 +10,7 @@
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="../helper/sharedBehavior.html">
+<link rel="import" href="../static-media/staticmedia-viewer.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <dom-module id="mcq-activity">
     <style is="custom-style" include="iron-flex iron-flex-alignment">
@@ -18,10 +19,25 @@
         flex-wrap: wrap;
         flex-direction: row;
     }
-        .correct {
+
+    .correct {
         color: green;
     }
-    
+
+    .headerText {
+        padding-left: 10px;
+        display: inline-flex;
+        align-self: center;
+    }
+
+    .resourceReadwrite {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: lightgreen;
+        width: 100%;
+    }
+
     .wrong {
         color: red;
     }
@@ -31,22 +47,23 @@
         flex-wrap: wrap;
         flex-direction: column;
     }
-    
+
     .mcq-body {
         padding: 10px;
     }
     </style>
     <template>
+        <template is="dom-if" if="[[conceptionMode]]" restamp>
+            <div class="resourceReadwrite">
+                <h3 class="headerText">{{resourceLabel}}</h3>
+            </div>
+        </template>
         <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
         <div class=outer>
             <div class="inner">
                 <div id="mcqbody" class="mcq-body">
                     <iron-collapse id="clue">
-                        <div class="">
-                            <marked-element markdown="{{staticElement.mkdown}}">
-                                <div class="markdown-html"></div>
-                            </marked-element>
-                        </div>
+                        <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
                     </iron-collapse>
                     <div class="question" name="question">{{question}}</div>
                     <paper-radio-group id="mcq" class="layout vertical wrap">
@@ -66,14 +83,12 @@
                             <div prefix> {{wrongAnswerMessage}}</div>
                         </paper-input>
                     </iron-collapse>
-                    <template is="dom-if" if="!{{preview}}">
                     <div style="margin-top:40px" class="card-actions">
                         <paper-button raised on-click="validate">Validate</paper-button>
-                        <template is="dom-if" if="{{mediaId}}" restamp=true>
+                        <template is="dom-if" if="{{showMediaButton}}" restamp=true>
                             <paper-button raised on-click="showClue">Show clue</paper-button>
                         </template>
                     </div>
-                    </template>
                 </div>
             </div>
         </div>
@@ -92,9 +107,6 @@
                 }.bind(this)
                 this.correctIndex = Math.floor((Math.random() * 2));
             },
-            editElement:function(){
-                this.fire('editMCQQuestion',this)
-            },
 
             getClue: function() {
                 this.set('needClue', !this.needClue);
@@ -110,11 +122,10 @@
                     this.$.correct.hide();
                 }
             },
-            _mediaIdObserver: function(newval) {
+            _mediaObserver: function(newval) {
                 if (newval) {
                     var temp = true
                     this.set('showMediaButton', true)
-                    this.$.ajaxLoader.generateRequest();
                 } else {
                     this.set('showMediaButton', false)
                     this.showMediaButton = false
@@ -122,17 +133,14 @@
                 }
             },
 
-            _resourceClueObserver: function(newval, oldval) {
-                if (newval) {
-                    this.set('hasClue', true)
-
-                }
-            },
             showClue: function() {
                 this.$.clue.toggle()
             },
 
 
+            observers: [
+                '_mediaObserver(media._id)',
+            ],
 
             properties: {
                 question: {
@@ -165,18 +173,17 @@
                     notify: true,
                 },
 
-                itemId: {
-                    type: String,
-                    notify: true
-                },
-                preview:{
-                    type:Boolean,
-                    notify:true,
-                },
-                mediaId: {
-                    type: String,
+                conceptionMode: {
+                    type: Boolean,
                     notify: true,
-                    observer: "_mediaIdObserver",
+                },
+                preview: {
+                    type: Boolean,
+                    notify: true,
+                },
+                media: {
+                    type: Object,
+                    notify: true,
                 },
                 resourceLabel: {
                     type: String,

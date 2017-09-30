@@ -131,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="label" value={{label}} label="Inventory item label"></paper-input>
             <paper-input name="itemText" value={{itemText}} label="Inventory item text"></paper-input>
             <paper-button raised on-click="showMediaDialog">Set inventory image</paper-button>
-            <generic-resource-viewer input-name="itemPageId" is-temp page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
             <paper-button raised on-click="showDocMediaDialog">Set inventory (optionnal) doc </paper-button>
             <generic-resource-viewer is-temp input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>
             <div class="insideflex">
@@ -228,7 +228,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     notify: true,
                     reflectToAttribute: true,
                 },
-
+                media:{
+                    type:Object,
+                    notify:true,
+                    reflectToAttribute:true,
+                },
                 status: {
                     type: Boolean,
                     observer: '_statusChanged'

@@ -31,7 +31,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
         .previewquestion {
             display: inline-flex;
-            padding: 10px;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
             margin: 10px;
         }
@@ -48,7 +47,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             color: #212121;
         }
         </style>
-        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <!--
         <paper-dialog style="left:269px" id="selectImage">
             <h2> Select image</h2>
@@ -71,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class='flexQuestion' id='constructors'>
                 <free-text-constructor id="questionConstructor" label="{{label}}" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" response-label="{{rLabel}}">
                 </free-text-constructor>
-                <free-text-question conception-mode question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" response-label="{{rLabel}}" class="previewquestion" id="previewQuestion">
+                <free-text-question conception-mode question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" resource-label=[[label]] response-label="{{rLabel}}" class="previewquestion" id="previewQuestion">
                 </free-text-question>
             </div>
         </div>

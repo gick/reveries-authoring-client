@@ -187,7 +187,7 @@ TODO : propose different CSS associated with the markdown
             },
             resetFields: function() {
                 this.updating = false
-                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-textarea');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
                 }
@@ -210,27 +210,7 @@ TODO : propose different CSS associated with the markdown
                     notify: true,
                     reflectToAttribute: true,
                 },
-                name: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true,
-                },
-                question: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true,
-                },
-                response: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true,
-                },
-                correctMessage: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true,
-                },
-                wrongMessage: {
+                label: {
                     type: String,
                     notify: true,
                     reflectToAttribute: true,
@@ -240,27 +220,6 @@ TODO : propose different CSS associated with the markdown
                     observer: '_statusChanged'
                 },
 
-                mediaName: {
-                    type: String,
-                    notify: true,
-                    value: null,
-                },
-                activate: {
-                    type: Boolean,
-                    reflectToAttribute: true,
-                    value: false,
-                    observer: '_activateObs'
-                },
-                imageRequired: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true
-                },
-                responseLabel: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true
-                }
 
             },
             _statusChanged: function(newval, oldval) {

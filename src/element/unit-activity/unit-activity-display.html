@@ -12,7 +12,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="./unit-game.html">
 <dom-module id="unit-activity-display">
     <template>
@@ -105,8 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             flex-wrap: wrap;
         }
         </style>
-        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
-        <remove-ressource id="remover" ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
+        <remove-ressource id="remover" resource-id={{itemId}} resource-url='/unitGame'></remove-ressource>
         <div class="outer">
             <iron-ajax id="ajaxLoader" url="/unitGame" handle-as="json" last-response="{{items}}"></iron-ajax>
         </div>
@@ -116,7 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="resourceReadwrite">
                         <h3 class="headerText">{{item.activityName}}</h3>
                         <!-- Read belonging to the user can be set public or private -->
-                        <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="editQuestion" icon="icons:create"></paper-icon-button>
+                        <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="edit" icon="icons:create"></paper-icon-button>
                         <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="remove" icon="icons:delete"></paper-icon-button>
                         <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
                         <template is="dom-if" if="{{isReadOnly}}">
@@ -139,40 +137,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'unit-activity-display',
 
             ready: function() {
+                this.requestElements()
                 this.addEventListener('authentification-changed', function(event) {
                     if (event.detail.logged)
                         this.$.ajaxLoader.generateRequest();
                 })
-                this.$.handler.addEventListener('removeGame', function(event) {
-                    this.removeGame(event);
-                }.bind(this))
-                this.addEventListener('unit-game-changed', function() {
-                    this.$.ajaxLoader.generateRequest();
-                })
-                this.set('callback', function() {
-                    this.$.ajaxLoader.generateRequest();
-                }.bind(this));
 
             },
-            removeGame: function(event) {
-                this.itemId = event.detail._id;
-                this.$.remover.genRequest();
-                this.$.ajaxLoader.generateRequest();
-
+            remove: function(event) {
+                this.itemId =event.model.__data__.item._id
+                this.$.remover.removeResource();
+            },
+            edit:function(event){
+                this.fire('resource-operation',{info:{operation:'edit',resource:event.model.__data__.item}})
+            },
+            requestElements:function(){
+                this.$.ajaxLoader.generateRequest()
             },
 
-            genrequest: function(event) {
-                event.srcElement.nextElementSibling.genRequest();
-            },
-
-            itemInArray: function(item) {
-                for (var i = 0; i < this.itemsOnMap.length; i++) {
-                    if (this.itemsOnMap[i] == item._id) {
-                        return true;
-                    }
-                }
-                return false;
-            },
             resetList: function() {
                 this.$.ajaxLoader.generateRequest()
             },
@@ -184,16 +166,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 return -1;
 
-            },
-            observers: [
-                'statusChanged(status)',
-                'newpoiChanged(newpoi)'
-            ],
-            statusChanged: function(status) {
-                if (status.logged) {
-                    this.$.ajaxLoader.generateRequest();
-
-                }
             },
             properties: {
                 callbackfunction: {

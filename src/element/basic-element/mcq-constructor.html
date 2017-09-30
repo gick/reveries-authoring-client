@@ -23,6 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
+<link rel="import" href="../remove-ressource/get-resource.html">
 <dom-module id="mcq-constructor">
     <style>
     .flexForm {
@@ -31,23 +32,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         justify-content: space-between;
         flex-direction: column;
     }
-    
+
     .formTitleWithButton {
         display: inline-flex;
         width: 93%;
         flex-direction: row;
         justify-content: space-between;
     }
-    
+
     .smallh3 {
         display: inline-flex;
         align-self: center;
     }
     </style>
     <template>
+        <get-resource id="getter" resource-url="/staticmedia" resource-id="{{resourceId}}"></get-resource>
         <create-resource id="creator" resource-url="/mcq" resource="{{resource}}"></create-resource>
         <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
-
         <form class="flexForm" id="mcqForm" is="iron-form" method="post" action="/mcq">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Edit MCQ question</h3>
@@ -59,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
-            <paper-input name="label" label="Label" value="{{resourceLabel}}" required></paper-input>
+            <paper-input name="label" label="Label" value="{{label}}" required></paper-input>
             <paper-input name="question" value={{question}} label="Question" required></paper-input>
             <paper-input name="distractor1" label="First distracor(wrong choice)" value={{distractor1}} required></paper-input>
             <paper-input name="distractor2" label="Second distractor (wrong choice)" value={{distractor2}} required></paper-input>
@@ -67,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
             <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
             <paper-button raised on-click="showMediaDialog">Set clue media (optionnal)</paper-button>
-            <generic-resource-viewer input-name="mediaId" is-temp image page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="mediaId" is-temp page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="card-actions ">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
@@ -88,10 +89,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             is: 'mcq-constructor',
             ready: function() {
                 //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
-                this.updating=false
+                this.updating = false
                 this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
-
             },
+
+            getResource: function(message) {
+                this.$.mcqMediaViewer.setPage(message.detail.info)
+            },
+
             setResource: function(message) {
                 switch (message.detail.resourceType) {
                     case "page":
@@ -114,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             resetFields: function() {
-                this.updating=false
+                this.updating = false
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
@@ -122,7 +127,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.mcqMediaViewer.removeResource()
             },
 
-            logout: function() {},
             _submit: function(event) {
                 var json = this.$.mcqForm.serialize()
                 this.set('resource', json)
@@ -135,12 +139,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             edit: function(question) {
                 this.updating = true
 
-                this.resourceLabel = question.label
+                this.label = question.label
                 this.question = question.question
-                this.mediaId = question.mediaId
+                if (question.media) {
+                    this.$.mcqMediaViewer.setPage(question.media)
+                }
                 this.distractor1 = question.distractor1
                 this.distractor2 = question.distractor2
-                this.correctChoice = question.correctChoice
+                this.correctChoice = question.response
                 this.wrongMessage = question.wrongMessage
                 this.correctMessage = question.correctMessage
                 this.itemId = question._id
@@ -195,15 +201,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     notify: true,
                     reflectToAttribute: true,
                 },
-                mediaPath: {
+                label: {
                     type: String,
                     notify: true,
-                    value: null,
-                },
-                hasImage: {
-                    type: Boolean,
-                    notify: true,
-                    value: false,
                 },
                 updating: {
                     type: Boolean,

@@ -14,7 +14,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="./styles/common-styles.html">
-<link rel="import" href="../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="./element/unit-activity/unit-activity-constructor.html">
 <link rel="import" href="./element/unit-activity/unit-activity-display.html">
 <dom-module id="constructor-view">
@@ -36,7 +35,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             flex-direction: column;
         }
         </style>
-        <akc-meta-query key="media" value={{selectMedia}}></akc-meta-query>
         <paper-material class="head">
             <div>
                 <h2>Game unit creator</h2></div>
@@ -56,44 +54,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'constructor-view',
         ready: function() {
             //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
-            this.$.unitGame.addEventListener('unitGameSaved', this.updateUnitGameList.bind(this))
+            this.$.unitGame.addEventListener('resource-operation', this.updateMedia.bind(this))
+            this.$.unitDisplay.addEventListener('resource-operation', this.updateMedia.bind(this))
+
         },
-        updateUnitGameList: function() {
-            this.$.unitDisplay.resetList()
-        },
-        addNewItem: function(event) {
-            if (event.detail) {
-                switch (event.detail.itemType) {
-                    case "poi":
-                        event.detail.item.itemType = event.detail.itemType;
-                        this.$.unitGame.addPOI(event.detail.item)
-                        break
-                    case "media":
-                        event.detail.item.itemType = this.selectMedia;
-                        this.$.unitGame.addMedia(event.detail.item, this.selectMedia)
-                        break
-                    case "freeText":
-                        event.detail.item.itemType = 'activities';
-                        event.detail.item.activityType = 'freeText';
-                        this.$.unitGame.addFreetext(event.detail.item)
-                        break
-                    case "mcq":
-                        event.detail.item.itemType = 'activities';
-                        event.detail.item.activityType = 'mcq';
-                        this.$.unitGame.addMcq(event.detail.item)
-                        break
-                    case "qrcode":
-                        event.detail.item.itemType = 'qrcode';
-                        this.$.unitGame.addQRCode(event.detail.item)
-                        break
+        updateMedia: function(message) {
+            switch (message.detail.info.operation) {
+                case 'create':
+                    this.$.unitDisplay.requestElements()
+                    break
+                case 'update':
+                    this.$.unitDisplay.requestElements()
+                    break
+                case 'edit' :
+                    this.$.unitGame.edit(message.detail.info.resource)
+                    break
 
+                case 'delete':
+                    this.$.unitDisplay.requestElements()
+                    break
 
-
-                }
             }
-        },
-        updateMedia: function() {
-            this.$.mediaviewer.updateMedia();
         },
         clearList: function() {
             this.$.uploader.clear();

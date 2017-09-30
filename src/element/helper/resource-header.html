@@ -36,7 +36,7 @@
             <!-- Read belonging to the user can be set public or private -->
             <template is="dom-if" if="{{!isReadOnly}}">
                 <template is="dom-if" if="{{!isReadOnly}}">
-                    <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="editQuestion" icon="icons:create"></paper-icon-button>
+                    <paper-icon-button id="edit" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="edit" icon="icons:create"></paper-icon-button>
                 </template>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
                 <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="remove" icon="icons:delete"></paper-icon-button>
@@ -60,7 +60,7 @@
                 this.addEventListener('shift_ressource_sharing_status', this.shiftShareStatus.bind(this))
                 this.requestParams = '{"Status":"Public"}'
             },
-            editQuestion: function() {
+            edit: function() {
                 this.fire('resource-operation',{info:{operation:'edit',resource:this.resource}})
             },
             cloneResource: function() {

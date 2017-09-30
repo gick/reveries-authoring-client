@@ -47,11 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </ul>
         </div>
         <div class="card constructorCard">
-            <staticmedia-generator style="display:inline-flex;" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
-            <staticmedia-viewer style="display:inline-flex;" mkdown="{{MK}}"></staticmedia-viewer>
+            <staticmedia-generator style="display:inline-flex;" label="{{label}}" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
+            <staticmedia-viewer resource-label="[[label]]" conception-mode style="display:inline-flex;" mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
-            <list-generic-resource share-url='/staticmedia' id='staticmedialist' resource-type='staticmedia' url='/staticmedia'></list-generic-resource>
+            <list-generic-resource share-url='/staticmedia' id='staticmedialist'  resource-type='staticmedia' url='/staticmedia'></list-generic-resource>
         </div>
     </template>
     <script>

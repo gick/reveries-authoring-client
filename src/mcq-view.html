@@ -22,23 +22,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="mcq-view">
     <template>
         <style include="common-styles">
-        :host {
+         :host {
             display: block;
             padding: 10px;
         }
-        
+
         .previewquestion {
             display: inline-table;
-            padding: 10px;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
             margin: 10px;
         }
-        
+
         .flexQuestion {
             display: flex;
             justify-content: space-between;
         }
-        
+
         mcq-constructor {
             display: inline-flex;
             flex-direction: row;
@@ -46,14 +45,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             align-items: flex-start;
             box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
         }
-        
+
         h1 {
             font-size: 22px;
             margin: 16px 0;
             color: #212121;
         }
         </style>
-        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
         <div class="card">
             <h1>MCQ Question</h1> MCQ question offers one correct choice amongs three.
             <br> In this section :
@@ -63,9 +61,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card">
             <div class='flexQuestion'>
-                <mcq-constructor class="" id="mcqConstructor" question={{question}}  distractor1={{dist1}} distractor2={{dist2}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
+                <mcq-constructor class="" id="mcqConstructor" label={{label}} question={{question}} distractor1={{dist1}} distractor2={{dist2}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
                 </mcq-constructor>
-                <mcq-activity class="previewquestion" question="{{question}}" correct-answer={{response}} wrong-answer2={{dist2}} wrong-answer1={{dist1}} correct-answer-message={{correct}} wrong-answer-message={{wrong}} media-id={{mediaId}}>
+                <mcq-activity conception-mode resource-label="[[label]]" class="previewquestion" question="{{question}}" correct-answer={{response}} wrong-answer2={{dist2}} wrong-answer1={{dist1}} correct-answer-message={{correct}} wrong-answer-message={{wrong}} media-id={{mediaId}}>
                 </mcq-activity>
             </div>
         </div>
@@ -78,24 +76,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'mcq-view',
         ready: function() {
-            this.addEventListener('resource-operation',this.updateMedia.bind(this))
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
         },
         updateMedia: function(message) {
-        switch(message.detail.info.operation){
-            case 'create':
-            this.$.mcqList.requestElements()
-            break
-            case 'update':
-            this.$.mcqList.requestElements()
-            break
+            switch (message.detail.info.operation) {
+                case 'create':
+                    this.$.mcqList.requestElements()
+                    break
+                case 'update':
+                    this.$.mcqList.requestElements()
+                    break
 
-            case 'delete':
-            this.$.mcqList.requestElements()
-            break
+                case 'delete':
+                    this.$.mcqList.requestElements()
+                    break
 
-            case 'edit':
-            this.$.mcqConstructor.edit(message.detail.info.resource)
-            break
+                case 'edit':
+                    this.$.mcqConstructor.edit(message.detail.info.resource)
+                    break
             }
         },
 

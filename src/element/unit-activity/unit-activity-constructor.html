@@ -34,6 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../basic-element/post-action.html">
 <link rel="import" href="../helper/word-list.html">
+<link rel="import" href="../remove-ressource/create-resource.html">
 <dom-module id="unit-activity-constructor">
     <style>
     .freeTextCreator {
@@ -150,9 +151,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <word-list id="randomSentence"></word-list>
+
+        <create-resource id="creator" resource-url="/unitGame" resource="{{resource}}"></create-resource>
         <resource-picker-dialog image page video resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
-        <resource-picker-dialog image page video  id="poiPAMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog image page video id="poiPAMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog image page video resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
@@ -162,9 +165,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="insideflex">
                     <h3>Game unit start</h3>
                 </div>
-                <paper-input name="activityName" value={{quest}} label="Game unit name"></paper-input>
+                <paper-input name="activityName" value={{activityName}} label="Game unit name"></paper-input>
                 <paper-button on-click="setMedia" raised>Set media :</paper-button>
-                <generic-resource-viewer input-name="startMedia"  is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
             <div class="contain shadow-2dp">
                 <div class="insideflex">
@@ -173,11 +176,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
                 <generic-resource-viewer input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
                 <label class="subtitle" id="label1">User guidance:</label>
-                <paper-radio-group     allow-empty-selection>
-                    <paper-radio-button  disabled="[[poiActive]]" name="map">POI map</paper-radio-button>
-                    <paper-radio-button  disabled="[[poiActive]]" name="ping">Ping</paper-radio-button>
-                    <paper-radio-button  disabled="[[poiActive]]" name="compass">Compass</paper-radio-button>
-                    <paper-radio-button  disabled="[[poiActive]]" checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
+                <paper-radio-group allow-empty-selection>
+                    <paper-radio-button disabled="[[poiActive]]" name="map">POI map</paper-radio-button>
+                    <paper-radio-button disabled="[[poiActive]]" name="ping">Ping</paper-radio-button>
+                    <paper-radio-button disabled="[[poiActive]]" name="compass">Compass</paper-radio-button>
+                    <paper-radio-button disabled="[[poiActive]]" checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
                     <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
                 </paper-radio-group>
                 <template is="dom-if" if="{{cluePOISelected}}">
@@ -185,16 +188,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </template>
                 <label class="subtitle" id="label2">POI reached validation:</label>
                 <paper-radio-group allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
-                    <paper-radio-button  disabled="[[poiActive]]" name="folia">Folia image analysis</paper-radio-button>
-                    <paper-radio-button  active="{{qrActive}}" disabled="[[poiActive]]" name="QR">QR code scan</paper-radio-button>
+                    <paper-radio-button disabled="[[poiActive]]" name="folia">Folia image analysis</paper-radio-button>
+                    <paper-radio-button active="{{qrActive}}" disabled="[[poiActive]]" name="QR">QR code scan</paper-radio-button>
                     <paper-radio-button disabled="[[poiActive]]" name="gps">Device GPS</paper-radio-button>
                 </paper-radio-group>
-                <paper-button class="heading" disabled="[[poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code [[poiid]]</paper-button>
+                <paper-button class="heading" disabled="[[poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
                 <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
                     <template is="dom-if" if="[[poiid]]" restamp>
-                    <div class="content">
-                        <img src='/qrcode/[[poiid]]'>
-                    </div>
+                        <div class="content">
+                            <img style="width:400px" src='/qrcode/[[poiid]]'>
+                        </div>
                     </template>
                 </iron-collapse>
             </div>
@@ -204,12 +207,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <iron-collapse opened='{{active}}'>
                     <label class="subtitle" id="label2">POI failure (incorrect QR code scanned) :</label>
-                    <paper-input label="Incorrect QR code message" name="poiIncorrectMessage"></paper-input>
+                    <paper-input label="Incorrect QR code message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
                 </iron-collapse>
                 <label class="subtitle" id="label2">POI reached :</label>
-                <paper-input label="POI reached message" name="poiReachedMessage"></paper-input>
+                <paper-input label="POI reached message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
                 <paper-button on-click="setPOIInventory" raised>Set POI Reached Item (inventory)</paper-button>
-                <generic-resource-viewer input-name="poiReachedInventory" is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
+                <generic-resource-viewer input-name="inventoryItem" is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
             </div>
             </div>
             <div class="contain shadow-2dp">
@@ -257,13 +260,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'use strict';
         Polymer({
             is: 'unit-activity-constructor',
+            edit: function(unitGame) {
+                this.activityName = unitGame.activityName
+                this.poiIncorrectMessage = unitGame.poiIncorrectMessage
+                this.poiReachedMessage = unitGame.poiReachedMessage
+                if (unitGame.startMediaId) {
+                    this.startMediaId = unitGame.startMediaId
+                    this.$.startMediaGetter.getResource()
+                }
+                if (unitGame.POIId) {
+                    this.POIId = unitGame.POIId
+                    this.$.poiGetter.getResource()
+                }
+                if(unitGame.poiReachedInventory){
+                    this.inventoryItemId=unitGame.poiReachedInventory
+                    this.$.inventoryGetter.getResource()
+                }
+                if(unitGame.activies){
+                    for(var i=0;i<unitGame.activities.length;i++){
+                        
+                    }
+                }
+
+            },
+
             ready: function() {
                 this.addEventListener('resourcePicked', this.setPickedResource.bind(this))
                 // this.$.startingMediaPicker.addEventListener('resourcePicked', this.setResource.bind(this))
-                this.$.unitActivityForm.addEventListener('iron-form-response', this.handleResponse.bind(this))
                 this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
                 this.$.situatedActivityMedia2.addEventListener('mediaDeleted', this.sa2Deleted.bind(this))
-                this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))      
+                this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
@@ -297,7 +323,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             toggleQr: function(selector) {
                 this.$.collapse1.toggle();
             },
-    
+
             sa1Deleted: function() {
                 this.pa1 = false
             },
@@ -322,29 +348,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
 
-            },
-            handleResponse: function(event) {
-                console.log(event)
-                if (event && event.detail && event.detail.__data__ && event.detail.__data__.status && event.detail.__data__.status === 200) {
-                    // this.resetFields();
-                    this.fire('unitGameSaved', 'New unit game saved');
-                }
-            },
-
-
-            poiPaPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "image":
-                            this.$.poiPaMedia.setImage(newItem)
-                            break;
-                        case "page":
-                            this.$.poiPaMedia.setPage(newItem)
-                            break;
-
-                    }
-                }
             },
 
             situatedQuestionPicked: function(item) {
@@ -397,33 +400,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
 
-            cluePOIPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "image":
-                            this.$$('#cluePOIMedia').setImage(newItem)
-                            break;
-                        case "page":
-                            this.$$('#cluePOIMedia').setPage(newItem)
-                            break;
-
-                    }
-                }
-            },
-
-            poiPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "poi":
-                            this.poiid = newItem._id
-                            this.$.poiViewer.setPOI(newItem)
-                            break;
-
-                    }
-                }
-            },
 
             _getPA: function(value) {
                 if (this.stepPA >= 0)
@@ -435,22 +411,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             addSituatedActivity: function() {
                 this.$.situatedQuestionPicker.open();
-            },
-            _activityCount: function(number) {
-                if (this.currentActivities)
-                    return number > this.currentActivities.length
-                else return false
-            },
-            setValues: function(e) {
-
-                if (this.currentStep == "cluePOI") {
-                    this.cluePOIId = this.mediaId;
-                }
-                if (this.currentStep == "poiPA") {
-                    this.poiPA = this.mediaId;
-                }
-
-
             },
             setPOIPaMedia: function() {
                 this.$.poiPAMediaPicker.open();
@@ -469,34 +429,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.poiInventoryMediaPicker.open();
             },
 
-            addMcq: function(item) {
-                this.$.pedagogicActivities.addItem(item)
-                if (this.currentActivities.length < 3) {
-                    this.push('currentActivities', item)
-                } else {
-                    this.pop('currentActivities')
-                    this.push('currentActivities', item)
-                }
-            },
-            addQRCode: function(item) {
-                this.$.qrCodes.addItem(item)
-            },
-            addMedia: function(item, position) {
-                if (item && position === 'startMedia') {
-                    this.$.startMedia.addItem(item)
-                } else if (item && position === 'act1') {
-                    this.$.act1successMed.value = item._id
-                } else if (item && position === 'act2') {
-                    this.$.act2successMed.value = item._id
-                } else {
-                    this.$.fbMedia.addItem(item)
-                }
-            },
-
-
-            addPOI: function(item) {
-                this.$.poi.addItem(item);
-            },
 
 
             dummyFill: function() {
@@ -511,26 +443,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             },
 
-            togglePOI: function() {
-                this.$.poiguide.toggle();
-            },
-            toggleActivities: function() {
-                this.$.activities.toggle();
-            },
-            toggleIntroduction: function() {
-                this.$.startingScreen.toggle();
-            },
-            toggleFeedback: function() {
-                this.$.endingScreen.toggle();
-            },
-
-            showImageDialog: function() {
-                this.fire("showImageDialog", "show");
-            },
-            _submit: function(event) {
-
-                this.$.unitActivityForm.submit();
-                this.unitGameName = this.quest;
+            _submit: function() {
+                var json = this.$.unitActivityForm.serialize()
+                this.set('resource', json)
+                this.$.creator.createResource()
             },
             _reset: function(event) {},
             properties: {

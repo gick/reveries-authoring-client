@@ -80,36 +80,24 @@
                 </div>
                 <paper-input style="display:inline-flex;" required name="label" value={{title}} label="Label"></paper-input>
                 <paper-input style="display:inline-flex;" required name="comment" value={{info}} label="Information"></paper-input>
-                <div class="insideflex" style="">
+              
+                <paper-input style="display:inline-flex;" required name="latitude" value=[[latitude]] label="Latitude"></paper-input>
+                <paper-input style="display:inline-flex;" required name="longitude" value=[[longitude]] label="Longitude"></paper-input>
+                <paper-input style="display:inline-flex;" required name="radius" value=[[radius]] label="Radius"></paper-input>
+
+                <div class="insideflex" style="margin-bottom: 10px">
                     <paper-button noink on-click="openDialog" raised class="small" style="align-self: center;margin-right: 15px;" name="Iconpick">Change icon</paper-button><img style="display:inline-flex" src="{{mapicon}}">
                     <input type="hidden" value={{mapicon}} name="marker" />
-                    <input type="hidden" value={{latitude}} name="latitude" />
-                    <input type="hidden" value={{longitude}} name="longitude" />
                     <input type="hidden" value={{mapLatitude}} name="mapLatitude" />
                     <input type="hidden" value={{mapLongitude}} name="mapLongitude" />
                     <input type="hidden" value={{mapZoom}} name="mapZoom" />
                 </div>
-                <template is="dom-if" restamp=true if="{{!_noarea(hasArea)}}">
-                    <paper-input style="display:inline-flex;" name="radius" value={{radius}} label="Trigger area radius (m)"></paper-input>
-                    <paper-button name class="small" raised on-click="_removeArea">Remove trigger area</paper-button>
-                    <input type="" value={{areaLat}} name="areaLat" />
-                    <input type="" value={{areaLong}} name="areaLong" />
-                </template>
                 <div class=insideflex style="margin-bottom: 10px">
-                    <paper-button noink style="background-color: #b2ffa6" name="save" class="small" on-click="_submit" raised>Save POI</paper-button>
-                    <paper-button noink style="background-color: rgba(231, 25, 25, 0.25)" name="delete" on-click="removeMark" class="small" raised>Remove POI</paper-button>
+                    <paper-button noink name="save" class="small" on-click="_submit" raised>Save POI</paper-button>
+                    <paper-button noink name="delete" on-click="removeMark" class="small" raised>Reset</paper-button>
                 </div>
             </form>
         </paper-material>
-        <paper-dialog id="selectImage">
-            <h2> Select image</h2>
-            <paper-dialog-scrollable>
-                <media-viewer-activity media-name={{currentname}} media-id="{{currentid}}" id="mediaviewer"></media-viewer-activity>
-            </paper-dialog-scrollable>
-            <div class="buttons">
-                <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>Accept</paper-button>
-            </div>
-        </paper-dialog>
         <paper-dialog id="icons">
             <h2>Select icon</h2>
             <paper-dialog-scrollable>
@@ -149,14 +137,7 @@
             _noarea: function(hasArea) {
                 return !this.get('hasArea');
             },
-            _hasImage: function() {
-                return this.get('hasImage');
-            },
 
-            _noImage: function() {
-
-                return !this.get('hasImage');
-            },
             setImage: function() {
                 this.$.mediaviewer.genReq();
                 this.$.selectImage.open();
@@ -170,7 +151,7 @@
                 var json = this.$.poimap.serialize()
                 this.set('resource', json)
                 this.$.creator.createResource()
-                this.resetFields()
+                this.removeMark()
             },
             removeMark: function() {
                 this.fire('remove-marker', {
