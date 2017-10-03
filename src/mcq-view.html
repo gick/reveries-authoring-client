@@ -15,6 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="./styles/common-styles.html">
+<link rel="import" href="./element/resource-filtering/generic-header.html">
+
 <link rel="import" href="./element/basic-element/mcq-constructor.html">
 <link rel="import" href="./element/basic-element/mcq-activity.html">
 <link rel="import" href="../src/element/helper/list-generic-resource.html">
@@ -22,53 +24,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="mcq-view">
     <template>
         <style include="common-styles">
-         :host {
-            display: block;
-            padding: 10px;
-        }
-
-        .previewquestion {
-            display: inline-table;
-            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-            margin: 10px;
-        }
-
-        .flexQuestion {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        mcq-constructor {
-            display: inline-flex;
-            flex-direction: row;
-            padding: 5px;
-            align-items: flex-start;
-            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-        }
-
-        h1 {
-            font-size: 22px;
-            margin: 16px 0;
-            color: #212121;
-        }
+     
         </style>
         <div class="card">
-            <h1>MCQ Question</h1> MCQ question offers one correct choice amongs three.
-            <br> In this section :
-            <ul>
-                <li> you can generate MCQ questions, and an optionnal clue image</li>
-            </ul>
-        </div>
-        <div class="card">
-            <div class='flexQuestion'>
-                <mcq-constructor class="" id="mcqConstructor" label={{label}} question={{question}} distractor1={{dist1}} distractor2={{dist2}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
-                </mcq-constructor>
-                <mcq-activity conception-mode resource-label="[[label]]" class="previewquestion" question="{{question}}" correct-answer={{response}} wrong-answer2={{dist2}} wrong-answer1={{dist1}} correct-answer-message={{correct}} wrong-answer-message={{wrong}} media-id={{mediaId}}>
-                </mcq-activity>
+            <div class="topLevelInfo">
+                <h1>MCQ Question</h1> MCQ question offers one correct choice amongs three.
+                <br> In this section :
+                <ul>
+                    <li> you can generate MCQ questions, and an optionnal clue image</li>
+                </ul>
             </div>
         </div>
+        <div class="card constructorCard">
+            <mcq-constructor class="topLevelView" id="mcqConstructor" label={{label}} question={{question}} distractor1={{dist1}} distractor2={{dist2}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
+            </mcq-constructor>
+            <mcq-activity conception-mode resource-label="[[label]]" class="topLevelView"  question="{{question}}" correct-answer={{response}} wrong-answer2={{dist2}} wrong-answer1={{dist1}} correct-answer-message={{correct}} wrong-answer-message={{wrong}} media-id={{mediaId}}>
+            </mcq-activity>
+        </div>
         <div class="card">
-            <list-generic-resource share-url='/mcq' id='mcqList' resource-type='mcq' url='/mcq'></list-generic-resource>
+            <generic-header search={{keyword}}></generic-header>
+            <list-generic-resource  filter-search=[[keyword]] share-url='/mcq' id='mcqList' resource-type='mcq' url='/mcq'></list-generic-resource>
         </div>
     </template>
     <script>

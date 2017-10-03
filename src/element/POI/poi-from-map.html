@@ -4,40 +4,22 @@
 <link rel="import" href="../../../bower_components/google-map/google-map-point.html">
 <link rel="import" href="../../../bower_components/google-map/google-map-marker.html">
 <link rel="import" href="../../../bower_components/google-map/google-map-poly.html">
-<link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../styles/common-styles.html">
+
 <link rel="import" href="./poi-map-representation.html">
 <dom-module id="poi-from-map">
     <template>
-        <style>
-        .outerdiv {
-            display: inline-flex;
-            align-items: flex-start;
-            flex-direction: row;
-            flex-wrap: wrap;
-            ;
-            width: 100%;
-        }
-
-        .innerdiv {
-            display: inline-flex;
-            flex-flow: initial;
-            flex-direction: row;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            align-content: center;
-            flex-grow: 1;
-            width: 50%
-        }
+        <style include="common-styles">
 
         google-map {
+            padding: 10px;
             width: 40%;
             height: 700px;
             display: inline-flex;
         }
         </style>
         <geo-location id="geoloc" watch-pos latitude="{{lat}}" longitude="{{long}}"></geo-location>
-        <div class="outerdiv">
+        <div style="padding:10px" class="constructorCard">
             <google-map api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="gmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{latitude}}" longitude="{{longitude}}" click-events>
                 <template is="dom-if" if="[[hasMarker]]" restamp>
                     <google-map-marker click-events draggable="true" title="POI" icon={{marker.icon}} on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>

@@ -12,7 +12,6 @@
 <dom-module id="resource-picker-dialog">
     <template>
         <paper-dialog dynamic-align style="overflow: auto;left: 269px;right: 87px;min-width: 500px;/* width: 100%; */height: 50%;outline: none;z-index: 103;position: fixed;top: 132.667px;" id="selectorDialog">
-            <paper-dialog-scrollable>
                 <paper-tabs selected="{{selected}}" scrollable>
                     <template is="dom-if" if="{{image}}">
                         <paper-tab>Images</paper-tab>
@@ -97,7 +96,6 @@
                         </div>
                     </template>
                 </iron-pages>
-            </paper-dialog-scrollable>
         </paper-dialog>
     </template>
     <script>

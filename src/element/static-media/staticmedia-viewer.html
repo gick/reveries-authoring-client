@@ -17,41 +17,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/marked-element/marked-element.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
+<link rel="import" href="../../styles/common-styles.html">
 <dom-module id="staticmedia-viewer">
-    <style include="shared-styles">
+    <style include="common-styles">
     .resourceElement {
         display: inline-flex;
         flex-direction: column;
         min-width: 250px;
         border-radius: 3px;
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
 
     .element {
         align-self: stretch;
     }
 
+    img[src$="centerme"] {
+        display: block;
+        margin: 0 auto;
+    }
+
     .remove {
         background-color: #eeeeee;
     }
 
-    .header {
-        width: 100%;
-    }
 
-    .headerText {
-        padding-left: 10px;
-        display: inline-flex;
-        align-self: center;
-    }
-
-    .resourceReadwrite {
-        display: inline-flex;
-        flex-direction: row;
-        justify-content: space-between;
-        background-color: lightgreen;
-        width: 100%;
-    }
 
     .suppress-action {
         display: inline-flex;
@@ -63,39 +52,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-width: 500px;
         max-height: 500px;
     }
-
-    .inner {
-        display: inline-flex;
-        flex-flow: column;
-        align-items: baseline;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        width: 100%;
-    }
     </style>
     <template>
-        <div class="resourceElement">
-            <template is="dom-if" if="[[conceptionMode]]" restamp>
-                <div class="resourceReadwrite">
-                    <h3 class="headerText">{{resourceLabel}}</h3>
-                </div>
-            </template>
-            <form class="inner">
-                <marked-element markdown="{{mkdown}}">
+        <template is="dom-if" if="[[conceptionMode]]" restamp>
+            <div class="resourceHeader">
+                <h3 class="headerText">{{resourceLabel}}</h3>
+            </div>
+        </template>
+        <form class="resource">
+            <marked-element markdown="{{mkdown}}">
+                <div class="markdown-html"></div>
+            </marked-element>
+            <template is="dom-if" if="[[showDefaultMkdown]]" restamp>
+                <marked-element markdown="{{defaultMkdown}}">
                     <div class="markdown-html"></div>
                 </marked-element>
-                <template is="dom-if" if="[[showDefaultMkdown]]" restamp>
-                    <marked-element markdown="{{defaultMkdown}}">
-                        <div class="markdown-html"></div>
-                    </marked-element>
-                </template>
-            </form>
-            <div style="margin-top:40px" class="card-actions suppress-action">
-                <template is="dom-if" if="{{!isReadOnly}}">
-                    <paper-button on-click="removeElement" raised>Suppress</paper-button>
-                </template>
-            </div>
-        </div>
+            </template>
+        </form>
     </template>
     <script>
     (function() {

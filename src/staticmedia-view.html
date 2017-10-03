@@ -16,42 +16,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/static-media/staticmedia-viewer.html">
+<link rel="import" href="./element/resource-filtering/generic-header.html">
 <link rel="import" href="./element/static-media/staticmedia-generator.html">
 <link rel="import" href="../src/element/helper/generic-resource-viewer.html">
 <link rel="import" href="../src/element/helper/list-generic-resource.html">
 <dom-module id="staticmedia-view">
     <template>
         <style include="common-styles">
-         :host {
-            display: block;
-            padding: 10px;
-        }
 
-        h1 {
-            font-size: 22px;
-            margin: 16px 0;
-            color: #212121;
-        }
-
-        .constructorCard {
-            display: flex;
-            justify-content: space-between;
-        }
         </style>
         <div class="card">
+            <div class='topLevelInfo'>
             <h1>My pages</h1>
             <b>Pages are composed of formatted text, images and/or video. The templating is based on the markdown templating language 
             <br> In this section :
             <ul>
                 <li> you can create and save pages using the media generator</li>
             </ul>
+            </b>
+            </div>
         </div>
         <div class="card constructorCard">
-            <staticmedia-generator style="display:inline-flex;" label="{{label}}" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
-            <staticmedia-viewer resource-label="[[label]]" conception-mode style="display:inline-flex;" mkdown="{{MK}}"></staticmedia-viewer>
+            <staticmedia-generator class="topLevelView"   label="{{label}}" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
+            <staticmedia-viewer resource-label="[[label]]" conception-mode style="min-width:150px" class="topLevelView"  mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
-            <list-generic-resource share-url='/staticmedia' id='staticmedialist'  resource-type='staticmedia' url='/staticmedia'></list-generic-resource>
+            <generic-header search="{{keyword}}"></generic-header>
+            <list-generic-resource filter-search="[[keyword]]" share-url='/staticmedia' id='staticmedialist'  resource-type='staticmedia' url='/staticmedia'></list-generic-resource>
         </div>
     </template>
     <script>

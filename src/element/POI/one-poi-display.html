@@ -10,40 +10,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../styles/common-styles.html">
+
 <dom-module id="one-poi-display">
     <template>
-        <style include="shared-styles">
-         :host {
-            display: inline-flex
-        }
-
-        ;
-        .outer {
-            display: inline-flex;
-            flex-wrap: wrap;
-        }
-
-        paper-card {
-            --paper-card-header: {
-                background-color: #b2ffa6;
-            }
-            --paper-card-header-text: {
-                width: 250px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            ;
-            --paper-card-actions {
-                border-top: 1px solid lightgrey;
-            }
-            ;
-            --paper-card: {
-                margin-left: 15px;
-                margin-bottom: 15px;
-            }
-            ;
-        }
+        <style include="common-styles">
+         
 
         .info {
             color: #737373;
@@ -53,39 +25,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             display: inline-block;
         }
 
-        .generalflex {
-            display: inline-flex;
-            flex-wrap: wrap;
-            flex-direction: column;
-        }
-
-        .mediaimg {
-            height: 300px;
-            display: flex;
-            border-radius: 3px;
-            -moz-box-shadow: 6px 5px 2px #CECEB9;
-            -webkit -box-shadow: 6px 5px 2px #CECEB9;
-            -o-box-shadow: 6px 5px 2px #CECEB9;
-            box-shadow: 6px 5px 2px #CECEB9;
-            margin-bottom: 15px;
-        }
-
-        .innerdiv {
-            position: relative;
-            overflow: visible;
-            width: 100%;
-            height: 100%;
-            display: inline-flex;
-            flex-wrap: wrap;
-        }
         </style>
-        <paper-card class="generalflex">
-            <div style="flex-grow:1" class=card-content>
-                <template is="dom-if" if={{item.photo}}>
-                    <div class="mediablock">
-                        <img class="mediaimg" src="/file/{{item.photo}}">
-                    </div>
-                </template>
+            <div style="flex-grow:1" class="resource">
                 <template is="dom-if" if={{item.creator}}>
                     <div>Creator :
                         <div class="info"> {{item.creator}}</div>
@@ -108,11 +49,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div class="info"> {{item.comment}}</div>
                     </div>
                 </template>
-                <div class="card-action" style="display:inline-flex;flex-direction: row;justify-content:space-around; border-top: 1px solid lightgrey;">
-                    <paper-button on-click="toggledMap">{{toggleMap}}</paper-button>
+                <div style="justify-content: center" class="insideflex">
+                    <paper-button raised on-click="toggledMap">{{toggleMap}}</paper-button>
                 </div>
             </div>
-        </paper-card>
     </template>
     <script>
     (function() {

@@ -28,12 +28,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
         </style>
         <div class="card">
-            <h1>Point of interest and maps</h1>
-            <b>Point of interest</b> (POI) represents <b>physical location</b> within the mobile game area.
-            <br> Point of interest are fundamental for the design of mobile activities : most activities being situated, they must be associated with a point of interest.
-            <ul>
-                <li> <b>The POI are added using a map.</b> You have to select on the map the location of the POI and associate optional comments. The map can be Google Map or another map as long as the map reflects well the game area</li>
-            </ul>
+            <div class="topLevelInfo">
+                <h1>Point of interest and maps</h1>
+                <b>Point of interest</b> (POI) represents <b>physical location</b> within the mobile game area.
+                <br> Point of interest are fundamental for the design of mobile activities : most activities being situated, they must be associated with a point of interest.
+                <ul>
+                    <li> <b>The POI are added using a map.</b> You have to select on the map the location of the POI and associate optional comments. The map can be Google Map or another map as long as the map reflects well the game area</li>
+                </ul>
+            </div>
         </div>
         <div class="card">
             <poi-from-map id="poimap" activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
@@ -51,7 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'poi-view',
         ready: function() {
             this.$.poimap.addEventListener('resource-operation', this.updateMedia.bind(this))
-            this.$.poiList.addEventListener('resource-operation',this.updateMedia.bind(this))
+            this.$.poiList.addEventListener('resource-operation', this.updateMedia.bind(this))
             this.$.poiList.addEventListener('change-poi-map', this.updateMap.bind(this))
         },
         updateMedia: function(message) {

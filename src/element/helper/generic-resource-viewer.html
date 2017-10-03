@@ -8,17 +8,17 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../basic-element/mcq-activity.html">
 <link rel="import" href="../../../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../basic-element/free-text-question.html">
 <link rel="import" href="../POI/one-poi-display.html">
 <link rel="import" href="../inventory/inventory-element.html">
 <link rel="import" href="../badges/badge-element.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
-
 <dom-module id="generic-resource-viewer">
     <template>
-        <style>
+        <style include="common-styles">
          :host {
-            display: inline-flex;
+            display: flex;
             flex-wrap: wrap;
         }
 
@@ -66,7 +66,6 @@
             width: 300px;
             height: 300px;
             margin-bottom: 15px;
-            margin-left: 24px;
             box-shadow: 6px 5px 26px #CECEB9;
             -moz-box-shadow: 6px 5px 2px #CECEB9;
             -webkit-box-shadow: 6px 5px 2px #CECEB9;
@@ -97,15 +96,11 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{page}}" restamp>
-                    <div class="markdownblock">
-                        <marked-element markdown="{{item.mkdown}}">
-                            <div class="markdown-html"></div>
-                        </marked-element>
-                    </div>
+                    <staticmedia-viewer conception-mode=[[conceptionMode]] resource-label="[[item.label]]" mkdown="[[item.mkdown]]"></staticmedia-viewer>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{badge}}" restamp>
-                    <badge-element class="" id="" media="{{item.media}}" badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
+                    <badge-element class="" id="" media="{{item.media}}" conception-mode=[[conceptionMode]] badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
                     </badge-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -122,17 +117,17 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
-                    <inventory-element class="" id="" resource-status="{{item.status}}" media="{{item.media}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}">
+                    <inventory-element class="" id="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media="{{item.media}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}">
                     </inventory-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mcq}}" restamp>
-                    <mcq-activity preview class="" question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media={{item.media}}>
+                    <mcq-activity preview class="" conception-mode=[[conceptionMode]] question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media={{item.media}}>
                     </mcq-activity>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{freetext}}" restamp>
-                    <free-text-question resource-status="{{item.status}}" media={{item.media}} resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" style="display:block" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" item-id="{{item._id}}" media="{{item.media}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <free-text-question conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media={{item.media}} resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" item-id="{{item._id}}" media="{{item.media}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{isTemp}}" restamp>
@@ -149,6 +144,7 @@
             is: 'generic-resource-viewer',
             ready: function() {
                 this.pickedValue = 'mainDiv'
+                this.active=false
             },
             isEmpty: function() {
                 this.image = false;
@@ -271,7 +267,7 @@
                 this.item = oldItem;
                 this.item = newItem;
                 this.poiId = this.item._id
-                this.set('active', false)
+                this.set('active', true)
             },
             setMcq: function(newItem) {
                 this.isMcq();
@@ -290,6 +286,7 @@
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
+                this.set('active', true)
 
             },
 
@@ -304,7 +301,7 @@
                 this.isEmpty();
                 this.item = null
                 this.fire('mediaDeleted', null)
-                this.set('active', true)
+                this.set('active', false)
             },
             hasImage: function(imageId) {
                 if (!imageId) {
@@ -384,7 +381,7 @@
                 },
                 active: {
                     type: Boolean,
-                    value: true,
+                    value: false,
                     notify: true,
                     reflectToAttribute: true,
                 },
@@ -401,12 +398,16 @@
                 item: {
                     type: Object,
                     notify: true,
-                    reflectToAttribute:true,
+                    reflectToAttribute: true,
                 },
                 resourceType: {
                     type: String,
                     notify: true,
                 },
+                conceptionMode:{
+                    type:Boolean,
+                    notify:true,
+                }
             }
         });
     })();

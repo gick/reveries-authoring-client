@@ -19,34 +19,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="constructor-view">
     <template>
         <style include="common-styles">
-        .elem {
-            display: flex;
-            flex-direction: row;
-            height: 100% width: 97%;
-            background-color: white;
-        }
-        
-        .head {
-            background-color: white;
-            display: flex;
-            margin-bottom: 10px;
-            padding-left: 10px;
-            margin-top: 10px;
-            flex-direction: column;
-        }
         </style>
-        <paper-material class="head">
-            <div>
-                <h2>Game unit creator</h2></div>
-        </paper-material>
-        <paper-material class="elem">
-            <unit-activity-constructor id="unitGame"></unit-activity-constructor>
-        </paper-material>
-        <paper-material class="head">
-
-                <h2>Game unit list</h2>
+        <div style="margin-bottom: 0" class="card">
+            <div class="topLevelInfo">
+                <h2>Game unit creator</h2>
+            </div>
+        </div>
+        <unit-activity-constructor id="unitGame"></unit-activity-constructor>
+        <div style="padding:10px;" class="card">
+            <h2>Game unit list</h2>
             <unit-activity-display id="unitDisplay"></unit-activity-display>
-        </paper-material>
+        </div>
     </template>
     <script>
     Polymer({
@@ -66,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 case 'update':
                     this.$.unitDisplay.requestElements()
                     break
-                case 'edit' :
+                case 'edit':
                     this.$.unitGame.edit(message.detail.info.resource)
                     break
 

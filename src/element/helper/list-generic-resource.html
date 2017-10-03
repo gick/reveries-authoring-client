@@ -8,7 +8,7 @@
     <template>
         <style>
          :host {
-            display: inline-flex;
+            display: flex;
             flex-wrap: wrap;
         }
 
@@ -22,6 +22,7 @@
             margin: 10px;
         }
         </style>
+        <iron-ajax id="searchLoader" params="[[keyword]]" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <iron-ajax id="ajaxLoader" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
         <div style="display:flex;flex-wrap:wrap;" id="genericListener">
             <array-selector id="selector" items="{{items}}" selected="{{selected}}" toggle></array-selector>
@@ -76,6 +77,14 @@
 
                 }
             },
+            _search:function(keyword){
+                if(keyword && keyword.length>=3){
+                    this.set('keyword',{search:keyword})
+                    this.$.searchLoader.generateRequest()
+                    return
+                }
+                this.$.ajaxLoader.generateRequest()
+            },
             _resourceTypeChanged: function(rc) {},
             properties: {
                 url: {
@@ -100,6 +109,12 @@
                     type: String,
                     notify: true,
                 },
+                filterSearch:
+                {
+                    type:String,
+                    notify:true,
+                    observer:'_search',
+                }
             }
         });
     })();

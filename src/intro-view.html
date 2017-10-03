@@ -11,54 +11,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="./styles/common-styles.html">
-
 <dom-module id="intro-view">
     <template>
-
         <style include="common-styles">
-        :host {
-            display: block;
-            padding: 10px;
-        }
-        
-        
-        
-        .circle {
-            display: inline-block;
-            height: 64px;
-            width: 64px;
-            border-radius: 50%;
-            background: #ddd;
-            line-height: 64px;
-            font-size: 30px;
-            color: #555;
-            text-align: center;
-        }
-        
-        h1 {
-            font-size: 22px;
-            margin: 16px 0;
-            color: #212121;
-        }
+
         </style>
         <div class="card">
-        <iron-icon icon="menu"></iron-icon>
-            <h2>Welcome to the ReVeRIES conception! A web application for authoring mobile serious games.</h2>
-            <h3>Principle</h3>
-            <ul>
-                <li>Only based on reusable web components</li>
-                <li>Let you author complex mobile scenarios and that can be play through any HTML5 mobile ready web browser</li>
-                <li>No need for any installation : everything is done through this web app!</li>
-            </ul>
+            <div class="topLevelInfo">
+                <iron-icon icon="menu"></iron-icon>
+                <h2>Welcome to the ReVeRIES conception! A web application for authoring mobile serious games.</h2>
+                <h3>Principle</h3>
+                <ul>
+                    <li>Only based on reusable web components</li>
+                    <li>Let you author complex mobile scenarios and that can be play through any HTML5 mobile ready web browser</li>
+                    <li>No need for any installation : everything is done through this web app!</li>
+                </ul>
+            </div>
         </div>
         <div class="card">
-            <p> License : I am pretty sure license information goes there, I am not a jurist so I will just gives general advices
-                <ul>
-                    <li>This software is distrubuted without any garantee of performance or safety.</li>
-                    <li>Feel free to distribute this app with any modification you like</li>
-                    <li>There are no such thing as premium plan, if you bought one you've being scammed</li>
-                    <li>Please don't use this app for taking over the world, it is not designed for that. Use Excel instead</li>
-                </ul>
+            <div class="topLevelInfo">
+                <p> License : I am pretty sure license information goes there, I am not a jurist so I will just gives general advices
+                    <ul>
+                        <li>This software is distrubuted without any garantee of performance or safety.</li>
+                        <li>Feel free to distribute this app with any modification you like</li>
+                        <li>There are no such thing as premium plan, if you bought one you've being scammed</li>
+                        <li>Please don't use this app for taking over the world, it is not designed for that. Use Excel instead</li>
+                    </ul>
+                </p>
+            </div>
         </div>
     </template>
     <script>

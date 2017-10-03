@@ -29,6 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
@@ -36,14 +37,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
 <dom-module id="unit-activity-constructor">
-    <style>
-    .freeTextCreator {
-        padding: 15px;
+    <style include="common-styles">
+     :host {
         display: inline-flex;
-        align-items: center;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: left;
+        width: 100%;
     }
+
+
 
     .shadow-2dp {
         @apply(--shadow-elevation-2dp);
@@ -59,20 +61,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-width: 1px;
     }
 
+    paper-input {
+        width: 90%;
+        margin: 10px;
+        margin-left: 0;
+    }
+
+    paper-button {
+        width: 90%;
+        margin: 10px;
+        margin-left: 0;
+    }
+
+    h3 {
+        margin-left: 10px;
+    }
+
     .insideflex {
-        background-color: #f3f3f3;
-        height: 43px;
-        display: inline-flex;
-        flex-direction: row;
-        align-self: stretch;
-        justify-content: space-between;
-        align-items: center;
-        padding-left: 5px;
-        padding-right: 5px;
-        border-radius: 5px;
-        box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
-        border-bottom-right-radius: 0px;
-        border-bottom-left-radius: 0px;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
     .unitActions {
@@ -85,62 +92,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom-left-radius: 0px;
     }
 
-    .insideflexOption {
-        display: inline-flex;
-        flex-direction: row;
-        align-self: stretch;
-        justify-content: space-between;
-        margin-top: 16px;
-        margin-bottom: 10px;
-    }
-
-    ,
-    .toggleMedia {
-        margin-top: 15px;
-        margin-bottom: 15px;
-        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        color: #333;
-    }
-
-    .titleone {
-        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    .namefield: {
-        width: 100%;
-    }
 
     .contain {
         margin-top: 15px;
         margin-bottom: 15px;
         margin-right: 15px;
         margin-left: 15px;
+        width: 50%;
         display: flex;
-        width: 100%;
         flex-direction: column;
-        align-self: stretch;
+        align-items: center;
     }
 
     .subtitle {
+        align-self: stretch;
+        margin-left: 24px;
         font-weight: bold;
         font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
-    .previewquestion {
-        display: inline-flex;
-        flex-grow: 2;
-        padding: 10px;
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    .creator {
+        padding: 0;
+        width: 100%;
     }
 
     .resourceViewer {
         margin-top: 10px;
+        margin-right: 20px;
     }
 
-    .inputfield {
-        width: 90%;
+    .situatedQuestion {
         display: inline-flex;
-        align-self: center;
+        flex-direction: row;
+    }
+
+    .topLevel {
+
+        display: flex;
+        margin: 24px;
+        border-radius: 7px;
+        flex-direction: row;
+        background-color: white;
+        justify-content: space-between;
+        box-shadow: 8px 9px 2px 0px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        margin-bottom: 0;
+        margin-top: 5px;
     }
 
     div.unitActions {
@@ -151,7 +147,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <template>
         <word-list id="randomSentence"></word-list>
-
         <create-resource id="creator" resource-url="/unitGame" resource="{{resource}}"></create-resource>
         <resource-picker-dialog image page video resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
@@ -160,100 +155,130 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <resource-picker-dialog image page video resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog poi resource-viewer="poiViewer" id="poiMediaPicker"></resource-picker-dialog>
-        <form class="freeTextCreator" id="unitActivityForm" is="iron-form" method="post" action="/unitGame">
-            <div class="contain shadow-2dp">
-                <div class="insideflex">
-                    <h3>Game unit start</h3>
+        <form class="creator" id="unitActivityForm" is="iron-form" style="width:100%;">
+            <template is="dom-if" if="{{updating}}" restamp>
+                <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
+            </template>
+            <div class="topLevel">
+                <div class="contain">
+                    <div class="insideflex">
+                        <h3>Game unit start</h3>
+                    </div>
+                    <paper-input name="activityName" value={{activityName}} label="Game unit name"></paper-input>
+                    <label class="subtitle">Optionnal media displayed when game unit starts :</label>
+                    <paper-button on-click="setMedia" raised>Set start media</paper-button>
                 </div>
-                <paper-input name="activityName" value={{activityName}} label="Game unit name"></paper-input>
-                <paper-button on-click="setMedia" raised>Set media :</paper-button>
-                <generic-resource-viewer input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer conception-mode input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
-            <div class="contain shadow-2dp">
-                <div class="insideflex">
-                    <h3>Place and guiding</h3>
+            <div class="topLevel">
+                <div class="contain">
+                    <div class="insideflex">
+                        <h3>Place and guiding</h3>
+                    </div>
+                    <label class="subtitle">Area where the activity takes place :</label>
+                    <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
+                    <label class="subtitle" id="label1">User guidance:</label>
+                    <paper-radio-group allow-empty-selection>
+                        <paper-radio-button disabled="[[!poiActive]]" name="map">POI map</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="ping">Ping</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="compass">Compass</paper-radio-button>
+                    </paper-radio-group>
+                    <label class="subtitle" id="label2">POI reached validation:</label>
+                    <paper-radio-group allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
+                        <paper-radio-button disabled="[[!poiActive]]" name="folia">Folia image analysis</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="QR">QR code scan</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="gps">Device GPS</paper-radio-button>
+                    </paper-radio-group>
+                    <paper-button class="heading" disabled="[[!poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
+                    <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
+                        <template is="dom-if" if="[[poiid]]" restamp>
+                            <div class="content">
+                                <img style="width:400px" src='/qrcode/[[poiid]]'>
+                            </div>
+                        </template>
+                    </iron-collapse>
                 </div>
-                <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
                 <generic-resource-viewer input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
-                <label class="subtitle" id="label1">User guidance:</label>
-                <paper-radio-group allow-empty-selection>
-                    <paper-radio-button disabled="[[poiActive]]" name="map">POI map</paper-radio-button>
-                    <paper-radio-button disabled="[[poiActive]]" name="ping">Ping</paper-radio-button>
-                    <paper-radio-button disabled="[[poiActive]]" name="compass">Compass</paper-radio-button>
-                    <paper-radio-button disabled="[[poiActive]]" checked="{{cluePOISelected}}" name="cluePoiMedia">Clue (Media element)</paper-radio-button>
-                    <paper-button disabled="{{!cluePOISelected}}" on-click="setCluePOIValue" raised>Pick Clue Media </paper-button>
-                </paper-radio-group>
-                <template is="dom-if" if="{{cluePOISelected}}">
-                    <generic-resource-viewer input-name="cluePOIId" image page video class="resourceViewer" id="cluePOIMedia"></generic-resource-viewer>
-                </template>
-                <label class="subtitle" id="label2">POI reached validation:</label>
-                <paper-radio-group allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
-                    <paper-radio-button disabled="[[poiActive]]" name="folia">Folia image analysis</paper-radio-button>
-                    <paper-radio-button active="{{qrActive}}" disabled="[[poiActive]]" name="QR">QR code scan</paper-radio-button>
-                    <paper-radio-button disabled="[[poiActive]]" name="gps">Device GPS</paper-radio-button>
-                </paper-radio-group>
-                <paper-button class="heading" disabled="[[poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
-                <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
-                    <template is="dom-if" if="[[poiid]]" restamp>
-                        <div class="content">
-                            <img style="width:400px" src='/qrcode/[[poiid]]'>
-                        </div>
+            </div>
+            <div class="topLevel">
+                <div class="contain">
+                    <div class="insideflex">
+                        <h3>POI Post action</h3>
+                    </div>
+                    <iron-collapse opened='{{active}}'>
+                        <label class="subtitle" id="labelpoi">POI failure (incorrect QR code scanned) :</label>
+                        <paper-input label="Incorrect QR code message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
+                    </iron-collapse>
+                    <label class="subtitle" id="label2">POI reached :</label>
+                    <paper-input label="POI reached message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
+                </div>
+            </div>
+            <div class="topLevel">
+                <div class="contain">
+                    <div class="insideflex">
+                        <h3>Inventory item reward</h3>
+                    </div>
+                    <label class="subtitle" id="label2">Item acquired by player during unit game :</label>
+                    <paper-button on-click="setPOIInventory" raised>Set optionnal inventory item</paper-button>
+                    <label class="subtitle" id="label2">Item acquired when :</label>
+                    <paper-radio-group allow-empty-selection aria-labelledby="label2">
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStart">Unit game start</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryPOI">POI reached</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventorySituated">Situated activities completed</paper-radio-button>
+                    </paper-radio-group>
+                </div>
+                <generic-resource-viewer input-name="inventoryItem" active={{rewardActive}} is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
+            </div>
+            <div style="flex-wrap: wrap;" class="topLevel">
+                <div class="contain">
+                    <div class="insideflex">
+                        <h3>Situated activities</h3>
+                    </div>
+                    <label class="subtitle" id="label2">Activities proposed to player when she has reached the POI :</label>
+
+                    <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
+                </div>
+                <div class="situatedQuestion">
+                    <generic-resource-viewer input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                    <template is="dom-if" if="{{pa1}}">
+                        <post-action score-success='act1success' score-fail='act1fail' id="pa1"></post-action>
                     </template>
-                </iron-collapse>
-            </div>
-            <div class="contain shadow-2dp">
-                <div class="insideflex">
-                    <h3>POI Post action</h3>
                 </div>
-                <iron-collapse opened='{{active}}'>
-                    <label class="subtitle" id="label2">POI failure (incorrect QR code scanned) :</label>
-                    <paper-input label="Incorrect QR code message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
-                </iron-collapse>
-                <label class="subtitle" id="label2">POI reached :</label>
-                <paper-input label="POI reached message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
-                <paper-button on-click="setPOIInventory" raised>Set POI Reached Item (inventory)</paper-button>
-                <generic-resource-viewer input-name="inventoryItem" is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
-            </div>
-            </div>
-            <div class="contain shadow-2dp">
-                <div class="insideflex">
-                    <h3>Situated activities</h3>
+                <div class="situatedQuestion">
+                    <generic-resource-viewer input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                    <template is="dom-if" if="{{pa2}}">
+                        <post-action score-success='act2success' score-fail='act2fail' id="pa2"></post-action>
+                    </template>
                 </div>
-                <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
-                <div style="display:inline-flex;flex-direction:column">
-                    <div style="width:100%;display:flex;">
-                        <generic-resource-viewer input-name="situatedAct1" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
-                        <template is="dom-if" if="{{pa1}}">
-                            <post-action score-success='act1success' score-fail='act1fail' id="pa1"></post-action>
-                        </template>
+                <div class="situatedQuestion">
+                    <generic-resource-viewer input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                    <template is="dom-if" if="{{pa3}}">
+                        <post-action score-success='act3success' score-fail='act3fail' id="pa3"></post-action>
+                    </template>
+                </div>
+            </div>
+            <div class="topLevel">
+                <div class="contain">
+                    <div class="insideflex">
+                        <h3>Pedagogical feedback</h3>
                     </div>
-                    <div style="width:100%;display:flex;">
-                        <generic-resource-viewer input-name="situatedAct2" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
-                        <template is="dom-if" if="{{pa2}}">
-                            <post-action score-success='act2success' score-fail='act2fail' id="pa2"></post-action>
-                        </template>
-                    </div>
-                    <div style="width:100%;display:flex;">
-                        <generic-resource-viewer input-name="situatedAct3" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
-                        <template is="dom-if" if="{{pa3}}">
-                            <post-action score-success='act3success' score-fail='act3fail' id="pa3"></post-action>
-                        </template>
-                    </div>
+                    <label class="subtitle">Optionnal feedback on unit game completion :</label>
+                    <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
                 </div>
-            </div>
-            <div class="contain shadow-2dp">
-                <div class="insideflex">
-                    <h3>Pedagogical feedback</h3>
-                </div>
-                <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
                 <generic-resource-viewer is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
+            <div class="topLevel">
+                <template is="dom-if" if="{{updating}}" restamp>
+                    <paper-button raised on-click="_submit">Update</paper-button>
+                    <paper-button raised on-click="resetFields">Cancel update</paper-button>
+                </template>
+                <template is="dom-if" if="{{!updating}}" restamp>
+                    <paper-button raised on-click="_submit">Save</paper-button>
+                    <paper-button raised on-click="resetFields">Reset</paper-button>
+                    <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                </template>
+            </div>
         </form>
-        <div class="unitActions">
-            <paper-button raised on-click="_submit">Save</paper-button>
-            <paper-button raised on-click="resetFields">Reset</paper-button>
-            <paper-button raised on-click="dummyFill">Dummy Fill</paper-button>
-        </div>
     </template>
     <script>
     (function() {
@@ -261,26 +286,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer({
             is: 'unit-activity-constructor',
             edit: function(unitGame) {
+                this.updating = true
+                this.itemId = unitGame._id
                 this.activityName = unitGame.activityName
                 this.poiIncorrectMessage = unitGame.poiIncorrectMessage
                 this.poiReachedMessage = unitGame.poiReachedMessage
-                if (unitGame.startMediaId) {
-                    this.startMediaId = unitGame.startMediaId
-                    this.$.startMediaGetter.getResource()
+                if (unitGame.startMedia) {
+                    this.$.startMediaViewer.setPage(unitGame.startMedia)
                 }
-                if (unitGame.POIId) {
-                    this.POIId = unitGame.POIId
-                    this.$.poiGetter.getResource()
+                if (unitGame.feedbackMedia) {
+                    this.$.feedbackMediaViewer.setPage(unitGame.feedbackMedia)
                 }
-                if(unitGame.poiReachedInventory){
-                    this.inventoryItemId=unitGame.poiReachedInventory
-                    this.$.inventoryGetter.getResource()
+
+                if (unitGame.POI) {
+                    this.$.poiViewer.setPOI(unitGame.POI)
                 }
-                if(unitGame.activies){
-                    for(var i=0;i<unitGame.activities.length;i++){
-                        
+                if (unitGame.inventoryItem) {
+                    this.$.poiInventoryResourceViewer.setInventory(unitGame.inventoryItem)
+                }
+                if (unitGame.freetextActivities) {
+                    switch (unitGame.freetextActivities.length) {
+                        case 0:
+                            break;
+                        case 1:
+                            this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
+                            this.situatedAct1 = 'freetextActivities'
+                            break;
+                        case 2:
+                            this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
+                            this.situatedAct1 = 'freetextActivities'
+                            this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
+                            this.situatedAct2 = 'freetextActivities'
+                            break;
+                        case 3:
+                            this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
+                            this.situatedAct1 = 'freetextActivities'
+                            this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
+                            this.situatedAct2 = 'freetextActivities'
+                            this.$.situatedActivityMedia2.setFreetext(unitGame.freetextActivities[2])
+                            this.situatedAct3 = 'freetextActivities'
+                            break;
                     }
                 }
+
+                if (unitGame.mcqActivities) {
+                    var freetextActivitiesNumber = 0
+                    if (unitGame.freetextActivities) {
+                        freetextActivitiesNumber = unitGame.freetextActivities.length
+                    }
+                    switch (unitGame.mcqActivities.length) {
+                        case 0:
+                            break;
+                        case 1:
+                            this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[freetextActivitiesNumber])
+                            this.situatedAct1 = 'mcqActivities'
+                            break;
+                        case 2:
+                            this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[freetextActivitiesNumber])
+                            this.situatedAct1 = 'mcqActivities'
+                            this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[freetextActivitiesNumber + 1])
+                            this.situatedAct2 = 'mcqActivities'
+                            break;
+                        case 3:
+                            this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[freetextActivitiesNumber])
+                            this.situatedAct1 = 'mcqActivities'
+                            this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[freetextActivitiesNumber + 1])
+                            this.situatedAct2 = 'mcqActivities'
+                            this.$.situatedActivityMedia2.setMcq(unitGame.mcqActivities[freetextActivitiesNumber + 2])
+                            this.situatedAct3 = 'mcqActivities'
+                            break;
+                    }
+                }
+
 
             },
 
@@ -293,6 +370,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
+                this.updating = false
 
             },
             setPickedResource: function(evt) {
@@ -334,7 +412,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.pa3 = false
             },
             resetFields: function() {
-                this.poiDeleted();
+                this.updating = false
+                this.$.startMediaViewer.removeResource()
+                this.$.feedbackMediaViewer.removeResource()
+                this.$.poiViewer.removeResource()
+                this.$.poiInventoryResourceViewer.removeResource()
+                this.$.situatedActivityMedia.removeResource()
+                this.$.situatedActivityMedia2.removeResource()
+                this.$.situatedActivityMedia3.removeResource()
                 this.sa1Deleted();
                 this.sa2Deleted();
                 this.sa3Deleted();
@@ -356,10 +441,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (!this.$.situatedActivityMedia.item) {
                         switch (newItem.type) {
                             case "mcq":
+                                this.situatedAct1 = "mcqActivities"
                                 this.$.situatedActivityMedia.setMcq(newItem)
                                 this.pa1 = true
                                 break;
                             case "freetext":
+                                this.situatedAct1 = "freetextActivities"
+
                                 this.$.situatedActivityMedia.setFreetext(newItem)
                                 this.pa1 = true
                                 break;
@@ -373,8 +461,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             case "mcq":
                                 this.$.situatedActivityMedia2.setMcq(newItem)
                                 this.pa2 = true
+                                this.situatedAct2 = "mcqActivities"
+
                                 break;
                             case "freetext":
+                                this.situatedAct2 = "freetextActivities"
+
                                 this.$.situatedActivityMedia2.setFreetext(newItem)
                                 this.pa2 = true
                                 break;
@@ -385,10 +477,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     if (!this.$.situatedActivityMedia3.item) {
                         switch (newItem.type) {
                             case "mcq":
+                                this.situatedAct3 = "mcqActivities"
+
                                 this.$.situatedActivityMedia3.setMcq(newItem)
                                 this.pa3 = true
                                 break;
                             case "freetext":
+                                this.situatedAct3 = "freetextActivities"
+
                                 this.$.situatedActivityMedia3.setFreetext(newItem)
                                 this.pa3 = true
                                 break;
@@ -447,8 +543,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var json = this.$.unitActivityForm.serialize()
                 this.set('resource', json)
                 this.$.creator.createResource()
+                this.resetFields()
             },
-            _reset: function(event) {},
             properties: {
                 mediaId: {
                     type: String,

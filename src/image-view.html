@@ -14,44 +14,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/file-upload/file-upload.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../src/element/media-viewer/media-viewer.html">
 <link rel="import" href="../src/element/helper/list-generic-resource.html">
 <link rel="import" href="./styles/common-styles.html">
 <dom-module id="image-view">
     <template>
         <style include="common-styles">
-         :host {
-            display: block;
-            padding: 10px;
-        }
 
-        h1 {
-            font-size: 22px;
-            margin: 16px 0;
-            color: #212121;
-        }
         </style>
         <div class="card">
-            <h1>My images ressources</h1>
-            <b>Images plays an important role in mobile learning games. Images are a simple way to communicate concepts to the user.
-            <br>In this section :
-            <ul>
-                <li>You can upload new images of different types (jpg, gif, png), to be used later during activities design</li>
-                <li>You can add metadata to an image such as title</li>
-                <li>You can also remove images</li>
-            </ul>
+            <div class="topLevelInfo">
+                <h1>My images ressources</h1>
+                <b>Images plays an important role in mobile learning games. Images are a simple way to communicate concepts to the user.</b>
+                <br>In this section :
+                <ul>
+                    <li>You can upload new images of different types (jpg, gif, png), to be used later during activities design</li>
+                    <li>You can add metadata to an image such as title</li>
+                    <li>You can also remove images</li>
+                </ul>
+            </div>
         </div>
         <div class="card">
-            <h2>Media uploader</h2>
-
-            <file-upload id="uploader" on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
-            </file-upload>
-
-            <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
-            <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
+            <div class="topLevelInfo">
+                <h2>Media uploader</h2>
+                <file-upload id="uploader" on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
+                </file-upload>
+                <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
+                <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
+            </div>
         </div>
         <div class="card">
-            <list-generic-resource  share-url='/file' id='mediaviewer' resource-type='image' url='/listUserImages'></list-generic-resource>
+            <list-generic-resource share-url='/file' id='mediaviewer' resource-type='image' url='/listUserImages'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -59,22 +51,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'image-view',
         ready: function() {
-            this.addEventListener('resource-operation',this.updateMedia.bind(this))
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
 
-        }
-        ,
-        updateImages:function(message){
+        },
+        updateImages: function(message) {
             this.$.mediaviewer.requestElements()
-            this.fire('resource-operation',{info:JSON.parse(message.detail.xhr.responseText)})
+            this.fire('resource-operation', { info: JSON.parse(message.detail.xhr.responseText) })
 
         },
         updateMedia: function(message) {
             console.log(message)
-        switch(message.detail.info.operation){
+            switch (message.detail.info.operation) {
 
-            case 'delete':
-            this.$.mediaviewer.requestElements()
-            break
+                case 'delete':
+                    this.$.mediaviewer.requestElements()
+                    break
 
             }
         },
