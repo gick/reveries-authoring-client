@@ -15,7 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/unit-activity/unit-activity-constructor.html">
-<link rel="import" href="./element/unit-activity/unit-activity-display.html">
 <dom-module id="constructor-view">
     <template>
         <style include="common-styles">
@@ -27,8 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <unit-activity-constructor id="unitGame"></unit-activity-constructor>
         <div style="padding:10px;" class="card">
-            <h2>Game unit list</h2>
-            <unit-activity-display id="unitDisplay"></unit-activity-display>
+            <list-generic-resource  share-url='/unitgame' id='unitgameList'  resource-type='unitgame' url='/unitgame'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -38,23 +36,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
             this.$.unitGame.addEventListener('resource-operation', this.updateMedia.bind(this))
-            this.$.unitDisplay.addEventListener('resource-operation', this.updateMedia.bind(this))
+            this.$.unitgameList.addEventListener('resource-operation', this.updateMedia.bind(this))
 
         },
         updateMedia: function(message) {
             switch (message.detail.info.operation) {
                 case 'create':
-                    this.$.unitDisplay.requestElements()
+                    this.$.unitgameList.requestElements()
                     break
                 case 'update':
-                    this.$.unitDisplay.requestElements()
+                    this.$.unitgameList.requestElements()
                     break
                 case 'edit':
                     this.$.unitGame.edit(message.detail.info.resource)
                     break
 
                 case 'delete':
-                    this.$.unitDisplay.requestElements()
+                    this.$.unitgameList.requestElements()
                     break
 
             }

@@ -164,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="insideflex">
                         <h3>Game unit start</h3>
                     </div>
-                    <paper-input name="activityName" value={{activityName}} label="Game unit name"></paper-input>
+                    <paper-input name="label" value={{label}} label="Game unit name"></paper-input>
                     <label class="subtitle">Optionnal media displayed when game unit starts :</label>
                     <paper-button on-click="setMedia" raised>Set start media</paper-button>
                 </div>
@@ -198,7 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </template>
                     </iron-collapse>
                 </div>
-                <generic-resource-viewer input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
+                <generic-resource-viewer conception-mode input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
             </div>
             <div class="topLevel">
                 <div class="contain">
@@ -222,12 +222,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-button on-click="setPOIInventory" raised>Set optionnal inventory item</paper-button>
                     <label class="subtitle" id="label2">Item acquired when :</label>
                     <paper-radio-group allow-empty-selection aria-labelledby="label2">
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStart">Unit game start</paper-radio-button>
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryPOI">POI reached</paper-radio-button>
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventorySituated">Situated activities completed</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="uginstructions">Unit game start</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">POI reached</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="questions">Situated activities completed</paper-radio-button>
                     </paper-radio-group>
                 </div>
-                <generic-resource-viewer input-name="inventoryItem" active={{rewardActive}} is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
+                <generic-resource-viewer conception-mode input-name="inventoryItem" active={{rewardActive}} is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
             </div>
             <div style="flex-wrap: wrap;" class="topLevel">
                 <div class="contain">
@@ -239,19 +239,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
                 </div>
                 <div class="situatedQuestion">
-                    <generic-resource-viewer input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                    <generic-resource-viewer conception-mode input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
                     <template is="dom-if" if="{{pa1}}">
                         <post-action score-success='act1success' score-fail='act1fail' id="pa1"></post-action>
                     </template>
                 </div>
                 <div class="situatedQuestion">
-                    <generic-resource-viewer input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                    <generic-resource-viewer conception-mode input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
                     <template is="dom-if" if="{{pa2}}">
                         <post-action score-success='act2success' score-fail='act2fail' id="pa2"></post-action>
                     </template>
                 </div>
                 <div class="situatedQuestion">
-                    <generic-resource-viewer input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                    <generic-resource-viewer conception-mode input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                     <template is="dom-if" if="{{pa3}}">
                         <post-action score-success='act3success' score-fail='act3fail' id="pa3"></post-action>
                     </template>
@@ -265,7 +265,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <label class="subtitle">Optionnal feedback on unit game completion :</label>
                     <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
                 </div>
-                <generic-resource-viewer is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer conception-mode is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
             <div class="topLevel">
                 <template is="dom-if" if="{{updating}}" restamp>
@@ -288,7 +288,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             edit: function(unitGame) {
                 this.updating = true
                 this.itemId = unitGame._id
-                this.activityName = unitGame.activityName
+                this.label = unitGame.label
                 this.poiIncorrectMessage = unitGame.poiIncorrectMessage
                 this.poiReachedMessage = unitGame.poiReachedMessage
                 if (unitGame.startMedia) {

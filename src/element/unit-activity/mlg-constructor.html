@@ -1,0 +1,160 @@
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel=import href='./unitGame.html'>
+<link rel="import" href="../remove-ressource/create-resource.html">
+<link rel=import href='../helper/resource-picker-nodialog.html'>
+<link rel=import href='../helper/resource-picker-dialog.html'>
+<link rel=import href='../helper/list-generic-resource-subset.html'>
+<dom-module id="mlg-constructor">
+    <template>
+        <style>
+
+        </style>
+        <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
+        <resource-picker-dialog badge id="badgePicker"></resource-picker-dialog>
+
+        <create-resource id="creator" resource-url="/mlg" resource="{{resource}}"></create-resource>
+        <form style="display:flex" id="mlgform" is="iron-form" method="post" action="/mlg">
+            <div class="card gameUnit">
+                <div class="card-content">
+                    <div class="cafe-header">
+                        <h3 label="Unit game short description">Mobile Game description</h3>
+                    </div>
+                    <div style="display:inline-flex;flex-direction: column;">
+                        <paper-textarea style="width:300px" name="label" value="{{mlgName}}" label="Label"></paper-textarea>
+                        <paper-input name="gameDifficulty" label="Difficulty" value="3"></paper-input>
+                        <paper-input name="gameDuration" label="Duration" value="5"></paper-input>
+                        <paper-input hidden name="gameProximity" label="Proximity" value="5"></paper-input>
+                        <paper-radio-button name='multi' active='{{multi}}'>Multiplayer</paper-radio-button>
+                        <template is='dom-if' if='{{multi}}' restamp>
+                            <paper-input type='number' value='2' name='playerNbr' label="Player number"></paper-input>
+                        </template>
+                        <paper-button raised on-click="showMediaDialog">Set start page</paper-button>
+                        <paper-button raised on-click="showBadgeDialog">Set reward badge</paper-button>
+                        <generic-resource-viewer no-header input-name="badge" badge class="resourceViewer" id="badgeViewer"></generic-resource-viewer>
+                        <generic-resource-viewer input-name="startpage" image page video class="resourceViewer" id="startPage"></generic-resource-viewer>
+                    </div>
+                </div>
+                <div style="float:left" class="card-actions">
+                    <paper-button on-click="submit" class="cafe-reserve">Save</paper-button>
+                    <paper-button class="cafe-reserve">Cancel</paper-button>
+                </div>
+            </div>
+            <div style="padding:10px;" class="card">
+                <list-generic-resource-subset id='unitgameTopost' resource-type='unitgame'></list-generic-resource-subset>
+            </div>
+        </form>
+        <div style="padding:10px;" class="card">
+            <resource-picker-nodialog picker id='unitgameList' resource-type='unitgame' url='/unitgame'></resource-picker-nodialog>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'mlg-constructor',
+            ready: function() {
+                this.$.unitgameList.addEventListener('itemPicked', this.addItem.bind(this))
+                this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
+                this.$.badgePicker.addEventListener('resourcePicked',this.setResource.bind(this))
+            },
+
+
+            setResource: function(message) {
+                switch (message.detail.resourceType) {
+                    case "page":
+                        this.$.startPage.setPage(message.detail.resourceItem)
+                        break
+                    case "badge":
+                        this.$.badgeViewer.setBadge(message.detail.resourceItem)
+                }
+            },
+
+            addItem: function(event) {
+                if (event && event.detail && event.detail.item)
+                    this.$.unitgameTopost.addItem(event.detail.item)
+            },
+            setPage: function(item) {
+                this.$.explanationUnit.setPage(item)
+
+            },
+            setBadge: function(item) {
+                this.$.explanationUnit.setBadge(item)
+
+            },
+            resetFields: function() {
+
+            },
+            showMediaDialog: function() {
+                this.$.pagePicker.open()
+            },
+
+            showBadgeDialog: function() {
+                this.$.badgePicker.open()
+            },
+
+            getUnitActivityAsJSON: function() {
+                if (this.items) {
+                    var exp = JSON.stringify(this.items);
+                    return exp;
+                }
+                return {}
+            },
+            cons: function() {
+                console.log(test)
+            },
+
+            submit: function() {
+                var json = this.$.mlgform.serialize()
+                this.set('resource', json)
+                this.$.creator.createResource()
+                this.resetFields()
+            },
+
+            properties: {
+                gameSaved: {
+                    type: Array,
+                    notify: true,
+
+                },
+                feedbackText: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                },
+                newGame: {
+                    type: Array,
+                    notify: true
+                },
+                activityName: {
+                    type: String,
+                    notify: true,
+                    value: null,
+
+                },
+                mlbPosition: {
+                    type: Number,
+                    notify: true,
+                },
+                gameUnit: {
+                    type: Object,
+                    notify: true,
+                },
+                currentPos: {
+                    type: Number,
+                    notify: true,
+                    value: 0
+                }
+
+            },
+        });
+    })();
+    </script>
+</dom-module>

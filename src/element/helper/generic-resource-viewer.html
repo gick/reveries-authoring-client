@@ -14,6 +14,7 @@
 <link rel="import" href="../inventory/inventory-element.html">
 <link rel="import" href="../badges/badge-element.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
+<link rel="import" href="../unit-activity/unitGame.html">
 <dom-module id="generic-resource-viewer">
     <template>
         <style include="common-styles">
@@ -92,7 +93,7 @@
         <div class$="{{pickedValue}}">
             <template is="dom-if" if="{{item}}">
                 <template is="dom-if" if="{{poi}}" restamp>
-                    <one-poi-display item="{{item}}"></one-poi-display>
+                    <one-poi-display conception-mode=[[conceptionMode]] resource-label="{{item.label}}" item="{{item}}"></one-poi-display>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{page}}" restamp>
@@ -102,6 +103,11 @@
                 <template is="dom-if" if="{{badge}}" restamp>
                     <badge-element class="" id="" media="{{item.media}}" conception-mode=[[conceptionMode]] badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
                     </badge-element>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </template>
+                <template is="dom-if" if="{{unitgame}}" restamp>
+                    <unit-game start-media={{item.startMedia}} resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
+                    </unit-game>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{image}}" restamp>
@@ -117,13 +123,18 @@
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
-                    <inventory-element class="" id="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media="{{item.media}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" label="{{item.label}}">
+                    <inventory-element class="" id="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media="{{item.media}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" resource-label="{{item.label}}">
                     </inventory-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mcq}}" restamp>
                     <mcq-activity preview class="" conception-mode=[[conceptionMode]] question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media={{item.media}}>
                     </mcq-activity>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </template>
+                <template is="dom-if" if="{{mlg}}" restamp>
+                    <mlg-viewer class="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" item-id="{{item._id}}">
+                    </mlg-viewer>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{freetext}}" restamp>
@@ -144,7 +155,7 @@
             is: 'generic-resource-viewer',
             ready: function() {
                 this.pickedValue = 'mainDiv'
-                this.active=false
+                this.active = false
             },
             isEmpty: function() {
                 this.image = false;
@@ -156,9 +167,14 @@
                 this.poiId = null
                 this.badge = false
                 this.inventory = false
+                this.unitgame = false
+                this.mlg = false
+
 
             },
             isImage: function() {
+                this.unitgame = false
+                this.mlg = false
                 this.image = true;
                 this.video = false;
                 this.poi = false;
@@ -170,6 +186,8 @@
 
             },
             isBadge: function() {
+                this.unitgame = false
+                this.mlg = false
                 this.image = false;
                 this.video = false;
                 this.poi = false;
@@ -183,6 +201,8 @@
             isInventory: function() {
                 this.image = false;
                 this.video = false;
+                this.mlg = false
+                this.unitgame = false
                 this.poi = false;
                 this.freetext = false;
                 this.mcq = false;
@@ -198,6 +218,8 @@
                 this.video = false;
                 this.poi = false;
                 this.freetext = false;
+                this.unitgame = false
+                this.mlg = false
                 this.mcq = false;
                 this.page = true;
                 this.badge = false
@@ -209,6 +231,8 @@
                 this.video = false;
                 this.poi = true;
                 this.freetext = false;
+                this.unitgame = false
+                this.mlg = false
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
@@ -220,6 +244,8 @@
                 this.video = true;
                 this.poi = false;
                 this.freetext = false;
+                this.unitgame = false
+                this.mlg = false
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
@@ -232,6 +258,9 @@
                 this.poi = false;
                 this.freetext = false;
                 this.mcq = true;
+                this.unitgame = false
+                this.mlg = false
+
                 this.page = false;
                 this.inventory = false
                 this.badge = false
@@ -242,12 +271,51 @@
                 this.video = false;
                 this.poi = false;
                 this.freetext = true;
+                this.unitgame = false
+                this.mlg = false
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
                 this.inventory = false
 
             },
+            isUnitgame: function() {
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.unitgame = true
+                this.mlg = false
+                this.mcq = false;
+                this.page = false;
+                this.badge = false
+                this.inventory = false
+
+            },
+
+
+            isMlg:function(){
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.unitgame = false
+                this.mlg = true
+                this.mcq = false;
+                this.page = false;
+                this.badge = false
+                this.inventory = false
+
+            },
+
+            setUnigame: function(newItem) {
+                this.isUnitgame();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+
+
             setBadge: function(newItem) {
                 this.isBadge();
                 var oldItem;
@@ -290,6 +358,14 @@
 
             },
 
+            setMlg: function(newItem) {
+                this.isMlg();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+                this.set('active', true)
+
+            },
 
             setImage: function(newItem) {
                 this.isImage();
@@ -344,6 +420,12 @@
                 }
                 if (resourceType == 'mcq') {
                     this.setMcq(this.item)
+                }
+                if (resourceType == 'unitgame') {
+                    this.setUnigame(this.item)
+                }
+                if (resourceType == 'mlg') {
+                    this.setMlg(this.item)
                 }
 
 
@@ -404,9 +486,9 @@
                     type: String,
                     notify: true,
                 },
-                conceptionMode:{
-                    type:Boolean,
-                    notify:true,
+                conceptionMode: {
+                    type: Boolean,
+                    notify: true,
                 }
             }
         });

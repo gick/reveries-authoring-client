@@ -1,0 +1,86 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="./generic-resource-viewer.html">
+<link rel="import" href="./resource-header-picker.html">
+<dom-module id="list-generic-resource-subset">
+    <template>
+        <style>
+         :host {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .selected {
+            border: solid black 1px;
+        }
+
+
+
+        .resourceList {
+            margin: 10px;
+        }
+        </style>
+        <div style="display:flex;flex-wrap:wrap;" id="genericListener">
+            <template is="dom-repeat" id='list' items="{{items}}" as="item">
+                <paper-card class="resourceList">
+                    <resource-header-picker resource-index="[[index]]" is-resourcelist resource="{{item}}" resource-label="{{item.label}}"></resource-header-picker>
+                    <div class=card-content>
+                        <generic-resource-viewer input-name="unitGames" resource-type="{{resourceType}}" item={{item}}>
+                        </generic-resource-viewer>
+                    </div>
+                </paper-card>
+            </template>
+        </div>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+
+        Polymer({
+            is: 'list-generic-resource-subset',
+            ready: function() {
+                this.items=[]
+                this.addEventListener('itemRemoved',this.removeItem.bind(this))
+                //  this.$.selector.addEventListener('selected-changed',this.setStyleValue.bind(this))
+                //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
+            },
+            addItem: function(item) {
+                this.push('items',item)
+
+            },
+            removeItem:function(event){
+                this.splice('items',event.detail.index,1)
+            },
+            observers: [
+                'statusChanged(status)',
+            ],
+            _resourceTypeChanged: function(rc) {},
+            properties: {
+                url: {
+                    type: String,
+                    notify: true
+                },
+                picker: {
+                    type: Boolean,
+                    value: false,
+                },
+                minimizeResource:{
+                    type:Boolean,
+                    notify:true,
+                },  
+                resourceId: {
+                    type: String,
+                    reflectToAttribute: true,
+                    value: 'test',
+                },
+                resourceType: {
+                    type: String,
+                    notify: true,
+                    observer: '_resourceTypeChanged'
+                },
+            }
+        });
+    })();
+    </script>
+</dom-module>

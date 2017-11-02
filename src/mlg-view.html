@@ -14,36 +14,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="../src/element/unit-activity/list-posted-games.html">
-<link rel="import" href="../src/element/unit-activity/list-unit-game.html">
-<link rel="import" href="../src/element/unit-activity/unit-mlg-display.html">
-<link rel="import" href="./element/helper/resource-picker-dialog.html">
+<link rel="import" href="../src/element/unit-activity/mlg-constructor.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
+
 <dom-module id="mlg-view">
     <template>
         <style include="common-styles">
 
         </style>
-        <resource-picker-dialog page media-id="{{currentid}}" media-name="{{currentname}}" id="selectMedia"></resource-picker-dialog>
-        <resource-picker-dialog badge media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="badgePicker"></resource-picker-dialog>
         <form is="iron-form" id="mlgform" method="post" action="/mlg">
             <input hidden type="text" name="mlg" value="{{mlgList}}">
         </form>
-        <akc-meta type="gameListUnit" value="{{cards}}"></akc-meta>
         <div class="card">
-            <h1>Mobile Learning Games are the last conception step</h1>
-            <br> Here you can :
-            <ul>
-                <li>Combine unit game into MLG </li>
-            </ul>
+            <div class="topLevelInfo">
+                <h1>Mobile Learning Games are the last conception step</h1>
+                <br> Here you can :
+                <ul>
+                    <li>Combine unit game into MLG </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card constructorCard" >
+            <mlg-constructor new-game="{{games}}" id="mlgCreator"></mlg-constructor>
         </div>
         <div class="card">
-            <list-posted-games new-game="{{games}}" id="mlgCreator"></list-posted-games>
-        </div>
-        <div class="card">
-            <list-unit-game id="unitGameList" game-saved="{{currentList}}"></list-unit-game>
-        </div>
-        <div class="card">
-            <unit-mlg-display id="mlgList" game-saved="{{currentList}}"></unit-mlg-display>
+            <list-generic-resource id='mlgList' share-url="/mlg" resource-type='mlg' url='/mlg'></list-generic-resource>
         </div>
     </template>
     <script>
@@ -51,62 +46,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         is: 'mlg-view',
         ready: function() {
-            this.addEventListener('newgame', this.analyse.bind(this))
-            this.$.mlgCreator.addEventListener('saveMLG', this.saveMLG.bind(this))
-            this.$.mlgCreator.addEventListener('selectMedia', this.selectMedia.bind(this))
-            this.$.mlgCreator.addEventListener('selectBadge', this.selectBadge.bind(this))
-
-            this.$.selectMedia.addEventListener('itemPicked', this.mediaPicked.bind(this));
-            this.$.selectMedia.addEventListener('mediaDeleted', this.mediaDeleted.bind(this));
-            this.$.badgePicker.addEventListener('itemPicked', this.badgePicked.bind(this))
-            this.$.badgePicker.addEventListener('mediaDeleted', this.badgeDeleted.bind(this))
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
 
             //    this.push('games',this.returnItem   )
         },
-        selectMedia: function() {
-            this.mediaDeleted();
-            //this.$.mediaviewer.genReq();
-            this.$.selectMedia.open();
-        },
-        mediaDeleted: function() {},
-        badgeDeleted: function() {},
+        updateMedia: function(message) {
+            switch (message.detail.info.operation) {
+                case 'create':
+                    this.$.mlgList.requestElements()
+                    break
+                case 'update':
+                    this.$.mlgList.requestElements()
+                    break
 
-        selectBadge:function(){
-            this.$.badgePicker.open()
-        },
-        badgePicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                this.$.mlgCreator.setBadge(newItem)
-            }
+                case 'delete':
+                    this.$.mlgList.requestElements()
+                    break
 
-        },
-
-        mediaPicked: function(item) {
-            if (item && item.detail && item.detail.__data__) {
-                var newItem = item.detail.__data__.item;
-                switch (newItem.type) {
-                    case "page":
-                        this.$.mlgCreator.setPage(newItem)
-                        break;
-
-                }
+                case 'edit':
+                    this.$.mlgCreator.edit(message.detail.info.resource)
+                    break
             }
         },
-
-        saveMLG: function() {
-            this.$.mlgList.mlgChanged()
-        },
-        unitGameChanged: function() {
-            console.log('save MLG')
-            this.$.unitGameList.unitGameChanged();
-        },
-        analyse: function(item) {
-            console.log(item)
-            if (item.detail) {
-                this.$.mlgCreator.addItem(item.detail)
-            }
-        }
     })
     </script>
 </dom-module>

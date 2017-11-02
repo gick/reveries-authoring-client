@@ -89,7 +89,7 @@
                     </template>
                     <template is="dom-if" if="{{badge}}">
                         <div>
-                            <badge-viewer-activity class="flexible" media-name={{currentname}} url='/badge' media-id="{{mediaId}}" id="badgeViewer"></badge-viewer-activity>
+                            <list-generic-resource picker share-url='/badge' id='badge' resource-type='badge' url='/badge'></list-generic-resource>
                             <div class="buttons">
                                 <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
                             </div>

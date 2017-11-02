@@ -1,0 +1,59 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/marked-element/marked-element.html">
+<link rel="import" href="../../styles/common-styles.html">
+
+<link rel="import" href="../helper/sharedBehavior.html">
+<dom-module id="mlg-viewer">
+    <template>
+        <style include="common-styles">
+        .image {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+
+        .markdown-html img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+        }
+
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        </style>
+            <div class="resourceHeader">
+                <h3 class="headerText">{{resourceLabel}}</h3>
+            </div>
+    </template>
+</dom-module>
+<script>
+(function() {
+    'use strict';
+    Polymer({
+        is: 'mlg-viewer',
+        behaviors: [sharedBehavior],
+
+        ready: function() {
+        },
+        properties: {
+            media: {
+                type: Object,
+                notify: true,
+            },
+            resourceLabel: {
+                type: String,
+                notify: true,
+            },
+            itemId: {
+                type: String,
+                notify: true,
+            },
+        }
+    })
+})();
+</script>

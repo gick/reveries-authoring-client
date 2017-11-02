@@ -26,224 +26,128 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../../../bower_components/paper-styles/shadow.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
-<link rel="import" href="../helper/resource-picker-dialog.html">
-<link rel="import" href="../helper/generic-resource-viewer.html">
-<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../basic-element/post-action.html">
-<link rel="import" href="../helper/word-list.html">
-<dom-module id="unitgame-resource">
-    <style>
-    .insideflex {
-        display: inline-flex;
-        flex-direction: row;
-        align-self: stretch;
-        justify-content: space-between;
-        margin-top: 16px;
-        margin-bottom: 10px;
-    }
-    
-    .mediaimg {
-        align-self: center;
-        display: flex;
-        max-width: 250px;
-        max-height: 250px;
-        border-radius: 3px;
-        -moz-box-shadow: 6px 5px 2px #CECEB9;
-        -webkit-box-shadow: 6px 5px 2px #CECEB9;
-        -o-box-shadow: 6px 5px 2px #CECEB9;
-        box-shadow: 6px 5px 2px #CECEB9;
-    }
-    
-    .question {
-        display: inline-flex;
-        font-family: 'Roboto', 'Noto', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        font-size: 20px;
-        font-weight: 500;
-        line-height: 24px;
-        max-width: 300px;
-        color: black;
-    }
-    
-    .markdown-html img {
-        max-width: 200px;
-        max-height: 200px;
-    }
-    
-    .markdown-html video {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .element {
-        align-self: stretch;
-    }
-    
-    .remove {
-        background-color: #eeeeee;
-    }
-    
-    .correct {
-        color: green;
-    }
-    
-    .wrong {
-        color: red;
-    }
-    
-    .inner {
-        display: inline-flex;
-        flex-flow: column;
-        align-items: baseline;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
+<link rel="import" href="../static-media/staticmedia-viewer.html">
+<link rel="import" href="../../styles/common-styles.html">
+<dom-module id="unit-game">
+    <style include="common-styles">
+
     </style>
     <template>
-        <div style="display:inline-flex">
-            <remove-ressource id="remover" callbackfunction={{freeTextQuestionRemoved}} ressource-id={{itemId}} ressource-url='/unitGame'></remove-ressource>
-            <form class="inner">
-                <resource-header id="header" editable style="width:100%" resource-url="/unitGame" resource-id="{{itemId}}" resource-status="{{resourceStatus}}" resource-readonly="{{resourceReadonly}}" resource-label="{{activityName}}"></resource-header>
+        <div class="resource">
+            <div>
+                Activities : {{activities.length}}
+            </div>
+            <template is="dom-if" if="{{startMedia}}">
+                <staticmedia-viewer resource-label="[[startMedia.label]]" conception-mode style="min-width:150px" class="topLevelView" mkdown="[[startMedia.mkdown]]"></staticmedia-viewer>
+            </template>
+            <template is="dom-if" if="{{poiGuidMap}}">
                 <div>
-                    Activities : {{activities.length}}
+                    POI guidance : Map
                 </div>
-                <template is="dom-if" if="{{poiGuidClue}}">
-                    <div>
-                        POI guidance : Clue
-                    </div>
-                </template>
-                <template is="dom-if" if="{{poiGuidMap}}">
-                    <div>
-                        POI guidance : Map
-                    </div>
-                </template>
-                <template is="dom-if" if="{{poiGPSValidation}}">
-                    <div>
-                        POI reached validation : GPS
-                    </div>
-                </template>
-                <template is="dom-if" if="{{poiQRValidation}}">
-                    <div>
-                        POI reached validation : QR-Code
-                    </div>
-                </template>
-                <template is="dom-if" if="{{poiGuidFolia}}">
-                    <div>
-                        POI reached validation : Folia
-                    </div>
-                </template>
-                <template is="dom-if" if="{{conceptionMode}}">
-                    <div style="" class="insideflex">
-                        <template is="dom-if" if="{{mediaId}}" restamp=true>
-                            <paper-button raised on-click="showClue">Show clue</paper-button>
-                        </template>
-                        <paper-button raised class="remove" on-click="removeElement">Remove</paper-button>
-                    </div>
-                </template>
-            </form>
+            </template>
+            <template is="dom-if" if="{{poiGPSValidation}}">
+                <div>
+                    POI reached validation : GPS
+                </div>
+            </template>
+            <template is="dom-if" if="{{poiQRValidation}}">
+                <div>
+                    POI reached validation : QR-Code
+                </div>
+            </template>
+            <template is="dom-if" if="{{poiGuidFolia}}">
+                <div>
+                    POI reached validation : Folia
+                </div>
+            </template>
         </div>
     </template>
     <script>
     (function() {
-            'use strict';
-            Polymer({
-                    is: 'unitgame-resource',
-                    ready: function() {
+        'use strict';
+        Polymer({
+            is: 'unit-game',
+            ready: function() {
 
-                    },
+            },
 
-                properties: {
-                    activityName: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    startMediaId: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    activities: {
-                        type: Array,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    POIId: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiGuidFolia: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    feedbackMediaId: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiScorePA: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiPAId: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    cluePOIId: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiGuidFolia: {
-                        type: Boolean,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiGuidMap: {
-                        type: Boolean,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiGuidClue: {
-                        type: Boolean,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiGPSValidation: {
-                        type: Boolean,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiQRValidation: {
-                        type: Boolean,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiIncorrectMessage: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    poiReachedMessage: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    mediaName: {
-                        type: String,
-                        notify: true,
-                        value: null,
-                    },
+            properties: {
+                itemId: {
+                    type: String,
+                    notify: true,
+                },
+                activityName: {
+                    type: String,
+                    notify: true,
+                },
+                startMedia: {
+                    type: Object,
+                    notify: true,
+                },
+                activities: {
+                    type: Array,
+                    notify: true,
+                },
+                POIId: {
+                    type: String,
+                    notify: true,
+                },
+                poiGuidFolia: {
+                    type: String,
+                    notify: true,
+                },
+                feedbackMediaId: {
+                    type: String,
+                    notify: true,
+                },
+                poiScorePA: {
+                    type: String,
+                    notify: true,
+                },
+                poiPAId: {
+                    type: String,
+                    notify: true,
+                },
+                cluePOIId: {
+                    type: String,
+                    notify: true,
+                },
+                poiGuidFolia: {
+                    type: Boolean,
+                    notify: true,
+                },
+                poiGuidMap: {
+                    type: Boolean,
+                    notify: true,
+                },
+                poiGuidClue: {
+                    type: Boolean,
+                    notify: true,
+                },
+                poiGPSValidation: {
+                    type: Boolean,
+                    notify: true,
+                },
+                poiQRValidation: {
+                    type: Boolean,
+                    notify: true,
+                },
+                poiIncorrectMessage: {
+                    type: String,
+                    notify: true,
+                },
+                poiReachedMessage: {
+                    type: String,
+                    notify: true,
+                },
+                mediaName: {
+                    type: String,
+                    notify: true,
+                    value: null,
+                },
 
-                }
-            });
+            }
+        });
     })();
     </script>
 </dom-module>

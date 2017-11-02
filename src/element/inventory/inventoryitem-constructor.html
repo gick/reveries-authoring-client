@@ -80,6 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             setResource: function(message) {
                 switch (message.detail.resourceType) {
                     case "page":
+                        message.detail.resourceItem.mkdown=  message.detail.resourceItem.mkdown
                         this.$.inventoryMediaViewer.setPage(message.detail.resourceItem)
                 }
             },
