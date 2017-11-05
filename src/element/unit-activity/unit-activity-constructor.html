@@ -240,21 +240,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <div class="situatedQuestion">
                     <generic-resource-viewer conception-mode input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
-                    <template is="dom-if" if="{{pa1}}">
-                        <post-action score-success='act1success' score-fail='act1fail' id="pa1"></post-action>
-                    </template>
                 </div>
                 <div class="situatedQuestion">
                     <generic-resource-viewer conception-mode input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
-                    <template is="dom-if" if="{{pa2}}">
-                        <post-action score-success='act2success' score-fail='act2fail' id="pa2"></post-action>
-                    </template>
                 </div>
                 <div class="situatedQuestion">
                     <generic-resource-viewer conception-mode input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
-                    <template is="dom-if" if="{{pa3}}">
-                        <post-action score-success='act3success' score-fail='act3fail' id="pa3"></post-action>
-                    </template>
                 </div>
             </div>
             <div class="topLevel">
@@ -364,9 +355,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready: function() {
                 this.addEventListener('resourcePicked', this.setPickedResource.bind(this))
                 // this.$.startingMediaPicker.addEventListener('resourcePicked', this.setResource.bind(this))
-                this.$.situatedActivityMedia.addEventListener('mediaDeleted', this.sa1Deleted.bind(this))
-                this.$.situatedActivityMedia2.addEventListener('mediaDeleted', this.sa2Deleted.bind(this))
-                this.$.situatedActivityMedia3.addEventListener('mediaDeleted', this.sa3Deleted.bind(this))
                 this.actPA = [];
                 this.currentActivities = [];
                 this.activityCount = null;
@@ -402,15 +390,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.collapse1.toggle();
             },
 
-            sa1Deleted: function() {
-                this.pa1 = false
-            },
-            sa2Deleted: function() {
-                this.pa2 = false
-            },
-            sa3Deleted: function() {
-                this.pa3 = false
-            },
             resetFields: function() {
                 this.updating = false
                 this.$.startMediaViewer.removeResource()
@@ -420,9 +399,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.situatedActivityMedia.removeResource()
                 this.$.situatedActivityMedia2.removeResource()
                 this.$.situatedActivityMedia3.removeResource()
-                this.sa1Deleted();
-                this.sa2Deleted();
-                this.sa3Deleted();
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
@@ -443,13 +419,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             case "mcq":
                                 this.situatedAct1 = "mcqActivities"
                                 this.$.situatedActivityMedia.setMcq(newItem)
-                                this.pa1 = true
                                 break;
                             case "freetext":
                                 this.situatedAct1 = "freetextActivities"
-
                                 this.$.situatedActivityMedia.setFreetext(newItem)
-                                this.pa1 = true
                                 break;
 
                         }
@@ -460,17 +433,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.$.situatedActivityMedia2.setMcq(newItem)
-                                this.pa2 = true
                                 this.situatedAct2 = "mcqActivities"
-
                                 break;
                             case "freetext":
                                 this.situatedAct2 = "freetextActivities"
-
                                 this.$.situatedActivityMedia2.setFreetext(newItem)
-                                this.pa2 = true
                                 break;
-
                         }
                         return
                     }
@@ -478,17 +446,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         switch (newItem.type) {
                             case "mcq":
                                 this.situatedAct3 = "mcqActivities"
-
                                 this.$.situatedActivityMedia3.setMcq(newItem)
-                                this.pa3 = true
                                 break;
                             case "freetext":
                                 this.situatedAct3 = "freetextActivities"
-
                                 this.$.situatedActivityMedia3.setFreetext(newItem)
-                                this.pa3 = true
                                 break;
-
                         }
                         return
                     }
@@ -497,10 +460,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
 
-            _getPA: function(value) {
-                if (this.stepPA >= 0)
-                    return value.base[this.stepPA]
-            },
             setFeedbackMedia: function() {
                 this.$.feedbackMediaPicker.open();
             },

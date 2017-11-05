@@ -2,35 +2,19 @@ x
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../helper/resource-picker-dialog.html">
-<link rel="import" href="../helper/generic-resource-viewer.html">
 <dom-module id="post-action">
-<style>
-.flexible {
-    display: inline-flex;
-    flex-wrap: wrap;
-}
-</style>
-
+    <style>
+    .flexible {
+        display: inline-flex;
+        flex-wrap: wrap;
+    }
+    </style>
     <template>
         <div class="flexible">
             <div>
-                <resource-picker-dialog image page video id="successMediaPicker"></resource-picker-dialog>
-                <resource-picker-dialog image page video id="failMediaPicker"></resource-picker-dialog>
-                <h2> Success </h2>
-                <paper-input name="[[scoreSuccess]]" class="inputfield" value="{{successScore}}" label="Success score add"></paper-input>
-                <paper-input name="successMessage" class="element" value="{{successMessage}}" label="Success message"></paper-input>
-                <paper-button on-click="openSuccessPicker">Set success media</paper-button>
-                <generic-resource-viewer image page video class="resourceViewer" id="successMedia"></generic-resource-viewer>
+                <h2> Activity score </h2>
+                <paper-input name="scoreCorrect" class="inputfield" value="{{scoreCorrect}}" label="Correct response earned points"></paper-input>
             </div>
-            <div>
-                <h2> Failure </h2>
-                <paper-input name="[[scoreFail]]" class="element" value="{{failScore}}" label="Fail score remove"></paper-input>
-                <paper-input name="failMessage" class="element" value="{{failMessage}}" label="Fail message"></paper-input>
-                <paper-button on-click="openFailPicker">Set failure media</paper-button>
-                <generic-resource-viewer image page video class="resourceViewer" id="failMedia"></generic-resource-viewer>
-            </div>
-        </div>
     </template>
     <script>
     (function() {
@@ -38,64 +22,12 @@ x
         Polymer({
             is: 'post-action',
             ready: function() {
-                this.$.successMediaPicker.addEventListener('itemPicked', this.successMediaPicked.bind(this))
-                this.$.failMediaPicker.addEventListener('itemPicked', this.failMediaPicked.bind(this))
             },
-            openSuccessPicker: function() {
-                this.$.successMediaPicker.open()
-            },
-            openFailPicker: function() {
-                this.$.failMediaPicker.open()
-            },
-            successMediaPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "image":
-                            this.$.successMedia.setImage(newItem)
-                            break;
-                        case "page":
-                            this.$.successMedia.setPage(newItem)
-                            break;
-
-                    }
-                }
-            },
-            failMediaPicked: function(item) {
-                if (item && item.detail && item.detail.__data__) {
-                    var newItem = item.detail.__data__.item;
-                    switch (newItem.type) {
-                        case "image":
-                            this.$.failMedia.setImage(newItem)
-                            break;
-                        case "page":
-                            this.$.failMedia.setPage(newItem)
-                            break;
-
-                    }
-                }
-            },
-
             properties: {
-                authenticated: {
-                    type: Boolean,
-                    value: false,
-                    reflectToAttribute: true
-                },
-                scoreSuccess: {
+                scoreCorrect: {
                     type: String,
                     notify: true,
                 },
-                scoreFail: {
-                    type: String,
-                    notify: true,
-                },
-
-                authparam: {
-                    type: String,
-                    value: '',
-                    notify: true
-                }
             }
         })
     })();

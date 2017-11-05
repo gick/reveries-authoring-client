@@ -9,6 +9,7 @@
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
+<link rel="import" href="../basic-element/post-action.html">
 <link rel="import" href="../helper/sharedBehavior.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -58,7 +59,6 @@
                 <h3 class="headerText">{{resourceLabel}}</h3>
             </div>
         </template>
-        <iron-ajax id="ajaxLoader" url="/staticmedia/{{mediaId}}" handle-as="json" last-response="{{staticElement}}"></iron-ajax>
         <div class=outer>
             <div class="inner">
                 <div id="mcqbody" class="mcq-body">
@@ -91,6 +91,9 @@
                     </div>
                 </div>
             </div>
+            <template is="dom-if" if="[[unitActivity]]" restamp>
+                <post-action></post-action>
+            </template>
         </div>
     </template>
     <script>
