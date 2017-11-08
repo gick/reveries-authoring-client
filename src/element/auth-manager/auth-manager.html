@@ -1,14 +1,14 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <dom-module id="auth-manager">
     <template>
-        <akc-meta key="status" value=[[status]]></akc-meta>
-        <akc-meta key="test" value=[[test]]></akc-meta>
         <iron-ajax id="logout" url='/logout' handle-as="json" on-response="handleLogout"></iron-ajax>
+        <iron-ajax id="signup" url='/signup' body="{{signupParam}}" method="post" handle-as="json" on-response="validateSignup"></iron-ajax>
         <iron-ajax id="userInfo" url='/profile' handle-as="json" on-response="validateAuth"></iron-ajax>
-        <iron-ajax method='post' url='/login' id="userLogin" body='{{authparam}}' handle-as="json" on-response="validateAuthLogin"></iron-ajax>
+        <iron-ajax id="checkStatus" url='/profile' handle-as="json" on-response="refreshStatus"></iron-ajax>
+
+        <iron-ajax method='post' url='/login' id="userLogin" body='{{authparam}}' handle-as="json" on-response="validateAuth"></iron-ajax>
         <paper-dialog id="loginFailed">
             <h2>Authentification failed</h2>
             <div>
@@ -25,7 +25,14 @@
     'use strict';
     Polymer({
         is: 'auth-manager',
-        ready: function() {},
+        ready: function() {
+            this.status={}
+            this.signupParam=""
+        },
+        checkStatusOnRefresh: function() {
+            this.$.checkStatus.generateRequest();
+        },
+
         getUserInfo: function() {
             this.$.userInfo.generateRequest();
         },
@@ -34,7 +41,50 @@
 
         },
         handleLogout: function() {
-            this.$.userInfo.generateRequest();
+            this.$.checkStatus.generateRequest();
+        },
+        validateSignup:function(resp){
+            var response = resp.detail.__data__.response;
+            var status={}
+            if (!response.success) {
+                status.logged = false;
+                status.name = '';
+                status.email = '';
+                status.isadmin = false;
+                this.fire('auth-message',{info:'Username already exists'})
+
+
+            } else {
+                status.logged = true;
+                status.name = response.user.name;
+                status.isadmin = response.user.isadmin;
+                status.email = response.user.email;
+                this.fire('auth-message',{info:'Welcome new user!'})
+
+            }
+            this.status={}
+            this.status=status
+
+
+        },
+        refreshStatus:function(resp){
+            var status = {}
+            var response = resp.detail.__data__.response;
+            if (!response.success) {
+                status.logged = false;
+                status.name = '';
+                status.email = '';
+                status.isadmin = false;
+
+            } else {
+                status.logged = true;
+                status.name = response.user.name;
+                status.isadmin = response.user.isadmin;
+                status.email = response.user.email;
+            }
+            this.status={}
+            this.status=status
+
         },
         validateAuth: function(resp) {
             var status = {}
@@ -42,7 +92,10 @@
             if (!response.success) {
                 status.logged = false;
                 status.name = '';
-                status.status = '';
+                status.email = '';
+                status.isadmin = false;
+                this.fire('auth-message',{info:'Username/password mismatch!'})
+
 
             } else {
                 status.logged = true;
@@ -50,27 +103,14 @@
                 status.isadmin = response.user.isadmin;
                 status.email = response.user.email;
             }
-            this.status = status
-            this.fire('authChanged', status)
+            this.status={}
+            this.status=status
         },
-        validateAuthLogin: function(resp) {
-            var status = {}
-            var response = resp.detail.__data__.response;
-            if (!response.success) {
-                this.authProblem = "Username pass mismatch"
-                status.logged = false;
-                status.name = '';
-                status.status = '';
-                this.$.loginFailed.open();
-            } else {
-                status.logged = true;
-                status.name = response.user.name;
-                status.isadmin = response.user.isadmin;
-                status.email = response.user.email;
-            }
-            this.status = status
-            this.fire('authChanged', status)
-
+        signup: function(name,pass,mail) {
+            this.signupParam="name="+name
+            this.signupParam=this.signupParam+'&password='+pass
+            this.signupParam=this.signupParam+'&email='+mail
+            this.$.signup.generateRequest()
         },
 
         authenticate: function(username, pass) {
@@ -90,6 +130,12 @@
                 type: String,
                 value: '',
                 notify: true
+            },
+
+            status:{
+                type:Object,
+                notify:true,
+                reflectToAttribute:true,
             }
         }
     })

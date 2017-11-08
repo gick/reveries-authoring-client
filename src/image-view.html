@@ -23,20 +23,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="card">
             <div class="topLevelInfo">
-                <h1>My images ressources</h1>
-                <b>Images plays an important role in mobile learning games. Images are a simple way to communicate concepts to the user.</b>
-                <br>In this section :
+                <h1>Mes fichiers images</h1>
+                <b>Les images sont très utiles en apprentissage mobile, pour illustrer ou expliquer un phénomène plus rapidement que du texte.</b>
+                <b>Une image importée dans cette section deviens disponible lors de la création de composants de jeu.</b>
+
+                <br>Dans cette section :
                 <ul>
-                    <li>You can upload new images of different types (jpg, gif, png), to be used later during activities design</li>
-                    <li>You can add metadata to an image such as title</li>
-                    <li>You can also remove images</li>
+                    <li>Vous pouvez importer des images utilisables dans les phases suivante de la conception</li>
+                    <li>Vous pouvez partager ces images avec votre groupe de conception</li>
+                    <li>Vous pouvez supprimer des images précédemment importées</li>
                 </ul>
             </div>
         </div>
         <div class="card">
             <div class="topLevelInfo">
-                <h2>Media uploader</h2>
-                <file-upload id="uploader" on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
+                <h2>Image uploader</h2>
+                <file-upload id="uploader" on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Importer une image
                 </file-upload>
                 <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
                 <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>

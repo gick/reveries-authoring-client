@@ -28,8 +28,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
-<link rel="import" href="../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../src/element/helper/messageNotification.html">
+<link rel="import" href="../src/element/helper/authNotification.html">
+
 <dom-module id="my-app">
     <template>
         <style>
@@ -89,9 +90,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <app-location use-hash-as-path route="{{route}}"></app-location>
         <message-notification id="toaster"></message-notification>
-        <auth-manager id="manager" status="{{ustat}}"></auth-manager>
-        <akc-meta key="media" value=0></akc-meta>
-        <akc-meta-query key="status" value="{{status}}"></akc-meta-query>
+        <auth-notification id="authNotif"></auth-notification>
+        <auth-manager id="manager" status="{{status}}"></auth-manager>
         <app-route route="{{route}}" pattern="#/page" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-drawer-layout fullbleed>
             <!-- Drawer content -->
@@ -114,54 +114,54 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-item>
                     <paper-submenu>
                         <paper-item class="menu-trigger firstLevelMenu">
-                            <i18n-msg msgid="resources_button"> My Documents & medias </i18n-msg>
+                            <i18n-msg msgid="resources_button"> Mes documents & médias </i18n-msg>
                         </paper-item>
                         <paper-menu class="menu-content">
                             <paper-item>
-                                <a class='menuLink' name="image" href="#image">My images</a>
+                                <a class='menuLink' name="image" href="#image">Mes images</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="video" href="#video">My audio/videos</a>
+                                <a class='menuLink' name="video" href="#video">Mes vidéos</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="staticmedia" href="#staticmedia">My multimédias documents</a>
+                                <a class='menuLink' name="staticmedia" href="#staticmedia">Mes documents multimédias</a>
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
                     <paper-submenu>
                         <paper-item class="menu-trigger firstLevelMenu">
-                            My Games Components
+                            Mes composants de jeu
                         </paper-item>
                         <paper-menu class="menu-content">
                             <paper-item>
-                                <a class='menuLink' name="freetext" href="#freetext" My>My Free Text Questions</a>
+                                <a class='menuLink' name="freetext" href="#freetext">Mes questions libres</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="mcq" href="#mcq">My MCQ</a>
+                                <a class='menuLink' name="mcq" href="#mcq">Mes QCM</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="badge" href="#badge">My badges</a>
+                                <a class='menuLink' name="badge" href="#badge">Mes badges</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="inventory" href="#inventory">My inventory items</a>
+                                <a class='menuLink' name="inventory" href="#inventory">Mes objets d'inventaire</a>
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
                     <paper-item>
-                        <a class='menu-trigger firstLevelMenu' name="poi" href="#poi">My Maps and POI</a>
+                        <a class='menu-trigger firstLevelMenu' name="poi" href="#poi">Mes cartes et POI</a>
                     </paper-item>
                     </paper-menu>
                     </paper-submenu>
                     <paper-submenu>
                         <paper-item class="menu-trigger firstLevelMenu">
-                            My Games Scenarios
+                            Mes scénarios de jeu
                         </paper-item>
                         <paper-menu class="menu-content">
                             <paper-item>
-                                <a class='menuLink' name="constructor" href="#constructor">My Games units</a>
+                                <a class='menuLink' name="constructor" href="#constructor">Mes unités de jeu</a>
                             </paper-item>
                             <paper-item>
-                                <a class='menuLink' name="mlg" href="#mlg">My Mobile Learning Games</a>
+                                <a class='menuLink' name="mlg" href="#mlg">Mes jeux sérieux</a>
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
@@ -178,7 +178,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </app-header>
                 <iron-pages id="pages" role="main" selected="[[page]]" attr-for-selected="name">
                     <intro-view name="intro"></intro-view>
-                    <login-view name="login"></login-view>
+                    <login-view  status=[[status]] name="login"></login-view>
                     <video-view name="video"></video-view>
                     <poi-view name="poi"></poi-view>
                     <staticmedia-view id='staticmedia' name="staticmedia"></staticmedia-view>
@@ -207,24 +207,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$$('#constructorView').addEventListener('unitGameSaved', this.resourceSaved.bind(this))
             this.$$('#badge').addEventListener('badge_saved', this.resourceSaved.bind(this))*/
             this.$$('#pages').addEventListener('resource-operation', this.showMessage.bind(this))
+            this.$$('#pages').addEventListener('auth-event', this.authChanged.bind(this))
+            this.$.manager.addEventListener('auth-message',this.showAuthMessage.bind(this))
             //this.$.login.addEventListener('logout',function(){this.$.manager.logout()}.bind(this))
             //this.$.login.addEventListener('authenticate',function(){this.$.manager.authenticate('admin','admin')}.bind(this))
-            this.$.manager.addEventListener('authChanged', this.authChanged.bind(this))
+          //  this.$.manager.addEventListener('auth-event', this.authChanged.bind(this))
             this.$.constructorView.addEventListener('unitGameSaved', this.unitGameSaved.bind(this))
-            this.$.manager.getUserInfo();
-            this.logged = false;
+            this.$.manager.checkStatusOnRefresh();
         },
         unitGameSaved: function() {
-            console.log('saved')
             if (this.$.mlgView && this.$.mlgView.unitGameChanged) {
                 this.$.mlgView.unitGameChanged();
             }
+        },
+        showAuthMessage:function(message){
+            this.$.authNotif.showToast(message.detail)
         },
         showMessage: function(message) {
             this.$.toaster.showToast(message.detail)
         },
         authChanged: function(arg) {
-            console.log('change')
+            if(arg && arg.detail && arg.detail.type){
+                var operation=arg.detail
+                switch(operation.type){
+                    case 'login':
+                        this.$.manager.authenticate(operation.credential.name,operation.credential.pass)
+                        break
+                    case 'logout' :
+                        this.$.manager.logout()
+                        break
+                    case 'signup' :
+                        var cred=operation.credential
+                        this.$.manager.signup(cred.name,cred.pass,cred.mail)
+                }
+            }
             /* if (arg && arg.detail) {
                  if (arg.detail == '') {
                      this.logged = false;
@@ -253,7 +269,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         observers: [
-            '_routePageChanged(route.page)'
+            '_routePageChanged(route.page)',
         ],
 
         _routePageChanged: function() {
@@ -262,7 +278,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.page = this.route.path || 'intro';
             //console.log(page)
         },
-
+        _statusObserver:function(change){
+            console.log(change)
+        },
         _pageChanged: function(page) {
             // load page import on demand.
             console.log(page)
