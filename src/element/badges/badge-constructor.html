@@ -40,7 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
         <form class="creator" id="badgeForm" is="iron-form">
             <div class="formTitleWithButton">
-                <h3 class="smallh3">Edit badge</h3>
+                <h3 class="smallh3">Nouveau badge</h3>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                 <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                 <input type="hidden" value="{{statusString}}" name="status" />
@@ -48,19 +48,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
-            <paper-input name="label" value={{label}} label="Badge label"></paper-input>
-            <paper-input name="badgeText" value={{badgeText}} label="Badge text"></paper-input>
-            <paper-button raised on-click="showMediaDialog">Set badge image</paper-button>
+            <paper-input name="label" value={{label}} label="Identifiânt du badge"></paper-input>
+            <paper-input name="badgeText" value={{badgeText}} label="Texte associé au badge"></paper-input>
+            <paper-button raised on-click="showMediaDialog">Associer une image</paper-button>
             <generic-resource-viewer item={{media}} input-name="badgePageId" is-temp page class="resourceViewer" id="resourceViewer"></generic-resource-viewer>
             <div class="insideflex">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Cancel update</paper-button>
+                    <paper-button raised on-click="_reset">Annuler update</paper-button>
                 </template>
                 <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Save</paper-button>
-                    <paper-button raised on-click="_reset">Reset</paper-button>
-                    <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
+                    <paper-button raised on-click="_reset">Annuler</paper-button>
                 </template>
             </div>
         </form>

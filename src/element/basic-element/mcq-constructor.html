@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
         <form class="creator" id="mcqForm" is="iron-form" method="post" action="/mcq">
             <div class="formTitleWithButton">
-                <h3 class="smallh3">Edit MCQ question</h3>
+                <h3 class="smallh3">Nouveau QCM</h3>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                 <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                 <input type="hidden" value="{{statusString}}" name="status" />
@@ -46,22 +46,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
             <paper-input name="label" label="Label" value="{{label}}" required></paper-input>
             <paper-input name="question" value={{question}} label="Question" required></paper-input>
-            <paper-input name="distractor1" label="First distracor(wrong choice)" value={{distractor1}} required></paper-input>
-            <paper-input name="distractor2" label="Second distractor (wrong choice)" value={{distractor2}} required></paper-input>
-            <paper-input name="response" label="Valid choice" value={{correctChoice}} required></paper-input>
-            <paper-input name="correctMessage" label="Correct answer message" value={{correctMessage}} required></paper-input>
-            <paper-input name="wrongMessage" label="Wrong answer message" value={{wrongMessage}} required></paper-input>
-            <paper-button raised on-click="showMediaDialog">Set clue media (optionnal)</paper-button>
+            <paper-input name="distractor1" label="Premier distracteur" value={{distractor1}} required></paper-input>
+            <paper-input name="distractor2" label="Second distracteur" value={{distractor2}} required></paper-input>
+            <paper-input name="response" label="Réponse correcte" value={{correctChoice}} required></paper-input>
+            <paper-input name="correctMessage" label="Message associé à une réponse correcte" value={{correctMessage}} required></paper-input>
+            <paper-input name="wrongMessage" label="Message associé à une réponse incorrecte" value={{wrongMessage}} required></paper-input>
+            <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel)</paper-button>
             <generic-resource-viewer input-name="mediaId" is-temp page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="insideflex ">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Cancel update</paper-button>
+                    <paper-button raised on-click="_reset">Annuler update</paper-button>
                 </template>
                 <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button style="margin-top:15px" raised on-click="_submit">Save</paper-button>
-                    <paper-button raised on-click="_reset">Reset</paper-button>
-                    <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                    <paper-button style="margin-top:15px" raised on-click="_submit">Suvegarder</paper-button>
+                    <paper-button raised on-click="_reset">Annuler</paper-button>
                 </template>
             </div>
         </form>

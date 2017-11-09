@@ -24,20 +24,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="card">
             <div class="topLevelInfo">
-                <h1>My audio and videos ressources</h1>
-                <b>Audio and videos can be used ti give instructiohn as well as to give reward to learner completing a task</b>
-                <br> In this section :
+                <h1>Mes vidéos</h1>
+                Les vidéos peuvent être utiles pour donner des instructions concernant une tâche
+                <br> Ou fournir des explications situées à l'utilisateur
+                <br>Dans cette section :
                 <ul>
-                    <li> you can upload audio and video files</li>
+                    <li> Vous pouvez uploader des fichier vidéos</li>
                 </ul>
             </div>
         </div>
         <div class="card">
             <div class="topLevelInfo">
                 <h2>Video</h2>
-                <h2>Media uploader</h2>
-                <paper-checkbox style="display:inline-block;" raised checked={{setpublic}}>Make image public</paper-checkbox>
-                <file-upload id="uploader" public={{setpublic}} raised method="POST" target="/file">Upload media ressources
+                <file-upload id="uploader" public={{setpublic}} raised method="POST" target="/file">Importer une vidéo
                 </file-upload>
                 <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="{{this.clearList}}">Clear uploaded list</paper-icon-button>
                 <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>

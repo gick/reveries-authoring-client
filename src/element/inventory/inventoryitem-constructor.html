@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <resource-picker-dialog page id="pageDocPicker"></resource-picker-dialog>
         <form class="creator" id="inventoryForm" is="iron-form">
             <div class="formTitleWithButton">
-                <h3 class="smallh3">Edit inventory item</h3>
+                <h3 class="smallh3">Nouvel objet d'inventaire</h3>
                 <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                 <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                 <input type="hidden" value="{{statusString}}" name="status" />
@@ -47,21 +47,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
-            <paper-input name="label" value={{label}} label="Inventory item label"></paper-input>
-            <paper-input name="itemText" value={{itemText}} label="Inventory item text"></paper-input>
-            <paper-button raised  style="margin-top: 10px" on-click="showMediaDialog">Set inventory image</paper-button>
+            <paper-input name="label" value={{label}} label="Identifiant de l'onjet d'inventaire"></paper-input>
+            <paper-input name="itemText" value={{itemText}} label="Texte associé à l'objet d'inventaire"></paper-input>
+            <paper-button raised  style="margin-top: 10px" on-click="showMediaDialog">Associer une image</paper-button>
             <generic-resource-viewer input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
-            <paper-button raised style="margin-top: 10px" on-click="showDocMediaDialog">Set inventory (optionnal) doc </paper-button>
+            <paper-button raised style="margin-top: 10px" on-click="showDocMediaDialog">Associer une notice (optionnelle) </paper-button>
             <generic-resource-viewer is-temp input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>
             <div class="insideflex">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Cancel update</paper-button>
+                    <paper-button raised on-click="_reset">Annuler update</paper-button>
                 </template>
                 <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Save</paper-button>
-                    <paper-button raised on-click="_reset">Reset</paper-button>
-                    <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
+                    <paper-button raised on-click="_reset">Annuler</paper-button>
                 </template>
             </div>
         </form>

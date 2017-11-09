@@ -73,33 +73,33 @@
         <paper-material class="flexible" elevation="2">
             <form id="poimap" is="iron-form" class="innerdiv">
                 <div class="formTitleWithButton">
-                    <h3 class="smallh3">Edit POI</h3>
+                    <h3 class="smallh3">Nouveau POI</h3>
                     <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
                     <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                     <input type="hidden" value="{{statusString}}" name="status" />
                 </div>
-                <paper-input style="display:inline-flex;" required name="label" value={{title}} label="Label"></paper-input>
+                <paper-input style="display:inline-flex;" required name="label" value={{title}} label="Nom du POI"></paper-input>
                 <paper-input style="display:inline-flex;" required name="comment" value={{info}} label="Information"></paper-input>
               
                 <paper-input style="display:inline-flex;" required name="latitude" value=[[latitude]] label="Latitude"></paper-input>
                 <paper-input style="display:inline-flex;" required name="longitude" value=[[longitude]] label="Longitude"></paper-input>
-                <paper-input style="display:inline-flex;" required name="radius" value=[[radius]] label="Radius"></paper-input>
+                <paper-input style="display:inline-flex;" required name="radius" value=[[radius]] label="Rayon"></paper-input>
 
                 <div class="insideflex" style="margin-bottom: 10px">
-                    <paper-button noink on-click="openDialog" raised class="small" style="align-self: center;margin-right: 15px;" name="Iconpick">Change icon</paper-button><img style="display:inline-flex" src="{{mapicon}}">
+                    <paper-button noink on-click="openDialog" raised class="small" style="align-self: center;margin-right: 15px;" name="Iconpick">Modifier le marqueur</paper-button><img style="display:inline-flex" src="{{mapicon}}">
                     <input type="hidden" value={{mapicon}} name="marker" />
                     <input type="hidden" value={{mapLatitude}} name="mapLatitude" />
                     <input type="hidden" value={{mapLongitude}} name="mapLongitude" />
                     <input type="hidden" value={{mapZoom}} name="mapZoom" />
                 </div>
                 <div class=insideflex style="margin-bottom: 10px">
-                    <paper-button noink name="save" class="small" on-click="_submit" raised>Save POI</paper-button>
-                    <paper-button noink name="delete" on-click="removeMark" class="small" raised>Reset</paper-button>
+                    <paper-button noink name="save" class="small" on-click="_submit" raised>Enregistrer POI</paper-button>
+                    <paper-button noink name="delete" on-click="removeMark" class="small" raised>Annuler</paper-button>
                 </div>
             </form>
         </paper-material>
         <paper-dialog id="icons">
-            <h2>Select icon</h2>
+            <h2>Choisir un marqueur</h2>
             <paper-dialog-scrollable>
                 <div>
                     <map-icons icon={{mapicon}}></map-icons>

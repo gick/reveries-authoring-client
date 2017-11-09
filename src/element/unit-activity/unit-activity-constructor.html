@@ -162,32 +162,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
-                        <h3>Game unit start</h3>
+                        <h3>Début de l'unité de jeu</h3>
                     </div>
                     <paper-input name="label" value={{label}} label="Game unit name"></paper-input>
-                    <label class="subtitle">Optionnal media displayed when game unit starts :</label>
-                    <paper-button on-click="setMedia" raised>Set start media</paper-button>
+                    <label class="subtitle">Document multimédia à afficher au démarrage (optionnel) :</label>
+                    <paper-button on-click="setMedia" raised>Assigner un document</paper-button>
                 </div>
                 <generic-resource-viewer conception-mode input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
             <div class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
-                        <h3>Place and guiding</h3>
+                        <h3>POI et guidance</h3>
                     </div>
-                    <label class="subtitle">Area where the activity takes place :</label>
-                    <paper-button style="margin-top:10px;" on-click="setPOI" raised>Select POI</paper-button>
-                    <label class="subtitle" id="label1">User guidance:</label>
+                    <label class="subtitle">Point d'intérêt associé à l'unité de jeu :</label>
+                    <paper-button style="margin-top:10px;" on-click="setPOI" raised>Choisir un POI</paper-button>
+                    <label class="subtitle" id="label1">Guidance :</label>
                     <paper-radio-group allow-empty-selection>
-                        <paper-radio-button disabled="[[!poiActive]]" name="map">POI map</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" name="ping">Ping</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" name="compass">Compass</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="map">Carte interactive</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="ping">Radar</paper-radio-button>
                     </paper-radio-group>
-                    <label class="subtitle" id="label2">POI reached validation:</label>
-                    <paper-radio-group allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
-                        <paper-radio-button disabled="[[!poiActive]]" name="folia">Folia image analysis</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" name="QR">QR code scan</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" name="gps">Device GPS</paper-radio-button>
+                    <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
+                    <paper-radio-group  allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
+                        <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="QR">Scan d'un QR code</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
                     </paper-radio-group>
                     <paper-button class="heading" disabled="[[!poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
                     <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
@@ -206,25 +205,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <h3>POI Post action</h3>
                     </div>
                     <iron-collapse opened='{{active}}'>
-                        <label class="subtitle" id="labelpoi">POI failure (incorrect QR code scanned) :</label>
-                        <paper-input label="Incorrect QR code message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
+                        <label class="subtitle" id="labelpoi">Mauvais QR-Code scanné :</label>
+                        <paper-input label="QR code incorrect message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
                     </iron-collapse>
-                    <label class="subtitle" id="label2">POI reached :</label>
-                    <paper-input label="POI reached message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
+                    <label class="subtitle" id="label2">POI atteint :</label>
+                    <paper-input label="POI atteint message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
                 </div>
             </div>
             <div class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
-                        <h3>Inventory item reward</h3>
+                        <h3>Objet d'inventaire</h3>
                     </div>
-                    <label class="subtitle" id="label2">Item acquired by player during unit game :</label>
-                    <paper-button on-click="setPOIInventory" raised>Set optionnal inventory item</paper-button>
-                    <label class="subtitle" id="label2">Item acquired when :</label>
+                    <label class="subtitle" id="label2">Objet d'inventaire acquis durant l'unité de jeu :</label>
+                    <paper-button on-click="setPOIInventory" raised>Choisir un objet d'inventaire (optionnel)</paper-button>
+                    <label class="subtitle" id="label2">L'objet est acquis quand :</label>
                     <paper-radio-group allow-empty-selection aria-labelledby="label2">
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="uginstructions">Unit game start</paper-radio-button>
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">POI reached</paper-radio-button>
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="questions">Situated activities completed</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="uginstructions">L'unité de jeu commence</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">Le POI est attein</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="questions">Les activités situées sont terminées</paper-radio-button>
                     </paper-radio-group>
                 </div>
                 <generic-resource-viewer conception-mode input-name="inventoryItem" active={{rewardActive}} is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
@@ -232,11 +231,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div style="flex-wrap: wrap;" class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
-                        <h3>Situated activities</h3>
+                        <h3>Activités situées</h3>
                     </div>
-                    <label class="subtitle" id="label2">Activities proposed to player when she has reached the POI :</label>
+                    <label class="subtitle" id="label2">Activités proposées au joueur lorsqu'il atteint le POI :</label>
 
-                    <paper-button on-click="addSituatedActivity" raised>Add on site question</paper-button>
+                    <paper-button on-click="addSituatedActivity" raised>Ajouter une question située</paper-button>
                 </div>
                 <div class="situatedQuestion">
                     <generic-resource-viewer conception-mode input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
@@ -251,22 +250,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
-                        <h3>Pedagogical feedback</h3>
+                        <h3>Feedback pédagogique</h3>
                     </div>
-                    <label class="subtitle">Optionnal feedback on unit game completion :</label>
-                    <paper-button on-click="setFeedbackMedia" raised>Set feedback media</paper-button>
+                    <label class="subtitle">Feedback optionnel à l'issu de l'unité de jeu :</label>
+                    <paper-button on-click="setFeedbackMedia" raised>Choisir un document de feedback</paper-button>
                 </div>
                 <generic-resource-viewer conception-mode is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
             <div class="topLevel">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="resetFields">Cancel update</paper-button>
+                    <paper-button raised on-click="resetFields">Annuler update</paper-button>
                 </template>
                 <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Save</paper-button>
-                    <paper-button raised on-click="resetFields">Reset</paper-button>
-                    <paper-button raised on-click="dummyFill">Dummy fill</paper-button>
+                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
+                    <paper-button raised on-click="resetFields">Annuler</paper-button>
                 </template>
             </div>
         </form>

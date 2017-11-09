@@ -19,19 +19,19 @@
         showToast: function(message) {
             switch (message.info.operation) {
                 case 'update':
-                    this.currentMessage = message.info.resource.typeLabel + " updated"
+                    this.currentMessage = message.info.resource.typeLabel + " mis à jour"
                     this.$.message.show()
                     break
                 case 'edit':
-                    this.currentMessage = "Editing " +message.info.resource.typeLabel+ " resource"
+                    this.currentMessage = "Edition d'une ressource " +message.info.resource.typeLabel
                     this.$.message.show()
                     break
                 case 'delete':
-                    this.currentMessage = message.info.resource.typeLabel + " resource removed"
+                    this.currentMessage = message.info.resource.typeLabel + " supprimée"
                     this.$.message.show()
                     break
                 case 'create':
-                    this.currentMessage = "New " +message.info.resource.typeLabel + " created"
+                    this.currentMessage = "Nouvelle " +message.info.resource.typeLabel + " créée"
                     this.$.message.show()
                     break
 
