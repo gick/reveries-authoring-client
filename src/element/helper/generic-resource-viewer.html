@@ -118,7 +118,7 @@
                 </template>
                 <template is="dom-if" if="{{video}}" restamp>
                     <div class="mediablock">
-                        <video controls height="300" src="/file/{{item._id}}"></video>
+                        <video controls width="300" src="/file/{{item._id}}"></video>
                     </div>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -314,7 +314,13 @@
                 this.item = oldItem;
                 this.item = newItem;
             },
+            setVideo:function(newItem){
+                this.isVideo()
+                var oldItem
+                this.item = oldItem;
+                this.item = newItem;
 
+            },
 
             setBadge: function(newItem) {
                 this.isBadge();
@@ -427,6 +433,10 @@
                 if (resourceType == 'mlg') {
                     this.setMlg(this.item)
                 }
+                if (resourceType == 'video') {
+                    this.setVideo(this.item)
+                }
+
 
 
 

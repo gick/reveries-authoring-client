@@ -20,15 +20,8 @@
             <template is="dom-repeat" items="{{items}}" as="item">
                 <paper-card>
                     <div class="card-content audiovid">
-                        <template is="dom-if" if="{{_isAudio(item)}}">
-                            <resource-header resource-url="/file" resource-id="{{item._id}}" resource-readonly="{{item.metadata.readonly}}" resource-status="{{item.metadata.status}}" resource-label="{{item.filename}}"></resource-header>
-                            <img src='/file/57f78beb4c22d562745e69ae' style="height:300px">
-                            <paper-audio-player src="/file/{{item._id}}"></paper-audio-player>
-                        </template>
-                        <template is="dom-if" if="{{_isVideo(item)}}">
                             <resource-header resource-url="/file" resource-id="{{item._id}}" resource-readonly="{{item.metadata.readonly}}" resource-status="{{item.metadata.status}}" resource-label="{{item.filename}}"></resource-header>
                             <video controls height="300" src="/file/{{item._id}}"></video>
-                        </template>
                     </div>
                     <div style="border-top: 1px solid lightgrey;" class="myaction card-action">
                         <paper-button on-click='genRequest'>Remove</paper-button>
