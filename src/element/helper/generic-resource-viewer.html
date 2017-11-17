@@ -12,6 +12,7 @@
 <link rel="import" href="../basic-element/free-text-question.html">
 <link rel="import" href="../POI/one-poi-display.html">
 <link rel="import" href="../inventory/inventory-element.html">
+<link rel="import" href="../auth-manager/user.html">
 <link rel="import" href="../badges/badge-element.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
 <link rel="import" href="../unit-activity/unitGame.html">
@@ -105,6 +106,12 @@
                     </badge-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
+                <template is="dom-if" if="{{user}}" restamp>
+                    <user-profile class="" id="" user={{item}}>
+                    </user-profile>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </template>
+
                 <template is="dom-if" if="{{unitgame}}" restamp>
                     <unit-game start-media={{item.startMedia}} resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
                     </unit-game>
@@ -160,6 +167,8 @@
             isEmpty: function() {
                 this.image = false;
                 this.video = false;
+                this.user = false
+
                 this.poi = false;
                 this.freetext = false;
                 this.mcq = false;
@@ -172,12 +181,30 @@
 
 
             },
+            isUser: function() {
+                this.unitgame = false
+                this.mlg = false
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.user = true
+
+                this.freetext = false;
+                this.mcq = false;
+                this.page = false;
+                this.badge = false
+                this.inventory = false
+
+            },
+
             isImage: function() {
                 this.unitgame = false
                 this.mlg = false
                 this.image = true;
                 this.video = false;
                 this.poi = false;
+                this.user = false
+
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
@@ -189,6 +216,8 @@
                 this.unitgame = false
                 this.mlg = false
                 this.image = false;
+                this.user = false
+
                 this.video = false;
                 this.poi = false;
                 this.freetext = false;
@@ -199,6 +228,8 @@
 
             },
             isInventory: function() {
+                this.user = false
+
                 this.image = false;
                 this.video = false;
                 this.mlg = false
@@ -214,6 +245,8 @@
 
 
             isPage: function() {
+                this.user = false
+
                 this.image = false;
                 this.video = false;
                 this.poi = false;
@@ -227,6 +260,8 @@
 
             },
             isPoi: function() {
+                this.user = false
+
                 this.image = false;
                 this.video = false;
                 this.poi = true;
@@ -250,6 +285,7 @@
                 this.page = false;
                 this.badge = false
                 this.inventory = false
+                this.user = false
 
             },
             isMcq: function() {
@@ -260,6 +296,7 @@
                 this.mcq = true;
                 this.unitgame = false
                 this.mlg = false
+                this.user = false
 
                 this.page = false;
                 this.inventory = false
@@ -277,6 +314,7 @@
                 this.page = false;
                 this.badge = false
                 this.inventory = false
+                this.user = false
 
             },
             isUnitgame: function() {
@@ -290,11 +328,12 @@
                 this.page = false;
                 this.badge = false
                 this.inventory = false
+                this.user = false
 
             },
 
 
-            isMlg:function(){
+            isMlg: function() {
                 this.image = false;
                 this.video = false;
                 this.poi = false;
@@ -305,16 +344,23 @@
                 this.page = false;
                 this.badge = false
                 this.inventory = false
+                this.user = false
 
             },
 
+            setUser: function(newItem) {
+                this.isUser();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
             setUnigame: function(newItem) {
                 this.isUnitgame();
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
             },
-            setVideo:function(newItem){
+            setVideo: function(newItem) {
                 this.isVideo()
                 var oldItem
                 this.item = oldItem;
@@ -437,6 +483,9 @@
                     this.setVideo(this.item)
                 }
 
+                if (resourceType == 'user') {
+                    this.setUser(this.item)
+                }
 
 
 

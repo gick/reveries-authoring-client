@@ -1,0 +1,58 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+<dom-module id="tutorial-tooltip">
+    <template>
+        <style include="common-styles">
+
+        </style>
+        <div class="card">
+            <div class="topLevelInfo">
+                <h1>Outils d'administration</h1>
+                <div>
+                    Cette section est <b>réservée aux administrateurs</b>
+                </div>
+                <br> Dans cette section vous pouvez:
+                <ul>
+                    <li>Supprimer des comptes utilisateurs</li>
+                    <li>Supprimer des ressources créés par un utilisateur (utile si un utisateur à créé involontairement beaucoup de ressources du même type)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <generic-header></generic-header>
+            <list-generic-resource share-url='/user' id='userList' resource-type='user' url='/listUsers'></list-generic-resource>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'tutorial-tooltip',
+        ready: function() {
+            this.addEventListener('resource-operation', this.updateMedia.bind(this))
+        },
+        updateMedia: function(message) {
+            switch (message.detail.info.operation) {
+
+                case 'delete':
+                    this.$.userList.requestElements()
+                    break
+                case 'bulkDelete':
+                    this.$.userList.requestElements()
+                    break
+
+
+
+            }
+        },
+
+    });
+    </script>
+</dom-module>

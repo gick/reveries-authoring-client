@@ -4,6 +4,8 @@
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="./share-ressource.html">
+<link rel="import" href="./confirmOperation.html">
+
 <dom-module id="resource-header">
     <style>
     .resourceReadwrite {
@@ -29,20 +31,22 @@
     }
     </style>
     <template>
+        <confirm-operation id="confirmRemove"></confirm-operation>
         <remove-ressource id="remover" resource-id={{resourceId}} resource-type="{{resource.type}}" resource-url='{{resourceUrl}}'></remove-ressource>
         <share-ressource id="sharingElement" request-params="{{requestParams}}" ressource-url="{{resourceUrl}}" ressource-id="{{resourceId}}"></share-ressource>
         <div class="resourceReadwrite">
             <h3 class="headerText">{{resourceLabel}}</h3>
             <!-- Read belonging to the user can be set public or private -->
             <template is="dom-if" if="{{!isReadOnly}}" restamp>
-                <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
-                <paper-tooltip for="setStatus" position="top">Partager/annuler le partage</paper-tooltip>
-
+                <template is="dom-if" if="[[_isSharable(resource.typeLabel)]]" restamp>
+                    <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
+                    <paper-tooltip for="setStatus" position="top">Partager/annuler le partage</paper-tooltip>
+                </template>
                 <template is="dom-if" if="[[_isEditable(resource.typeLabel)]]" restamp>
                     <paper-icon-button id="edit" style="display:inline-flex;align-self: center;" raised on-click="edit" icon="icons:create"></paper-icon-button>
                     <paper-tooltip for="edit" position="top">Editer</paper-tooltip>
                 </template>
-                <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="remove" icon="icons:delete"></paper-icon-button>
+                <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="confirmRemove" icon="icons:delete"></paper-icon-button>
                 <paper-tooltip for="delete" position="top">Supprimer</paper-tooltip>
             </template>
             <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
@@ -60,6 +64,7 @@
 
             ready: function() {
                 //  this.sharedIcon="visibility-off"
+                this.addEventListener('confirm-remove',this.remove.bind(this))
                 this.addEventListener('shift_ressource_sharing_status', this.shiftShareStatus.bind(this))
                 this.requestParams = '{"Status":"Public"}'
             },
@@ -73,10 +78,25 @@
                 if (this.resource.typeLabel && this.resource.typeLabel == "Image") {
                     return false
                 }
+                if (this.resource.typeLabel && this.resource.typeLabel == "user") {
+                    return false
+                }
+
                 return true
             },
+            _isSharable: function() {
+                if (this.resource.typeLabel && this.resource.typeLabel == "user") {
+                    return false
+                }
+
+                return true
+            },
+
             remove: function() {
                 this.$.remover.removeResource()
+            },
+            confirmRemove:function(){
+                this.$.confirmRemove.open()
             },
             setStatus: function() {
                 /* if (this.resourceStatus == "Private") {
