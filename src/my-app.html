@@ -229,6 +229,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             if (arg && arg.detail && arg.detail.type) {
                 var operation = arg.detail
                 switch (operation.type) {
+                    case 'reset':
+                        this.page = 'login'
+                        var message={}
+                        message.detail={'info':'Mot de passe mis à jour'}
+                        this.showAuthMessage(message)
+                        break
+
                     case 'login':
                         this.$.manager.authenticate(operation.credential.name, operation.credential.pass)
                         break

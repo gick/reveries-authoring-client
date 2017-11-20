@@ -20,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <style include="common-styles">
 
         </style>
-        <iron-ajax id="resetpass" url='/reset/[[token]]' body="password=[[pass]]" method="post"></iron-ajax>
+        <iron-ajax id="resetpass" url='/reset/[[token]]' body="password=[[pass]]" method="post" on-response="fireResetComplete"></iron-ajax>
         <div class="card">
             <div class="topLevelInfo">
                 <h2>Réinitialisation du mot de passe</h2>
@@ -33,6 +33,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
         confirmPass: function() {
             this.$.resetpass.generateRequest()
+        },
+        fireResetComplete:function(){
+            this.fire('auth-event',{type:'reset'})
         },
         is: 'reset-view',
         property: {
