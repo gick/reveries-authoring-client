@@ -22,6 +22,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 color: #4caf50;
             }
 
+             :host {
+                --paper-badge-height: 30px;
+                --paper-badge-width: 30px;
+                --paper-badge-background: #8D99AE;
+            }
+
             paper-dialog.size-position {
                 position: fixed;
                 top: 16px;
@@ -37,13 +43,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <marked-element markdown="{{mkdown}}">
                 <div class="markdown-html"></div>
             </marked-element>
+            <div style="display:flex;flex-direction:row-reverse;">
+                <paper-badge style="position:inherit;left:unset!important;top:unset!important;" label="[[currentPage]]/[[currentTuto.length]]"></paper-badge>
+            </div>
             <div class="buttons">
                 <paper-button on-click="reload">Reload</paper-button>
                 <paper-button on-click="previous">Précédent</paper-button>
                 <paper-button on-click="next">Suivant</paper-button>
             </div>
-            <paper-badge label="4/5" class="red">
-            </paper-badge>
         </paper-dialog>
     </template>
     <script>
@@ -53,6 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             this.$.tutorials.generateRequest()
             this.currentTuto = []
+            this.currentPage = 1
         },
         reload: function() {
             this.$.tutorials.generateRequest()
@@ -61,22 +69,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         previous: function() {
             if (this.currentIndex > 0) {
                 this.currentIndex = this.currentIndex - 1
+                this.currentPage = this.currentIndex + 1
                 this.mkdown = this.currentTuto[this.currentIndex].mkdown
-            } else {
-                this.currentIndex = this.currentTuto.length - 1
-                this.mkdown = this.currentTuto[this.currentIndex].mkdown
+                this.$.position.scrollTop = 0
 
-            }
+            } 
         },
         next: function() {
             if (this.currentIndex < this.currentTuto.length - 1) {
                 this.currentIndex = this.currentIndex + 1
-                this.mkdown = this.currentTuto[this.currentIndex].mkdown
-            } else {
-                this.currentIndex = 0
-                this.mkdown = this.currentTuto[this.currentIndex].mkdown
+                this.currentPage = this.currentIndex + 1
 
-            }
+                this.mkdown = this.currentTuto[this.currentIndex].mkdown
+                this.$.position.scrollTop = 0
+
+            } 
         },
         updateTutorial: function(res) {
             this.tutorial = res.detail.__data__.response
@@ -84,6 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         setPage: function(page) {
             this.currentIndex = 0
+            this.currentPage = 1
             this.currentTuto = this.getTurorial(page)
             if (this.currentTuto) {
                 this.mkdown = this.currentTuto[0].mkdown
