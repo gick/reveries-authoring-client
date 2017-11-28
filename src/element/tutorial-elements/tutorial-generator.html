@@ -1,0 +1,161 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../media-viewer/media-viewer-activity.html">
+<link rel="import" href="../helper/word-list.html">
+<link rel="import" href="../remove-ressource/create-resource.html">
+<link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../helper/generic-resource-viewer.html">
+<dom-module id="tutorial-generator">
+    <!--
+An element to design static web page using markdown. An helper button allow to pick an image from user image
+gallery.
+TODO : propose different CSS associated with the markdown
+-->
+    <style include="common-styles">
+
+    </style>
+    <template>
+        <create-resource id="creator" resource-url="/tutorial" resource="{{resource}}"></create-resource>
+        <word-list id="randomSentence"></word-list>
+        <form class="creator" id="tutorialGenerator" is="iron-form" method="post" action="/tutorial">
+            <template is="dom-if" if="{{updating}}" restamp>
+                <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
+            </template>
+            <div class="formTitleWithButton">
+                <input id="status" type="hidden" value="Private" name="status" />
+            </div>
+            <paper-input id="label" name="label" value={{label}} label="Identifiant du document"></paper-input>
+            <paper-dropdown-menu name="reference" label="Resource">
+                <paper-listbox class="dropdown-content" selected="1">
+                    <paper-item>login</paper-item>
+                    <paper-item>image</paper-item>
+                    <paper-item>video</paper-item>
+                    <paper-item>staticmedia</paper-item>
+                    <paper-item>mcq</paper-item>
+                    <paper-item>mlg</paper-item>
+                    <paper-item>freetext</paper-item>
+                    <paper-item>inventory</paper-item>
+                    <paper-item>badge</paper-item>
+                    <paper-item>poi</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu>
+            <paper-input name="order" label="Position (laisser vide pour ajouter à la fin)" type="number">
+            </paper-input>
+            <paper-textarea id="mkdownCode" name="mkdown" value={{mkdown}} rows="5" label="Contenu du document (Markdown)"></paper-textarea>
+            <div class="insideflex">
+                <template is="dom-if" if="{{!updating}}" restamp>
+                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
+                    <paper-button raised on-click="resetFields">Annuler</paper-button>
+                </template>
+                <template is="dom-if" if="{{updating}}" restamp>
+                    <paper-button raised on-click="_submit">Update document</paper-button>
+                    <paper-button raised on-click="_reset">Annuler update</paper-button>
+                </template>
+            </div>
+        </form>
+    </template>
+    <script>
+    (function() {
+        'use strict';
+        Polymer({
+            is: 'tutorial-generator',
+            ready: function() {
+                this.updating = false
+            },
+            edit: function(page) {
+                this.updating = true
+                this.mkdown = page.mkdown
+                this.itemId = page._id
+                this.label = page.label
+            },
+
+            setValues: function() {
+                this.set('mediaId', this.currentid)
+            },
+            _activateObs: function(newval, oldval) {
+                this.set('imageRequired', newval)
+            },
+            resetFields: function() {
+                this.updating = false
+                var inputList = Polymer.dom(this.root).querySelectorAll('paper-textarea');
+                for (var i = 0; i < inputList.length; i++) {
+                    inputList[i].value = ""
+                }
+            },
+
+            _submit: function(event) {
+                var json = this.$.tutorialGenerator.serialize()
+                //   json.reference=
+                this.set('resource', json)
+                console.log(this.resource)
+                this.$.creator.createResource()
+                this.statusString = ""
+                this.label = ""
+                this.mkdown = ""
+            },
+            _reset: function() {
+                this.resetFields()
+            },
+            properties: {
+                mkdown: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                label: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                status: {
+                    type: Boolean,
+                    observer: '_statusChanged'
+                },
+
+
+            },
+            _statusChanged: function(newval, oldval) {
+                if (!newval) {
+                    this.statusText = "Private content, not visible for other users"
+                    this.statusString = "Private"
+                    this.statusIcon = "visibility-off"
+                } else {
+                    this.statusText = "Public content, shared with other users"
+                    this.statusString = "Public"
+                    this.statusIcon = "visibility"
+
+                }
+            }
+
+
+        });
+    })();
+    </script>
+</dom-module>

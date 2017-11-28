@@ -7,6 +7,7 @@
         <iron-ajax id="signup" url='/signup' body="{{signupParam}}" method="post" handle-as="json" on-response="validateSignup"></iron-ajax>
         <iron-ajax id="userInfo" url='/profile' handle-as="json" on-response="validateAuth"></iron-ajax>
         <iron-ajax id="checkStatus" url='/profile' handle-as="json" on-response="refreshStatus"></iron-ajax>
+        <iron-ajax id="importTuto" url='/setup_tutorial' handle-as="json" on-response="tutorialImported"></iron-ajax>
 
         <iron-ajax method='post' url='/login' id="userLogin" body='{{authparam}}' handle-as="json" on-response="validateAuth"></iron-ajax>
         <paper-dialog id="loginFailed">
@@ -32,13 +33,24 @@
         checkStatusOnRefresh: function() {
             this.$.checkStatus.generateRequest();
         },
-
+        tutorialImported:function(resp){
+                var response = resp.detail.__data__.response;
+                if(response.success){
+                    this.fire('auth-message',{info:"Le scénario d'exemple a été importé!"})           
+                }
+                else{
+                    this.fire('auth-message',{info:"Problème rencontré, le tutoriel n'a pas été importé!"})
+                }
+        },
         getUserInfo: function() {
             this.$.userInfo.generateRequest();
         },
         logout: function() {
             this.$.logout.generateRequest();
 
+        },
+        importTutorial:function(){
+            this.$.importTuto.generateRequest()
         },
         handleLogout: function() {
             this.$.checkStatus.generateRequest();

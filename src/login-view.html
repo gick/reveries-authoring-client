@@ -18,7 +18,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../src/element/helper/forgotPassForm.html">
-
 <dom-module id="login-view">
     <template>
         <style>
@@ -63,7 +62,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button raised on-click="_submit">Envoyer</paper-button>
                 <paper-button raised on-click="_reset">Annuler</paper-button>
                 <paper-button raised on-click="forgotPassword">Mot de passe oublié</paper-button>
-
                 <div class="output"></div>
             </form>
         </div>
@@ -92,6 +90,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
             </div>
         </template>
+        <template is="dom-if" if="{{status.logged}}" restamp>
+            <div class="card">
+                <div class="topLevelInfo">
+                    <h1>Comment démarrer?</h1>
+                    <div>
+                        Vous pouvez accéder au tutoriel en cliquant sur l'icone d'aide en hautà droite
+                        <br>Un <b>scénario d'exemple</b> a été conçu pour illustrer ce tutoriel, pour importer le scénario d'exemple cliquez sur le bouton Importer
+                    </div>
+                    <br>
+                    <paper-button raised on-click="_import">Importer</paper-button>
+                </div>
+            </div>
+        </template>
         <div hidden={{status.logged}} class="card">
             <form class="insidePaper" id="signupForm" is="iron-form">
                 <h1>Créer un compte</h1>
@@ -100,7 +111,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input on-keydown="checkEnterSignup" type="email" value="{{signupMail}}" name="email" label="Email" required></paper-input>
                 <paper-button raised on-click="_signup">Envoyer</paper-button>
                 <paper-button raised on-click="_reset">Annuler</paper-button>
-
             </form>
         </div>
     </template>
@@ -118,12 +128,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var signupCredential = { name: this.signupName, pass: this.signupPass, mail: this.signupMail }
             this.fire('auth-event', { type: 'signup', credential: signupCredential })
         },
+        _import: function() {
+            this.fire('auth-event', { type: 'import', credential: {} })
+        },
         checkEnter: function(evt) {
             if (evt.keyCode === 13) {
                 this._submit()
             }
         },
-        forgotPassword:function(){
+        forgotPassword: function() {
             this.$.forgotPass.open()
         },
         checkEnterSignup: function(evt) {

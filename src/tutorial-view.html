@@ -1,0 +1,81 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="./styles/common-styles.html">
+<link rel="import" href="./element/tutorial-elements/tutorial-generator.html">
+<link rel="import" href="./element/resource-filtering/generic-header.html">
+<link rel="import" href="./element/static-media/staticmedia-generator.html">
+<link rel="import" href="../src/element/helper/generic-resource-viewer.html">
+<link rel="import" href="../src/element/helper/list-generic-resource.html">
+<dom-module id="tutorial-view">
+    <template>
+        <style include="common-styles">
+
+        </style>
+        <div class="card">
+            <div class='topLevelInfo'>
+            <h1>Mes éléments de tutoriel</h1>
+            <div>
+            Les éléments de tutoriel permettent aux <b>utilisateurs aant le rôle administrateur</b> de créer des tutoriels personalisés pour l'utilisation de MOGGLE.
+            <br>Ces tutoriels sont associés à des pages et déclenchés par un clic sur le bouton d'aide (en haut a droite)  
+            <br>La syntaxe Markdown permet la mise en forme de ces documents
+            </div>
+            <br> Dans cet section :
+            <ul>
+                <li>Vous pouvez créer, partager, éditer des éléments de tutoriel</li>
+            </ul>
+            </b>
+            </div>
+        </div>
+        <div class="card constructorCard">
+            <tutorial-generator class="topLevelView"   label="{{label}}" mkdown="{{MK}}" id="tutorialGenerator"></tutorial-generator>
+            <staticmedia-viewer resource-label="[[label]]" conception-mode style="min-width:150px" class="topLevelView"  mkdown="{{MK}}"></staticmedia-viewer>
+        </div>
+        <div class="card">
+            <generic-header search="{{keyword}}"></generic-header>
+            <list-generic-resource filter-search="[[keyword]]" share-url='/tutorial' id='tutorialList'  resource-type='tutorial' url='/tutorial'></list-generic-resource>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'tutorial-view',
+        ready: function() {
+            this.addEventListener('resource-operation',this.updateMedia.bind(this))
+
+        }
+        ,
+        updateMedia: function(message) {
+        switch(message.detail.info.operation){
+            case 'create':
+            this.$.tutorialList.requestElements()
+            break
+            case 'update':
+            this.$.tutorialList.requestElements()
+            break
+
+            case 'delete':
+            this.$.tutorialList.requestElements()
+            break
+
+            case 'edit':
+            this.$.tutorialGenerator.edit(message.detail.info.resource)
+            break
+            }
+        }
+    });
+    </script>
+</dom-module>

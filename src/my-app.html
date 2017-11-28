@@ -30,6 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
 <link rel="import" href="../src/element/helper/messageNotification.html">
 <link rel="import" href="../src/element/helper/authNotification.html">
+<link rel="import" href="../src/element/tutorial-elements/tutorial-dialog.html">
 <dom-module id="my-app">
     <template>
         <style>
@@ -90,6 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-location use-hash-as-path route="{{route}}"></app-location>
         <message-notification id="toaster"></message-notification>
         <auth-notification id="authNotif"></auth-notification>
+        <tutorial-dialog page=[[page]] id="tuto"></tutorial-dialog>
         <auth-manager id="manager" status="{{status}}"></auth-manager>
         <app-route route="{{route}}" pattern="#/page/:param" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-drawer-layout fullbleed>
@@ -114,6 +116,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-item hidden=[[!status.isadmin]]>
                         <a class='menuLink' name="admin" href="#admin">
                             <i18n-msg msgid="login_button">Admin</i18n-msg>
+                        </a>
+                    </paper-item>
+                    <paper-item hidden=[[!status.isadmin]]>
+                        <a class='menuLink' name="tutorial" href="#tutorial">
+                            <i18n-msg msgid="login_button">Tutoriel</i18n-msg>
                         </a>
                     </paper-item>
                     <paper-submenu>
@@ -178,12 +185,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div title>ReVeRIeS 1.5</div>
+                        <paper-icon-button style="display:block;" icon="help" on-click="showTutorial"></paper-icon-button>
                     </app-toolbar>
                 </app-header>
                 <iron-pages id="pages" role="main" selected="[[page]]" attr-for-selected="name">
                     <intro-view name="intro"></intro-view>
                     <login-view status=[[status]] name="login"></login-view>
                     <admin-view name="admin"></admin-view>
+                    <tutorial-view name="tutorial"></tutorial-view>
                     <video-view name="video"></video-view>
                     <poi-view name="poi"></poi-view>
                     <staticmedia-view id='staticmedia' name="staticmedia"></staticmedia-view>
@@ -219,6 +228,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.mlgView.unitGameChanged();
             }
         },
+        showTutorial: function() {
+            this.$.tuto.toggle()
+        },
         showAuthMessage: function(message) {
             this.$.authNotif.showToast(message.detail)
         },
@@ -231,11 +243,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 switch (operation.type) {
                     case 'reset':
                         this.page = 'login'
-                        var message={}
-                        message.detail={'info':'Mot de passe mis à jour'}
+                        var message = {}
+                        message.detail = { 'info': 'Mot de passe mis à jour' }
                         this.showAuthMessage(message)
                         break
-
+                    case 'import' :
+                        this.$.manager.importTutorial()
                     case 'login':
                         this.$.manager.authenticate(operation.credential.name, operation.credential.pass)
                         break
@@ -268,14 +281,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _routePageChanged: function() {
             if (this.route.path.indexOf('reset') >= 0) {
-                this.token=this.route.path.slice(12)
+                this.token = this.route.path.slice(12)
                 this.page = 'reset'
                 return
             }
-
             this.page = this.route.path || 'intro';
         },
         _pageChanged: function(page) {
+            this.$.tuto.setPage(this.page)
+
             this.importHref(
                 this.resolveUrl(page + '-view.html'), null, null, true);
         }

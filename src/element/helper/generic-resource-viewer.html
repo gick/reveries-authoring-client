@@ -15,6 +15,7 @@
 <link rel="import" href="../auth-manager/user.html">
 <link rel="import" href="../badges/badge-element.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
+<link rel="import" href="../tutorial-elements/tutorial-viewer.html">
 <link rel="import" href="../unit-activity/unitGame.html">
 <dom-module id="generic-resource-viewer">
     <template>
@@ -111,7 +112,10 @@
                     </user-profile>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
-
+                <template is="dom-if" if="{{tutorial}}" restamp>
+                    <tutorial-viewer item="[[item]]"></tutorial-viewer>
+                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </template>
                 <template is="dom-if" if="{{unitgame}}" restamp>
                     <unit-game start-media={{item.startMedia}} resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
                     </unit-game>
@@ -188,7 +192,7 @@
                 this.video = false;
                 this.poi = false;
                 this.user = true
-
+                this.tutorial = false
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
@@ -204,7 +208,7 @@
                 this.video = false;
                 this.poi = false;
                 this.user = false
-
+                this.tutorial = false
                 this.freetext = false;
                 this.mcq = false;
                 this.page = false;
@@ -217,7 +221,7 @@
                 this.mlg = false
                 this.image = false;
                 this.user = false
-
+                this.tutorial = false
                 this.video = false;
                 this.poi = false;
                 this.freetext = false;
@@ -229,7 +233,7 @@
             },
             isInventory: function() {
                 this.user = false
-
+                this.tutorial = false
                 this.image = false;
                 this.video = false;
                 this.mlg = false
@@ -246,7 +250,7 @@
 
             isPage: function() {
                 this.user = false
-
+                this.tutorial = false
                 this.image = false;
                 this.video = false;
                 this.poi = false;
@@ -261,7 +265,7 @@
             },
             isPoi: function() {
                 this.user = false
-
+                this.tutorial = false
                 this.image = false;
                 this.video = false;
                 this.poi = true;
@@ -277,6 +281,7 @@
             isVideo: function() {
                 this.image = false;
                 this.video = true;
+                this.tutorial = false
                 this.poi = false;
                 this.freetext = false;
                 this.unitgame = false
@@ -297,7 +302,7 @@
                 this.unitgame = false
                 this.mlg = false
                 this.user = false
-
+                this.tutorial=false
                 this.page = false;
                 this.inventory = false
                 this.badge = false
@@ -310,6 +315,7 @@
                 this.freetext = true;
                 this.unitgame = false
                 this.mlg = false
+                this.tutorial=false
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
@@ -324,6 +330,7 @@
                 this.freetext = false;
                 this.unitgame = true
                 this.mlg = false
+                this.tutorial=false
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
@@ -340,6 +347,7 @@
                 this.freetext = false;
                 this.unitgame = false
                 this.mlg = true
+                this.tutorial=false
                 this.mcq = false;
                 this.page = false;
                 this.badge = false
@@ -348,12 +356,35 @@
 
             },
 
+            isTutorial:function(){
+                this.image = false;
+                this.video = false;
+                this.poi = false;
+                this.freetext = false;
+                this.unitgame = false
+                this.mlg = false
+                this.tutorial=true
+                this.mcq = false;
+                this.page = false;
+                this.badge = false
+                this.inventory = false
+                this.user = false
+            },
+
             setUser: function(newItem) {
                 this.isUser();
                 var oldItem;
                 this.item = oldItem;
                 this.item = newItem;
             },
+
+            setTutorial: function(newItem) {
+                this.isTutorial();
+                var oldItem;
+                this.item = oldItem;
+                this.item = newItem;
+            },
+
             setUnigame: function(newItem) {
                 this.isUnitgame();
                 var oldItem;
@@ -485,6 +516,9 @@
 
                 if (resourceType == 'user') {
                     this.setUser(this.item)
+                }
+                if (resourceType == 'tutorial') {
+                    this.setTutorial(this.item)
                 }
 
 
