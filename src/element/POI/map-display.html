@@ -3,22 +3,25 @@
 <link rel="import" href="../../../bower_components/google-apis/google-maps-api.html">
 <link rel="import" href="../../../bower_components/google-map/google-map-point.html">
 <link rel="import" href="../../../bower_components/google-map/google-map-marker.html">
+<link rel="import" href="../../../bower_components/google-map/google-map-search.html">
 <link rel="import" href="../../../bower_components/google-map/google-map-poly.html">
 <dom-module id="map-display">
     <template>
         <style>
-       
-        
-        .mymap {width:500px;height:500px;display: inline-flex;
+        .mymap {
+            width: 500px;
+            height: 500px;
+            display: inline-flex;
         }
         </style>
-            <google-maps-api api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" version="3.exp"></google-maps-api>
-
-            <google-map class="mymap" api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="poimapgmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{lat}}" longitude="{{long}}" click-events>
-                <template is="dom-repeat" items={{markers}} as="marker">
-                    <google-map-marker click-events title="{{marker.title}}" on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
-                </template>
-            </google-map>
+        <google-maps-api api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" version="3.exp"></google-maps-api>
+        <google-map-search map="[[mapsAPI]]" query="Pizza" results="{{results}}">
+        </google-map-search>
+        <google-map class="mymap" api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="poimapgmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{lat}}" longitude="{{long}}" click-events>
+            <template is="dom-repeat" items={{markers}} as="marker">
+                <google-map-marker click-events title="{{marker.title}}" on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
+            </template>
+        </google-map>
     </template>
     <script>
     (function() {
@@ -26,43 +29,41 @@
 
         Polymer({
             is: 'map-display',
-           
+
             ready: function() {
 
-                this.markers=[];
-                this.circles=[];
+                this.markers = [];
+                this.circles = [];
 
             },
-            showPOI:function(item){
-                if(this.findIndex(item)>=0){
+            showPOI: function(item) {
+                if (this.findIndex(item) >= 0) {
                     this.removeMarker(item)
-                   // this.fitMarkers();
+                    // this.fitMarkers();
                     return;
                 }
                 this.addMarker(item);
             },
-            removePOI:function(item){
-              this.removeMarker(item);  
-            }
-            ,
+            removePOI: function(item) {
+                this.removeMarker(item);
+            },
             removeMarker: function(item) {
                 var i = this.findIndex(item);
                 this.splice('markers', i, 1);
                 this.removeArea(item);
             },
-            fitMarkers:function(){
-                var markerArray=[];
-                for(var i=0;i<this.markers.length;i++){
+            fitMarkers: function() {
+                var markerArray = [];
+                for (var i = 0; i < this.markers.length; i++) {
 
                 }
                 var bounds = new google.maps.LatLngBounds();
 
-            }
-            ,
+            },
             findIndex: function(item) {
                 for (var i = 0; i < this.markers.length; i++) {
                     if (this.markers[i].id === item._id) {
-                            return i
+                        return i
                     }
                 }
                 return -1
@@ -72,7 +73,7 @@
                 var lat = item.latitude;
                 var long = item.longitude;
                 var latlng = new google.maps.LatLng(item.latitude, item.longitude);
-                
+
 
                 var circle = new google.maps.Circle({
                     strokeColor: '#FF0000',
@@ -86,17 +87,17 @@
                         lat: item.map.areaLat,
                         lng: item.map.areaLong,
                     },
-                    radius:item.map.areaRadius ,
+                    radius: item.map.areaRadius,
                 })
                 this.push('markers', {
                     latitude: lat,
                     longitude: long,
-                    areaLat:item.map.areaLat,
-                    areaLong:item.map.areaLong,
+                    areaLat: item.map.areaLat,
+                    areaLong: item.map.areaLong,
                     radius: item.map.areaRadius,
                     id: item._id,
                 });
-                this.push('circles',circle);
+                this.push('circles', circle);
                 map.setCenter(latlng)
             },
             _getMarkeIndexById: function(id) {
@@ -109,11 +110,11 @@
             },
             removeArea: function(item) {
                 var id = item._id;
-                var circles =this.get('circles')
-                for(var i=0;i<circles.length;i++){
-                    if(circles[i].id===id){
+                var circles = this.get('circles')
+                for (var i = 0; i < circles.length; i++) {
+                    if (circles[i].id === id) {
                         circles[i].setMap(null);
-                        var markerIndex=this._getMarkeIndexById(id);
+                        var markerIndex = this._getMarkeIndexById(id);
                         this.set('markers.#' + markerIndex + '.radius', 0);
 
                     }
@@ -121,10 +122,10 @@
             },
 
             properties: {
-                mapSize:{
-                    type:String,
-                    notify:true,
-                    default:"width:500px;height:500px;display: inline-flex;"
+                mapSize: {
+                    type: String,
+                    notify: true,
+                    default: "width:500px;height:500px;display: inline-flex;"
                 },
                 lat: {
                     type: Number
@@ -132,8 +133,10 @@
                 long: {
                     type: Number
                 },
-                poi:{type:Array,
-                    notify:true}
+                poi: {
+                    type: Array,
+                    notify: true
+                }
 
             }
         })
