@@ -113,7 +113,7 @@
                         lat: lat,
                         lng: long
                     },
-                    radius: 100,
+                    radius: 30,
                     editable: true,
                 })
                 google.maps.event.addDomListener(circle, 'radius_changed', function() {
@@ -125,7 +125,7 @@
                     longitude: long,
                     areaLat: lat,
                     areaLong: long,
-                    radius: 100,
+                    radius: 30,
                     id: id,
                 });
                 this.set('circle', circle);

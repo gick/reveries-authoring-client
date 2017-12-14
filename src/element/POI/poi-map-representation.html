@@ -1,5 +1,7 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
@@ -23,7 +25,6 @@
         .innerdiv {
             display: inline-flex;
             flex-flow: column;
-            align-items: baseline;
             flex-wrap: wrap;
         }
 
@@ -63,7 +64,9 @@
             display: inline-flex;
             align-self: center;
         }
-
+        paper-input{
+            display: inline-flex;
+        }
         .innerdiv>* {
             margin-left: 10px;
             margin-right: 10px;
@@ -78,12 +81,12 @@
                     <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                     <input type="hidden" value="{{statusString}}" name="status" />
                 </div>
-                <paper-input style="display:inline-flex;" required name="label" value={{title}} label="Identifiant du POI"></paper-input>
-                <paper-input style="display:inline-flex;" required name="comment" value={{info}} label="Information"></paper-input>
+                <paper-input name="label" value={{title}} label="Identifiant du POI"></paper-input>
+                <paper-textarea name="comment" value={{info}} label="Description"></paper-textarea>
               
-                <paper-input style="display:inline-flex;" required name="latitude" value=[[latitude]] label="Latitude"></paper-input>
-                <paper-input style="display:inline-flex;" required name="longitude" value=[[longitude]] label="Longitude"></paper-input>
-                <paper-input style="display:inline-flex;" required name="radius" value=[[radius]] label="Rayon"></paper-input>
+                <paper-input name="latitude" value=[[latitude]] label="Latitude"></paper-input>
+                <paper-input name="longitude" value=[[longitude]] label="Longitude"></paper-input>
+                <paper-input name="radius" value=[[radius]] label="Rayon"></paper-input>
 
                 <div class="insideflex" style="margin-bottom: 10px">
                     <paper-button noink on-click="openDialog" raised class="small" style="align-self: center;margin-right: 15px;" name="Iconpick">Modifier le marqueur</paper-button><img style="display:inline-flex" src="{{mapicon}}">
