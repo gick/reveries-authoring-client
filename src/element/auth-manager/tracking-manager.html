@@ -1,0 +1,32 @@
+<!--
+@license
+Copyright Pierre-Yves Gicquel ReVeRIES project
+Tracker Element for logging custom events on server
+Perform a POST request with the body.operation.track field set 
+The request get logged on server side
+Usefull for tracking events that do not perform actions on server, e.g changing route, opening a modal...
+
+
+-->
+
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="tracking-manager">
+    <template>
+        <iron-ajax id="tracker" url='/track' params="[[trackingString]]"></iron-ajax>
+    </template>
+</dom-module>
+<script>
+(function() {
+    'use strict';
+    Polymer({
+        is: 'tracking-manager',
+        ready: function() {
+        },
+        performTracking:function(operationType,param){
+            this.trackingString={operation:operation,param:param}
+            this.$.tracker.generateRequest()
+        }
+    })
+})();
+</script>

@@ -20,16 +20,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="admin-view">
     <template>
         <style include="common-styles">
-
         </style>
         <div class="card">
             <div class="topLevelInfo">
                 <h1 class="text">Outils d'administration</h1>
-                <div class="text">Cette section est <b>réservée aux administrateurs</b></div>
+                <div class="text">Cette section est
+                    <b>réservée aux administrateurs</b>
+                </div>
                 <div>Dans cette section vous pouvez:</div>
                 <ul>
                     <li class="text">Supprimer des comptes utilisateurs</li>
-                    <li class="text">Supprimer des ressources créés par un utilisateur (utile si un utisateur à créé involontairement beaucoup de ressources du même type)</li>
+                    <li class="text">Supprimer des ressources créés par un utilisateur (utile si un utisateur à créé involontairement beaucoup
+                        de ressources du même type)</li>
                 </ul>
             </div>
         </div>
@@ -41,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
     Polymer({
 
-        is: 'admin-view',
+        is: 'admin-view',        
         ready: function() {
             this.addEventListener('resource-operation', this.updateMedia.bind(this))
         },

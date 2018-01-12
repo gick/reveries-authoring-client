@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../src/element/auth-manager/auth-manager.html">
+<link rel="import" href="../src/element/auth-manager/tracking-manager.html">
 <link rel="import" href="../bower_components/i18n-msg/i18n-msg.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -96,6 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <auth-notification id="authNotif"></auth-notification>
         <tutorial-dialog page=[[page]] id="tuto"></tutorial-dialog>
         <auth-manager id="manager" status="{{status}}"></auth-manager>
+        <tracking-manager id="tracking"></tracking-manager>
         <app-route route="{{route}}" pattern="#/page/:param" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-drawer-layout fullbleed>
             <!-- Drawer content -->
@@ -218,6 +220,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ready: function() {
             I18nMsg.lang = 'en';
             Platform.performMicrotaskCheckpoint();
+            this.$$('#pages').addEventListener('tracking-operation', this.peformTracking.bind(this))
             this.$$('#pages').addEventListener('resource-operation', this.showMessage.bind(this))
             this.$$('#pages').addEventListener('auth-event', this.authChanged.bind(this))
             this.$$('#pages').addEventListener('auth-message', this.showAuthMessage.bind(this))
@@ -225,6 +228,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.manager.addEventListener('auth-message', this.showAuthMessage.bind(this))
             this.$.constructorView.addEventListener('unitGameSaved', this.unitGameSaved.bind(this))
             this.$.manager.checkStatusOnRefresh();
+        },
+        peformTracking:function(){
+
         },
         unitGameSaved: function() {
             if (this.$.mlgView && this.$.mlgView.unitGameChanged) {

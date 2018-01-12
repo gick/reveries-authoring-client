@@ -185,7 +185,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
                     <paper-radio-group  allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
                         <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" name="QR">Scan d'un QR code</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" checked={{active}} name="QR">Scan d'un QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
                     </paper-radio-group>
                     <paper-button class="heading" disabled="[[!poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
@@ -199,19 +199,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <generic-resource-viewer conception-mode input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
             </div>
-            <div class="topLevel">
-                <div class="contain">
-                    <div class="insideflex">
-                        <h3>POI Post action</h3>
-                    </div>
-                    <iron-collapse opened='{{active}}'>
+            <iron-collapse opened='[[active]]'>
+            
+                <div class="topLevel">
+                    <div class="contain">
+                        <div class="insideflex">
+                            <h3>POI Post action</h3>
+                        </div>
                         <label class="subtitle" id="labelpoi">Mauvais QR-Code scanné :</label>
                         <paper-input label="QR code incorrect message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
-                    </iron-collapse>
-                    <label class="subtitle" id="label2">POI atteint :</label>
-                    <paper-input label="POI atteint message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
+                        <label class="subtitle" id="label2">Bon QR-code scanné :</label>
+                        <paper-input label="QR code correct message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
+                    </div>
                 </div>
-            </div>
+            </iron-collapse>
+
             <div class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
