@@ -226,15 +226,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$$('#pages').addEventListener('auth-message', this.showAuthMessage.bind(this))
 
             this.$.manager.addEventListener('auth-message', this.showAuthMessage.bind(this))
-            this.$.constructorView.addEventListener('unitGameSaved', this.unitGameSaved.bind(this))
             this.$.manager.checkStatusOnRefresh();
         },
         peformTracking:function(){
 
         },
         unitGameSaved: function() {
-            if (this.$.mlgView && this.$.mlgView.unitGameChanged) {
-                this.$.mlgView.unitGameChanged();
+            console.log(this.$$('#mlgView').updateUnitGames)
+            console.log(this.$$('#pages'))
+            if (this.$$('#mlgView') && this.$$('#mlgView').updateUnitGames) {
+                this.$$('#mlgView').updateUnitGames();
             }
         },
         showTutorial: function() {
@@ -244,6 +245,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.authNotif.showToast(message.detail)
         },
         showMessage: function(message) {
+            if(message && message.detail && message.detail.info && message.detail.info.resource && message.detail.info.resource.type && message.detail.info.resource.type=='unitgame'){
+                this.unitGameSaved()                
+            }
             this.$.toaster.showToast(message.detail)
         },
         authChanged: function(arg) {

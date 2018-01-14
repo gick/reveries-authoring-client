@@ -65,7 +65,9 @@
                 this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
                 this.$.badgePicker.addEventListener('resourcePicked',this.setResource.bind(this))
             },
-
+            updateUnitGames:function(){
+                this.$.unitgameList.requestElements()
+            },
 
             setResource: function(message) {
                 switch (message.detail.resourceType) {

@@ -50,6 +50,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             //    this.push('games',this.returnItem   )
         },
+        updateUnitGames:function(){
+            this.$.mlgCreator.updateUnitGames()
+        },
         updateMedia: function(message) {
             switch (message.detail.info.operation) {
                 case 'create':
