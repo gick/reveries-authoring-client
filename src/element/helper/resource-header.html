@@ -37,21 +37,25 @@
         <div class="resourceReadwrite">
             <h3 class="headerText">{{resourceLabel}}</h3>
             <!-- Read belonging to the user can be set public or private -->
-            <template is="dom-if" if="{{!isReadOnly}}" restamp>
-                <template is="dom-if" if="[[_isSharable(resource.typeLabel)]]" restamp>
-                    <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
-                    <paper-tooltip for="setStatus" position="top">Partager/annuler le partage</paper-tooltip>
+            <template is="dom-if" if="{{!isPicker}}" restamp>
+            
+                <template is="dom-if" if="{{!isReadOnly}}" restamp>
+                    <template is="dom-if" if="[[_isSharable(resource.typeLabel)]]" restamp>
+                        <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center;margin-left:auto" raised on-click="setStatus"
+                            icon="{{sharedIcon}}"></paper-icon-button>
+                        <paper-tooltip for="setStatus" position="top">Partager/annuler le partage</paper-tooltip>
+                    </template>
+                    <template is="dom-if" if="[[_isEditable(resource.typeLabel)]]" restamp>
+                        <paper-icon-button id="edit" style="display:inline-flex;align-self: center;" raised on-click="edit" icon="icons:create"></paper-icon-button>
+                        <paper-tooltip for="edit" position="top">Editer</paper-tooltip>
+                    </template>
+                    <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="confirmRemove" icon="icons:delete"></paper-icon-button>
+                    <paper-tooltip for="delete" position="top">Supprimer</paper-tooltip>
                 </template>
-                <template is="dom-if" if="[[_isEditable(resource.typeLabel)]]" restamp>
-                    <paper-icon-button id="edit" style="display:inline-flex;align-self: center;" raised on-click="edit" icon="icons:create"></paper-icon-button>
-                    <paper-tooltip for="edit" position="top">Editer</paper-tooltip>
+                <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
+                <template is="dom-if" if="{{isReadOnly}}">
+                    <paper-icon-button id="cloneObject" style="display:inline-flex;align-self: center" raised on-click="cloneResource" icon="icons:content-copy"></paper-icon-button>
                 </template>
-                <paper-icon-button id="delete" style="display:inline-flex;align-self: center;" raised on-click="confirmRemove" icon="icons:delete"></paper-icon-button>
-                <paper-tooltip for="delete" position="top">Supprimer</paper-tooltip>
-            </template>
-            <!-- Public resource not belonging to the user can be cloned in order to be used/modified in SG -->
-            <template is="dom-if" if="{{isReadOnly}}">
-                <paper-icon-button id="cloneObject" style="display:inline-flex;align-self: center" raised on-click="cloneResource" icon="icons:content-copy"></paper-icon-button>
             </template>
         </div>
     </template>
@@ -142,6 +146,12 @@
                     type: Object,
                     notify: true,
                 },
+                isPicker: {
+                    type: Boolean,
+                    notify: true,
+                    value:false,
+                },
+
                 ressourceId: {
                     type: String,
                     notify: true,

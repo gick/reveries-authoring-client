@@ -28,7 +28,7 @@
             <array-selector id="selector" items="{{items}}" selected="{{selected}}" toggle></array-selector>
             <template is="dom-repeat" id='list' items="{{items}}" as="item">
                 <paper-card class="resourceList" on-click='selectItem'>
-                    <resource-header hidden={{picker}} resource-url="{{shareUrl}}" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource="{{item}}" resource-label="{{item.label}}"></resource-header>
+                    <resource-header is-picker={{picker}} resource-url="{{shareUrl}}" resource-id="{{item._id}}" resource-readonly="{{item.readonly}}" resource-status="{{item.status}}" resource="{{item}}" resource-label="{{item.label}}"></resource-header>
                     <div class=card-content>
                         <generic-resource-viewer class$={{setStyleValue(item,selected)}} resource-type="{{resourceType}}" item={{item}}>
                         </generic-resource-viewer>
