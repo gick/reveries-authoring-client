@@ -178,12 +178,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <label class="subtitle">Point d'intérêt associé à l'unité de jeu :</label>
                     <paper-button style="margin-top:10px;" on-click="setPOI" raised>Choisir un POI</paper-button>
                     <label class="subtitle" id="label1">Guidance :</label>
-                    <paper-radio-group allow-empty-selection>
+                    <paper-radio-group id="selectGuidance" allow-empty-selection>
                         <paper-radio-button disabled="[[!poiActive]]" name="map">Carte interactive</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="ping">Radar</paper-radio-button>
                     </paper-radio-group>
                     <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
-                    <paper-radio-group  allow-empty-selection selectable={{poiSet}} aria-labelledby="label2">
+                    <paper-radio-group  allow-empty-selection selectable={{poiSet}} id="selectReach" aria-labelledby="label2">
                         <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" checked={{active}} name="QR">Scan d'un QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
@@ -222,9 +222,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <label class="subtitle" id="label2">Objet d'inventaire acquis durant l'unité de jeu :</label>
                     <paper-button on-click="setPOIInventory" raised>Choisir un objet d'inventaire (optionnel)</paper-button>
                     <label class="subtitle" id="label2">L'objet est acquis quand :</label>
-                    <paper-radio-group allow-empty-selection aria-labelledby="label2">
+                    <paper-radio-group id="inventoryStep" allow-empty-selection aria-labelledby="label2" attr-for-selected="value">            
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="uginstructions">L'unité de jeu commence</paper-radio-button>
-                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">Le POI est attein</paper-radio-button>
+                        <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">Le POI est atteint</paper-radio-button>
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="questions">Les activités situées sont terminées</paper-radio-button>
                     </paper-radio-group>
                 </div>
@@ -399,6 +399,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.situatedActivityMedia.removeResource()
                 this.$.situatedActivityMedia2.removeResource()
                 this.$.situatedActivityMedia3.removeResource()
+                this.$.selectGuidance.selected=0
+                this.$.selectReach.selected=0
+                this.$.inventoryStep.selected=0
+
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
