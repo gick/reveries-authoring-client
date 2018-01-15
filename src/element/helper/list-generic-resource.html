@@ -44,8 +44,9 @@
         Polymer({
             is: 'list-generic-resource',
             ready: function() {
-
-                this.requestElements()
+                if (!this.lazy) {
+                    this.requestElements()
+                }
                 //  this.$.selector.addEventListener('selected-changed',this.setStyleValue.bind(this))
                 //  this.$.remover.addEventListener('elementRemoved',this.requestElements.bind(this))
             },
@@ -108,6 +109,11 @@
                 shareUrl: {
                     type: String,
                     notify: true,
+                },
+                lazy:{
+                    type:Boolean,
+                    notify:true,
+                    value:false,
                 },
                 filterSearch:
                 {
