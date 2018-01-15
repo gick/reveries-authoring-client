@@ -49,6 +49,9 @@
                 this.push('items',item)
 
             },
+            removeAllItems:function(){
+                this.splice('items',0,this.items.length)
+            },
             removeItem:function(event){
                 this.splice('items',event.detail.index,1)
             },

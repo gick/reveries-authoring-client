@@ -92,7 +92,11 @@
 
             },
             resetFields: function() {
-
+                this.$.badgeViewer.removeResource()
+                this.$.startPage.removeResource()
+                this.$.unitgameTopost.removeAllItems()
+                this.mlgName=""
+                this.multi=false
             },
             showMediaDialog: function() {
                 this.$.pagePicker.open()
