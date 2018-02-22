@@ -6,6 +6,7 @@
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../basic-element/mcq-activity.html">
 <link rel="import" href="../../../bower_components/marked-element/marked-element.html">
 <link rel="import" href="../../styles/common-styles.html">
@@ -43,7 +44,7 @@
 
         .image {
             width: 300px;
-            max-height: 300px;
+            height: 300px;
         }
 
         .deleteIcon {
@@ -123,7 +124,7 @@
                 </template>
                 <template is="dom-if" if="{{image}}" restamp>
                     <div class="mediablock">
-                        <img class="image" src="/file/{{item._id}}">
+                        <iron-image class="image" sizing="contain" src="/file/{{item._id}}"></iron-image>
                     </div>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
