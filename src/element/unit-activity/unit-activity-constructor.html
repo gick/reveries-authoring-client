@@ -200,16 +200,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <generic-resource-viewer conception-mode input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
             </div>
             <iron-collapse opened='[[active]]'>
-            
+
                 <div class="topLevel">
                     <div class="contain">
                         <div class="insideflex">
                             <h3>POI Post action</h3>
                         </div>
-                        <label class="subtitle" id="labelpoi">Mauvais QR-Code scanné :</label>
-                        <paper-input label="QR code incorrect message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
                         <label class="subtitle" id="label2">Bon QR-code scanné :</label>
                         <paper-input label="QR code correct message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
+                        <label class="subtitle" id="labelpoi">Mauvais QR-Code scanné :</label>
+                        <paper-input label="QR code incorrect message" value={{poiIncorrectMessage}} name="poiIncorrectMessage"></paper-input>
                     </div>
                 </div>
             </iron-collapse>
@@ -222,7 +222,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <label class="subtitle" id="label2">Objet d'inventaire acquis durant l'unité de jeu :</label>
                     <paper-button on-click="setPOIInventory" raised>Choisir un objet d'inventaire (optionnel)</paper-button>
                     <label class="subtitle" id="label2">L'objet est acquis quand :</label>
-                    <paper-radio-group id="inventoryStep" allow-empty-selection aria-labelledby="label2" attr-for-selected="value">            
+                    <paper-radio-group id="inventoryStep" allow-empty-selection aria-labelledby="label2" attr-for-selected="value">
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="uginstructions">L'unité de jeu commence</paper-radio-button>
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">Le POI est atteint</paper-radio-button>
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="questions">Les activités situées sont terminées</paper-radio-button>

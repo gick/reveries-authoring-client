@@ -37,9 +37,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div>
                 Activities : {{activities.length}}
             </div>
-            <template is="dom-if" if="{{startMedia}}">
-                <staticmedia-viewer resource-label="[[startMedia.label]]" conception-mode style="min-width:150px" class="topLevelView" mkdown="[[startMedia.mkdown]]"></staticmedia-viewer>
-            </template>
             <template is="dom-if" if="{{poiGuidMap}}">
                 <div>
                     POI guidance : Map
