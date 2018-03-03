@@ -91,7 +91,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             font-weight: bold;
         }
 
-        .drawer-list a.subroute {}
         </style>
         <app-location use-hash-as-path route="{{route}}"></app-location>
         <message-notification id="toaster"></message-notification>
@@ -102,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-route route="{{route}}" pattern="#/page/:param" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-drawer-layout fullbleed>
             <!-- Drawer content -->
-            <app-drawer>
+            <app-drawer>[[page]]
                 <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
                     <paper-item class="menu-content firstLevelMenu">
                         <a class='' name="intro" href="#intro">
@@ -129,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <i18n-msg msgid="login_button">Tutoriel</i18n-msg>
                         </a>
                     </paper-item>
-                    <paper-submenu>
+                    <paper-submenu name=[[page]]>
                         <paper-item class="menu-trigger firstLevelMenu">
                             <i18n-msg msgid="resources_button"> Mes documents & médias </i18n-msg>
                         </paper-item>
@@ -145,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
-                    <paper-submenu>
+                    <paper-submenu name=[[page]]>
                         <paper-item class="menu-trigger firstLevelMenu">
                             Mes composants de jeu
                         </paper-item>
@@ -169,7 +168,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-item>
                     </paper-menu>
                     </paper-submenu>
-                    <paper-submenu>
+                    <paper-submenu name=[[page]]>
                         <paper-item class="menu-trigger firstLevelMenu">
                             Mes scénarios de jeu
                         </paper-item>
@@ -283,8 +282,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             page: {
                 type: String,
-                reflectToAttribute: true,
-                observer: '_pageChanged'
+                reflectToAttribute: true
             },
 
         },
@@ -300,12 +298,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return
             }
             this.page = this.route.path || 'intro';
+            this.pageChanged(this.page)
         },
-        _pageChanged: function(page) {
-            this.$.tuto.setPage(this.page)
+        pageChanged: function(page) {
+            if(page===null){
+                return
+            }
+            this.$.tuto.setPage(page)
 
             this.importHref(
-                this.resolveUrl(page + '-view.html'), null, null, true);
+                this.resolveUrl(page + '-view.html'),
+                ()=>{console.log(page + ' loaded')},
+                ()=>{console.log(page + ' loading Error')},
+                false);
         }
 
     })
