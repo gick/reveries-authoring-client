@@ -18,13 +18,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../../styles/common-styles.html">
-
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
+<!--
+<h1>Constructor for multiple choice questions</h1> 
+Builder for free text question resources 
+<b>Parameters</b>
+    <ul>
+        <li>Label :identifiant</li> 
+        <li>mediaId : </li>
+        <li>question</li>
+    </ul>
+    <script>
+    </script>
+
+@demo
+-->
+
 <dom-module id="mcq-constructor">
     <style include="common-styles">
 
@@ -36,21 +52,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <form class="creator" id="mcqForm" is="iron-form" method="post" action="/mcq">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Nouveau QCM</h3>
-                <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
-                <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
-                <input type="hidden" value="{{statusString}}" name="status" />
             </div>
             <word-list id="randomSentence"></word-list>
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
             <paper-input name="label" label="Label" value="{{label}}" required></paper-input>
-            <paper-input name="question" value={{question}} label="Question" required></paper-input>
+            <paper-textarea name="question" value={{question}} label="Question" required></paper-textarea>
             <paper-input name="distractor1" label="Premier distracteur" value={{distractor1}} required></paper-input>
             <paper-input name="distractor2" label="Second distracteur" value={{distractor2}} required></paper-input>
             <paper-input name="response" label="Réponse correcte" value={{correctChoice}} required></paper-input>
-            <paper-input name="correctMessage" label="Message associé à une réponse correcte" value={{correctMessage}} required></paper-input>
-            <paper-input name="wrongMessage" label="Message associé à une réponse incorrecte" value={{wrongMessage}} required></paper-input>
+            <paper-textarea name="correctMessage" label="Message associé à une réponse correcte" value={{correctMessage}} required></paper-textarea>
+            <paper-textarea name="wrongMessage" label="Message associé à une réponse incorrecte" value={{wrongMessage}} required></paper-textarea>
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel)</paper-button>
             <generic-resource-viewer input-name="mediaId" is-temp page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="insideflex ">
@@ -89,20 +102,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             showMediaDialog: function() {
                 this.$.pagePicker.open()
             },
-            dummyFill: function() {
-                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
-
-                for (var i = 0; i < inputList.length; i++) {
-                    if (inputList[i].name != "imageId")
-                        inputList[i].value = this.$.randomSentence.getRandomSentence(5);
-                }
-            },
             resetFields: function() {
                 this.updating = false
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
                 }
+                var textarealist = Polymer.dom(this.root).querySelectorAll('paper-textarea');
+                for (var i = 0; i < textarealist.length; i++) {
+                    textarealist[i].value = ""
+                }
+
                 this.$.mcqMediaViewer.removeResource()
             },
 
@@ -188,27 +198,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Boolean,
                     notify: true,
                     value: false,
-                },
-                status: {
-                    type: Boolean,
-                    observer: '_statusChanged'
                 }
-
 
             },
-            _statusChanged: function(newval, oldval) {
-                if (!newval) {
-                    this.statusText = "Private content, not visible for other users"
-                    this.statusString = "Private"
-                    this.statusIcon = "visibility-off"
-                } else {
-                    this.statusText = "Public content, shared with other users"
-                    this.statusString = "Public"
-                    this.statusIcon = "visibility"
-
-                }
-            }
-
 
         });
     })();

@@ -18,6 +18,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 <link rel="import" href="../helper/resource-header.html">
 <link rel="import" href="../../styles/common-styles.html">
+<!--
+Viewer for Markdown resource using marked-element 
+<b>Example - basic</b>
+
+    <staticmedia-viewer mkdown="# Mkdown title"></staticmedia-viewer>
+
+    <script>
+    </script>
+
+<b>Example</b> - Use of a default markdown string when mkdown is null:
+
+    <staticmedia-viewer default-mkdown="# Default title"></staticmedia-viewer>
+@demo
+-->
+
 <dom-module id="staticmedia-viewer">
     <style include="common-styles">
     .resourceElement {
@@ -49,8 +64,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .markdown-html img {
-        max-width: 500px;
-        max-height: 500px;
+        max-width: 400px;
+        max-height: 400px;
     }
     </style>
     <template>

@@ -29,7 +29,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
+
+<!--
+<h1>Inventory item constructor</h1> 
+Builder for inventory 
+
+@demo
+-->
+
 <dom-module id="inventoryitem-constructor">
+
     <style include="common-styles">
     </style>
     <template>
@@ -40,9 +49,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <form class="creator" id="inventoryForm" is="iron-form">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Nouvel objet d'inventaire</h3>
-                <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
-                <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
-                <input type="hidden" value="{{statusString}}" name="status" />
             </div>
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
@@ -151,25 +157,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type:Object,
                     notify:true,
                     reflectToAttribute:true,
-                },
-                status: {
-                    type: Boolean,
-                    observer: '_statusChanged'
-                },
-            },
-            _statusChanged: function(newval, oldval) {
-                if (!newval) {
-                    this.statusText = "Private content, not visible for other users"
-                    this.statusString = "Private"
-                    this.statusIcon = "visibility-off"
-                } else {
-                    this.statusText = "Public content, shared with other users"
-                    this.statusString = "Public"
-                    this.statusIcon = "visibility"
-
                 }
-            }
-
+            },
 
         });
     })();

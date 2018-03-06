@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
@@ -28,6 +29,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../remove-ressource/get-resource.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../../styles/common-styles.html">
+<!--
+<h1>Free text question constructor</h1> 
+Builder for free text question resources 
+<b>Parameters</b>
+    <ul>
+        <li>Label :identifiant</li> 
+        <li>mediaId : </li>
+        <li>question</li>
+    </ul>
+    <script>
+    </script>
+
+@demo
+-->
+
 <dom-module id="free-text-constructor">
     <style include="common-styles">
 
@@ -48,19 +64,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <form class="creator" id="freeTextForm" is="iron-form">
             <div class="formTitleWithButton">
                 <h3 class="smallh3">Nouvelle question</h3>
-                <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
-                <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
-                <input type="hidden" value="{{statusString}}" name="status" />
             </div>
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
             <paper-input name="label" value={{label}} label="Identifiant de la question"></paper-input>
-            <paper-input name="question" value={{question}} label="Question"></paper-input>
+            <paper-textarea name="question" value={{question}} max-rows=0 rows=1 label="Question"></paper-textarea>
+
             <paper-input name="responseLabel" value={{responseLabel}} label="Label du champ réponse"></paper-input>
-            <paper-input style=";" name="response" label="Response" value={{response}} required></paper-input>
-            <paper-input style=";" name="correctMessage" label="Message associé à une réponse correcte" value={{correctMessage}} required></paper-input>
-            <paper-input style=";" name="wrongMessage" label="Message associé à une réponse incorrecte" value={{wrongMessage}} required></paper-input>
+            <paper-input name="response" label="Response" value={{response}} required></paper-input>
+            <paper-textarea name="correctMessage" label="Message associé à une réponse correcte" value={{correctMessage}} required></paper-textarea>
+            <paper-textarea name="wrongMessage" label="Message associé à une réponse incorrecte" value={{wrongMessage}} required></paper-textarea>
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel))</paper-button>
             <generic-resource-viewer input-name="mediaId" image is-temp page video class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
             <div class="insideflex">
@@ -93,16 +107,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
 
-
-            dummyFill: function() {
-                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
-                for (var i = 0; i < inputList.length; i++) {
-                    inputList[i].value = this.$.randomSentence.getRandomSentence(5);
-                }
-            },
-            _activateObs: function(newval, oldval) {
-                this.set('imageRequired', newval)
-            },
             showMediaDialog: function() {
                 this.$.pagePicker.open()
             },
@@ -112,6 +116,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
                 }
+                var textareaList = Polymer.dom(this.root).querySelectorAll('paper-textarea');
+                for (var i = 0; i < textareaList.length; i++) {
+                    textareaList[i].value = ""
+                }
+
                 this.$.freetextMediaViewer.removeResource()
             },
 
@@ -169,31 +178,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     notify: true,
                     reflectToAttribute: true,
                 },
-                status: {
-                    type: Boolean,
-                    observer: '_statusChanged'
-                },
                 mediaId: {
                     type: String,
                     notify: true,
                     value: null,
-                },
-
-                mediaName: {
-                    type: String,
-                    notify: true,
-                    value: null,
-                },
-                activate: {
-                    type: Boolean,
-                    reflectToAttribute: true,
-                    value: false,
-                    observer: '_activateObs'
-                },
-                imageRequired: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true
                 },
                 responseLabel: {
                     type: String,
@@ -202,19 +190,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
             },
-            _statusChanged: function(newval, oldval) {
-                if (!newval) {
-                    this.statusText = "Private content, not visible for other users"
-                    this.statusString = "Private"
-                    this.statusIcon = "visibility-off"
-                } else {
-                    this.statusText = "Public content, shared with other users"
-                    this.statusString = "Public"
-                    this.statusIcon = "visibility"
-
-                }
-            }
-
 
         });
     })();
