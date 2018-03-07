@@ -13,13 +13,17 @@
             height: 500px;
             display: inline-flex;
         }
+
+div > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div:nth-child(1) > div:nth-child(3){
+    display: none !important
+}
         </style>
         <google-maps-api api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" version="3.exp"></google-maps-api>
         <google-map-search map="[[mapsAPI]]" query="Pizza" results="{{results}}">
         </google-map-search>
         <google-map class="mymap" api-key="AIzaSyBw9aJOCPfc4Hel0sTET3DgwJhuDeCDqdc" id="poimapgmap" zoom="{{mapzoom}}" map={{mapsAPI}} latitude="{{lat}}" longitude="{{long}}" click-events>
             <template is="dom-repeat" items={{markers}} as="marker">
-                <google-map-marker click-events title="{{marker.title}}" on-google-map-marker-click="{{markerClicked}}" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
+                <google-map-marker click-events info="{{marker.info}}" title="{{marker.title}}" on-google-map-marker-click="clickMarker" latitude="{{marker.latitude}}" longitude="{{marker.longitude}}"></google-map-marker>
             </template>
         </google-map>
     </template>
@@ -35,6 +39,12 @@
                 this.markers = [];
                 this.circles = [];
 
+            },
+            clickMarker:function(evt){
+                var map = this.get('mapsAPI')
+
+                let mark=evt.model
+                mark.__data__.marker.info.open(map)
             },
             showPOI: function(item) {
                 if (this.findIndex(item) >= 0) {
@@ -75,7 +85,7 @@
                 var latlng = new google.maps.LatLng(item.latitude, item.longitude);
 
 
-                var circle = new google.maps.Circle({
+/*                 var circle = new google.maps.Circle({
                     strokeColor: '#FF0000',
                     id: item._id,
                     strokeOpacity: 0.8,
@@ -84,21 +94,42 @@
                     fillOpacity: 0.35,
                     map: map,
                     center: {
-                        lat: item.map.areaLat,
-                        lng: item.map.areaLong,
+                        lat: item.map.mapLatitude,
+                        lng: item.map.mapLongitude,
                     },
                     radius: item.map.areaRadius,
                 })
+ */                
+ 
                 this.push('markers', {
                     latitude: lat,
                     longitude: long,
                     areaLat: item.map.areaLat,
+                    title:item.label,
+                    info: this.getInfoWindow(item),
                     areaLong: item.map.areaLong,
                     radius: item.map.areaRadius,
                     id: item._id,
                 });
-                this.push('circles', circle);
+         //       this.push('circles', circle);
                 map.setCenter(latlng)
+                this.getInfoWindow(item)
+            },
+            getInfoWindow:function(poiItem){
+                var latlng = new google.maps.LatLng(poiItem.latitude, poiItem.longitude);
+                var offset= new google.maps.Size(0,-30)
+                var map = this.get('mapsAPI')
+
+                var contenuInfoBulle =	'<b>'+ poiItem.label +'</b>'	
+                var info= new google.maps.InfoWindow({
+                     content: contenuInfoBulle,
+                     pixelOffset : offset
+                                    });
+                    info.setPosition(latlng)
+                    info.open(map)
+                return info
+
+
             },
             _getMarkeIndexById: function(id) {
 

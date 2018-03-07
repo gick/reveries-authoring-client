@@ -25,7 +25,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../styles/common-styles.html">
 
 <link rel="import" href="./inventory-element.html">
-<link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
@@ -42,7 +41,6 @@ Builder for inventory
     <style include="common-styles">
     </style>
     <template>
-        <word-list id="randomSentence"></word-list>
         <create-resource id="creator" resource-url="/inventory" resource="{{resource}}"></create-resource>
         <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
         <resource-picker-dialog page id="pageDocPicker"></resource-picker-dialog>
@@ -131,6 +129,12 @@ Builder for inventory
                 this.label = inventory.label
                 this.itemText = inventory.itemText
                 this.itemId = inventory._id
+                if(inventory.media){
+                    this.$.inventoryMediaViewer.setPage(inventory.media)
+                }
+                if(inventory.inventoryDoc){
+                    this.$.inventoryDocPageViewer.setPage(inventory.inventoryDoc)
+                }
             },
             _submit: function() {
                 var json = this.$.inventoryForm.serialize()
