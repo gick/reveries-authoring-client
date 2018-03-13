@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/static-media/staticmedia-viewer.html">
 <link rel="import" href="./element/resource-filtering/generic-header.html">
@@ -23,59 +24,96 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="staticmedia-view">
     <template>
         <style include="common-styles">
-
         </style>
         <div class="card">
             <div class='topLevelInfo'>
-            <h1>Mes documents multimédia</h1>
-            <div>
-            Les documents multimédias permettent d'associer <b>images ou vidéos à du texte mis en forme.</b>
-            <br>Ces documents sont utilisables dans la <b>création des éléments de jeu (ex. instruction de jeu, feedback...)</b>  
-            <br>La syntaxe Markdown permet la mise en forme de ces documents
+                <h1>Mes documents multimédia</h1>
+                <div>
+                    Les documents multimédias permettent d'associer
+                    <b>images ou vidéos à du texte mis en forme.</b>
+                    <br>Ces documents sont utilisables dans la
+                    <b>création des éléments de jeu (ex. instruction de jeu, feedback...)</b>
+                    <br>La syntaxe Markdown permet la mise en forme de ces documents</div>
+                <br> Dans cet section :
+                <ul>
+                    <li>Vous pouvez créer, partager, éditer des documents multimédias</li>
+                </ul>
+                <paper-toggle-button checked={{showMkdown}}>Afficher syntaxe Markdown</paper-toggle-button>
+                <iron-collapse id="mkdownHelp" tabindex="0" opened=[[showMkdown]]>
+                    <ul>
+                        <li>Pour mettre du texte en
+                            <i>italique</i>, utiler underscore.
+                            <ul>
+                                <li>Exemple _d'italique_ -> Exemple d'
+                                    <i>italique</i>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Pour mettre du texte en
+                            <b>gras</b>, utiler double underscore.
+                            <ul>
+                                <li>Exemple __de texte en gras__ -> Exemple
+                                    <b>de texte en gras</b>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Pour <b>créer une liste d'élément avec "bullets" </b>, précéder chaque élément d'une étoile et d'un espace <ul>
+                            <li>* Item 1</li>
+                            <li>* Item 2</li>
+                            <li>** Sous liste item 1</li>
+                        </ul> </li>
+                    </ul>
+                    <li>Pour <b>créer des titres/sous-titres</b>, précéder le titre du caractère dièse et d'un espace <ul>
+                            <li># Documentation sur les cartes -> <h1 style="display:inline">Documentation sur les cartes</h1></li>
+                            <li>* Item 2</li>
+                            <li>** Sous liste item 1</li>
+                        </ul> </li>
+                    </ul>
+
+                </iron-collapse>
+
             </div>
-            <br> Dans cet section :
-            <ul>
-                <li>Vous pouvez créer, partager, éditer des documents multimédias</li>
-            </ul>
-            </b>
-            </div>
+
         </div>
         <div class="card constructorCard">
-            <staticmedia-generator class="topLevelView"   label="{{label}}" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
-            <staticmedia-viewer resource-label="[[label]]" conception-mode style="min-width:150px" class="topLevelView"  mkdown="{{MK}}"></staticmedia-viewer>
+            <staticmedia-generator class="topLevelView" label="{{label}}" mkdown="{{MK}}" id="staticConstructor"></staticmedia-generator>
+
+
+
+            <staticmedia-viewer resource-label="[[label]]" conception-mode style="min-width:150px" class="topLevelView" mkdown="{{MK}}"></staticmedia-viewer>
         </div>
         <div class="card">
             <generic-header search="{{keyword}}"></generic-header>
-            <list-generic-resource filter-search="[[keyword]]" share-url='/staticmedia' id='staticmedialist'  resource-type='staticmedia' url='/staticmedia'></list-generic-resource>
+            <list-generic-resource filter-search="[[keyword]]" share-url='/staticmedia' id='staticmedialist' resource-type='staticmedia'
+                url='/staticmedia'></list-generic-resource>
         </div>
     </template>
     <script>
-    Polymer({
+        Polymer({
 
-        is: 'staticmedia-view',
-        ready: function() {
-            this.addEventListener('resource-operation',this.updateMedia.bind(this))
+            is: 'staticmedia-view',
+            ready: function () {
+                this.addEventListener('resource-operation', this.updateMedia.bind(this))
 
-        }
-        ,
-        updateMedia: function(message) {
-        switch(message.detail.info.operation){
-            case 'create':
-            this.$.staticmedialist.requestElements()
-            break
-            case 'update':
-            this.$.staticmedialist.requestElements()
-            break
+            },
+            updateMedia: function (message) {
+                switch (message.detail.info.operation) {
+                    case 'create':
+                        this.$.staticmedialist.requestElements()
+                        break
+                    case 'update':
+                        this.$.staticmedialist.requestElements()
+                        break
 
-            case 'delete':
-            this.$.staticmedialist.requestElements()
-            break
+                    case 'delete':
+                        this.$.staticmedialist.requestElements()
+                        break
 
-            case 'edit':
-            this.$.staticConstructor.edit(message.detail.info.resource)
-            break
+                    case 'edit':
+                        this.$.staticConstructor.edit(message.detail.info.resource)
+                        break
+                }
             }
-        }
-    });
+        });
     </script>
 </dom-module>

@@ -19,50 +19,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
         <style include="common-styles">
         </style>
-        <div style="margin-bottom: 0" class="card">
+        <div  class="card">
             <div class="topLevelInfo">
                 <h2>Unités de jeu</h2>
-            <div>
-            Les unités de jeux sont les composants <b>les plus complexes dans MOGGLE.</b> Une unité de jeu définit, suivant un pattern préétabli, une activité complète.
+                <div>
+                    Les unités de jeux sont les composants
+                    <b>les plus complexes dans MOGGLE.</b> Une unité de jeu définit, suivant un pattern préétabli, une activité
+                    complète.
+                    La création d'une unité de jeu se fait suivant plusieurs étapes, chaque étape étant représenté par un cadre ci dessous.
+                    <ul>
+                        <li>Choix d'une page de départ</li>
+                        <li>Sélection du POI et du mode de guidance</li>
+                        <li>Sélection (optionnelle) d'un item d'inventaire acquis durant l'unité</li>
+                        <li>Sélection des activités proposées à l'arrivée au POI</li>
+                        <li>Choix (optionnel) d'une page de feedback/synthèse terminant l'unité de jeu</li>
+                    </ul>
 
+                </div>
             </div>
-        </div>
-        <unit-activity-constructor id="unitGame"></unit-activity-constructor>
-        <div style="padding:10px;" class="card">
-            <list-generic-resource  share-url='/unitgame' id='unitgameList'  resource-type='unitgame' url='/unitgame'></list-generic-resource>
-        </div>
+            </div>
+            <unit-activity-constructor id="unitGame"></unit-activity-constructor>
+            <div style="padding:10px;" class="card">
+                <list-generic-resource share-url='/unitgame' id='unitgameList' resource-type='unitgame' url='/unitgame'></list-generic-resource>
+            </div>
     </template>
     <script>
-    Polymer({
+        Polymer({
 
-        is: 'constructor-view',
-        ready: function() {
-            //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
-            this.$.unitGame.addEventListener('resource-operation', this.updateMedia.bind(this))
-            this.$.unitgameList.addEventListener('resource-operation', this.updateMedia.bind(this))
+            is: 'constructor-view',
+            ready: function () {
+                //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
+                this.$.unitGame.addEventListener('resource-operation', this.updateMedia.bind(this))
+                this.$.unitgameList.addEventListener('resource-operation', this.updateMedia.bind(this))
 
-        },
-        updateMedia: function(message) {
-            switch (message.detail.info.operation) {
-                case 'create':
-                    this.$.unitgameList.requestElements()
-                    break
-                case 'update':
-                    this.$.unitgameList.requestElements()
-                    break
-                case 'edit':
-                    this.$.unitGame.edit(message.detail.info.resource)
-                    break
+            },
+            updateMedia: function (message) {
+                switch (message.detail.info.operation) {
+                    case 'create':
+                        this.$.unitgameList.requestElements()
+                        break
+                    case 'update':
+                        this.$.unitgameList.requestElements()
+                        break
+                    case 'edit':
+                        this.$.unitGame.edit(message.detail.info.resource)
+                        break
 
-                case 'delete':
-                    this.$.unitgameList.requestElements()
-                    break
+                    case 'delete':
+                        this.$.unitgameList.requestElements()
+                        break
 
+                }
+            },
+            clearList: function () {
+                this.$.uploader.clear();
             }
-        },
-        clearList: function() {
-            this.$.uploader.clear();
-        }
-    });
+        });
     </script>
 </dom-module>
