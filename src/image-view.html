@@ -19,7 +19,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="image-view">
     <template>
         <style include="common-styles">
-
+            file-upload{
+                --file-upload-upload-border:{display:none !important;}
+            }
         </style>
         <div class="card">
             <div class="topLevelInfo">
@@ -38,10 +40,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="card">
             <div class="topLevelInfo">
                 <h2>Image uploader</h2>
-                <file-upload id="uploader" on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Importer une image
+                <file-upload id="uploader" hide-file-list on-success="updateImages" public={{setpublic}} raised method="POST" target="/file">Importer une image
                 </file-upload>
-                <paper-icon-button id="removeMedia" raised icon="icons:remove-circle-outline" on-click="clearList">Clear uploaded list</paper-icon-button>
-                <paper-tooltip for="removeMedia" offset="0">Clear uploaded list</paper-tooltip>
             </div>
         </div>
         <div class="card">

@@ -65,7 +65,7 @@ Builder for free text question resources
             <paper-textarea name="correctMessage" label="Message associé à une réponse correcte" value={{correctMessage}} required></paper-textarea>
             <paper-textarea name="wrongMessage" label="Message associé à une réponse incorrecte" value={{wrongMessage}} required></paper-textarea>
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel)</paper-button>
-            <generic-resource-viewer input-name="mediaId" is-temp page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="mediaId" is-temp page  video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="insideflex ">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
@@ -93,6 +93,7 @@ Builder for free text question resources
                 switch (message.detail.resourceType) {
                     case "page":
                         this.$.mcqMediaViewer.setPage(message.detail.resourceItem)
+                        break
                 }
             },
             setValues: function() {

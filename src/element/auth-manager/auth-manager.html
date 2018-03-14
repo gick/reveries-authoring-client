@@ -125,10 +125,10 @@
             this.$.signup.generateRequest()
         },
 
-        authenticate: function(username, pass) {
-            var nameParam = 'name=' + username;
+        authenticate: function(userMail, pass) {
+            var emailParam = 'email=' + userMail;
             var passParam = '&password=' + pass
-            this.set('authparam', nameParam + passParam);
+            this.set('authparam', emailParam + passParam);
             this.$.userLogin.generateRequest();
 
         },

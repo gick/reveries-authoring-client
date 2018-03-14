@@ -269,7 +269,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     case 'import' :
                         this.$.manager.importTutorial()
                     case 'login':
-                        this.$.manager.authenticate(operation.credential.name, operation.credential.pass)
+                        this.$.manager.authenticate(operation.credential.email, operation.credential.pass)
                         break
                     case 'logout':
                         this.$.manager.logout()

@@ -12,9 +12,11 @@
 <link rel="import" href="../basic-element/post-action.html">
 <link rel="import" href="../helper/sharedBehavior.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
+<link rel="import" href="../../styles/common-styles.html">
+
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <dom-module id="mcq-activity">
-    <style is="custom-style" include="iron-flex iron-flex-alignment">
+    <style include="common-style">
     .outer {
         display: inline-flex;
         flex-wrap: wrap;
@@ -59,9 +61,9 @@
                 <h3 class="headerText">{{resourceLabel}}</h3>
             </div>
         </template>
-        <div class=outer>
-            <div class="inner">
-                <div id="mcqbody" class="mcq-body">
+        <form class=resource>
+            <div class="resource">
+                <div id="mcqbody" class="resource">
                     <iron-collapse id="clue">
                         <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
                     </iron-collapse>
@@ -94,7 +96,7 @@
             <template is="dom-if" if="[[unitActivity]]" restamp>
                 <post-action></post-action>
             </template>
-        </div>
+        </form>
     </template>
     <script>
     (function() {

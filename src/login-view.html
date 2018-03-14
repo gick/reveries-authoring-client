@@ -57,7 +57,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div hidden="{{status.logged}}" class="card">
             <form class="insidePaper" id="authform" is="iron-form">
                 <h1>Log in</h1>
-                <paper-input on-keydown="checkEnter" name="name" value={{nameVal}} label="Name" required></paper-input>
+                <paper-input on-keydown="checkEnter" name="email" value={{emailVal}} label="Email" required></paper-input>
                 <paper-input on-keydown="checkEnter" type="password" value="{{passVal}}" name="password" label="password" required></paper-input>
                 <paper-button raised on-click="_submit">Envoyer</paper-button>
                 <paper-button raised on-click="_reset">Annuler</paper-button>
@@ -121,7 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.fire('auth-event', { type: 'logout', credential: {} })
         },
         _submit: function() {
-            var loginCredential = { name: this.nameVal, pass: this.passVal }
+            var loginCredential = { email: this.emailVal, pass: this.passVal }
             this.fire('auth-event', { type: 'login', credential: loginCredential })
         },
         _signup: function() {

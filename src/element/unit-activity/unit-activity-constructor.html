@@ -185,10 +185,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
                     <paper-radio-group  allow-empty-selection selectable={{poiSet}} id="selectReach" aria-labelledby="label2">
                         <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" checked={{active}} name="QR">Scan d'un QR code</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" checked={{active}} name="QR">Scan du QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
                     </paper-radio-group>
-                    <paper-button class="heading" disabled="[[!poiActive]]" aria-controls="collapse1" on-click="toggleQr">QR code</paper-button>
+                    <paper-button class="heading" raised disabled="[[!poiActive]]" aria-controls="collapse1" on-click="toggleQr">Imprimer QR-code</paper-button>
                     <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
                         <template is="dom-if" if="[[poiid]]" restamp>
                             <div class="content">
