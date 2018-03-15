@@ -1,23 +1,24 @@
 <!--
 @license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
 -->
+
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../src/element/helper/forgotPassForm.html">
+<!--
+<h1>Login view</h1> 
+Used to log in.
+@demo
+-->
+
 <dom-module id="login-view">
     <template>
         <style>
@@ -57,8 +58,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div hidden="{{status.logged}}" class="card">
             <form class="insidePaper" id="authform" is="iron-form">
                 <h1>Log in</h1>
-                <paper-input on-keydown="checkEnter" name="email" value={{emailVal}} label="Email" required></paper-input>
-                <paper-input on-keydown="checkEnter" type="password" value="{{passVal}}" name="password" label="password" required></paper-input>
+                <paper-input on-keydown="checkEnter" type="email" autocomplete="email" name="email" value={{emailVal}} label="Email" required></paper-input>
+                <paper-input on-keydown="checkEnter" type="password" autocomplete="current-password" value="{{passVal}}" name="password" label="password" required></paper-input>
                 <paper-button raised on-click="_submit">Envoyer</paper-button>
                 <paper-button raised on-click="_reset">Annuler</paper-button>
                 <paper-button raised on-click="forgotPassword">Mot de passe oublié</paper-button>
@@ -70,13 +71,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h1 class="insidePaper">Profil utilisateur</h1>
                 <div role="listbox">
                     <paper-icon-item>
-                        <iron-icon icon="social:person" item-icon></iron-icon>
-                        Login {{userval}} : {{status.name}}
-                    </paper-icon-item>
-                    <paper-icon-item>
                         <iron-icon icon="icons:mail" item-icon></iron-icon>
                         Email : {{status.email}}
                     </paper-icon-item>
+                    <paper-icon-item>
+                        <iron-icon icon="social:person" item-icon></iron-icon>
+                        Pseudo {{userval}} : {{status.name}}
+                    </paper-icon-item>
+
                     <template is="dom-if" if=[[status.isadmin]]>
                         <paper-icon-item>
                             <iron-icon icon="icons:verified-user" item-icon>
@@ -106,9 +108,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div hidden={{status.logged}} class="card">
             <form class="insidePaper" id="signupForm" is="iron-form">
                 <h1>Créer un compte</h1>
-                <paper-input on-keydown="checkEnterSignup" name="name" value={{signupName}} label="Name" required></paper-input>
-                <paper-input on-keydown="checkEnterSignup" type="password" value="{{signupPass}}" name="password" label="password" required></paper-input>
                 <paper-input on-keydown="checkEnterSignup" type="email" value="{{signupMail}}" name="email" label="Email" required></paper-input>
+                <paper-input on-keydown="checkEnterSignup" type="password" value="{{signupPass}}" name="password" label="password" required></paper-input>
+                <paper-input on-keydown="checkEnterSignup" name="name" value={{signupName}} label="Pseudonyme" required></paper-input>
                 <paper-button raised on-click="_signup">Envoyer</paper-button>
                 <paper-button raised on-click="_reset">Annuler</paper-button>
             </form>

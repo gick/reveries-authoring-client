@@ -1,7 +1,20 @@
+<!--
+@license
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
+-->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<!--
+<h1>Authentification manager</h1> 
+Global manager for logging/authenticating states and status
+Fires messages when a logging/authentification fails
+@demo
+-->
+
 <dom-module id="auth-manager">
+
     <template>
         <iron-ajax id="logout" url='/logout' handle-as="json" on-response="handleLogout"></iron-ajax>
         <iron-ajax id="signup" url='/signup' body="{{signupParam}}" method="post" handle-as="json" on-response="validateSignup"></iron-ajax>

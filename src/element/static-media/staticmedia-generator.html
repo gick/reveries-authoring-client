@@ -1,30 +1,12 @@
 <!--
 @license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
-<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../media-viewer/media-viewer-activity.html">
-<link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../../styles/common-styles.html">
@@ -45,7 +27,6 @@ TODO : propose different CSS associated with the markdown
     <template>
         <resource-picker-dialog image id="imagePicker"></resource-picker-dialog>
         <create-resource id="creator" resource-url="/staticmedia" resource="{{resource}}"></create-resource>
-        <word-list id="randomSentence"></word-list>
         <form class="creator" id="staticmediaConstructor" is="iron-form" method="post" action="/staticmedia">
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>

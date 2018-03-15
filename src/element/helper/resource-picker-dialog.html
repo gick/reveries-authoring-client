@@ -1,10 +1,14 @@
+<!--
+@license
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
+-->
 <link rel="import" href="./list-generic-resource.html">
 <link rel="import" href="../../../src/element/POI/map-display.html">
 <link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <dom-module id="resource-picker-dialog">
     <style>
         .flexible {
@@ -67,62 +71,37 @@
                     <div>
                         <list-generic-resource lazy picker share-url='/listUserImages' id='image' resource-id='{{mediaId}}' resource-type='image'
                             url='/listUserImages'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
                 <template is="dom-if" if="{{page}}" restamp>
                     <div>
                         <list-generic-resource lazy picker share-url='/staticmedia' id='staticmedia' resource-type='page' url='/staticmedia'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
                     <div>
                         <list-generic-resource lazy picker share-url='/inventory' id='inventoryList' resource-type='inventory' url='/inventory'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
                 <template is="dom-if" if="{{poi}}">
                     <div>
-                        <div style="display: inline-flex;
-                                flex-wrap: wrap;">
-                            <map-display id="gmap"></map-display>
-                        </div>
-
+                        <map-display id="gmap"></map-display>
                         <list-generic-resource lazy picker share-url='/poi' id='poiList' resource-type='poi' url='/poi'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
                 <template is="dom-if" if="{{mcq}}">
                     <div>
                         <list-generic-resource lazy picker share-url='/mcq' id='mcqList' resource-type='mcq' url='/mcq'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
                 <template is="dom-if" if="{{freetext}}">
                     <div>
                         <list-generic-resource lazy picker share-url='/freetextactivity' id='freetextList' resource-type='freetext' url='/freetextActivity'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
                 <template is="dom-if" if="{{badge}}">
                     <div>
                         <list-generic-resource lazy picker share-url='/badge' id='badge' resource-type='badge' url='/badge'></list-generic-resource>
-                        <div class="buttons">
-                            <paper-button raised style="background-color: lightgreen" on-click="setValues" dialog-confirm>OK</paper-button>
-                        </div>
                     </div>
                 </template>
             </iron-pages>
