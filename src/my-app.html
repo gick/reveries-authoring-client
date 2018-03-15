@@ -1,11 +1,7 @@
 <!--
 @license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
@@ -24,8 +20,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../src/element/auth-manager/auth-manager.html">
 <link rel="import" href="../src/element/auth-manager/tracking-manager.html">
 <link rel="import" href="../bower_components/i18n-msg/i18n-msg.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
@@ -165,7 +159,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             </paper-item>
                         </paper-menu>
                     </paper-submenu>
-                    <paper-item>
+                    <paper-item name="[[page]]">
                         <a class='menu-trigger firstLevelMenu' name="poi" href="#poi">Mes cartes et POI</a>
                     </paper-item>
                     </paper-menu>
@@ -192,7 +186,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div title>Echologia - MOOGLE 1.5</div>
-                        <paper-icon-button style="display:block;" icon="help" on-click="showTutorial"></paper-icon-button>
+                        <paper-icon-button style="margin-left:auto;" icon="help" on-click="showTutorial"></paper-icon-button>
                     </app-toolbar>
                 </app-header>
                 <iron-pages id="pages" role="main" selected="[[page]]" attr-for-selected="name">

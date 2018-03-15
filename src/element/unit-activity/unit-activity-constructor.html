@@ -1,40 +1,21 @@
 <!--
 @license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
-<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
-<link rel="import" href="../../../bower_components/akc-meta/akc-meta.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
-<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel="import" href="../basic-element/post-action.html">
-<link rel="import" href="../helper/word-list.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
 <dom-module id="unit-activity-constructor">
     <style include="common-styles">
@@ -146,13 +127,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     </style>
     <template>
-        <word-list id="randomSentence"></word-list>
         <create-resource id="creator" resource-url="/unitGame" resource="{{resource}}"></create-resource>
-        <resource-picker-dialog image page video resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog  page  resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
-        <resource-picker-dialog image page video id="poiPAMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog image page video media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog image page video resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog  page  id="poiPAMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog  page  media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog page  resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog poi resource-viewer="poiViewer" id="poiMediaPicker"></resource-picker-dialog>
         <form class="creator" id="unitActivityForm" is="iron-form" style="width:100%;">
@@ -407,10 +387,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 for (var i = 0; i < inputList.length; i++) {
                     inputList[i].value = ""
                 }
-                var inputList2 = Polymer.dom(this.root).querySelectorAll('paper-textarea');
-                for (var j = 0; j < inputList2.length; j++) {
-                    inputList2[j].value = ""
-                }
 
 
             },
@@ -490,17 +466,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-            dummyFill: function() {
-                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
-                for (var i = 0; i < inputList.length; i++) {
-                    inputList[i].value = this.$.randomSentence.getRandomSentence(3);
-                }
-                var inputList2 = Polymer.dom(this.root).querySelectorAll('paper-textarea');
-                for (var j = 0; j < inputList2.length; j++) {
-                    inputList2[j].value = this.$.randomSentence.getRandomSentence(10);
-                }
-
-            },
 
             _submit: function() {
                 var json = this.$.unitActivityForm.serialize()
