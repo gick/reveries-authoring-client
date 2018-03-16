@@ -109,21 +109,22 @@ This code may only be used under the "Do whatever you want with code license"
                             <iron-icon src="../images/logo_appliSenario1.png"></iron-icon> <span>MOOGLE</span>
                         </a>
                     </paper-item>
-                    <paper-item>
+                    
+                    <paper-item name="[[page]]">
                         <a class='menuLinkPermanent' name="login" href="#login">
                             <i18n-msg msgid="login_button">Login/logout</i18n-msg>
                         </a>
                     </paper-item>
-                    <paper-item visible=[[status.isadmin]]>
-                        <a class='menuLinkPermanent' name="admin" href="#admin">
-                            <i18n-msg msgid="login_button">Admin</i18n-msg>
-                        </a>
-                    </paper-item>
-                    <paper-item visible=[[status.isadmin]]>
+                    <paper-item name="[[page]]" visible=[[status.isadmin]]>
                         <a class='menuLinkPermanent' name="tutorial" href="#tutorial">
                             <i18n-msg msgid="login_button">Tutoriel</i18n-msg>
                         </a>
                     </paper-item>
+                    <paper-item name="[[page]]" visible=[[status.isadmin]]>
+                            <a class='menuLinkPermanent' name="admin" href="#">
+                                <i18n-msg msgid="login_button">Tutoriel</i18n-msg>
+                            </a>
+                    </paper-item>    
                     <paper-submenu name=[[page]]>
                         <paper-item class="menu-trigger firstLevelMenu">
                             <i18n-msg msgid="resources_button"> Mes documents & médias </i18n-msg>
