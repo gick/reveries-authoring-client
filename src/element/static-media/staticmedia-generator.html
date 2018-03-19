@@ -25,7 +25,7 @@ TODO : propose different CSS associated with the markdown
 <style include="common-styles">
 </style>
     <template>
-        <resource-picker-dialog image id="imagePicker"></resource-picker-dialog>
+        <resource-picker-dialog image video id="imagePicker"></resource-picker-dialog>
         <create-resource id="creator" resource-url="/staticmedia" resource="{{resource}}"></create-resource>
         <form class="creator" id="staticmediaConstructor" is="iron-form" method="post" action="/staticmedia">
             <template is="dom-if" if="{{updating}}" restamp>
@@ -85,6 +85,17 @@ TODO : propose different CSS associated with the markdown
                                 this.mkdown = toAppend;
                             }
                             break
+                        case "video":
+                             var videoURL = '/file/' + message.detail.resourceItem._id
+                             var toAppend = '<video controls width="300" src="'+videoURL+'"></video>'
+
+                            if (this.mkdown) {
+                                this.mkdown = this.mkdown + "\n" + "\n" + toAppend;
+                            } else {
+                                this.mkdown = toAppend;
+                            }
+                            break
+
                     }
                 },
                 resetFields: function () {

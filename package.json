@@ -20,14 +20,21 @@
   },
   "homepage": "https://github.com/gick/reveries-authoring-client#readme",
   "devDependencies": {
+    "eslint": "^4.19.0",
+    "eslint-plugin-html": "^4.0.2",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
     "gulp": "^3.9.1",
     "gulp-vulcanize": "^7.0.0"
   },
   "dependencies": {
     "css-slam": "^2.1.0",
+    "eslint-plugin-polymer": "^0.2.1",
     "gulp-html-minifier": "^0.1.8",
     "gulp-if": "^2.0.2",
     "gulp-uglify": "^3.0.0",
-    "polymer-build": "^1.6.0"
+    "polymer-build": "^1.6.0",
+    "save-dev": "^2.0.0"
   }
 }
