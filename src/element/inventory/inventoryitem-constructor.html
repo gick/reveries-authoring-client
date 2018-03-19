@@ -38,7 +38,9 @@ Builder for inventory
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
-            <paper-input name="label" value={{label}} label="Identifiant de l'objet d'inventaire"></paper-input>
+            <paper-input name="label" value={{label}} label="Label">
+                    <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+            </paper-input>
             <paper-input name="itemText" value={{itemText}} label="Texte associé à l'objet d'inventaire"></paper-input>
             <paper-button raised  style="margin-top: 10px" on-click="showMediaDialog">Associer une image</paper-button>
             <generic-resource-viewer input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>

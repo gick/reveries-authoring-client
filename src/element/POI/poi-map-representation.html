@@ -83,7 +83,9 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
                     <input type="hidden" value="{{statusString}}" name="status" />
                 </div>
-                <paper-input name="label" value={{title}} label="Identifiant du POI"></paper-input>
+                <paper-input name="label" value={{title}} label="Label">
+                        <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+                </paper-input>
                 <paper-textarea name="comment" value={{info}} label="Description"></paper-textarea>
               
                 <paper-input name="latitude" value=[[latitude]] label="Latitude"></paper-input>

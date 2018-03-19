@@ -33,7 +33,10 @@ Fires messages when a logging/authentification fails
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
-            <paper-input name="label" value={{label}} label="Identifiant du badge"></paper-input>
+            <paper-input name="label" value={{label}} label="Label">
+                    <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+
+            </paper-input>
             <paper-input name="badgeText" value={{badgeText}} label="Texte associé au badge"></paper-input>
             <paper-button raised on-click="showMediaDialog">Associer une image</paper-button>
             <generic-resource-viewer item={{media}} input-name="badgePageId" is-temp page class="resourceViewer" id="resourceViewer"></generic-resource-viewer>

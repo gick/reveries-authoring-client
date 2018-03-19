@@ -50,7 +50,9 @@ Builder for free text question resources
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
-            <paper-input name="label" value={{label}} label="Identifiant de la question"></paper-input>
+            <paper-input name="label" value={{label}} label="Label">
+                    <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+            </paper-input>
             <paper-textarea name="question" value={{question}} max-rows=0 rows=1 label="Question"></paper-textarea>
 
             <paper-input name="responseLabel" value={{responseLabel}} label="Label du champ réponse"></paper-input>
