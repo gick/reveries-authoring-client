@@ -1,13 +1,13 @@
 <!--
 @license
-Copyright (c) 2018 Pierre-Yves Gicquel. 
+Copyright (c) 2018 Pierre-Yves Gicquel.
 This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 <!--
-<h1>Authentification manager</h1> 
+<h1>Authentification manager</h1>
 Global manager for logging/authenticating states and status
 Fires messages when a logging/authentification fails
 @demo
@@ -21,7 +21,6 @@ Fires messages when a logging/authentification fails
         <iron-ajax id="userInfo" url='/profile' handle-as="json" on-response="validateAuth"></iron-ajax>
         <iron-ajax id="checkStatus" url='/profile' handle-as="json" on-response="refreshStatus"></iron-ajax>
         <iron-ajax id="importTuto" url='/setup_tutorial' handle-as="json" on-response="tutorialImported"></iron-ajax>
-
         <iron-ajax method='post' url='/login' id="userLogin" body='{{authparam}}' handle-as="json" on-response="validateAuth"></iron-ajax>
         <paper-dialog id="loginFailed">
             <h2>Authentification failed</h2>
@@ -36,7 +35,7 @@ Fires messages when a logging/authentification fails
 </dom-module>
 <script>
 (function() {
-    'use strict';
+    'use strict'
     Polymer({
         is: 'auth-manager',
         ready: function() {
@@ -49,7 +48,7 @@ Fires messages when a logging/authentification fails
         tutorialImported:function(resp){
                 var response = resp.detail.__data__.response;
                 if(response.success){
-                    this.fire('auth-message',{info:"Le scénario d'exemple a été importé!"})           
+                    this.fire('auth-message',{info:"Le scénario d'exemple a été importé!"})
                 }
                 else{
                     this.fire('auth-message',{info:"Problème rencontré, le tutoriel n'a pas été importé!"})
@@ -72,19 +71,19 @@ Fires messages when a logging/authentification fails
             var response = resp.detail.__data__.response;
             var status={}
             if (!response.success) {
-                status.logged = false;
-                status.name = '';
-                status.email = '';
-                status.isadmin = false;
-                this.fire('auth-message',{info:'Username already exists'})
+                status.logged = false
+                status.name = ''
+                status.email = ''
+                status.isadmin = false
+                this.fire('auth-message',{info:'Email déjà utilisé'})
 
 
             } else {
                 status.logged = true;
-                status.name = response.user.name;
-                status.isadmin = response.user.isadmin;
-                status.email = response.user.email;
-                this.fire('auth-message',{info:'Welcome new user!'})
+                status.name = response.user.name
+                status.isadmin = response.user.isadmin
+                status.email = response.user.email
+                this.fire('auth-message',{info:'Bienvenue nouvel utilisateur!'})
 
             }
             this.status={}
@@ -94,18 +93,18 @@ Fires messages when a logging/authentification fails
         },
         refreshStatus:function(resp){
             var status = {}
-            var response = resp.detail.__data__.response;
+            var response = resp.detail.__data__.response
             if (!response.success) {
-                status.logged = false;
-                status.name = '';
-                status.email = '';
-                status.isadmin = false;
+                status.logged = false
+                status.name = ''
+                status.email = ''
+                status.isadmin = false
 
             } else {
-                status.logged = true;
-                status.name = response.user.name;
-                status.isadmin = response.user.isadmin;
-                status.email = response.user.email;
+                status.logged = true
+                status.name = response.user.name
+                status.isadmin = response.user.isadmin
+                status.email = response.user.email
             }
             this.status={}
             this.status=status
@@ -113,20 +112,20 @@ Fires messages when a logging/authentification fails
         },
         validateAuth: function(resp) {
             var status = {}
-            var response = resp.detail.__data__.response;
+            var response = resp.detail.__data__.response
             if (!response.success) {
-                status.logged = false;
-                status.name = '';
-                status.email = '';
-                status.isadmin = false;
-                this.fire('auth-message',{info:'Username/password mismatch!'})
+                status.logged = false
+                status.name = ''
+                status.email = ''
+                status.isadmin = false
+                this.fire('auth-message',{info:'Email/mot de passe incorrect!'})
 
 
             } else {
-                status.logged = true;
-                status.name = response.user.name;
-                status.isadmin = response.user.isadmin;
-                status.email = response.user.email;
+                status.logged = true
+                status.name = response.user.name
+                status.isadmin = response.user.isadmin
+                status.email = response.user.email
             }
             this.status={}
             this.status=status
@@ -139,10 +138,10 @@ Fires messages when a logging/authentification fails
         },
 
         authenticate: function(userMail, pass) {
-            var emailParam = 'email=' + userMail;
+            var emailParam = 'email=' + userMail
             var passParam = '&password=' + pass
-            this.set('authparam', emailParam + passParam);
-            this.$.userLogin.generateRequest();
+            this.set('authparam', emailParam + passParam)
+            this.$.userLogin.generateRequest()
 
         },
         properties: {
@@ -164,5 +163,5 @@ Fires messages when a logging/authentification fails
             }
         }
     })
-})();
+})()
 </script>

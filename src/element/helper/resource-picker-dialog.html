@@ -78,6 +78,12 @@ This code may only be used under the "Do whatever you want with code license"
                         <list-generic-resource lazy picker share-url='/staticmedia' id='staticmedia' resource-type='page' url='/staticmedia'></list-generic-resource>
                     </div>
                 </template>
+                <template is="dom-if" if="{{video}}" restamp>
+                    <div>
+                        <list-generic-resource lazy picker share-url='/listUserAudioVideo' id='video' resource-type='video' url='/listUserAudioVideo'></list-generic-resource>
+                    </div>
+                </template>
+
                 <template is="dom-if" if="{{inventory}}" restamp>
                     <div>
                         <list-generic-resource lazy picker share-url='/inventory' id='inventoryList' resource-type='inventory' url='/inventory'></list-generic-resource>
