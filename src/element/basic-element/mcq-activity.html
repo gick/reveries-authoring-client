@@ -68,6 +68,7 @@ This code may only be used under the "Do whatever you want with code license"
                         <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
                     </iron-collapse>
                     <div class="question" name="question">{{question}}</div>
+                    [[distractors]]
                     <paper-radio-group id="mcq" class="layout vertical wrap">
                         <paper-radio-button name="resp1">{{correctAnswer}}</paper-radio-button>
                         <paper-radio-button name="resp2">{{wrongAnswer1}}</paper-radio-button>
@@ -181,6 +182,10 @@ This code may only be used under the "Do whatever you want with code license"
                 conceptionMode: {
                     type: Boolean,
                     notify: true,
+                },
+                distractors:{
+                    type:Array,
+                    notify:true,
                 },
                 preview: {
                     type: Boolean,

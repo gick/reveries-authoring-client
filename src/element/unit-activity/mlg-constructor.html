@@ -27,7 +27,9 @@ This code may only be used under the "Do whatever you want with code license"
                         <h3 label="Unit game short description">Nouveau scénario de jeu</h3>
                     </div>
                     <div style="display:inline-flex;flex-direction: column;">
-                        <paper-textarea style="width:300px" name="label" value="{{mlgName}}" label="Identifiant du scénario"></paper-textarea>
+                        <paper-input style="width:300px" name="label" value="{{mlgName}}" label="Label">
+                                <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+                        </paper-input>
                         <paper-input name="gameDifficulty" label="Difficulté" value="3"></paper-input>
                         <paper-input name="gameDuration" label="Durée" value="5"></paper-input>
                         <paper-input hidden name="gameProximity" label="Proximitée" value="5"></paper-input>

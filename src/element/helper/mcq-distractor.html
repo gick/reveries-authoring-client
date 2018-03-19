@@ -1,0 +1,71 @@
+<!--
+@license
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
+-->
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../styles/common-styles.html">
+
+<!--
+A generic response input field to be used to define MCQ resposnses
+
+@demo
+@author Gicquel
+-->
+
+<dom-module id="mcq-distractor">
+    <style include="common-styles">
+        :host {
+            display: inline-flex;
+            justify-content: flex-start;
+            flex-direction: row-reverse;
+            align-items: flex-end;
+        }
+    </style>
+
+    <template>
+        <paper-icon-button disabled=[[disabled]] icon="icons:cancel" on-click="removeDistractor" alt="Supprimer" title="Supprimer ce distracteur"></paper-icon-button>
+        <paper-input class="mcq-distractor" name="distractor" label="[[distractorLabel]]" value="{{distractorValue}}" required></paper-input>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'mcq-distractor',
+                ready: function () {},
+                removeDistractor: function () {
+                    this.fire('remove-distractor', {index:this.index})
+                },
+                _indexChangedObserver: function (newval, oldval) {
+                    if (typeof newval === "number") {
+                        let val=newval+3
+                        this.set('distractorLabel', 'Distracteur ' +val )
+                    }
+                },
+
+                properties: {
+                    distractorLabel: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    distractorValue: {
+                        type: String,
+                        reflectToAttribute: true,
+                    },
+                    disabled:{
+                        type:Boolean,
+                        notify:true,
+                    },
+                    index: {
+                        type: Number,
+                        observer: '_indexChangedObserver',
+                        reflectToAttribute:true,
+                    }
+                },
+            });
+        })();
+    </script>
+</dom-module>

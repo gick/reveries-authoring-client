@@ -34,7 +34,9 @@ TODO : propose different CSS associated with the markdown
             <div class="formTitleWithButton">
                 <input id="status" type="hidden" value="Private" name="status" />
             </div>
-            <paper-input id="label" name="label" value={{label}} label="Identifiant du document"></paper-input>
+            <paper-input id="label" name="label" value={{label}} label="Label">
+                    <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+            </paper-input>
             <paper-textarea id="mkdownCode" name="mkdown" value={{mkdown}} rows="5" label="Contenu du document (Markdown)"></paper-textarea>
             <paper-button on-click="showImageDialog">Ajouter une image</paper-button>
             <div class="insideflex">

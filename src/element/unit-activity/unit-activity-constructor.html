@@ -144,7 +144,9 @@ This code may only be used under the "Do whatever you want with code license"
                     <div class="insideflex">
                         <h3>Début de l'unité de jeu</h3>
                     </div>
-                    <paper-input name="label" value={{label}} label="Game unit name"></paper-input>
+                    <paper-input name="label" value={{label}} label="Label">
+                            <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+                    </paper-input>
                     <label class="subtitle">Document multimédia à afficher au démarrage (optionnel) :</label>
                     <paper-button on-click="setMedia" raised>Assigner un document</paper-button>
                 </div>
