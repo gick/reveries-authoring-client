@@ -8,6 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/resource-filtering/generic-header.html">
 <link rel="import" href="./element/basic-element/mcq-constructor.html">
@@ -16,14 +17,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="mcq-view">
     <template>
         <style include="common-styles">
-
         </style>
         <div class="card">
+
             <div class="topLevelInfo">
                 <h1>Questions à choix multiples</h1>
                 <div>
                     Les questions à choix multiples comportent deux distracteurs et une bonne réponse.
-                    <br> Un <b>indice optionnel</b> peut être associé à la question sous la forme d'un document multimédia
+                    <br> Un
+                    <b>indice optionnel</b> peut être associé à la question sous la forme d'un document multimédia
                 </div>
                 <br> Dans cette section :
                 <ul>
@@ -32,9 +34,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </div>
         <div class="card constructorCard">
-            <mcq-constructor class="topLevelView" id="mcqConstructor" label={{label}} question={{question}} distractor1={{dist1}} distractor2={{dist2}} distractors={{distArray}} correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
+            <mcq-constructor class="topLevelView" id="mcqConstructor" label={{label}} question={{question}} distractor-array={{distArray}}
+                correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
             </mcq-constructor>
-            <mcq-activity conception-mode resource-label="[[label]]" class="topLevelView" question="{{question}}" correct-answer={{response}} wrong-answer2={{dist2}} wrong-answer1={{dist1}} correct-answer-message={{correct}} wrong-answer-message={{wrong}} media-id={{mediaId}}>
+            <mcq-activity style="max-width:30%;" conception-mode resource-label="[[label]]" distractor-array="[[distArray]]" class="topLevelView" question="{{question}}" correct-answer={{response}}
+             correct-answer-message={{correct}} wrong-answer-message={{wrong}}  media-id={{mediaId}}>
             </mcq-activity>
         </div>
         <div class="card">
@@ -43,31 +47,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
     </template>
     <script>
-    Polymer({
+        Polymer({
 
-        is: 'mcq-view',
-        ready: function() {
-            this.addEventListener('resource-operation', this.updateMedia.bind(this))
-        },
-        updateMedia: function(message) {
-            switch (message.detail.info.operation) {
-                case 'create':
-                    this.$.mcqList.requestElements()
-                    break
-                case 'update':
-                    this.$.mcqList.requestElements()
-                    break
+            is: 'mcq-view',
+            ready: function () {
+                this.addEventListener('resource-operation', this.updateMedia.bind(this))
+            },
+            updateMedia: function (message) {
+                switch (message.detail.info.operation) {
+                    case 'create':
+                        this.$.mcqList.requestElements()
+                        break
+                    case 'update':
+                        this.$.mcqList.requestElements()
+                        break
 
-                case 'delete':
-                    this.$.mcqList.requestElements()
-                    break
+                    case 'delete':
+                        this.$.mcqList.requestElements()
+                        break
 
-                case 'edit':
-                    this.$.mcqConstructor.edit(message.detail.info.resource)
-                    break
-            }
-        },
+                    case 'edit':
+                        this.$.mcqConstructor.edit(message.detail.info.resource)
+                        break
+                }
+            },
 
-    });
+        });
     </script>
 </dom-module>

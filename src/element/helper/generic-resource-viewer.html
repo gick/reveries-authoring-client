@@ -45,6 +45,7 @@ This code may only be used under the "Do whatever you want with code license"
         .image {
             width: 300px;
             height: 300px;
+            @apply --resource-image-template;
         }
 
         .deleteIcon {
@@ -75,6 +76,7 @@ This code may only be used under the "Do whatever you want with code license"
             -webkit-box-shadow: 6px 5px 2px #CECEB9;
             -o-box-shadow: 6px 5px 2px #CECEB9;
             box-shadow: 6px 5px 26px #CECEB9;
+            @apply --resource-container-template;
         }
 
         .mainDiv {
@@ -140,7 +142,11 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mcq}}" restamp>
-                    <mcq-activity preview class="" conception-mode=[[conceptionMode]] question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}} correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" media={{item.media}}>
+                    <mcq-activity preview distractor-array={{item.distractors}} class="" conception-mode=[[conceptionMode]] question={{item.question}} 
+                    resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}"
+                     correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}}
+                      correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" 
+                      media={{item.media}}>
                     </mcq-activity>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>

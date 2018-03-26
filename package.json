@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "css-slam": "^2.1.0",
+    "driver.js": "^0.3.5",
     "eslint-plugin-polymer": "^0.2.1",
     "gulp-html-minifier": "^0.1.8",
     "gulp-if": "^2.0.2",

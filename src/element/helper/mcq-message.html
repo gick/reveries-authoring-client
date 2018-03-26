@@ -26,7 +26,7 @@ A generic response input field to be used to define MCQ resposnses
     </style>
 
     <template>
-        <paper-textarea class="mcq-message" name="[[messageName]]" label="[[messageLabel]]" required></paper-textarea>
+        <paper-textarea class="mcq-message" name="[[name]]" label="[[messageLabel]]" value={{value}} required></paper-textarea>
     </template>
     <script>
         (function () {
@@ -36,7 +36,12 @@ A generic response input field to be used to define MCQ resposnses
                 ready: function () {},
 
                 properties: {
-                    messageName: {
+                    value:{
+                        type:String,
+                        notify:true,
+                        reflectToAttribute:true,
+                    },
+                    name: {
                         type: String,
                         notify: true,
                         reflectToAttribute: true,

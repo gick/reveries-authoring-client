@@ -177,11 +177,17 @@ This code may only be used under the "Do whatever you want with code license"
                     }
 
                 },
+                _openDialog:function(newval){
+                    if(newval){
+                        this.open()
+                    }
+                },
                 properties: {
 
                     opened: {
                         type: Boolean,
                         value: false,
+                        observer:'_openDialog',
                     },
                     inventory: {
                         type: Boolean,

@@ -22,7 +22,9 @@ This code may only be used under the "Do whatever you want with code license"
         flex-wrap: wrap;
         flex-direction: row;
     }
-
+    .question{
+        padding:10px;
+    }
     .correct {
         color: green;
     }
@@ -68,11 +70,11 @@ This code may only be used under the "Do whatever you want with code license"
                         <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
                     </iron-collapse>
                     <div class="question" name="question">{{question}}</div>
-                    [[distractors]]
                     <paper-radio-group id="mcq" class="layout vertical wrap">
-                        <paper-radio-button name="resp1">{{correctAnswer}}</paper-radio-button>
-                        <paper-radio-button name="resp2">{{wrongAnswer1}}</paper-radio-button>
-                        <paper-radio-button name="resp3">{{wrongAnswer2}}</paper-radio-button>
+                        <paper-radio-button name="resp1">[[correctAnswer]]</paper-radio-button>
+                        <template is="dom-repeat" items="[[distractorArray]]">
+                            <paper-radio-button name="dist[[index]]">[[item.value]]</paper-radio-button>
+                        </template>
                     </paper-radio-group>
                     <iron-collapse id="correct">
                         <paper-input class="correct" text="">
@@ -87,9 +89,9 @@ This code may only be used under the "Do whatever you want with code license"
                         </paper-input>
                     </iron-collapse>
                     <div style="margin-top:40px" class="card-actions">
-                        <paper-button raised on-click="validate">Valider</paper-button>
+                        <paper-button style="width:100%" on-click="validate">Valider</paper-button>
                         <template is="dom-if" if="{{showMediaButton}}" restamp=true>
-                            <paper-button raised on-click="showClue">Indice</paper-button>
+                            <paper-button  style="width:100%"  on-click="showClue">Indice</paper-button>
                         </template>
                     </div>
                 </div>
@@ -170,22 +172,13 @@ This code may only be used under the "Do whatever you want with code license"
                     notify: true,
                 },
 
-                wrongAnswer1: {
-                    type: String,
-                    notify: true,
+                distractorArray:{
+                    type:Array,
+                    notify:true,
                 },
-                wrongAnswer2: {
-                    type: String,
-                    notify: true,
-                },
-
                 conceptionMode: {
                     type: Boolean,
                     notify: true,
-                },
-                distractors:{
-                    type:Array,
-                    notify:true,
                 },
                 preview: {
                     type: Boolean,
