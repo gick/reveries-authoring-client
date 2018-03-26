@@ -26,6 +26,9 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../src/element/helper/messageNotification.html">
 <link rel="import" href="../src/element/helper/authNotification.html">
 <link rel="import" href="../src/element/tutorial-elements/tutorial-dialog.html">
+<link rel="import" href="../bower_components/paper-lightbox/paper-lightbox.html">
+<link rel="import" href="../bower_components/paper-lightbox/paper-lightbox-popup.html">
+
 <dom-module id="my-app">
     <template>
         <style>
@@ -86,6 +89,8 @@ This code may only be used under the "Do whatever you want with code license"
         }
 
         </style>
+
+        <driver-element></driver-element>
         <app-location use-hash-as-path route="{{route}}"></app-location>
         <message-notification id="toaster"></message-notification>
         <auth-notification id="authNotif"></auth-notification>
@@ -94,6 +99,7 @@ This code may only be used under the "Do whatever you want with code license"
         <tracking-manager id="tracking"></tracking-manager>
         <app-route route="{{route}}" pattern="#/page/:param" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-scrollpos-control id="scrollPosition" selected="{{page}}"></app-scrollpos-control>
+        <paper-lightbox-popup src="https://placehold.it/3000x4000" type="image">launch image popup</paper-lightbox-popup>
 
         <app-drawer-layout fullbleed>
             <!-- Drawer content -->

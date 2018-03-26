@@ -5,7 +5,12 @@ This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../../bower_components/paper-lightbox/paper-lightbox-popup.html">
+<link rel="import" href="../helper/resource-picker-dialog.html">
+
 <link rel="import" href="../../styles/common-styles.html">
 
 <!--
@@ -23,25 +28,53 @@ A generic response input field to be used to define MCQ resposnses
             flex-direction: row-reverse;
             align-items: flex-end;
         }
+
+
+        }
     </style>
 
     <template>
+        <resource-picker-dialog image id="imagePicker"></resource-picker-dialog>
         <paper-icon-button disabled=[[disabled]] icon="icons:cancel" on-click="removeDistractor" alt="Supprimer" title="Supprimer ce distracteur"></paper-icon-button>
-        <paper-input class="mcq-distractor" name="distractor" label="[[distractorLabel]]" value="{{distractorValue}}" required></paper-input>
+        <template is="dom-if" if=[[!imageMode]]>
+            <paper-input class="mcq-distractor" name="distractors" label="[[distractorLabel]]" value="{{distractorValue}}" required></paper-input>
+        </template>
+        <template is="dom-if" if=[[imageMode]]>
+            <paper-icon-button title="Choisir image" on-click="showImages" src="../../../images/setImage.png" alt="Choisir une image" class="">Choisir image</paper-icon-button>
+                <iron-image id="distImage" sizing="contain" style="width:70px;height:70px;" on-click=[[showFull]] src="/file/[[image]]" ></iron-image>
+            [[image]]
+
+        </template>
+
     </template>
     <script>
         (function () {
             'use strict';
             Polymer({
                 is: 'mcq-distractor',
-                ready: function () {},
+                ready: function () {
+                    this.notbound=true
+                    this.addEventListener('resourcePicked', this.setResource.bind(this))
+                },
+                showImages: function () {
+                    this.$.imagePicker.open()
+                },
+                showFull:function(){
+                    this.$.preview.open()
+                },
                 removeDistractor: function () {
-                    this.fire('remove-distractor', {index:this.index})
+                    this.fire('remove-distractor', {
+                        index: this.index
+                    })
+                },
+                setResource: function (evt) {
+                    this.set('image',evt.detail.resourceItem._id)
+                    this.notbound=false
                 },
                 _indexChangedObserver: function (newval, oldval) {
                     if (typeof newval === "number") {
-                        let val=newval+3
-                        this.set('distractorLabel', 'Distracteur ' +val )
+                        let val = newval + 1
+                        this.set('distractorLabel', 'Distracteur ' + val)
                     }
                 },
 
@@ -53,16 +86,22 @@ A generic response input field to be used to define MCQ resposnses
                     },
                     distractorValue: {
                         type: String,
+                        notify: true,
                         reflectToAttribute: true,
                     },
-                    disabled:{
-                        type:Boolean,
-                        notify:true,
+                    imageMode: {
+                        type: Boolean,
+                        notify: true,
+                        value: false,
+                    },
+                    disabled: {
+                        type: Boolean,
+                        notify: true,
                     },
                     index: {
                         type: Number,
                         observer: '_indexChangedObserver',
-                        reflectToAttribute:true,
+                        reflectToAttribute: true,
                     }
                 },
             });

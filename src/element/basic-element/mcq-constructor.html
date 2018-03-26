@@ -10,6 +10,7 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
@@ -47,6 +48,7 @@ Builder for free text question resources
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
+           <paper-toggle-button checked="{{imageMode}}">Réponses images</paper-toggle-button>
             <paper-input name="label" label="Label" value="{{label}}" required>
                     <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
             </paper-input>
@@ -54,13 +56,9 @@ Builder for free text question resources
             <paper-textarea name="question" value={{question}} label="Question" required>
 
             </paper-textarea>
-            <mcq-distractor disabled distractor-label="Distracteur 1">
-                </mcq-distractor>
-            <mcq-distractor disabled distractor-label="Distracteur 2">
-                    </mcq-distractor>
     
-            <template is="dom-repeat" items="{{distractors}}">
-                <mcq-distractor  index=[[index]]>
+            <template is="dom-repeat" items="{{distractorArray}}">
+                <mcq-distractor image-mode=[[imageMode]] disabled=[[item.disabled]] distractor-name={{item.distractorName}} distractor-value={{item.value}} index=[[index]]>
                 </mcq-distractor>
             </template>
             <paper-input name="response" label="Réponse correcte" value={{correctChoice}} required>
@@ -93,15 +91,14 @@ Builder for free text question resources
                 //this.$.selectImage.addEventListener('iron-overlay-opened',function(){this.$.selectImage.fit();console.log('opened')}.bind(this))
                 this.updating = false
                 this.addEventListener('remove-distractor',this.removeDistractor.bind(this))
+                this.distractorArray=[{disabled:true,value:""},{disabled:true,value:""}]
                 this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
-                this.push('distractors','deed')
             },
             addResponseField:function(){
-                this.push('distractors',"dez")
+                this.push('distractorArray',{})
             },
             removeDistractor:function(evt){
-                this.splice('distractors',evt.detail.index,1)
-                console.log(evt)
+                this.splice('distractorArray',evt.detail.index,1)
             },
             setResource: function(message) {
                 switch (message.detail.resourceType) {
@@ -117,6 +114,14 @@ Builder for free text question resources
             showMediaDialog: function() {
                 this.$.pagePicker.open()
             },
+            resetDistrators:function(){
+                this.set('distractorArray.0.value',"")
+                this.set('distractorArray.1.value',"")
+
+                while(this.distractorArray.length>2){
+                    this.pop('distractorArray')
+                }
+            },
             resetFields: function() {
                 this.updating = false
                 var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
@@ -127,7 +132,9 @@ Builder for free text question resources
                 for (var i = 0; i < textarealist.length; i++) {
                     textarealist[i].value = ""
                 }
-
+                this.resetDistrators()
+                this.correctMessage=""
+                this.wrongMessage=""
                 this.$.mcqMediaViewer.removeResource()
             },
 
@@ -142,7 +149,12 @@ Builder for free text question resources
             },
             edit: function(question) {
                 this.updating = true
-
+                this.set('distractorArray.0.value',question.distractors[0].value)
+                this.set('distractorArray.1.value',question.distractors[1].value)
+                while(question.distractors.length>2){
+                    let currentDist=question.distractors.pop()
+                    this.push('distractorArray',{value:currentDist.value})
+                }
                 this.label = question.label
                 this.question = question.question
                 if (question.media) {
@@ -170,9 +182,9 @@ Builder for free text question resources
                     notify: true,
                     reflectToAttribute: true,
                 },
-                distractors:{
+                distractorArray:{
                     type:Array,
-                    reflectToAttribute:true,
+                    notify:true,
                 },
                 distractor1: {
                     type: String,

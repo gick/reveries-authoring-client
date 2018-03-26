@@ -68,7 +68,8 @@
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#1.5.1",
     "paper-badge": "PolymerElements/paper-badge#1.1.4",
     "file-upload": "^2.3.1",
-    "iron-test-helpers": "PolymerElements/iron-test-helpers#1.4.1"
+    "iron-test-helpers": "PolymerElements/iron-test-helpers#1.4.1",
+    "paper-lightbox": "Redbility/paper-lightbox#^1.1.0"
   },
   "resolutions": {
     "polymer": "^1.7.1",
