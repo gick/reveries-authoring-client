@@ -11,51 +11,34 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../basic-element/post-action.html">
 <link rel="import" href="../helper/sharedBehavior.html">
+<link rel="import" href="../helper/thumbnailView.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
 <link rel="import" href="../../styles/common-styles.html">
 
-<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <dom-module id="mcq-activity">
     <style include="common-style">
-    .outer {
-        display: inline-flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-    }
-    .question{
-        padding:10px;
-    }
-    .correct {
-        color: green;
-    }
 
-    .headerText {
-        padding-left: 10px;
-        display: inline-flex;
-        align-self: center;
-    }
+        .question {
+            padding: 10px;
+        }
 
-    .resourceReadwrite {
-        display: inline-flex;
-        flex-direction: row;
-        justify-content: space-between;
-        background-color: lightgreen;
-        width: 100%;
-    }
+        .correct {
+            color: green;
+        }
 
-    .wrong {
-        color: red;
-    }
+        .wrong {
+            color: red;
+        }
+        .resource{
+            border-radius: 3px;
+            padding: 10px;
+            width: 350px;
+            flex-direction: column;
+            overflow:hidden;
+            @apply --resource-look;
+        }
 
-    .inner {
-        display: inline-flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-    }
 
-    .mcq-body {
-        padding: 10px;
-    }
     </style>
     <template>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
@@ -63,137 +46,156 @@ This code may only be used under the "Do whatever you want with code license"
                 <h3 class="headerText">{{resourceLabel}}</h3>
             </div>
         </template>
-        <form class=resource>
-            <div class="resource">
-                <div id="mcqbody" class="resource">
-                    <iron-collapse id="clue">
-                        <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
-                    </iron-collapse>
-                    <div class="question" name="question">{{question}}</div>
-                    <paper-radio-group id="mcq" class="layout vertical wrap">
-                        <paper-radio-button name="resp1">[[correctAnswer]]</paper-radio-button>
-                        <template is="dom-repeat" items="[[distractorArray]]">
-                            <paper-radio-button name="dist[[index]]">[[item.value]]</paper-radio-button>
-                        </template>
-                    </paper-radio-group>
-                    <iron-collapse id="correct">
-                        <paper-input class="correct" text="">
-                            <iron-icon icon="check-circle" prefix></iron-icon>
-                            <div prefix> {{correctAnswerMessage}}</div>
-                        </paper-input>
-                    </iron-collapse>
-                    <iron-collapse id="wrong">
-                        <paper-input class="wrong">
-                            <iron-icon icon="cancel" prefix></iron-icon>
-                            <div prefix> {{wrongAnswerMessage}}</div>
-                        </paper-input>
-                    </iron-collapse>
-                    <div style="margin-top:40px" class="card-actions">
-                        <paper-button style="width:100%" on-click="validate">Valider</paper-button>
-                        <template is="dom-if" if="{{showMediaButton}}" restamp=true>
-                            <paper-button  style="width:100%"  on-click="showClue">Indice</paper-button>
-                        </template>
-                    </div>
-                </div>
-            </div>
-            <template is="dom-if" if="[[unitActivity]]" restamp>
-                <post-action></post-action>
+        <div id="mcqbody" class="resource">
+            <iron-collapse id="clue">
+                <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
+            </iron-collapse>
+            <div class="question" name="question">{{question}}</div>
+            <template is="dom-if" if=[[!imageMode]] restamp>
+                <paper-radio-group selected={{textSelected}} id="textMcq" class="layout vertical wrap">
+                    <paper-radio-button name="resp1">[[correctAnswer]]</paper-radio-button>
+                    <template is="dom-repeat" items="[[distractorArray]]">
+                        <paper-radio-button name="dist[[index]]">[[item.value]]</paper-radio-button>
+                    </template>
             </template>
-        </form>
+            <template is="dom-if" if=[[imageMode]] restamp>
+                <paper-radio-group selected={{imageSelected}} id="imageMcq" class="layout vertical wrap">
+                    <paper-radio-button name="resp1">
+                        <thumbnail-view thumbnail-path="/file/[[correctAnswer]]"></thumbnail-view>
+                    </paper-radio-button>
+                    <template is="dom-repeat" items="[[distractorArray]]">
+                        <paper-radio-button name="dist[[index]]">
+                            <thumbnail-view thumbnail-path="/file/[[item.value]]"></thumbnail-view>
+                        </paper-radio-button>
+                    </template>
+            </template>
+
+            <iron-collapse id="correct">
+                <paper-input class="correct" text="">
+                    <iron-icon icon="check-circle" prefix></iron-icon>
+                    <div prefix> {{correctAnswerMessage}}</div>
+                </paper-input>
+            </iron-collapse>
+            <iron-collapse id="wrong">
+                <paper-input class="wrong">
+                    <iron-icon icon="cancel" prefix></iron-icon>
+                    <div prefix> {{wrongAnswerMessage}}</div>
+                </paper-input>
+            </iron-collapse>
+            <div style="margin-top:40px" class="card-actions">
+                <paper-button style="width:100%" on-click="validate">Valider</paper-button>
+                <template is="dom-if" if="{{showMediaButton}}" restamp=true>
+                    <paper-button style="width:100%" on-click="showClue">Indice</paper-button>
+                </template>
+            </div>
+        </div>
+        <template is="dom-if" if="[[unitActivity]]" restamp>
+            <post-action></post-action>
+        </template>
     </template>
     <script>
-    (function() {
-        'use strict';
-        Polymer({
-            is: 'mcq-activity',
-            behaviors: [sharedBehavior],
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'mcq-activity',
+                behaviors: [sharedBehavior],
 
-            ready: function() {
-                // this.hasClue=false
-                this.mcqRemoved = function() {
-                    this.fire('mcq-removed', null)
-                }.bind(this)
-                this.correctIndex = Math.floor((Math.random() * 2));
-            },
+                ready: function () {
+                    // this.hasClue=false
+                    this.mcqRemoved = function () {
+                        this.fire('mcq-removed', null)
+                    }.bind(this)
+                    this.correctIndex = Math.floor((Math.random() * 2));
+                },
 
-            getClue: function() {
-                this.set('needClue', !this.needClue);
-            },
+                getClue: function () {
+                    this.set('needClue', !this.needClue);
+                },
 
-            validate: function() {
-
-                if (this.$.mcq.selectedItem && this.$.mcq.selectedItem.innerText && this.$.mcq.selectedItem.innerText.trim() == this.correctAnswer.trim()) {
-                    this.$.correct.show();
-                    this.$.wrong.hide();
-                } else {
+                validate: function () {
+                    if (this.textSelected && this.textSelected === 'resp1') {
+                        this.$.correct.show();
+                        this.$.wrong.hide();
+                        return
+                    }
+                    if (this.imageSelected && this.imageSelected === 'resp1') {
+                        this.$.correct.show();
+                        this.$.wrong.hide();
+                        return
+                    }
                     this.$.wrong.show();
                     this.$.correct.hide();
+
+                },
+                _mediaObserver: function (newval) {
+                    if (newval) {
+                        var temp = true
+                        this.set('showMediaButton', true)
+                    } else {
+                        this.set('showMediaButton', false)
+                        this.showMediaButton = false
+
+                    }
+                },
+
+                showClue: function () {
+                    this.$.clue.toggle()
+                },
+
+
+                observers: [
+                    '_mediaObserver(media._id)',
+                ],
+
+                properties: {
+                    question: {
+                        type: String,
+                        notify: true,
+                    },
+                    correctAnswerMessage: {
+                        type: String,
+                        notify: true,
+                    },
+                    wrongAnswerMessage: {
+                        type: String,
+                        notify: true,
+                    },
+                    resourceStatus: {
+                        type: String,
+                        notify: true,
+                    },
+                    correctAnswer: {
+                        type: String,
+                        notify: true,
+                    },
+
+                    distractorArray: {
+                        type: Array,
+                        notify: true,
+                    },
+                    conceptionMode: {
+                        type: Boolean,
+                        notify: true,
+                    },
+                    preview: {
+                        type: Boolean,
+                        notify: true,
+                    },
+                    imageMode: {
+                        type: Boolean,
+                        notify: true,
+                        value: false,
+                    },
+                    media: {
+                        type: Object,
+                        notify: true,
+                    },
+                    resourceLabel: {
+                        type: String,
+                        notify: true,
+                    },
                 }
-            },
-            _mediaObserver: function(newval) {
-                if (newval) {
-                    var temp = true
-                    this.set('showMediaButton', true)
-                } else {
-                    this.set('showMediaButton', false)
-                    this.showMediaButton = false
-
-                }
-            },
-
-            showClue: function() {
-                this.$.clue.toggle()
-            },
-
-
-            observers: [
-                '_mediaObserver(media._id)',
-            ],
-
-            properties: {
-                question: {
-                    type: String,
-                    notify: true,
-                },
-                correctAnswerMessage: {
-                    type: String,
-                    notify: true,
-                },
-                wrongAnswerMessage: {
-                    type: String,
-                    notify: true,
-                },
-                resourceStatus: {
-                    type: String,
-                    notify: true,
-                },
-                correctAnswer: {
-                    type: String,
-                    notify: true,
-                },
-
-                distractorArray:{
-                    type:Array,
-                    notify:true,
-                },
-                conceptionMode: {
-                    type: Boolean,
-                    notify: true,
-                },
-                preview: {
-                    type: Boolean,
-                    notify: true,
-                },
-                media: {
-                    type: Object,
-                    notify: true,
-                },
-                resourceLabel: {
-                    type: String,
-                    notify: true,
-                },
-            }
-        });
-    })();
+            });
+        })();
     </script>
 </dom-module>

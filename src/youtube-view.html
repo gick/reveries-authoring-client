@@ -1,0 +1,35 @@
+<!--
+@PYG
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="./element/youtube-elements/youtube-importer.html">
+<link rel="import" href="./element/youtube-elements/youtube-viewer.html">
+<link rel="import" href="./styles/common-styles.html">
+<dom-module id="youtube-view">
+    <template>
+        <style include="common-styles">
+        </style>
+        <div class="card">
+
+            <div class="topLevelInfo">
+                <h1>Youtube import</h1>
+                <br> Dans cette section :
+                <ul>
+                    <li>Vous pouvez importer des vidéos youtube</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card constructorCard">
+            <youtube-importer class="topLevelView"></youtube-importer>
+            <youtube-viewer></youtube-viewer>
+        </div>
+    </template>
+    <script>
+        Polymer({
+
+            is: 'youtube-view',
+            ready: function () {},
+
+        });
+    </script>
+</dom-module>

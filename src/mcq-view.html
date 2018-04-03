@@ -8,7 +8,6 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/resource-filtering/generic-header.html">
 <link rel="import" href="./element/basic-element/mcq-constructor.html">
@@ -34,11 +33,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
         </div>
         <div class="card constructorCard">
-            <mcq-constructor class="topLevelView" id="mcqConstructor" label={{label}} question={{question}} distractor-array={{distArray}}
+            <mcq-constructor class="topLevelView" id="mcqConstructor" image-mode={{imageMode}} label={{label}} question={{question}} distractor-array={{distArray}}
                 correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
             </mcq-constructor>
-            <mcq-activity style="max-width:30%;" conception-mode resource-label="[[label]]" distractor-array="[[distArray]]" class="topLevelView" question="{{question}}" correct-answer={{response}}
-             correct-answer-message={{correct}} wrong-answer-message={{wrong}}  media-id={{mediaId}}>
+            <mcq-activity style="max-width:30%;" conception-mode resource-label="[[label]]" image-mode="[[imageMode]]" distractor-array="[[distArray]]" class="topLevelView"
+                question="{{question}}" correct-answer={{response}} correct-answer-message={{correct}} wrong-answer-message={{wrong}}
+                media-id={{mediaId}}>
             </mcq-activity>
         </div>
         <div class="card">

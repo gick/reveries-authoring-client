@@ -18,6 +18,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../static-media/staticmedia-viewer.html">
 <link rel="import" href="../tutorial-elements/tutorial-viewer.html">
 <link rel="import" href="../unit-activity/unitGame.html">
+<link rel="import" href="../unit-activity/mlg-viewer.html">
+
 <dom-module id="generic-resource-viewer">
     <template>
         <style include="common-styles">
@@ -33,8 +35,8 @@ This code may only be used under the "Do whatever you want with code license"
         }
 
         .markdown-html img {
-            max-width: 200px;
-            max-height: 200px;
+            width: 200px;
+            height: 200px;
         }
 
         .markdown-html video {
@@ -54,17 +56,6 @@ This code may only be used under the "Do whatever you want with code license"
             right: 30px;
         }
 
-        .markdownblock {
-            width: 300px;
-            height: 300px;
-            overflow: auto;
-            margin-top: 15px;
-            box-shadow: 6px 5px 26px #CECEB9;
-            -moz-box-shadow: 6px 5px 2px #CECEB9;
-            -webkit-box-shadow: 6px 5px 2px #CECEB9;
-            -o-box-shadow: 6px 5px 2px #CECEB9;
-            box-shadow: 6px 5px 26px #CECEB9;
-        }
 
         .mediablock {
             display: inline-flex;
@@ -85,8 +76,12 @@ This code may only be used under the "Do whatever you want with code license"
             flex-direction: column;
             justify-content: right;
             align-items: center;
+            @apply --resource-template;
         }
-
+        h3.resourceLabel {
+            color: #737373!important;
+            margin-bottom: 0!important;
+        }
         .pickedDiv {
             display: flex;
             background-color: blue;
@@ -97,8 +92,10 @@ This code may only be used under the "Do whatever you want with code license"
         </style>
         <div class$="{{pickedValue}}">
             <template is="dom-if" if="{{item}}">
+                    <h3 class="resourceLabel">[[label]]</h3>
+
                 <template is="dom-if" if="{{poi}}" restamp>
-                    <one-poi-display conception-mode=[[conceptionMode]] resource-label="{{item.label}}" item="{{item}}"></one-poi-display>
+                    <one-poi-display  conception-mode=[[conceptionMode]] resource-label="{{item.label}}" item="{{item}}"></one-poi-display>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{page}}" restamp>
@@ -142,7 +139,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mcq}}" restamp>
-                    <mcq-activity preview distractor-array={{item.distractors}} class="" conception-mode=[[conceptionMode]] question={{item.question}} 
+                    <mcq-activity preview image-mode={{item.imageMode}} distractor-array={{item.distractors}} class="" conception-mode=[[conceptionMode]] question={{item.question}} 
                     resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}"
                      correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}}
                       correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" 
@@ -151,7 +148,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mlg}}" restamp>
-                    <mlg-viewer class="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" item-id="{{item._id}}">
+                    <mlg-viewer class="" item={{item}} conception-mode=[[conceptionMode]] resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" item-id="{{item._id}}">
                     </mlg-viewer>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -543,6 +540,8 @@ This code may only be used under the "Do whatever you want with code license"
                 }
             },
             properties: {
+                label:{type:String,
+                notify:true,},
                 poiId: {
                     type: String,
                     reflectToAttribute: true,

@@ -5,6 +5,7 @@ This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-checkbox/paper-checkbox.html">
 <dom-module id="post-action">
@@ -22,7 +23,7 @@ For the moment, the PA can be defined at the "POI reached" level (condition : PO
 and between two Game Unit (game unit succeed condition)
 The instruction are either "change score instruction (var int)", "show media instruction (var static-media)", "skip activity instruction"
 !-->
-    <style>
+    <style include="common-style">
     .resourceReadwrite {
         display: inline-flex;
         flex-direction: row;

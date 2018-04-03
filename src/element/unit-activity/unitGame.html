@@ -8,18 +8,10 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../styles/common-styles.html">
 <dom-module id="unit-game">
     <style include="common-styles">
-            ul.activityList{
-                margin-top: 0px;
-                margin-left:30px;
-            }
-            div.activityContent{
-                margin:10px;
-                padding:8px;
-            }
     
     </style>
     <template>
-        <div class="resource">
+        <div class="">
             <template is="dom-if" if="{{item.POI}}">
                 <div class="activityContent">
                     <paper-toggle-button checked={{poiShowed}} on-change="togglePOI">Afficher sur la carte</paper-toggle-button>

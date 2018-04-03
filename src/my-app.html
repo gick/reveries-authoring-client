@@ -26,8 +26,6 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../src/element/helper/messageNotification.html">
 <link rel="import" href="../src/element/helper/authNotification.html">
 <link rel="import" href="../src/element/tutorial-elements/tutorial-dialog.html">
-<link rel="import" href="../bower_components/paper-lightbox/paper-lightbox.html">
-<link rel="import" href="../bower_components/paper-lightbox/paper-lightbox-popup.html">
 
 <dom-module id="my-app">
     <template>
@@ -99,7 +97,6 @@ This code may only be used under the "Do whatever you want with code license"
         <tracking-manager id="tracking"></tracking-manager>
         <app-route route="{{route}}" pattern="#/page/:param" active={{activity}} data="{{routeData}}" tail="{{subroute}}"></app-route>
         <app-scrollpos-control id="scrollPosition" selected="{{page}}"></app-scrollpos-control>
-        <paper-lightbox-popup src="https://placehold.it/3000x4000" type="image">launch image popup</paper-lightbox-popup>
 
         <app-drawer-layout fullbleed>
             <!-- Drawer content -->
@@ -136,12 +133,16 @@ This code may only be used under the "Do whatever you want with code license"
                             <i18n-msg msgid="resources_button"> Mes documents & médias </i18n-msg>
                         </paper-item>
                         <paper-menu class="menu-content">
+
                             <paper-item>
                                 <a class='menuLink' name="image" href="#image">Mes images</a>
                             </paper-item>
                             <paper-item>
                                 <a class='menuLink' name="video" href="#video">Mes vidéos</a>
                             </paper-item>
+                            <paper-item>
+                                    <a class='menuLink' name="youtube" href="#youtube">Mes vidéos</a>
+                                </paper-item>    
                             <paper-item>
                                 <a class='menuLink' name="staticmedia" href="#staticmedia">Mes documents multimédias</a>
                             </paper-item>
@@ -203,6 +204,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <tutorial-view name="tutorial"></tutorial-view>
                     <video-view name="video"></video-view>
                     <poi-view name="poi"></poi-view>
+                    <youtube-view name="youtube"></youtube-view>
                     <staticmedia-view id='staticmedia' name="staticmedia"></staticmedia-view>
                     <freetext-view id='freetext' name="freetext"></freetext-view>
                     <image-view name="image"></image-view>
@@ -302,6 +304,7 @@ This code may only be used under the "Do whatever you want with code license"
             if (this.route.path.indexOf('reset') >= 0) {
                 this.token = this.route.path.slice(12)
                 this.page = 'reset'
+                this.pageChanged('reset')
                 return
             }
             this.page = this.route.path || 'intro';

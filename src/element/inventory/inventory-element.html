@@ -6,10 +6,11 @@ This code may only be used under the "Do whatever you want with code license"
 
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../helper/sharedBehavior.html">
+<link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/resource-header.html">
 <dom-module id="inventory-element">
     <template>
-        <style type="text/css">
+        <style include="common-styles">
         .image {
             width: 150px;
             height: 150px;
@@ -19,22 +20,11 @@ This code may only be used under the "Do whatever you want with code license"
             width: 200px;
             height: 200px;
             border-radius: 50%;
-        }
-        .headerText {
-            padding-left: 10px;
-            display: inline-flex;
-            align-self: center;
-        }
+            }
 
-        .resourceReadwrite {
-            display: inline-flex;
-            flex-direction: row;
-            justify-content: space-between;
-            background-color: lightgreen;
-            width: 100%;
-        }
 
         .inventory {
+            padding: 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -46,8 +36,8 @@ This code may only be used under the "Do whatever you want with code license"
             </div>
         </template>
         <div class="inventory">
-            <staticmedia-viewer resource-label="[[media.label]]" default-mkdown="[[defaultMkdown]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
             <div>{{itemText}}</div>
+            <staticmedia-viewer resource-label="[[media.label]]" default-mkdown="[[defaultMkdown]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
         </div>
     </template>
 </dom-module>

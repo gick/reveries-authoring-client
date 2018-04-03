@@ -5,6 +5,11 @@ This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../../bower_components/iron-label/iron-label.html">
+
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel=import href='./unitGame.html'>
@@ -14,48 +19,98 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel=import href='../helper/list-generic-resource-subset.html'>
 <dom-module id="mlg-constructor">
     <template>
-        <style>
+        <style include="common-styles">
+            .viewer {
+                box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+                --page-look: {
+                    width: 150px;
+                    height: 150px;
+                }
+                --resource-look: {
+                    width: 200px;
+                }
+
+            }
+
+            map-display {
+                --custom-map-display: {
+                    width: 400px;
+                    height: 400px;
+                }
+            }
+
+            .unitGames {
+                --resource-look: {
+                    width: 200px;
+                }
+            }
+
+            .blockButton {
+                display: block;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .creatorForm {
+                display: inline-flex;
+                padding: 20px;
+            }
         </style>
         <resource-picker-dialog page id="pagePicker"></resource-picker-dialog>
         <resource-picker-dialog badge id="badgePicker"></resource-picker-dialog>
+        <resource-picker-dialog page id="endPagePicker"></resource-picker-dialog>
 
         <create-resource id="creator" resource-url="/mlg" resource="{{resource}}"></create-resource>
-        <form style="display:flex;padding:20px;" id="mlgform" is="iron-form" method="post" action="/mlg">
-            <div class="card gameUnit">
-                <div class="card-content">
-                    <div class="cafe-header">
-                        <h3 label="Unit game short description">Nouveau scénario de jeu</h3>
-                    </div>
-                    <div style="display:inline-flex;flex-direction: column;">
-                        <paper-input style="width:300px" name="label" value="{{mlgName}}" label="Label">
-                                <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
-                        </paper-input>
-                        <paper-input name="gameDifficulty" label="Difficulté" value="3"></paper-input>
-                        <paper-input name="gameDuration" label="Durée" value="5"></paper-input>
-                        <paper-input hidden name="gameProximity" label="Proximitée" value="5"></paper-input>
-                        <paper-radio-button name='multi' active='{{multi}}'>Multijoueur</paper-radio-button>
-                        <template is='dom-if' if='{{multi}}' restamp>
-                            <paper-input type='number' value='2' name='playerNbr' label="Nombre de joueurs"></paper-input>
-                        </template>
-                        <paper-button raised on-click="showMediaDialog">Ajouter une page de départ</paper-button>
-                        <paper-button raised on-click="showBadgeDialog">Ajouter un badge de récompense</paper-button>
-                        <generic-resource-viewer no-header input-name="badge" badge class="resourceViewer" id="badgeViewer"></generic-resource-viewer>
-                        <generic-resource-viewer input-name="startpage" image page video class="resourceViewer" id="startPage"></generic-resource-viewer>
-                    </div>
-                </div>
-                <div style="float:left" class="card-actions">
-                    <paper-button on-click="submit" class="cafe-reserve">Enregistrer</paper-button>
-                    <paper-button class="cafe-reserve">Annuler</paper-button>
-                </div>
-            </div>
-            <div style="padding:10px;" class="card">
-                <list-generic-resource-subset id='unitgameTopost' resource-type='unitgame'></list-generic-resource-subset>
-            </div>
-        </form>
-        <div style="padding:10px;" class="card">
-                <map-display id="gmap"></map-display>
+        <form class="creatorForm" id="mlgform" is="iron-form" method="post" action="/mlg">
+            <template is="dom-if" if="{{updating}}" restamp>
+                <paper-input hidden name="itemId" value="[[updateId]]"></paper-input>
+            </template>
 
-            <resource-picker-nodialog picker id='unitgameList' resource-type='unitgame' url='/unitgame'></resource-picker-nodialog>
+            <paper-card heading="Nouveau scénario de jeu">
+                <div class="card-content">
+                    <paper-input style="width:300px;margin-bottom:10px;" name="label" value="{{mlgName}}" label="Label">
+                        <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+                    </paper-input>
+                    <paper-input name="duration" label="Durée" value="{{duration}}">
+                        <div suffix style="color:#7f7f7f;">Minutes</div>
+                    </paper-input>
+                    <paper-textarea name="description" value={{description}} max-rows=0 rows=1 label="Description du jeu"></paper-textarea>
+
+                    <iron-label style="color:#7f7f7f;">
+                        Difficulté : [[difficulty]]
+                        <paper-slider id="difficulty" name="difficulty" pin snaps max="10" step="1" style="width: 100%;" value="{{difficulty}}"></paper-slider>
+                    </iron-label>
+                    <paper-button class="blockButton" raised on-click="showMediaDialog">Ajouter une page de départ</paper-button>
+                    <generic-resource-viewer is-temp input-name="startpage" label="Page de départ" page class="resourceViewer viewer" id="startPage"></generic-resource-viewer>
+
+                    <paper-button class="blockButton" raised on-click="showEndPagePicker">Ajouter une page de fin</paper-button>
+                    <generic-resource-viewer is-temp input-name="endPage" page label="Page de fin" class="resourceViewer viewer" id="endPage"></generic-resource-viewer>
+
+                    <paper-button class="blockButton" raised on-click="showBadgeDialog">Ajouter un badge de récompense</paper-button>
+                    <generic-resource-viewer is-temp no-header input-name="badge" label="Badge" badge class="resourceViewer viewer" id="badgeViewer"></generic-resource-viewer>
+
+                </div>
+                <div class="card-actions">
+                    <template is="dom-if" if="{{updating}}" restamp>
+                        <paper-button raised on-click="submit">Update</paper-button>
+                        <paper-button raised on-click="resetFields">Annuler update</paper-button>
+                    </template>
+                    <template is="dom-if" if="{{!updating}}" restamp>
+                        <paper-button raised on-click="submit">Enregistrer</paper-button>
+                        <paper-button raised on-click="resetFields">Annuler</paper-button>
+                    </template>
+                </div>
+            </paper-card>
+            <list-generic-resource-subset id='unitgameTopost' class="unitGames" resource-type='unitgame'></list-generic-resource-subset>
+        </form>
+
+
+        <div style="display:inline-flex;width:97%;justify-content:space-between;">
+
+            <resource-picker-nodialog picker class="unitGames" id='unitgameList' resource-type='unitgame' url='/unitgame'></resource-picker-nodialog>
+
+            <map-display class="mymap" id="gmap"></map-display>
+
         </div>
     </template>
     <script>
@@ -65,10 +120,36 @@ This code may only be used under the "Do whatever you want with code license"
             Polymer({
                 is: 'mlg-constructor',
                 ready: function () {
+                    this.updating=false
+                    this.difficulty=3
+                    this.duration=5
                     this.$.unitgameList.addEventListener('itemPicked', this.addItem.bind(this))
                     this.$.pagePicker.addEventListener('resourcePicked', this.setResource.bind(this))
                     this.$.badgePicker.addEventListener('resourcePicked', this.setResource.bind(this))
                     this.$.unitgameList.addEventListener('change-poi-map', this.updateMap.bind(this))
+                    this.$.endPagePicker.addEventListener('resourcePicked', this.setEndPage.bind(this))
+
+                },
+                edit:function(item){
+                    this.updating=true
+                    this.updateId=item._id
+                    this.mlgName=item.label
+                    this.description=item.description
+                    this.difficulty=item.difficulty
+                    if(item.startpage){
+                        this.$.startPage.setPage(item.startpage)
+                    }
+                    if(item.unitGames && item.unitGames.length>0){
+                        for(var i=0;i<item.unitGames.length;i++){
+                            this.$.unitgameTopost.addItem(item.unitGames[i])
+                        }
+                    }
+                    if(item.endPage){
+                        this.$.endPage.setPage(item.endPage)
+                    }
+                    if(item.badge){
+                        this.$.badgeViewer.setBadge(item.badge)
+                    }
 
                 },
                 updateUnitGames: function () {
@@ -82,7 +163,11 @@ This code may only be used under the "Do whatever you want with code license"
                         this.$.gmap.removePOI(data.resource)
                     }
                 },
+                setEndPage: function (message) {
+                        this.$.endPage.setPage(message.detail.resourceItem)
+                    }
 
+                    ,
                 setResource: function (message) {
                     switch (message.detail.resourceType) {
                         case "page":
@@ -97,23 +182,21 @@ This code may only be used under the "Do whatever you want with code license"
                     if (event && event.detail && event.detail.item)
                         this.$.unitgameTopost.addItem(event.detail.item)
                 },
-                setPage: function (item) {
-                    this.$.explanationUnit.setPage(item)
-
-                },
-                setBadge: function (item) {
-                    this.$.explanationUnit.setBadge(item)
-
-                },
                 resetFields: function () {
+                    this.$.endPage.removeResource()
                     this.$.badgeViewer.removeResource()
                     this.$.startPage.removeResource()
                     this.$.unitgameTopost.removeAllItems()
                     this.mlgName = ""
-                    this.multi = false
+                    this.difficulty=3
+                    this.duration=5
+                    this.updating=false
                 },
                 showMediaDialog: function () {
                     this.$.pagePicker.open()
+                },
+                showEndPagePicker: function () {
+                    this.$.endPagePicker.open()
                 },
 
                 showBadgeDialog: function () {
@@ -127,9 +210,6 @@ This code may only be used under the "Do whatever you want with code license"
                     }
                     return {}
                 },
-                cons: function () {
-                    console.log(test)
-                },
 
                 submit: function () {
                     var json = this.$.mlgform.serialize()
@@ -139,40 +219,10 @@ This code may only be used under the "Do whatever you want with code license"
                 },
 
                 properties: {
-                    gameSaved: {
-                        type: Array,
-                        notify: true,
-
-                    },
-                    feedbackText: {
-                        type: String,
-                        notify: true,
-                        value: null,
-                    },
-                    newGame: {
-                        type: Array,
-                        notify: true
-                    },
-                    activityName: {
-                        type: String,
-                        notify: true,
-                        value: null,
-
-                    },
-                    mlbPosition: {
-                        type: Number,
-                        notify: true,
-                    },
-                    gameUnit: {
+                    item: {
                         type: Object,
                         notify: true,
                     },
-                    currentPos: {
-                        type: Number,
-                        notify: true,
-                        value: 0
-                    }
-
                 },
             });
         })();

@@ -8,7 +8,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../../../bower_components/paper-lightbox/paper-lightbox-popup.html">
+<link rel="import" href="../helper/thumbnailView.html">
+
 <link rel="import" href="../helper/resource-picker-dialog.html">
 
 <link rel="import" href="../../styles/common-styles.html">
@@ -26,23 +27,38 @@ A generic response input field to be used to define MCQ resposnses
             display: inline-flex;
             justify-content: flex-start;
             flex-direction: row-reverse;
-            align-items: flex-end;
+            align-items: center;
         }
 
-
+        .imageDistractorLabel {
+            color: #737373;
+            margin-right: 20px;
         }
     </style>
 
     <template>
         <resource-picker-dialog image id="imagePicker"></resource-picker-dialog>
-        <paper-icon-button disabled=[[disabled]] icon="icons:cancel" on-click="removeDistractor" alt="Supprimer" title="Supprimer ce distracteur"></paper-icon-button>
-        <template is="dom-if" if=[[!imageMode]]>
+        <template is="dom-if" if=[[!response]] restamp>
+            <paper-icon-button disabled=[[disabled]] icon="icons:cancel" on-click="removeDistractor" alt="Supprimer" title="Supprimer ce distracteur"></paper-icon-button>
+        </template>
+        <template is="dom-if" if=[[!imageMode]] restamp>
             <paper-input class="mcq-distractor" name="distractors" label="[[distractorLabel]]" value="{{distractorValue}}" required></paper-input>
         </template>
         <template is="dom-if" if=[[imageMode]]>
-            <paper-icon-button title="Choisir image" on-click="showImages" src="../../../images/setImage.png" alt="Choisir une image" class="">Choisir image</paper-icon-button>
-                <iron-image id="distImage" sizing="contain" style="width:70px;height:70px;" on-click=[[showFull]] src="/file/[[image]]" ></iron-image>
-            [[image]]
+
+            <paper-icon-button title="Choisir image" on-click="showImages" src="../../../images/setImage.png" alt="Choisir une image"
+                class="">Choisir image</paper-icon-button>
+            <thumbnail-view style="margin-right:30px" thumbnail-path="/file/[[distractorValue]]">
+            </thumbnail-view>
+            <template is="dom-if" if=[[!response]] restamp>
+                <div class="imageDistractorLabel">[[distractorLabel]]</div>
+                <paper-input hidden name="distractors" value="{{distractorValue}}" required></paper-input>
+
+            </template>
+            <template is="dom-if" if=[[response]] restamp>
+                <div class="imageDistractorLabel">Réponse</div>
+                <paper-input hidden name="correct-choice" value="{{distractorValue}}" required></paper-input>
+            </template>
 
         </template>
 
@@ -53,14 +69,10 @@ A generic response input field to be used to define MCQ resposnses
             Polymer({
                 is: 'mcq-distractor',
                 ready: function () {
-                    this.notbound=true
                     this.addEventListener('resourcePicked', this.setResource.bind(this))
                 },
                 showImages: function () {
                     this.$.imagePicker.open()
-                },
-                showFull:function(){
-                    this.$.preview.open()
                 },
                 removeDistractor: function () {
                     this.fire('remove-distractor', {
@@ -68,8 +80,7 @@ A generic response input field to be used to define MCQ resposnses
                     })
                 },
                 setResource: function (evt) {
-                    this.set('image',evt.detail.resourceItem._id)
-                    this.notbound=false
+                    this.set('distractorValue', evt.detail.resourceItem._id)
                 },
                 _indexChangedObserver: function (newval, oldval) {
                     if (typeof newval === "number") {
@@ -94,9 +105,15 @@ A generic response input field to be used to define MCQ resposnses
                         notify: true,
                         value: false,
                     },
+                    response: {
+                        type: Boolean,
+                        notify: true,
+                        value: false
+                    },
                     disabled: {
                         type: Boolean,
                         notify: true,
+                        value: false,
                     },
                     index: {
                         type: Number,

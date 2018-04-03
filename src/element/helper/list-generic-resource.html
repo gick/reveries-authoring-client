@@ -23,6 +23,9 @@ This code may only be used under the "Do whatever you want with code license"
 
         .resourceList {
             margin: 10px;
+            width:360px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            @apply --resource-list-template;
         }
         </style>
         <iron-ajax id="searchLoader" params="[[keyword]]" url="{{url}}" handle-as="json" last-response="{{items}}"></iron-ajax>
