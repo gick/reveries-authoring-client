@@ -42,7 +42,7 @@ Builder for inventory
                     <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
             </paper-input>
             <paper-input name="itemText" value={{itemText}} label="Texte associé à l'objet d'inventaire"></paper-input>
-            <paper-button raised  style="margin-top: 10px" on-click="showMediaDialog">Associer une image</paper-button>
+            <paper-button raised  style="margin-top: 10px" on-click="showMediaDialog">Associer une ressource multimédia</paper-button>
             <generic-resource-viewer input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
             <paper-button raised style="margin-top: 10px" on-click="showDocMediaDialog">Associer une notice (optionnelle) </paper-button>
             <generic-resource-viewer is-temp input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>

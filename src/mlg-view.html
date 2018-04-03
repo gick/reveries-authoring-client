@@ -5,6 +5,8 @@ This code may only be used under the "Do Whatever You Want With Code" license
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="styles/common-styles.html">
+
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../src/element/unit-activity/mlg-constructor.html">
 <link rel="import" href="../src/element/POI/map-display.html">
@@ -13,7 +15,11 @@ This code may only be used under the "Do Whatever You Want With Code" license
 <dom-module id="mlg-view">
     <template>
         <style include="common-styles">
-
+            .mlglist{
+                --resource-list-template:{
+                    width:450px;
+                }
+            }
         </style>
         <form is="iron-form" id="mlgform" method="post" action="/mlg">
             <input hidden type="text" name="mlg" value="{{mlgList}}">
@@ -31,7 +37,7 @@ This code may only be used under the "Do Whatever You Want With Code" license
             <mlg-constructor new-game="{{games}}" id="mlgCreator"></mlg-constructor>
         </div>
         <div class="card">    
-            <list-generic-resource id='mlgList' share-url="/mlg" resource-type='mlg' url='/mlg'></list-generic-resource>
+            <list-generic-resource id='mlgList' class="mlglist" share-url="/mlg" resource-type='mlg' url='/mlg'></list-generic-resource>
         </div>
     </template>
     <script>

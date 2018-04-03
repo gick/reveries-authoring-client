@@ -10,19 +10,12 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="./share-ressource.html">
+<link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="./confirmOperation.html">
 <link rel="import" href="../remove-ressource/remove-ressource.html">
 
 <dom-module id="resource-header">
-    <style>
-    .resourceReadwrite {
-        display: inline-flex;
-        flex-direction: row;
-        justify-content: space-between;
-        background-color: lightgreen;
-        width: 100%;
-    }
-
+    <style include="common-styles">
     .resourceReadonly {
         display: inline-flex;
         flex-direction: row;
@@ -31,11 +24,6 @@ This code may only be used under the "Do whatever you want with code license"
         width: 100%;
     }
 
-    .headerText {
-        padding-left: 10px;
-        display: inline-flex;
-        align-self: center;
-    }
     </style>
     <template>
         <confirm-operation id="confirmRemove"></confirm-operation>
@@ -92,6 +80,10 @@ This code may only be used under the "Do whatever you want with code license"
                 if (this.resource.typeLabel && this.resource.typeLabel == "user") {
                     return false
                 }
+                if (this.resource.typeLabel && this.resource.typeLabel == "Point of interest") {
+                    return false
+                }
+
 
                 return true
             },

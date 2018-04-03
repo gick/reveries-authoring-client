@@ -4,7 +4,7 @@ Copyright (c) 2018 Pierre-Yves Gicquel.
 This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../styles/common-styles.html">
 <dom-module id="one-poi-display">
     <template>
@@ -34,12 +34,6 @@ This code may only be used under the "Do whatever you want with code license"
             <div>Latitude :
                 <div class="info">{{item.latitude}}</div>
             </div>
-            <div>Publique :
-                <div class="info">{{item.public}}</div>
-            </div>
-            <div>Date :
-                <div class="info">{{item.date}}</div>
-            </div>
             <template is="dom-if" if={{item.comment}}>
                 <div>Info :
                     <div class="info"> {{item.comment}}</div>
@@ -47,7 +41,7 @@ This code may only be used under the "Do whatever you want with code license"
             </template>
             <template is="dom-if" if="[[!conceptionMode]]" restamp>
                 <div style="justify-content: center" class="insideflex">
-                    <paper-button raised on-click="toggledMap">{{toggleMap}}</paper-button>
+                    <paper-toggle-button checked=[[onMap]] on-change="toggledMap">Afficher sur la carte</paper-toggle-button>
                 </div>
             </template>
         </div>
@@ -60,7 +54,6 @@ This code may only be used under the "Do whatever you want with code license"
             is: 'one-poi-display',
 
             ready: function() {
-                this.toggleMap = "Montrer sur la carte"
                 this.onMap = false
 
             },
@@ -69,10 +62,8 @@ This code may only be used under the "Do whatever you want with code license"
                 var val = this.onMap
                 if (val) {
                     this.fire('change-poi-map', { show: true, resource: this.item })
-                    this.toggleMap = "Cacher"
                 } else {
                     this.fire('change-poi-map', { show: false, resource: this.item })
-                    this.toggleMap = "Montrer sur la carte"
                 }
             },
             observers: [],

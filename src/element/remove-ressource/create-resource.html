@@ -24,6 +24,8 @@ This code may only be used under the "Do whatever you want with code license"
             },
             createResource:function(){
                 this.set('resource',this.resource)
+                this.set('resource.status','Private')
+
                 this.set('resourceURL',this.resourceUrl)                
                 this.$.creator.generateRequest()
             },

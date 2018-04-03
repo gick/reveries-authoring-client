@@ -160,12 +160,12 @@ This code may only be used under the "Do whatever you want with code license"
                     <label class="subtitle">Point d'intérêt associé à l'unité de jeu :</label>
                     <paper-button style="margin-top:10px;" on-click="setPOI" raised>Choisir un POI</paper-button>
                     <label class="subtitle" id="label1">Guidance :</label>
-                    <paper-radio-group id="selectGuidance" allow-empty-selection>
+                    <paper-radio-group attr-for-selected="name" selected="map" id="selectGuidance" allow-empty-selection>
                         <paper-radio-button disabled="[[!poiActive]]" name="map">Carte interactive</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="ping">Radar</paper-radio-button>
                     </paper-radio-group>
                     <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
-                    <paper-radio-group  allow-empty-selection selectable={{poiSet}} id="selectReach" aria-labelledby="label2">
+                    <paper-radio-group attr-for-selected="name" selected="gps" allow-empty-selection selectable={{poiSet}} id="selectReach" aria-labelledby="label2">
                         <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" checked={{active}} name="QR">Scan du QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>

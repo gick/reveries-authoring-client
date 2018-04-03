@@ -5,53 +5,71 @@
 <dom-module id="mlg-viewer">
     <template>
         <style include="common-styles">
-        .image {
-            border-radius: 50%;
-            width: 150px;
-            height: 150px;
-        }
+            .viewer {
+                box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+                --page-look: {
+                    width: 150px;
+                    height: 150px;
+                }
+                --resource-template: {
+                    display: inline-flex;
+                    width: 170px;
+                    height: 170px;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center
+                }
+                --resource-look: {
+                    width: 170px;
+                    height: 170px;
+                }
 
-        .markdown-html img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-        }
-
-        .badge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
+            }
         </style>
-            <div class="resourceHeader">
-                <h3 class="headerText">{{resourceLabel}}</h3>
+        <div class="constructorCard">
+            <generic-resource-viewer id="preview" page class="resourceViewer viewer"></generic-resource-viewer>
+            <div>
+                <ul>
+                    <li>
+                        <b>Difficulté</b> : [[item.difficulty]]
+                    </li>
+                    <li>
+                        <b>Durée</b> : [[item.duration]]
+                    </li>
+                    <li>
+                        <b>Unités de jeux</b> : [[item.unitGames.length]]
+                    </li>
+                    <li>
+                        <b>Description</b> : [[item.description]]
+                    </li>
+
+                </ul>
             </div>
+        </div>
     </template>
 </dom-module>
 <script>
-(function() {
-    'use strict';
-    Polymer({
-        is: 'mlg-viewer',
-        behaviors: [sharedBehavior],
+    (function () {
+        'use strict';
+        Polymer({
+            is: 'mlg-viewer',
+            behaviors: [sharedBehavior],
 
-        ready: function() {
-        },
-        properties: {
-            media: {
-                type: Object,
-                notify: true,
+            ready: function () {
+                if (this.item.startpage) {
+                    this.$.preview.setPage(this.item.startpage)
+                }
             },
-            resourceLabel: {
-                type: String,
-                notify: true,
+            _checkdiff: function (oldv, newv) {
+                console.log(oldv)
             },
-            itemId: {
-                type: String,
-                notify: true,
-            },
-        }
-    })
-})();
+            observers: ['_checkdiff(item.difficulty)', '_checkduration(item.duration)'],
+            properties: {
+                item: {
+                    type: Object,
+                    notify: true,
+                },
+            }
+        })
+    })();
 </script>

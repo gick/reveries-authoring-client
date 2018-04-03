@@ -1,0 +1,33 @@
+<!--
+@license
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="youtube-importer">
+    <template>
+        <style include="common-styles">
+        </style>
+        <div class="card">
+            <paper-input value={{videoId}} label="Youtube video ID"></paper-input>
+            <paper-button on-click={{triggerImport}}>Importer</paper-button>
+        </div>
+    </template>
+    <script>
+    Polymer({
+
+        is: 'youtube-importer',        
+        ready: function() {
+        },
+        triggerImport:function(){
+            this.fire('youtube-import',{videoId:this.videoId})
+        },
+
+    });
+    </script>
+</dom-module>

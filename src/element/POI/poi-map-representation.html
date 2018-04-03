@@ -79,9 +79,6 @@ This code may only be used under the "Do whatever you want with code license"
             <form id="poimap" is="iron-form" class="innerdiv">
                 <div class="formTitleWithButton">
                     <h3 class="smallh3">Nouveau POI</h3>
-                    <paper-icon-button id="setStatus" style="display:inline-flex;align-self: center" toggles raised active={{status}} icon="{{statusIcon}}"></paper-icon-button>
-                    <paper-tooltip for="setStatus" offset="0">{{statusText}}</paper-tooltip>
-                    <input type="hidden" value="{{statusString}}" name="status" />
                 </div>
                 <paper-input name="label" value={{title}} label="Label">
                         <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>

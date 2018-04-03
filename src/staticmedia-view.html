@@ -30,35 +30,15 @@ This code may only be used under the "Do whatever you want with code license"
                 <paper-toggle-button checked={{showMkdown}}>Afficher syntaxe Markdown</paper-toggle-button>
                 <iron-collapse id="mkdownHelp" tabindex="0" opened=[[showMkdown]]>
                     <ul>
-                        <li>Pour mettre du texte en
-                            <i>italique</i>, utiler underscore.
-                            <ul>
-                                <li>Exemple _d'italique_ -> Exemple d'
-                                    <i>italique</i>
-                                </li>
-                            </ul>
+                        <li>Pour mettre du texte en italique, utiler underscore (ex. _text_)
                         </li>
-                        <li>Pour mettre du texte en
-                            <b>gras</b>, utiler double underscore.
-                            <ul>
-                                <li>Exemple __de texte en gras__ -> Exemple
-                                    <b>de texte en gras</b>
-                                </li>
-                            </ul>
+                        <li>Pour mettre du texte en gras, utiler double underscore (ex. __gras__)
                         </li>
-                        <li>Pour <b>créer une liste d'élément avec "bullets" </b>, précéder chaque élément d'une étoile et d'un espace <ul>
-                            <li>* Item 1</li>
-                            <li>* Item 2</li>
-                            <li>** Sous liste item 1</li>
-                        </ul> </li>
+                        <li>Pour créer une liste d'élément, précéder chaque élément d'une étoile et d'un espace (ex. * Item 1)
+                        </li>
+                        <li>Pour créer des titres/sous-titres, précéder le titre du caractère dièse et d'un espace (ex. # titre)
+                        </li>
                     </ul>
-                    <li>Pour <b>créer des titres/sous-titres</b>, précéder le titre du caractère dièse et d'un espace <ul>
-                            <li># Documentation sur les cartes -> <h1 style="display:inline">Documentation sur les cartes</h1></li>
-                            <li>* Item 2</li>
-                            <li>** Sous liste item 1</li>
-                        </ul> </li>
-                    </ul>
-
                 </iron-collapse>
 
             </div>
