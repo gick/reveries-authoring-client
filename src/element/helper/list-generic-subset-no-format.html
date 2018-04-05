@@ -1,0 +1,48 @@
+<!--
+@license
+Copyright (c) 2018 Pierre-Yves Gicquel. 
+This code may only be used under the "Do whatever you want with code license"
+-->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="./generic-resource-viewer.html">
+<link rel="import" href="../../styles/common-styles.html">
+<dom-module id="list-generic-subset-no-format">
+    <template>
+        <style include="common-styles">
+            :host{
+                --resource-viewer-styling:{
+                    margin:5px;
+                }
+            }
+
+        </style>
+        <div style="display:flex;flex-direction:row-reverse;flex-wrap:wrap;">
+            <template is="dom-repeat" id='list' items="{{items}}">
+                    <generic-resource-viewer is-picker is-temp input-name="situated[[item.type]]" class="resourceViewer" resource-type="{{item.type}}" item={{item}}>
+                    </generic-resource-viewer>
+                </div>
+            </template>
+        </div>
+    </template>
+    <script>
+        (function () {
+            'use strict';
+
+            Polymer({
+                is: 'list-generic-subset-no-format',
+                ready: function () {
+                },
+                addItem: function (item) {
+                    this.push('items', item)
+                },
+                properties: {
+                  items:{
+                      type:Array,
+                      value:[],
+                      notify:true,
+                  }
+                }
+            });
+        })();
+    </script>
+</dom-module>

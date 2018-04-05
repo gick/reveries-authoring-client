@@ -63,8 +63,11 @@ This code may only be used under the "Do whatever you want with code license"
             <div class="headerText">{{resourceLabel}}</div>
             <!-- Read belonging to the user can be set public or private -->
             <div class="statusDiv">
+                <template is="dom-if" if="{{isImporter}}" restamp>
+                        <paper-icon-button id="addButton" class="statusButton" raised on-click="import" src="../../../images/import.png"></paper-icon-button>
+                        <paper-tooltip for="addButton" position="top">Ajouter cette unité de jeu</paper-tooltip>
+                </template>
                 <template is="dom-if" if="{{!isPicker}}" restamp>
-
                     <template is="dom-if" if="{{!isReadOnly}}" restamp>
                         <template is="dom-if" if="[[_isSharable(resource.typeLabel)]]" restamp>
                             <paper-icon-button id="setStatus" class="statusButton" raised on-click="setStatus" icon="{{sharedIcon}}"></paper-icon-button>
@@ -105,6 +108,13 @@ This code may only be used under the "Do whatever you want with code license"
                             operation: 'edit',
                             resource: this.resource
                         }
+                    })
+                },
+                import:function(){
+                    this.fire('resource-import',{
+                        operation:'import',
+                        resource:this.resource
+
                     })
                 },
                 cloneResource: function () {
@@ -183,6 +193,11 @@ This code may only be used under the "Do whatever you want with code license"
                         notify: true,
                     },
                     isPicker: {
+                        type: Boolean,
+                        notify: true,
+                        value: false,
+                    },
+                    isImporter: {
                         type: Boolean,
                         notify: true,
                         value: false,

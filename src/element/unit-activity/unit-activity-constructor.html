@@ -14,8 +14,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
 <link rel="import" href="../../../bower_components/paper-styles/typography.html">
-
 <link rel="import" href="../helper/resource-picker-dialog.html">
+<link rel="import" href="../helper/list-generic-subset-no-format.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
@@ -45,17 +45,6 @@ This code may only be used under the "Do whatever you want with code license"
 
 
 
-        .unitActions {
-            margin-bottom: 10px;
-            padding-left: 5px;
-            padding-right: 5px;
-            border-radius: 5px;
-            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
-            border-bottom-right-radius: 0px;
-            border-bottom-left-radius: 0px;
-        }
-
-
         .contain {
             width: 50%;
             display: flex;
@@ -65,8 +54,13 @@ This code may only be used under the "Do whatever you want with code license"
         }
 
         .subtitle {
-            margin-top: 5px;
             @apply(--paper-font-subhead);
+        }
+
+        #poiViewer {
+            --poi-map-visibility: {
+                display: none
+            }
         }
 
         .creator {
@@ -78,22 +72,20 @@ This code may only be used under the "Do whatever you want with code license"
             margin: 5px;
             display: flex;
             flex-direction: column;
-
         }
 
         .topLevel {
+            @apply(--shadow-elevation-2dp);
+
             background-color: white;
-            margin: 5px;
+            margin-bottom: 5px;
+            margin-left: 20px;
+            margin-right: 20px;
+
             display: flex;
             flex-direction: row;
             padding-top: 10px;
             padding-bottom: 10px;
-        }
-
-        div.unitActions {
-            border: none;
-            box-shadow: none;
-            background-color: white;
         }
     </style>
     <template>
@@ -105,25 +97,26 @@ This code may only be used under the "Do whatever you want with code license"
         <resource-picker-dialog page resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog poi resource-viewer="poiViewer" id="poiMediaPicker"></resource-picker-dialog>
-        <form class="creator" id="unitActivityForm" is="iron-form" style="width:100%;">
+        <form class="creator" id="unitActivityForm" is="iron-form">
             <template is="dom-if" if="{{updating}}" restamp>
                 <paper-input hidden name="itemId" value="{{itemId}}"></paper-input>
             </template>
+
             <div class="topLevel">
                 <div class="contain">
                     <div class="title">Début de l'unité de jeu</div>
                     <paper-input name="label" value={{label}} label="Label">
                         <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
                     </paper-input>
-                    <label class="subtitle">Document multimédia à afficher au démarrage (optionnel) :</label>
+                    <div class="subtitle">Page de départ (optionnelle) :</div>
                     <paper-button on-click="setMedia" raised>Assigner un document</paper-button>
                 </div>
                 <generic-resource-viewer is-picker input-name="startMedia" is-temp page class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
+
             <div class="topLevel">
                 <div class="contain">
                     <div class="title">POI et guidance</div>
-                    <label class="subtitle">Point d'intérêt associé à l'unité de jeu :</label>
                     <paper-button style="margin-top:10px;" on-click="setPOI" raised>Choisir un POI</paper-button>
                     <label class="subtitle" id="label1">Guidance :</label>
                     <paper-radio-group attr-for-selected="name" selected="map" id="selectGuidance" allow-empty-selection>
@@ -136,8 +129,8 @@ This code may only be used under the "Do whatever you want with code license"
                         <paper-radio-button disabled="[[!poiActive]]" checked={{QRactive}} name="QR">Scan du QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
                     </paper-radio-group>
-                    <paper-button class="heading" raised disabled="[[!QRactive]]" aria-controls="collapse1" on-click="toggleQr">Imprimer QR-code</paper-button>
-                    <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
+                    <paper-button class="heading" toggles active={{showQR}} raised disabled="[[!QRactive]]">Imprimer QR-code</paper-button>
+                    <iron-collapse tabindex="0" opened="{{showQR}}">
                         <template is="dom-if" if="[[poiid]]" restamp>
                             <div class="content">
                                 <img style="width:400px" src='/qrcode/[[poiid]]'>
@@ -148,13 +141,12 @@ This code may only be used under the "Do whatever you want with code license"
                 <generic-resource-viewer is-picker input-name="poi" style="height:10%" active="{{poiActive}}" poi-id={{poiid}} poi is-temp
                     class="resourceViewer" id="poiViewer"></generic-resource-viewer>
             </div>
+
             <iron-collapse opened='[[active]]'>
 
                 <div class="topLevel">
                     <div class="contain">
-                        <div class="insideflex">
-                            <h3>POI Post action</h3>
-                        </div>
+                        <div class="title">POI Post action</div>
                         <label class="subtitle" id="label2">Bon QR-code scanné :</label>
                         <paper-input label="QR code correct message" value={{poiReachedMessage}} name="poiReachedMessage"></paper-input>
                         <label class="subtitle" id="labelpoi">Mauvais QR-Code scanné :</label>
@@ -165,12 +157,10 @@ This code may only be used under the "Do whatever you want with code license"
 
             <div class="topLevel">
                 <div class="contain">
-                    <div class="insideflex">
-                        <h3>Objet d'inventaire</h3>
-                    </div>
-                    <label class="subtitle" id="label2">Objet d'inventaire acquis durant l'unité de jeu :</label>
+                    <div class="title">Inventaire</div>
+                    <div class="subtitle">Objet d'inventaire acquis durant l'unité de jeu :</div>
                     <paper-button on-click="setPOIInventory" raised>Choisir un objet d'inventaire (optionnel)</paper-button>
-                    <label class="subtitle" id="label2">L'objet est acquis quand :</label>
+                    <div class="subtitle">L'objet est acquis quand :</div>
                     <paper-radio-group id="inventoryStep" allow-empty-selection aria-labelledby="label2" attr-for-selected="value">
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="uginstructions">L'unité de jeu commence</paper-radio-button>
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="guidance">Le POI est atteint</paper-radio-button>
@@ -182,24 +172,16 @@ This code may only be used under the "Do whatever you want with code license"
             </div>
             <div class="topLevel">
                 <div class="contain">
-                    <div class="insideflex">
-                        <h3>Activités situées</h3>
-                    </div>
+                    <div class="title">Activité situées</div>
                     <label class="subtitle" id="label2">Activités proposées au joueur lorsqu'il atteint le POI :</label>
 
                     <paper-button on-click="addSituatedActivity" raised>Ajouter une question située</paper-button>
                 </div>
-                <div class="situated">
-                    <generic-resource-viewer is-picker input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
-                    <generic-resource-viewer is-picker input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
-                    <generic-resource-viewer is-picker input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
-                </div>
+                <list-generic-subset-no-format items={{currentActivities}}></list-generic-subset-no-format>
             </div>
             <div class="topLevel">
                 <div class="contain">
-                    <div class="insideflex">
-                        <h3>Feedback pédagogique</h3>
-                    </div>
+                    <div class="title">Feedback pédagogique</div>
                     <label class="subtitle">Feedback optionnel à l'issu de l'unité de jeu :</label>
                     <paper-button on-click="setFeedbackMedia" raised>Choisir un document de feedback</paper-button>
                 </div>
@@ -231,6 +213,18 @@ This code may only be used under the "Do whatever you want with code license"
                     if (unitGame.startMedia) {
                         this.$.startMediaViewer.setPage(unitGame.startMedia)
                     }
+                    if (unitGame.freetextActivities) {
+                        for (var i = 0; i < unitGame.freetextActivities.length; i++) {
+                            this.push('currentActivities', unitGame.freetextActivities[i])
+                        }
+                    }
+
+                    if (unitGame.mcqActivities) {
+                        for (var i = 0; i < unitGame.mcqActivities.length; i++) {
+                            this.push('currentActivities', unitGame.mcqActivities[i])
+                        }
+                    }
+
                     if (unitGame.feedbackMedia) {
                         this.$.feedbackMediaViewer.setPage(unitGame.feedbackMedia)
                     }
@@ -241,67 +235,23 @@ This code may only be used under the "Do whatever you want with code license"
                     if (unitGame.inventoryItem) {
                         this.$.poiInventoryResourceViewer.setInventory(unitGame.inventoryItem)
                     }
-                    if (unitGame.freetextActivities) {
-                        switch (unitGame.freetextActivities.length) {
-                            case 0:
-                                break;
-                            case 1:
-                                this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
-                                this.situatedAct1 = 'freetextActivities'
-                                break;
-                            case 2:
-                                this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
-                                this.situatedAct1 = 'freetextActivities'
-                                this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
-                                this.situatedAct2 = 'freetextActivities'
-                                break;
-                            case 3:
-                                this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
-                                this.situatedAct1 = 'freetextActivities'
-                                this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
-                                this.situatedAct2 = 'freetextActivities'
-                                this.$.situatedActivityMedia2.setFreetext(unitGame.freetextActivities[2])
-                                this.situatedAct3 = 'freetextActivities'
-                                break;
-                        }
+                    if (unitGame.poiGuidType === 'map') {
+                        this.$.selectGuidance.selected = 'map'
+                    }
+                    if (unitGame.poiGuidType === 'ping') {
+                        this.$.selectGuidance.selected = 'ping'
                     }
 
-                    if (unitGame.mcqActivities) {
-                        var freetextActivitiesNumber = 0
-                        if (unitGame.freetextActivities) {
-                            freetextActivitiesNumber = unitGame.freetextActivities.length
-                        }
-                        switch (unitGame.mcqActivities.length) {
-                            case 0:
-                                break;
-                            case 1:
-                                this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[
-                                    freetextActivitiesNumber])
-                                this.situatedAct1 = 'mcqActivities'
-                                break;
-                            case 2:
-                                this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[
-                                    freetextActivitiesNumber])
-                                this.situatedAct1 = 'mcqActivities'
-                                this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[
-                                    freetextActivitiesNumber + 1])
-                                this.situatedAct2 = 'mcqActivities'
-                                break;
-                            case 3:
-                                this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[
-                                    freetextActivitiesNumber])
-                                this.situatedAct1 = 'mcqActivities'
-                                this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[
-                                    freetextActivitiesNumber + 1])
-                                this.situatedAct2 = 'mcqActivities'
-                                this.$.situatedActivityMedia2.setMcq(unitGame.mcqActivities[
-                                    freetextActivitiesNumber + 2])
-                                this.situatedAct3 = 'mcqActivities'
-                                break;
-                        }
+                    if (unitGame.poiGuidFolia) {
+                        this.$.selectReach.selected = 'folia'
                     }
+                    if (unitGame.poiQRValidation) {
+                        this.$.selectReach.selected = 'QR'
+                    }
+                    if (unitGame.poiGPSValidation) {
+                        this.$.selectReach.selected = 'gps'
 
-
+                    }
                 },
 
                 ready: function () {
@@ -330,31 +280,27 @@ This code may only be used under the "Do whatever you want with code license"
                                 this.$[evt.detail.resourceViewer].setPOI(evt.detail.resourceItem)
                                 break;
                             case "mcq":
-                                this.situatedQuestionPicked(evt)
+                                this.push('currentActivities', evt.detail.resourceItem)
                                 break;
                             case "freetext":
-                                this.situatedQuestionPicked(evt);
+                                this.push('currentActivities', evt.detail.resourceItem)
                                 break;
                         }
                     }
                 },
 
-                toggleQr: function (selector) {
-                    this.$.collapse1.toggle();
-                },
 
                 resetFields: function () {
                     this.updating = false
+                    while(this.currentActivities.length){
+                        this.pop('currentActivities')
+                    }
                     this.$.startMediaViewer.removeResource()
                     this.$.feedbackMediaViewer.removeResource()
                     this.$.poiViewer.removeResource()
                     this.$.poiInventoryResourceViewer.removeResource()
-                    this.$.situatedActivityMedia.removeResource()
-                    this.$.situatedActivityMedia2.removeResource()
-                    this.$.situatedActivityMedia3.removeResource()
-                    this.$.selectGuidance.selected = 0
-                    this.$.selectReach.selected = 0
-                    this.$.inventoryStep.selected = 0
+                    this.$.selectGuidance.selected = 'map'
+                    this.$.selectReach.selected = 'gps'
 
                     var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
                     for (var i = 0; i < inputList.length; i++) {
@@ -364,53 +310,6 @@ This code may only be used under the "Do whatever you want with code license"
 
                 },
 
-                situatedQuestionPicked: function (item) {
-                    if (item && item.detail && item.detail.resourceType) {
-                        var newItem = item.detail.resourceItem
-                        if (!this.$.situatedActivityMedia.item) {
-                            switch (newItem.type) {
-                                case "mcq":
-                                    this.situatedAct1 = "mcqActivities"
-                                    this.$.situatedActivityMedia.setMcq(newItem)
-                                    break;
-                                case "freetext":
-                                    this.situatedAct1 = "freetextActivities"
-                                    this.$.situatedActivityMedia.setFreetext(newItem)
-                                    break;
-
-                            }
-                            return
-                        }
-
-                        if (!this.$.situatedActivityMedia2.item) {
-                            switch (newItem.type) {
-                                case "mcq":
-                                    this.$.situatedActivityMedia2.setMcq(newItem)
-                                    this.situatedAct2 = "mcqActivities"
-                                    break;
-                                case "freetext":
-                                    this.situatedAct2 = "freetextActivities"
-                                    this.$.situatedActivityMedia2.setFreetext(newItem)
-                                    break;
-                            }
-                            return
-                        }
-                        if (!this.$.situatedActivityMedia3.item) {
-                            switch (newItem.type) {
-                                case "mcq":
-                                    this.situatedAct3 = "mcqActivities"
-                                    this.$.situatedActivityMedia3.setMcq(newItem)
-                                    break;
-                                case "freetext":
-                                    this.situatedAct3 = "freetextActivities"
-                                    this.$.situatedActivityMedia3.setFreetext(newItem)
-                                    break;
-                            }
-                            return
-                        }
-
-                    }
-                },
 
 
                 setFeedbackMedia: function () {
