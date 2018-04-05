@@ -43,9 +43,9 @@ Builder for inventory
             </paper-input>
             <paper-input name="itemText" value={{itemText}} label="Texte associé à l'objet d'inventaire"></paper-input>
             <paper-button raised  style="margin-top: 10px" on-click="showMediaDialog">Associer une ressource multimédia</paper-button>
-            <generic-resource-viewer input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer is-picker input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
             <paper-button raised style="margin-top: 10px" on-click="showDocMediaDialog">Associer une notice (optionnelle) </paper-button>
-            <generic-resource-viewer is-temp input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>
+            <generic-resource-viewer is-picker is-temp input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>
             <div class="insideflex">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update</paper-button>
@@ -85,12 +85,6 @@ Builder for inventory
             },
 
 
-            dummyFill: function() {
-                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
-                for (var i = 0; i < inputList.length; i++) {
-                    inputList[i].value = this.$.randomSentence.getRandomSentence(5);
-                }
-            },
             _activateObs: function(newval, oldval) {
                 this.set('imageRequired', newval)
             },

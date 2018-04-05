@@ -16,13 +16,19 @@ This code may only be used under the "Do whatever you want with code license"
             font-family: 'Roboto', 'Noto', sans-serif;
             display: inline-block;
         }
+        .freetextBody {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            align-items: flex-start;
+        }
+
         </style>
-        <template is="dom-if" if="[[conceptionMode]]" restamp>
-            <div class="resourceHeader">
-                <h3 class="headerText">{{resourceLabel}}</h3>
-            </div>
-        </template>
-        <div style="flex-grow:1" class="resource">
+            <template is="dom-if" if="[[conceptionMode]]" restamp>
+                    <resource-header is-picker  resource-label="{{resourceLabel}}"></resource-header>
+            </template>
+        <div class="resource">
+            <div class="freetextBody">
             <template is="dom-if" if={{item.creator}}>
                 <div>Créateur :
                     <div class="info"> {{item.creator}}</div>
@@ -44,7 +50,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-toggle-button checked=[[onMap]] on-change="toggledMap">Afficher sur la carte</paper-toggle-button>
                 </div>
             </template>
-        </div>
+        </div></div>
     </template>
     <script>
     (function() {

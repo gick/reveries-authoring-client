@@ -32,11 +32,7 @@ Builder for free text question resources
 
 <dom-module id="free-text-constructor">
     <style include="common-styles">
-        .mediablock {
-            display: flex;
-            align-items: center;
-            align-self: center;
-        }
+
     </style>
     <template>
         <create-resource id="creator" resource-url="/freetextactivity" resource="{{resource}}"></create-resource>
@@ -59,7 +55,7 @@ Builder for free text question resources
             <short-textarea input-name="wrongMessage" input-label="Message associé à une réponse incorrecte" input-value={{wrongMessage}}
                 required></short-textarea>
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel))</paper-button>
-            <generic-resource-viewer input-name="mediaId" image is-temp page video class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer input-name="mediaId" is-picker is-temp page class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
             <div class="insideflex">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button raised on-click="_submit">Update</paper-button>

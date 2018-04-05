@@ -13,126 +13,96 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../../../bower_components/paper-styles/typography.html">
+
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
 <dom-module id="unit-activity-constructor">
     <style include="common-styles">
-     :host {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: left;
-        width: 100%;
-    }
+        .title {
+            @apply(--paper-font-title);
+        }
+
+        .shadow-2dp {
+            @apply(--shadow-elevation-2dp);
+        }
 
 
 
-    .shadow-2dp {
-        @apply(--shadow-elevation-2dp);
-    }
+        paper-input {
+            width: 90%;
+            margin: 10px;
+            margin-left: 0;
+        }
 
-    hr {
-        display: block;
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-        margin-left: auto;
-        margin-right: auto;
-        border-style: inset;
-        border-width: 1px;
-    }
-
-    paper-input {
-        width: 90%;
-        margin: 10px;
-        margin-left: 0;
-    }
-
-    paper-button {
-        width: 90%;
-        margin: 10px;
-        margin-left: 0;
-    }
-
-    h3 {
-        margin-left: 10px;
-    }
-
-    .insideflex {
-        margin-top: 0;
-        margin-bottom: 0;
-    }
-
-    .unitActions {
-        margin-bottom: 10px;
-        padding-left: 5px;
-        padding-right: 5px;
-        border-radius: 5px;
-        box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
-        border-bottom-right-radius: 0px;
-        border-bottom-left-radius: 0px;
-    }
+        paper-button {
+            width: 90%;
+            margin: 10px;
+            margin-left: 0;
+        }
 
 
-    .contain {
-        margin-top: 15px;
-        margin-bottom: 15px;
-        margin-right: 15px;
-        margin-left: 15px;
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .subtitle {
-        align-self: stretch;
-        margin-left: 24px;
-        font-weight: bold;
-        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
+        .unitActions {
+            margin-bottom: 10px;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0px 2px 0 rgba(0, 0, 0, 0.14), 0 0px 1px 0 rgba(0, 0, 0, 0.12), 0 -2px 1px -2px rgba(0, 0, 0, 0.2);
+            border-bottom-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
 
-    .creator {
-        padding: 0;
-        width: 100%;
-    }
 
-    .resourceViewer {
-        margin-top: 10px;
-        margin-right: 20px;
-    }
+        .contain {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 10px;
+        }
 
-    .situatedQuestion {
-        display: inline-flex;
-        flex-direction: row;
-    }
+        .subtitle {
+            margin-top: 5px;
+            @apply(--paper-font-subhead);
+        }
 
-    .topLevel {
+        .creator {
+            padding: 0;
+            width: 100%;
+        }
 
-        display: flex;
-        margin: 24px;
-        border-radius: 7px;
-        flex-direction: row;
-        background-color: white;
-        justify-content: space-between;
-        box-shadow: 8px 9px 2px 0px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        margin-bottom: 0;
-        margin-top: 5px;
-    }
+        .situated {
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
 
-    div.unitActions {
-        border: none;
-        box-shadow: none;
-        background-color: white;
-    }
+        }
+
+        .topLevel {
+            background-color: white;
+            margin: 5px;
+            display: flex;
+            flex-direction: row;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        div.unitActions {
+            border: none;
+            box-shadow: none;
+            background-color: white;
+        }
     </style>
     <template>
         <create-resource id="creator" resource-url="/unitGame" resource="{{resource}}"></create-resource>
-        <resource-picker-dialog  page  resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog page resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
-        <resource-picker-dialog  page  id="poiPAMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog  page  media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog page  resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog page id="poiPAMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog page media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
+        <resource-picker-dialog page resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog inventory resource-viewer="poiInventoryResourceViewer" id="poiInventoryMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog poi resource-viewer="poiViewer" id="poiMediaPicker"></resource-picker-dialog>
         <form class="creator" id="unitActivityForm" is="iron-form" style="width:100%;">
@@ -141,22 +111,18 @@ This code may only be used under the "Do whatever you want with code license"
             </template>
             <div class="topLevel">
                 <div class="contain">
-                    <div class="insideflex">
-                        <h3>Début de l'unité de jeu</h3>
-                    </div>
+                    <div class="title">Début de l'unité de jeu</div>
                     <paper-input name="label" value={{label}} label="Label">
-                            <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
+                        <iron-icon src="../../../images/labelFieldIcon.png" suffix></iron-icon>
                     </paper-input>
                     <label class="subtitle">Document multimédia à afficher au démarrage (optionnel) :</label>
                     <paper-button on-click="setMedia" raised>Assigner un document</paper-button>
                 </div>
-                <generic-resource-viewer conception-mode input-name="startMedia" is-temp image page video class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer is-picker input-name="startMedia" is-temp page class="resourceViewer" id="startMediaViewer"></generic-resource-viewer>
             </div>
             <div class="topLevel">
                 <div class="contain">
-                    <div class="insideflex">
-                        <h3>POI et guidance</h3>
-                    </div>
+                    <div class="title">POI et guidance</div>
                     <label class="subtitle">Point d'intérêt associé à l'unité de jeu :</label>
                     <paper-button style="margin-top:10px;" on-click="setPOI" raised>Choisir un POI</paper-button>
                     <label class="subtitle" id="label1">Guidance :</label>
@@ -167,10 +133,10 @@ This code may only be used under the "Do whatever you want with code license"
                     <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
                     <paper-radio-group attr-for-selected="name" selected="gps" allow-empty-selection selectable={{poiSet}} id="selectReach" aria-labelledby="label2">
                         <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
-                        <paper-radio-button disabled="[[!poiActive]]" checked={{active}} name="QR">Scan du QR code</paper-radio-button>
+                        <paper-radio-button disabled="[[!poiActive]]" checked={{QRactive}} name="QR">Scan du QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
                     </paper-radio-group>
-                    <paper-button class="heading" raised disabled="[[!poiActive]]" aria-controls="collapse1" on-click="toggleQr">Imprimer QR-code</paper-button>
+                    <paper-button class="heading" raised disabled="[[!QRactive]]" aria-controls="collapse1" on-click="toggleQr">Imprimer QR-code</paper-button>
                     <iron-collapse id="collapse1" tabindex="0" opened="{{opened1}}">
                         <template is="dom-if" if="[[poiid]]" restamp>
                             <div class="content">
@@ -179,7 +145,8 @@ This code may only be used under the "Do whatever you want with code license"
                         </template>
                     </iron-collapse>
                 </div>
-                <generic-resource-viewer conception-mode input-name="poi" active="{{poiActive}}" poi-id={{poiid}} poi is-temp class="resourceViewer" id="poiViewer"></generic-resource-viewer>
+                <generic-resource-viewer is-picker input-name="poi" style="height:10%" active="{{poiActive}}" poi-id={{poiid}} poi is-temp
+                    class="resourceViewer" id="poiViewer"></generic-resource-viewer>
             </div>
             <iron-collapse opened='[[active]]'>
 
@@ -210,9 +177,10 @@ This code may only be used under the "Do whatever you want with code license"
                         <paper-radio-button disabled="[[!rewardActive]]" name="inventoryStep" value="questions">Les activités situées sont terminées</paper-radio-button>
                     </paper-radio-group>
                 </div>
-                <generic-resource-viewer conception-mode input-name="inventoryItem" active={{rewardActive}} is-temp inventory class="resourceViewer" id="poiInventoryResourceViewer"></generic-resource-viewer>
+                <generic-resource-viewer is-picker input-name="inventoryItem" active={{rewardActive}} is-temp inventory class="resourceViewer"
+                    id="poiInventoryResourceViewer"></generic-resource-viewer>
             </div>
-            <div style="flex-wrap: wrap;" class="topLevel">
+            <div class="topLevel">
                 <div class="contain">
                     <div class="insideflex">
                         <h3>Activités situées</h3>
@@ -221,14 +189,10 @@ This code may only be used under the "Do whatever you want with code license"
 
                     <paper-button on-click="addSituatedActivity" raised>Ajouter une question située</paper-button>
                 </div>
-                <div class="situatedQuestion">
-                    <generic-resource-viewer conception-mode input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
-                </div>
-                <div class="situatedQuestion">
-                    <generic-resource-viewer conception-mode input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
-                </div>
-                <div class="situatedQuestion">
-                    <generic-resource-viewer conception-mode input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
+                <div class="situated">
+                    <generic-resource-viewer is-picker input-name="{{situatedAct1}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia"></generic-resource-viewer>
+                    <generic-resource-viewer is-picker input-name="{{situatedAct2}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia2"></generic-resource-viewer>
+                    <generic-resource-viewer is-picker input-name="{{situatedAct3}}" is-temp mcq freetext class="resourceViewer" id="situatedActivityMedia3"></generic-resource-viewer>
                 </div>
             </div>
             <div class="topLevel">
@@ -239,7 +203,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <label class="subtitle">Feedback optionnel à l'issu de l'unité de jeu :</label>
                     <paper-button on-click="setFeedbackMedia" raised>Choisir un document de feedback</paper-button>
                 </div>
-                <generic-resource-viewer conception-mode is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
+                <generic-resource-viewer is-picker is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
             <div class="topLevel">
                 <template is="dom-if" if="{{updating}}" restamp>
@@ -254,246 +218,253 @@ This code may only be used under the "Do whatever you want with code license"
         </form>
     </template>
     <script>
-    (function() {
-        'use strict';
-        Polymer({
-            is: 'unit-activity-constructor',
-            edit: function(unitGame) {
-                this.updating = true
-                this.itemId = unitGame._id
-                this.label = unitGame.label
-                this.poiIncorrectMessage = unitGame.poiIncorrectMessage
-                this.poiReachedMessage = unitGame.poiReachedMessage
-                if (unitGame.startMedia) {
-                    this.$.startMediaViewer.setPage(unitGame.startMedia)
-                }
-                if (unitGame.feedbackMedia) {
-                    this.$.feedbackMediaViewer.setPage(unitGame.feedbackMedia)
-                }
-
-                if (unitGame.POI) {
-                    this.$.poiViewer.setPOI(unitGame.POI)
-                }
-                if (unitGame.inventoryItem) {
-                    this.$.poiInventoryResourceViewer.setInventory(unitGame.inventoryItem)
-                }
-                if (unitGame.freetextActivities) {
-                    switch (unitGame.freetextActivities.length) {
-                        case 0:
-                            break;
-                        case 1:
-                            this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
-                            this.situatedAct1 = 'freetextActivities'
-                            break;
-                        case 2:
-                            this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
-                            this.situatedAct1 = 'freetextActivities'
-                            this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
-                            this.situatedAct2 = 'freetextActivities'
-                            break;
-                        case 3:
-                            this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
-                            this.situatedAct1 = 'freetextActivities'
-                            this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
-                            this.situatedAct2 = 'freetextActivities'
-                            this.$.situatedActivityMedia2.setFreetext(unitGame.freetextActivities[2])
-                            this.situatedAct3 = 'freetextActivities'
-                            break;
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'unit-activity-constructor',
+                edit: function (unitGame) {
+                    this.updating = true
+                    this.itemId = unitGame._id
+                    this.label = unitGame.label
+                    this.poiIncorrectMessage = unitGame.poiIncorrectMessage
+                    this.poiReachedMessage = unitGame.poiReachedMessage
+                    if (unitGame.startMedia) {
+                        this.$.startMediaViewer.setPage(unitGame.startMedia)
                     }
-                }
+                    if (unitGame.feedbackMedia) {
+                        this.$.feedbackMediaViewer.setPage(unitGame.feedbackMedia)
+                    }
 
-                if (unitGame.mcqActivities) {
-                    var freetextActivitiesNumber = 0
+                    if (unitGame.POI) {
+                        this.$.poiViewer.setPOI(unitGame.POI)
+                    }
+                    if (unitGame.inventoryItem) {
+                        this.$.poiInventoryResourceViewer.setInventory(unitGame.inventoryItem)
+                    }
                     if (unitGame.freetextActivities) {
-                        freetextActivitiesNumber = unitGame.freetextActivities.length
-                    }
-                    switch (unitGame.mcqActivities.length) {
-                        case 0:
-                            break;
-                        case 1:
-                            this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[freetextActivitiesNumber])
-                            this.situatedAct1 = 'mcqActivities'
-                            break;
-                        case 2:
-                            this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[freetextActivitiesNumber])
-                            this.situatedAct1 = 'mcqActivities'
-                            this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[freetextActivitiesNumber + 1])
-                            this.situatedAct2 = 'mcqActivities'
-                            break;
-                        case 3:
-                            this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[freetextActivitiesNumber])
-                            this.situatedAct1 = 'mcqActivities'
-                            this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[freetextActivitiesNumber + 1])
-                            this.situatedAct2 = 'mcqActivities'
-                            this.$.situatedActivityMedia2.setMcq(unitGame.mcqActivities[freetextActivitiesNumber + 2])
-                            this.situatedAct3 = 'mcqActivities'
-                            break;
-                    }
-                }
-
-
-            },
-
-            ready: function() {
-                this.addEventListener('resourcePicked', this.setPickedResource.bind(this))
-                // this.$.startingMediaPicker.addEventListener('resourcePicked', this.setResource.bind(this))
-                this.actPA = [];
-                this.currentActivities = [];
-                this.activityCount = null;
-                this.updating = false
-
-            },
-            setPickedResource: function(evt) {
-                if (evt && evt.detail && evt.detail.resourceType && evt.detail.resourceItem && evt.detail.resourceViewer) {
-                    switch (evt.detail.resourceType) {
-                        case "image":
-                            this.$[evt.detail.resourceViewer].setImage(evt.detail.resourceItem)
-                            break;
-                        case "page":
-                            this.$[evt.detail.resourceViewer].setPage(evt.detail.resourceItem)
-                            break;
-                        case "inventory":
-                            this.$[evt.detail.resourceViewer].setInventory(evt.detail.resourceItem)
-                            break;
-                        case "poi":
-                            this.$[evt.detail.resourceViewer].setPOI(evt.detail.resourceItem)
-                            break;
-                        case "mcq":
-                            this.situatedQuestionPicked(evt)
-                            break;
-                        case "freetext":
-                            this.situatedQuestionPicked(evt);
-                            break;
-                    }
-                }
-            },
-
-            toggleQr: function(selector) {
-                this.$.collapse1.toggle();
-            },
-
-            resetFields: function() {
-                this.updating = false
-                this.$.startMediaViewer.removeResource()
-                this.$.feedbackMediaViewer.removeResource()
-                this.$.poiViewer.removeResource()
-                this.$.poiInventoryResourceViewer.removeResource()
-                this.$.situatedActivityMedia.removeResource()
-                this.$.situatedActivityMedia2.removeResource()
-                this.$.situatedActivityMedia3.removeResource()
-                this.$.selectGuidance.selected=0
-                this.$.selectReach.selected=0
-                this.$.inventoryStep.selected=0
-
-                var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
-                for (var i = 0; i < inputList.length; i++) {
-                    inputList[i].value = ""
-                }
-
-
-            },
-
-            situatedQuestionPicked: function(item) {
-                if (item && item.detail && item.detail.resourceType) {
-                    var newItem = item.detail.resourceItem
-                    if (!this.$.situatedActivityMedia.item) {
-                        switch (newItem.type) {
-                            case "mcq":
-                                this.situatedAct1 = "mcqActivities"
-                                this.$.situatedActivityMedia.setMcq(newItem)
+                        switch (unitGame.freetextActivities.length) {
+                            case 0:
                                 break;
-                            case "freetext":
-                                this.situatedAct1 = "freetextActivities"
-                                this.$.situatedActivityMedia.setFreetext(newItem)
+                            case 1:
+                                this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
+                                this.situatedAct1 = 'freetextActivities'
                                 break;
-
-                        }
-                        return
-                    }
-
-                    if (!this.$.situatedActivityMedia2.item) {
-                        switch (newItem.type) {
-                            case "mcq":
-                                this.$.situatedActivityMedia2.setMcq(newItem)
-                                this.situatedAct2 = "mcqActivities"
+                            case 2:
+                                this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
+                                this.situatedAct1 = 'freetextActivities'
+                                this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
+                                this.situatedAct2 = 'freetextActivities'
                                 break;
-                            case "freetext":
-                                this.situatedAct2 = "freetextActivities"
-                                this.$.situatedActivityMedia2.setFreetext(newItem)
+                            case 3:
+                                this.$.situatedActivityMedia.setFreetext(unitGame.freetextActivities[0])
+                                this.situatedAct1 = 'freetextActivities'
+                                this.$.situatedActivityMedia1.setFreetext(unitGame.freetextActivities[1])
+                                this.situatedAct2 = 'freetextActivities'
+                                this.$.situatedActivityMedia2.setFreetext(unitGame.freetextActivities[2])
+                                this.situatedAct3 = 'freetextActivities'
                                 break;
                         }
-                        return
                     }
-                    if (!this.$.situatedActivityMedia3.item) {
-                        switch (newItem.type) {
-                            case "mcq":
-                                this.situatedAct3 = "mcqActivities"
-                                this.$.situatedActivityMedia3.setMcq(newItem)
+
+                    if (unitGame.mcqActivities) {
+                        var freetextActivitiesNumber = 0
+                        if (unitGame.freetextActivities) {
+                            freetextActivitiesNumber = unitGame.freetextActivities.length
+                        }
+                        switch (unitGame.mcqActivities.length) {
+                            case 0:
                                 break;
-                            case "freetext":
-                                this.situatedAct3 = "freetextActivities"
-                                this.$.situatedActivityMedia3.setFreetext(newItem)
+                            case 1:
+                                this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[
+                                    freetextActivitiesNumber])
+                                this.situatedAct1 = 'mcqActivities'
+                                break;
+                            case 2:
+                                this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[
+                                    freetextActivitiesNumber])
+                                this.situatedAct1 = 'mcqActivities'
+                                this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[
+                                    freetextActivitiesNumber + 1])
+                                this.situatedAct2 = 'mcqActivities'
+                                break;
+                            case 3:
+                                this.$.situatedActivityMedia.setMcq(unitGame.mcqActivities[
+                                    freetextActivitiesNumber])
+                                this.situatedAct1 = 'mcqActivities'
+                                this.$.situatedActivityMedia1.setMcq(unitGame.mcqActivities[
+                                    freetextActivitiesNumber + 1])
+                                this.situatedAct2 = 'mcqActivities'
+                                this.$.situatedActivityMedia2.setMcq(unitGame.mcqActivities[
+                                    freetextActivitiesNumber + 2])
+                                this.situatedAct3 = 'mcqActivities'
                                 break;
                         }
-                        return
                     }
 
-                }
-            },
 
-
-            setFeedbackMedia: function() {
-                this.$.feedbackMediaPicker.open();
-            },
-
-            addSituatedActivity: function() {
-                this.$.situatedQuestionPicker.open();
-            },
-            setPOIPaMedia: function() {
-                this.$.poiPAMediaPicker.open();
-            },
-            setPOI: function() {
-                this.$.poiMediaPicker.open()
-            },
-
-            setMedia: function() {
-                this.$.startingMediaPicker.open();
-            },
-            setCluePOIValue: function() {
-                this.$.cluePOIMediaPicker.open();
-            },
-            setPOIInventory: function() {
-                this.$.poiInventoryMediaPicker.open();
-            },
-
-
-
-
-            _submit: function() {
-                var json = this.$.unitActivityForm.serialize()
-                this.set('resource', json)
-                this.$.creator.createResource()
-                this.resetFields()
-            },
-            properties: {
-                mediaId: {
-                    type: String,
-                    notify: true,
-                    value: null,
                 },
-                mediaName: {
-                    type: String,
-                    notify: true,
-                    value: null,
-                },
-                imageRequired: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true
-                }
 
-            }
-        });
-    })();
+                ready: function () {
+                    this.addEventListener('resourcePicked', this.setPickedResource.bind(this))
+                    // this.$.startingMediaPicker.addEventListener('resourcePicked', this.setResource.bind(this))
+                    this.actPA = [];
+                    this.currentActivities = [];
+                    this.activityCount = null;
+                    this.updating = false
+
+                },
+                setPickedResource: function (evt) {
+                    if (evt && evt.detail && evt.detail.resourceType && evt.detail.resourceItem && evt.detail
+                        .resourceViewer) {
+                        switch (evt.detail.resourceType) {
+                            case "image":
+                                this.$[evt.detail.resourceViewer].setImage(evt.detail.resourceItem)
+                                break;
+                            case "page":
+                                this.$[evt.detail.resourceViewer].setPage(evt.detail.resourceItem)
+                                break;
+                            case "inventory":
+                                this.$[evt.detail.resourceViewer].setInventory(evt.detail.resourceItem)
+                                break;
+                            case "poi":
+                                this.$[evt.detail.resourceViewer].setPOI(evt.detail.resourceItem)
+                                break;
+                            case "mcq":
+                                this.situatedQuestionPicked(evt)
+                                break;
+                            case "freetext":
+                                this.situatedQuestionPicked(evt);
+                                break;
+                        }
+                    }
+                },
+
+                toggleQr: function (selector) {
+                    this.$.collapse1.toggle();
+                },
+
+                resetFields: function () {
+                    this.updating = false
+                    this.$.startMediaViewer.removeResource()
+                    this.$.feedbackMediaViewer.removeResource()
+                    this.$.poiViewer.removeResource()
+                    this.$.poiInventoryResourceViewer.removeResource()
+                    this.$.situatedActivityMedia.removeResource()
+                    this.$.situatedActivityMedia2.removeResource()
+                    this.$.situatedActivityMedia3.removeResource()
+                    this.$.selectGuidance.selected = 0
+                    this.$.selectReach.selected = 0
+                    this.$.inventoryStep.selected = 0
+
+                    var inputList = Polymer.dom(this.root).querySelectorAll('paper-input');
+                    for (var i = 0; i < inputList.length; i++) {
+                        inputList[i].value = ""
+                    }
+
+
+                },
+
+                situatedQuestionPicked: function (item) {
+                    if (item && item.detail && item.detail.resourceType) {
+                        var newItem = item.detail.resourceItem
+                        if (!this.$.situatedActivityMedia.item) {
+                            switch (newItem.type) {
+                                case "mcq":
+                                    this.situatedAct1 = "mcqActivities"
+                                    this.$.situatedActivityMedia.setMcq(newItem)
+                                    break;
+                                case "freetext":
+                                    this.situatedAct1 = "freetextActivities"
+                                    this.$.situatedActivityMedia.setFreetext(newItem)
+                                    break;
+
+                            }
+                            return
+                        }
+
+                        if (!this.$.situatedActivityMedia2.item) {
+                            switch (newItem.type) {
+                                case "mcq":
+                                    this.$.situatedActivityMedia2.setMcq(newItem)
+                                    this.situatedAct2 = "mcqActivities"
+                                    break;
+                                case "freetext":
+                                    this.situatedAct2 = "freetextActivities"
+                                    this.$.situatedActivityMedia2.setFreetext(newItem)
+                                    break;
+                            }
+                            return
+                        }
+                        if (!this.$.situatedActivityMedia3.item) {
+                            switch (newItem.type) {
+                                case "mcq":
+                                    this.situatedAct3 = "mcqActivities"
+                                    this.$.situatedActivityMedia3.setMcq(newItem)
+                                    break;
+                                case "freetext":
+                                    this.situatedAct3 = "freetextActivities"
+                                    this.$.situatedActivityMedia3.setFreetext(newItem)
+                                    break;
+                            }
+                            return
+                        }
+
+                    }
+                },
+
+
+                setFeedbackMedia: function () {
+                    this.$.feedbackMediaPicker.open();
+                },
+
+                addSituatedActivity: function () {
+                    this.$.situatedQuestionPicker.open();
+                },
+                setPOIPaMedia: function () {
+                    this.$.poiPAMediaPicker.open();
+                },
+                setPOI: function () {
+                    this.$.poiMediaPicker.open()
+                },
+
+                setMedia: function () {
+                    this.$.startingMediaPicker.open();
+                },
+                setCluePOIValue: function () {
+                    this.$.cluePOIMediaPicker.open();
+                },
+                setPOIInventory: function () {
+                    this.$.poiInventoryMediaPicker.open();
+                },
+
+
+
+
+                _submit: function () {
+                    var json = this.$.unitActivityForm.serialize()
+                    this.set('resource', json)
+                    this.$.creator.createResource()
+                    this.resetFields()
+                },
+                properties: {
+                    mediaId: {
+                        type: String,
+                        notify: true,
+                        value: null,
+                    },
+                    mediaName: {
+                        type: String,
+                        notify: true,
+                        value: null,
+                    },
+                    imageRequired: {
+                        type: String,
+                        notify: true,
+                        reflectToAttribute: true
+                    }
+
+                }
+            });
+        })();
     </script>
 </dom-module>
