@@ -37,7 +37,7 @@ This code may only be used under the "Do whatever you want with code license"
             <template is="dom-repeat" id='list' items="{{items}}" as="item">
                 <paper-card class="resource resourceList" on-click='selectItem'>
                     <div class=card-content>
-                        <generic-resource-viewer is-picker=[[picker]] class$={{setStyleValue(item,selected)}} resource-type="{{resourceType}}" item={{item}}>
+                        <generic-resource-viewer is-importer=[[importer]] is-picker=[[picker]] class$={{setStyleValue(item,selected)}} resource-type="{{resourceType}}" item={{item}}>
                         </generic-resource-viewer>
                     </div>
                 </paper-card>
@@ -107,6 +107,10 @@ This code may only be used under the "Do whatever you want with code license"
                     picker: {
                         type: Boolean,
                         value: false,
+                    },
+                    importer:{
+                        type:Boolean,
+                        value:false,
                     },
                     resourceId: {
                         type: String,

@@ -5,7 +5,7 @@ This code may only be used under the "Do Whatever You Want With Code" license
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="styles/common-styles.html">
+<link rel="import" href="./styles/common-styles.html">
 
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../src/element/unit-activity/mlg-constructor.html">
@@ -15,11 +15,6 @@ This code may only be used under the "Do Whatever You Want With Code" license
 <dom-module id="mlg-view">
     <template>
         <style include="common-styles">
-            .mlglist{
-                --resource-list-template:{
-                    width:450px;
-                }
-            }
         </style>
         <form is="iron-form" id="mlgform" method="post" action="/mlg">
             <input hidden type="text" name="mlg" value="{{mlgList}}">
