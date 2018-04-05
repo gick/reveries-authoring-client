@@ -8,77 +8,82 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../helper/sharedBehavior.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/resource-header.html">
+<link rel="import" href="../../../bower_components/paper-styles/typography.html">
+
 <dom-module id="inventory-element">
     <template>
         <style include="common-styles">
-        .image {
-            width: 150px;
-            height: 150px;
-        }
-
-        img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
+            .image {
+                width: 150px;
+                height: 150px;
             }
 
+            img {
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+            }
 
-        .inventory {
-            padding: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+            .headText {
+                @apply(--paper-font-headline);
+            }
+
+            .freetextBody {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                align-items: center;
+            }
         </style>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
-            <div class="resourceReadwrite">
-                <h3 class="headerText">{{resourceLabel}}</h3>
-            </div>
+            <resource-header is-picker resource-label="{{resourceLabel}}"></resource-header>
         </template>
-        <div class="inventory">
-            <div>{{itemText}}</div>
-            <staticmedia-viewer resource-label="[[media.label]]" default-mkdown="[[defaultMkdown]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
+        <div class="resource">
+            <div class="freetextBody">
+                <div class="headText">{{itemText}}</div>
+                <staticmedia-viewer resource-label="[[media.label]]" default-mkdown="[[defaultMkdown]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
+            </div>
         </div>
     </template>
 </dom-module>
 <script>
-(function() {
-    'use strict';
-    Polymer({
-        is: 'inventory-element',
-        behaviors: [sharedBehavior],
+    (function () {
+        'use strict';
+        Polymer({
+            is: 'inventory-element',
+            behaviors: [sharedBehavior],
 
 
-        ready: function() {
-            this.defaultMkdown = "<img style='width:150px;height:150px' src='../../src/element/image/carrot.png'>"
+            ready: function () {
+                this.defaultMkdown = "![alt text](/file/5ac5162b662b242d82fbbeba?style=centerme)"
 
-        },
-        properties: {
-            media: {
-                type: Object,
-                notify: true,
             },
-            label: {
-                type: String,
-                notify: true,
-            },
-            itemText: {
-                type: String,
-                notify: true,
-            },
-            itemId: {
-                type: String,
-                notify: true,
-            },
-            resourceLabel:{
-                type:String,
-                notify:true,
-            },
-            conceptionMode:{
-                type:Boolean,
-                notify:true,
+            properties: {
+                media: {
+                    type: Object,
+                    notify: true,
+                },
+                label: {
+                    type: String,
+                    notify: true,
+                },
+                itemText: {
+                    type: String,
+                    notify: true,
+                },
+                itemId: {
+                    type: String,
+                    notify: true,
+                },
+                resourceLabel: {
+                    type: String,
+                    notify: true,
+                },
+                conceptionMode: {
+                    type: Boolean,
+                    notify: true,
+                }
             }
-        }
-    })
-})();
+        })
+    })();
 </script>

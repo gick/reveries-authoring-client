@@ -38,8 +38,7 @@
 
             .resource {
                 border-radius: 3px;
-                padding: 10px;
-                width: 350px;
+                width: 360px;
                 flex-direction: column;
                 @apply --resource-look;
             }
@@ -57,16 +56,30 @@
 
             .headerText {
                 padding-left: 10px;
-                display: inline-flex;
                 align-self: center;
+                white-space: nowrap;
+                display: block;
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width:90%;
+                @apply --custom-header;
             }
+        .resourceViewer {
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            margin-top: 10px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+        }
+
 
             .resourceReadwrite {
                 display: inline-flex;
                 flex-direction: row;
                 justify-content: space-between;
                 background-color: lightgreen;
-                width: 100%;
+                width: 360px;
             }
 
             .correct {

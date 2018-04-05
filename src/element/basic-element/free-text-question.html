@@ -8,7 +8,10 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<link rel="import" href="../../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../styles/common-styles.html">
 
@@ -16,135 +19,148 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../static-media/staticmedia-viewer.html">
 <dom-module id="free-text-question">
     <style include="common-styles">
-   
+        .question {
+            margin-top: 10px;
+            padding: 8px;
+            @apply(--paper-font-body2);
+        }
+
+        .response{
+            width:100%;
+        }
+        .validator{
+            margin-top: 30px;
+        }
+        .freetextBody {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            align-items: center;
+        }
     </style>
     <template>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
-            <div class="resourceHeader">
-                <h3 class="headerText">{{resourceLabel}}</h3>
-            </div>
+            <resource-header is-picker resource-label="{{resourceLabel}}"></resource-header>
         </template>
-        <form class="resource">
-            {{question}}
-            <paper-input name="response" class="element" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}"></paper-input>
-            <iron-collapse id="clue">
-                <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
-            </iron-collapse>
-            <iron-collapse id="correct">
-                <paper-input class="correct" text="">
-                    <iron-icon icon="check-circle" prefix></iron-icon>
-                    <div prefix> {{correctMessage}}</div>
-                </paper-input>
-            </iron-collapse>
-            <iron-collapse id="wrong">
-                <paper-input class="wrong">
-                    <iron-icon icon="cancel" prefix></iron-icon>
-                    <div prefix> {{wrongMessage}}</div>
-                </paper-input>
-            </iron-collapse>
-            <div style="" class="insideflex">
-                <paper-button class="validateButton" raised on-click="validate">Valider</paper-button>
+        <div class="resource">
+            <div class="question">{{question}}</div>
+            <div class="freetextBody">
+                <paper-input name="response" class="response" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}"></paper-input>
                 <template is="dom-if" if="{{showMediaButton}}" restamp=true>
-                    <paper-button raised on-click="showClue">Indice</paper-button>
-                </template>
+                        <paper-toggle-button checked={{showClue}}>Indice</paper-toggle-button>
+                    </template>
+    
+                <iron-collapse opened=[[showClue]] id="clue">
+                    <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
+                </iron-collapse>
+                <iron-collapse id="correct">
+                    <paper-input class="correct" text="">
+                        <iron-icon icon="check-circle" prefix></iron-icon>
+                        <div prefix> {{correctMessage}}</div>
+                    </paper-input>
+                </iron-collapse>
+                <iron-collapse id="wrong">
+                    <paper-input class="wrong">
+                        <iron-icon icon="cancel" prefix></iron-icon>
+                        <div prefix> {{wrongMessage}}</div>
+                    </paper-input>
+                </iron-collapse>
+                <paper-icon-button class="validator" src="../../../images/check.png" on-click="validate"></paper-icon-button>
             </div>
-        </form>
+        </div>
     </template>
     <script>
-    (function() {
-        'use strict';
-        Polymer({
-            is: 'free-text-question',
-            behaviors: [sharedBehavior],
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'free-text-question',
+                behaviors: [sharedBehavior],
 
-            ready: function() {
-                // this.showMediaButton = false;
-                //  this.$.header.addEventListener('edit', this.editElement.bind(this))
+                ready: function () {
+                    // this.showMediaButton = false;
+                    //  this.$.header.addEventListener('edit', this.editElement.bind(this))
 
-                var validator = {
-                    validatorName: 'free-text-validator',
-                    validatorType: 'validator',
-                    validate: function() {
-                        return this.response === this.userResponse
-                    }.bind(this)
-                };
-            },
+                    var validator = {
+                        validatorName: 'free-text-validator',
+                        validatorType: 'validator',
+                        validate: function () {
+                            return this.response === this.userResponse
+                        }.bind(this)
+                    };
+                },
 
-            _mediaObserver: function(newval) {
-                if (newval) {
-                    var temp = true
-                    this.set('showMediaButton', true)
-                } else {
-                    this.set('showMediaButton', false)
-                    this.showMediaButton = false
+                _mediaObserver: function (newval) {
+                    if (newval) {
+                        var temp = true
+                        this.set('showMediaButton', true)
+                    } else {
+                        this.set('showMediaButton', false)
+                        this.showMediaButton = false
+
+                    }
+                },
+                validate: function () {
+                    if (this.response === this.userResponse) {
+                        this.$.correct.show();
+                        this.$.wrong.hide();
+                    } else {
+                        this.$.wrong.show();
+                        this.$.correct.hide();
+                    }
+                },
+                observers: [
+                    '_mediaObserver(media._id)',
+                ],
+                properties: {
+                    question: {
+                        type: String,
+                        notify: true,
+                    },
+                    response: {
+                        type: String,
+                        notify: true,
+
+                    },
+                    correctMessage: {
+                        type: String,
+                        notify: true,
+                    },
+                    wrongMessage: {
+                        type: String,
+                        notify: true,
+                    },
+
+                    responseLabel: {
+                        type: String,
+                        notify: true,
+                    },
+                    preview: {
+                        type: Boolean,
+                        notify: true,
+                    },
+                    media: {
+                        type: Object,
+                        notify: true,
+                    },
+                    itemId: {
+                        type: String,
+                        notify: true,
+                    },
+                    resourceStatus: {
+                        type: String,
+                        notify: true,
+                    },
+                    conceptionMode: {
+                        type: Boolean,
+                        notify: true,
+                    },
+                    resourceLabel: {
+                        type: String,
+                        notify: true,
+                    },
 
                 }
-            },
-            showClue: function() {
-                this.$.clue.toggle()
-            },
-            validate: function() {
-                if (this.response === this.userResponse) {
-                    this.$.correct.show();
-                    this.$.wrong.hide();
-                } else {
-                    this.$.wrong.show();
-                    this.$.correct.hide();
-                }
-            },
-            observers: [
-                '_mediaObserver(media._id)',
-            ],
-            properties: {
-                question: {
-                    type: String,
-                    notify: true,
-                },
-                response: {
-                    type: String,
-                    notify: true,
-
-                },
-                correctMessage: {
-                    type: String,
-                    notify: true,
-                },
-                wrongMessage: {
-                    type: String,
-                    notify: true,
-                },
-
-                responseLabel: {
-                    type: String,
-                    notify: true,
-                },
-                preview: {
-                    type: Boolean,
-                    notify: true,
-                },
-                media: {
-                    type: Object,
-                    notify: true,
-                },
-                itemId: {
-                    type: String,
-                    notify: true,
-                },
-                resourceStatus: {
-                    type: String,
-                    notify: true,
-                },
-                conceptionMode: {
-                    type: Boolean,
-                    notify: true,
-                },
-                resourceLabel: {
-                    type: String,
-                    notify: true,
-                },
-
-            }
-        });
-    })();
+            });
+        })();
     </script>
 </dom-module>

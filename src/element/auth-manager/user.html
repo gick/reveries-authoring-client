@@ -37,9 +37,7 @@ This code may only be used under the "Do whatever you want with code license"
         </style>
         <iron-ajax id="imageLoader"  url="/userImages?userId=[[user._id]]" handle-as="json" last-response="{{images}}"></iron-ajax>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
-            <div class="resourceHeader">
-                <h3 class="headerText">{{resourceLabel}}</h3>
-            </div>
+                <div class="headerText">{{resourceLabel}}</div>
         </template>
         <bulk-remove id="bulkRemove" target-user={{targetUser}} resource-type={{resourceType}}></bulk-remove>
         <form class="resource">

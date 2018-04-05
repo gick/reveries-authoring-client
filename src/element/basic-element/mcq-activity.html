@@ -4,10 +4,13 @@ Copyright (c) 2018 Pierre-Yves Gicquel.
 This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../../bower_components/paper-radio-group/paper-radio-group.html">
+
 <link rel="import" href="../../../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../basic-element/post-action.html">
 <link rel="import" href="../helper/sharedBehavior.html">
@@ -16,41 +19,41 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../styles/common-styles.html">
 
 <dom-module id="mcq-activity">
-    <style include="common-style">
-
+    <style include="common-styles">
         .question {
             padding: 10px;
+            @apply(--paper-font-body2);
+
+        }
+
+        .validator {
+            margin-top: 30px;
         }
 
         .correct {
             color: green;
         }
+        .freetextBody {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            align-items: center;
+        }
 
         .wrong {
             color: red;
         }
-        .resource{
-            border-radius: 3px;
-            padding: 10px;
-            width: 350px;
-            flex-direction: column;
-            overflow:hidden;
-            @apply --resource-look;
-        }
-
-
     </style>
     <template>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
-            <div class="resourceReadwrite">
-                <h3 class="headerText">{{resourceLabel}}</h3>
-            </div>
+            <resource-header is-picker resource-label="{{resourceLabel}}"></resource-header>
         </template>
         <div id="mcqbody" class="resource">
-            <iron-collapse id="clue">
+            <div class="question" name="question">{{question}}</div>
+            <div class="freetextBody">
+            <iron-collapse opened=[[showClue]]>
                 <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
             </iron-collapse>
-            <div class="question" name="question">{{question}}</div>
             <template is="dom-if" if=[[!imageMode]] restamp>
                 <paper-radio-group selected={{textSelected}} id="textMcq" class="layout vertical wrap">
                     <paper-radio-button name="resp1">[[correctAnswer]]</paper-radio-button>
@@ -59,7 +62,7 @@ This code may only be used under the "Do whatever you want with code license"
                     </template>
             </template>
             <template is="dom-if" if=[[imageMode]] restamp>
-                <paper-radio-group selected={{imageSelected}} id="imageMcq" class="layout vertical wrap">
+                <paper-radio-group  selected={{imageSelected}} id="imageMcq" class="layout vertical wrap">
                     <paper-radio-button name="resp1">
                         <thumbnail-view thumbnail-path="/file/[[correctAnswer]]"></thumbnail-view>
                     </paper-radio-button>
@@ -69,6 +72,10 @@ This code may only be used under the "Do whatever you want with code license"
                         </paper-radio-button>
                     </template>
             </template>
+            <template is="dom-if" if="{{showMediaButton}}" restamp=true>
+                <paper-toggle-button checked={{showClue}}>Indice</paper-toggle-button>
+            </template>
+            <paper-icon-button class="validator" src="../../../images/check.png" on-click="validate"></paper-icon-button>
 
             <iron-collapse id="correct">
                 <paper-input class="correct" text="">
@@ -81,13 +88,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <iron-icon icon="cancel" prefix></iron-icon>
                     <div prefix> {{wrongAnswerMessage}}</div>
                 </paper-input>
-            </iron-collapse>
-            <div style="margin-top:40px" class="card-actions">
-                <paper-button style="width:100%" on-click="validate">Valider</paper-button>
-                <template is="dom-if" if="{{showMediaButton}}" restamp=true>
-                    <paper-button style="width:100%" on-click="showClue">Indice</paper-button>
-                </template>
-            </div>
+            </iron-collapse></div>
         </div>
         <template is="dom-if" if="[[unitActivity]]" restamp>
             <post-action></post-action>
@@ -138,9 +139,6 @@ This code may only be used under the "Do whatever you want with code license"
                     }
                 },
 
-                showClue: function () {
-                    this.$.clue.toggle()
-                },
 
 
                 observers: [

@@ -8,37 +8,28 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../styles/common-styles.html">
 <dom-module id="unit-game">
     <style include="common-styles">
-    
+        .activityContent{
+            margin:5px;
+        }
     </style>
     <template>
-        <div class="">
+        <div>
             <template is="dom-if" if="{{item.POI}}">
-                <div class="activityContent">
-                    <paper-toggle-button checked={{poiShowed}} on-change="togglePOI">Afficher sur la carte</paper-toggle-button>
-                </div>
+                <paper-toggle-button checked={{poiShowed}} on-change="togglePOI">Afficher sur la carte</paper-toggle-button>
             </template>
 
-            <template is="dom-if" if="{{item.poiGuidMap}}">
-                    <div class="activityContent">
-                            <b>Guidance jusqu'au POI</b> : carte interactive
+            <template is="dom-if" if="{{guidance}}">
+                <div class="activityContent">
+                    <b>Guidance</b> : [[guidance]]
                 </div>
             </template>
-            <template is="dom-if" if="{{poiGPSValidation}}">
-                    <div class="activityContent">
-                            <b>Validation de l'arrivée au POI</b> : GPS
-                </div>
-            </template>
-            <template is="dom-if" if="{{poiQRValidation}}">
-                    <div class="activityContent">
-                            <b>Validation de l'arrivée au POI</b> : QR-Code
+            <template is="dom-if" if="{{validation}}">
+                <div class="activityContent">
+                    <b>Validation</b> : [[validation]]
                 </div>
             </template>
             <div class="activityContent">
-                    <b>Activité situées</b> :
-                <ul class="activityList">
-                    <li>{{item.freetextActivities.length}} questions libres</li>
-                    <li>{{item.mcqActivities.length}} questions à choix multiples</li>
-                </ul>
+                <b>Activité situées</b> : [[situated]]
             </div>
 
         </div>
@@ -48,7 +39,39 @@ This code may only be used under the "Do whatever you want with code license"
             'use strict';
             Polymer({
                 is: 'unit-game',
-                ready: function () {},
+                ready: function () {
+                    // TODO refactor with more meaningfull var name
+                    if (this.item && this.item.poiGuidType) {
+                        let guidance = this.item.poiGuidType
+                        if (guidance === "map") {
+                            this.guidance = "carte intéractive"
+                        }
+                        if (guidance === "ping") {
+                            this.guidance = "radar"
+                        }
+                    }
+
+
+                    if (this.item.poiGuidFolia) {
+                        this.validation = "Folia"
+                    }
+
+                    if (this.item.poiGPSValidation) {
+                        this.validation = "GPS"
+                    }
+                    if (this.item.poiQRValidation) {
+                        this.validation = "scan QR-code"
+                    }
+                    this.situated = 0
+                    if (this.item.freetextActivities) {
+                        this.situated = this.item.freetextActivities.length
+                    }
+
+                    if (this.item.mcqActivities) {
+                        this.situated = this.situated+ this.item.mcqActivities.length
+                    }
+
+                },
                 togglePOI: function () {
                     if (this.item && this.item.POI) {
                         this.item.POI.label = this.label

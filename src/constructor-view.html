@@ -6,18 +6,31 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="./styles/common-styles.html">
 <link rel="import" href="./element/unit-activity/unit-activity-constructor.html">
+<link rel="import" href="./element/POI/map-display.html">
 <dom-module id="constructor-view">
     <template>
         <style include="common-styles">
+            .ugList {
+                --resource-list-template: {
+                    width: 230px;
+                }
+            }
+            map-display {
+                --custom-map-display: {
+                    width: 400px;
+                    height: 400px;
+                }
+            }
+
         </style>
-        <div  class="card">
+        <div class="card">
             <div class="topLevelInfo">
                 <h2>Unités de jeu</h2>
                 <div>
                     Les unités de jeux sont les composants
                     <b>les plus complexes dans MOGGLE.</b> Une unité de jeu définit, suivant un pattern préétabli, une activité
-                    complète.
-                    La création d'une unité de jeu se fait suivant plusieurs étapes, chaque étape étant représenté par un cadre ci dessous.
+                    complète. La création d'une unité de jeu se fait suivant plusieurs étapes, chaque étape étant représenté
+                    par un cadre ci dessous.
                     <ul>
                         <li>Choix d'une page de départ</li>
                         <li>Sélection du POI et du mode de guidance</li>
@@ -28,11 +41,17 @@ This code may only be used under the "Do whatever you want with code license"
 
                 </div>
             </div>
-            </div>
-            <unit-activity-constructor id="unitGame"></unit-activity-constructor>
-            <div style="padding:10px;" class="card">
-                <list-generic-resource share-url='/unitgame' id='unitgameList' resource-type='unitgame' url='/unitgame'></list-generic-resource>
-            </div>
+        </div>
+        <unit-activity-constructor id="unitGame"></unit-activity-constructor>
+        <div style="display: inline-flex;
+        width: 98%;
+        background: white;
+        margin-top: 30px;
+        margin-left: 10px;
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);">
+            <list-generic-resource share-url='/unitgame' id='unitgameList' class="ugList" resource-type='unitgame' url='/unitgame'></list-generic-resource>
+            <map-display class="mymap" id="gmap"></map-display>
+        </div>
     </template>
     <script>
         Polymer({
@@ -42,6 +61,7 @@ This code may only be used under the "Do whatever you want with code license"
                 //  this.$.gameResource.addEventListener('addItem',this.addNewItem.bind(this))
                 this.$.unitGame.addEventListener('resource-operation', this.updateMedia.bind(this))
                 this.$.unitgameList.addEventListener('resource-operation', this.updateMedia.bind(this))
+                this.$.unitgameList.addEventListener('change-poi-map', this.updateMap.bind(this))
 
             },
             updateMedia: function (message) {
@@ -62,6 +82,15 @@ This code may only be used under the "Do whatever you want with code license"
 
                 }
             },
+            updateMap: function (event) {
+                var data = event.detail
+                if (data.show) {
+                    this.$.gmap.showPOI(data.resource)
+                } else {
+                    this.$.gmap.removePOI(data.resource)
+                }
+            },
+
             clearList: function () {
                 this.$.uploader.clear();
             }

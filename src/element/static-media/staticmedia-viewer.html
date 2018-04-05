@@ -24,34 +24,30 @@ Viewer for Markdown resource using marked-element
 
 <dom-module id="staticmedia-viewer">
     <style include="common-styles">
+        .element {
+            align-self: stretch;
+        }
 
-    .element {
-        align-self: stretch;
-    }
+        img[src$="centerme"] {
+            display: block;
+            margin: 0 auto;
+        }
 
-    img[src$="centerme"] {
-        display: block;
-        margin: 0 auto;
-    }
-
-    .remove {
-        background-color: #eeeeee;
-    }
-
+        .remove {
+            background-color: #eeeeee;
+        }
 
 
-    .suppress-action {
-        display: inline-flex;
-        flex-direction: row-reverse;
-        padding: 10px;
-    }
 
+        .suppress-action {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            padding: 10px;
+        }
     </style>
     <template>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
-            <div class="resourceHeader">
-                <h3 class="headerText">{{resourceLabel}}</h3>
-            </div>
+            <resource-header is-picker resource-label="{{resourceLabel}}"></resource-header>
         </template>
         <form class="resource">
             <marked-element markdown="{{mkdown}}">
@@ -65,78 +61,78 @@ Viewer for Markdown resource using marked-element
         </form>
     </template>
     <script>
-    (function() {
-        'use strict';
-        Polymer({
-            is: 'staticmedia-viewer',
-            ready: function() {},
-            noMkdown(defaultMkdown) {
-                if (defaultMkdown) {
-                    if (this.mkdown == null) {
-                        return true
+        (function () {
+            'use strict';
+            Polymer({
+                is: 'staticmedia-viewer',
+                ready: function () {},
+                noMkdown(defaultMkdown) {
+                    if (defaultMkdown) {
+                        if (this.mkdown == null) {
+                            return true
+                        }
                     }
+                    return false
+                },
+                _resourceReadonlyObserver: function (newval, oldval) {
+                    if (newval == "readonly") {
+                        this.isReadOnly = true
+
+                    } else {
+                        this.isReadOnly = false
+                    }
+                },
+
+                removeElement: function () {
+                    this.$.remover.genRequest();
+                },
+                _submit: function () {},
+                _defaultMkdownExists: function (defaultMkdown) {
+                    this.showDefaultMkdown = !this.mkdownExists
+                },
+                _mkdownExists: function (mkdown) {
+                    if (mkdown) {
+                        this.mkdownExists = true
+                        this.showDefaultMkdown = false
+                    } else {
+                        this.mkdownExists = false
+                        this.showDefaultMkdown = true
+
+                    }
+
+                },
+                properties: {
+                    mkdown: {
+                        type: String,
+                        notify: true,
+                        observer: '_mkdownExists',
+                    },
+                    defaultMkdown: {
+                        type: String,
+                        notify: true,
+                        observer: '_defaultMkdownExists',
+
+                    },
+                    resourceStatus: {
+                        type: String,
+                        notify: true,
+                    },
+                    resourceLabel: {
+                        type: String,
+                        notify: true,
+                    },
+                    resourceReadonly: {
+                        type: String,
+                        notify: true,
+                        observer: "_resourceReadonlyObserver",
+                    },
+                    conceptionMode: {
+                        type: Boolean,
+                        notify: true,
+                    }
+
                 }
-                return false
-            },
-            _resourceReadonlyObserver: function(newval, oldval) {
-                if (newval == "readonly") {
-                    this.isReadOnly = true
-
-                } else {
-                    this.isReadOnly = false
-                }
-            },
-
-            removeElement: function() {
-                this.$.remover.genRequest();
-            },
-            _submit: function() {},
-            _defaultMkdownExists: function(defaultMkdown) {
-                this.showDefaultMkdown = !this.mkdownExists
-            },
-            _mkdownExists: function(mkdown) {
-                if (mkdown) {
-                    this.mkdownExists = true
-                    this.showDefaultMkdown = false
-                } else {
-                    this.mkdownExists = false
-                    this.showDefaultMkdown = true
-
-                }
-
-            },
-            properties: {
-                mkdown: {
-                    type: String,
-                    notify: true,
-                    observer: '_mkdownExists',
-                },
-                defaultMkdown: {
-                    type: String,
-                    notify: true,
-                    observer: '_defaultMkdownExists',
-
-                },
-                resourceStatus: {
-                    type: String,
-                    notify: true,
-                },
-                resourceLabel: {
-                    type: String,
-                    notify: true,
-                },
-                resourceReadonly: {
-                    type: String,
-                    notify: true,
-                    observer: "_resourceReadonlyObserver",
-                },
-                conceptionMode: {
-                    type: Boolean,
-                    notify: true,
-                }
-
-            }
-        });
-    })();
+            });
+        })();
     </script>
 </dom-module>

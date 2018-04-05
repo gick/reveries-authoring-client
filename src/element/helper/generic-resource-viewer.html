@@ -23,87 +23,98 @@ This code may only be used under the "Do whatever you want with code license"
 <dom-module id="generic-resource-viewer">
     <template>
         <style include="common-styles">
-         :host {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        .previewquestion {
-            display: inline-flex;
-            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-            margin: 10px;
-        }
-
-        .markdown-html img {
-            width: 200px;
-            height: 200px;
-        }
-
-        .markdown-html video {
-            width: 200px;
-            height: 200px;
-        }
-
-        .image {
-            width: 300px;
-            height: 300px;
-            @apply --resource-image-template;
-        }
-
-        .deleteIcon {
-            color: red;
-            float: right;
-            right: 30px;
-        }
+            :host {
+                display: flex;
+                flex-wrap: wrap;
+            }
 
 
-        .mediablock {
-            display: inline-flex;
-            width: 300px;
-            height: 300px;
-            margin-bottom: 15px;
-            box-shadow: 6px 5px 26px #CECEB9;
-            -moz-box-shadow: 6px 5px 2px #CECEB9;
-            -webkit-box-shadow: 6px 5px 2px #CECEB9;
-            -o-box-shadow: 6px 5px 2px #CECEB9;
-            box-shadow: 6px 5px 26px #CECEB9;
-            @apply --resource-container-template;
-        }
+            .markdown-html img {
+                width: 200px;
+                height: 200px;
+            }
 
-        .mainDiv {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: right;
-            align-items: center;
-            @apply --resource-template;
-        }
-        h3.resourceLabel {
-            color: #737373!important;
-            margin-bottom: 0!important;
-        }
-        .pickedDiv {
-            display: flex;
-            background-color: blue;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
+            .markdown-html video {
+                width: 200px;
+                height: 200px;
+            }
+
+            .image {
+                width: 350px;
+                height: 350px;
+                @apply --resource-image-template;
+            }
+
+            .deleteIcon {
+                color: red;
+                float: right;
+                right: 30px;
+            }
+
+
+            .mediablock {
+                display: flex;
+                flex-direction: column;
+                width: 360px;
+                height: 360px;
+                margin-bottom: 15px;
+                box-shadow: 6px 5px 26px #CECEB9;
+                -moz-box-shadow: 6px 5px 2px #CECEB9;
+                -webkit-box-shadow: 6px 5px 2px #CECEB9;
+                -o-box-shadow: 6px 5px 2px #CECEB9;
+                box-shadow: 6px 5px 26px #CECEB9;
+                @apply --resource-container-template;
+            }
+
+            .mainDiv {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: right;
+                align-items: center;
+                @apply --resource-template;
+            }
+
+            h3.resourceLabel {
+                color: #737373 !important;
+                margin-bottom: 0 !important;
+            }
+
+            .pickedDiv {
+                display: flex;
+                background-color: blue;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            :host.resourceList {
+                --resource-list-template: {
+                    margin: 0;
+                    box-shadow: none;
+                }
+
+            }
         </style>
-        <div class$="{{pickedValue}}">
+        <div class="resourceList">
             <template is="dom-if" if="{{item}}">
-                    <h3 class="resourceLabel">[[label]]</h3>
-
                 <template is="dom-if" if="{{poi}}" restamp>
-                    <one-poi-display  conception-mode=[[conceptionMode]] resource-label="{{item.label}}" item="{{item}}"></one-poi-display>
+                    <resource-header is-picker=[[isPicker]] resource-url='/poi' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <one-poi-display conception-mode=[[conceptionMode]] resource-label="{{item.label}}" item="{{item}}"></one-poi-display>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{page}}" restamp>
+                    <resource-header is-picker=[[isPicker]] resource-url='/staticmedia' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
                     <staticmedia-viewer conception-mode=[[conceptionMode]] resource-label="[[item.label]]" mkdown="[[item.mkdown]]"></staticmedia-viewer>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{badge}}" restamp>
-                    <badge-element class="" id="" media="{{item.media}}" conception-mode=[[conceptionMode]] badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
+                    <resource-header is-picker=[[isPicker]] resource-url='/badge' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <badge-element class="" id="" media="{{item.media}}" conception-mode=[[conceptionMode]] badge-text="{{item.badgeText}}" resource-readonly="{{item.readonly}}"
+                        resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
                     </badge-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
@@ -117,15 +128,22 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{unitgame}}" restamp>
-                    <unit-game start-media={{item.startMedia}} item={{item}} resource-readonly="{{item.readonly}}" resource-status={{item.status}} item-id="{{item._id}}" label="{{item.label}}">
+                    <resource-header is-picker=[[isPicker]] resource-url='/unitgame' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <unit-game start-media={{item.startMedia}} item={{item}} resource-readonly="{{item.readonly}}" resource-status={{item.status}}
+                        item-id="{{item._id}}" label="{{item.label}}">
                     </unit-game>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{image}}" restamp>
+
                     <div class="mediablock">
-                        <iron-image class="image" sizing="contain" src="/file/{{item._id}}"></iron-image>
-                    </div>
+                        <resource-header is-picker=[[isPicker]] resource-url='/file' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+
+                     <iron-image class="image" sizing="contain" src="/file/{{item._id}}"></iron-image>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
+                </div>
                 </template>
                 <template is="dom-if" if="{{video}}" restamp>
                     <div class="mediablock">
@@ -134,26 +152,36 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
-                    <inventory-element class="" id="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media="{{item.media}}" item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" resource-label="{{item.label}}">
+                    <resource-header is-picker=[[isPicker]] resource-url='/inventory' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <inventory-element class="" id="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media="{{item.media}}"
+                        item-text="{{item.itemText}}" resource-readonly="{{item.readonly}}" item-id="{{item._id}}" resource-label="{{item.label}}">
                     </inventory-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mcq}}" restamp>
-                    <mcq-activity preview image-mode={{item.imageMode}} distractor-array={{item.distractors}} class="" conception-mode=[[conceptionMode]] question={{item.question}} 
-                    resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}"
-                     correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}}
-                      correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}" 
-                      media={{item.media}}>
+                    <resource-header is-picker=[[isPicker]] resource-url='/mcq' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <mcq-activity preview image-mode={{item.imageMode}} distractor-array={{item.distractors}} class="" conception-mode=[[conceptionMode]]
+                        question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}"
+                        correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}}
+                        correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}"
+                        media={{item.media}}>
                     </mcq-activity>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mlg}}" restamp>
-                    <mlg-viewer class="" item={{item}} conception-mode=[[conceptionMode]] resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" item-id="{{item._id}}">
+                    <resource-header is-picker=[[isPicker]] resource-url='/mlg'  resource-id=[[item._id]] resource-readonly="[[item.readonly]]" resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <mlg-viewer class="" item={{item}} conception-mode=[[conceptionMode]] resource-status="{{item.status}}" resource-readonly="{{item.readonly}}"
+                        resource-label="{{item.label}}" item-id="{{item._id}}">
                     </mlg-viewer>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{freetext}}" restamp>
-                    <free-text-question conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media={{item.media}} resource-readonly="{{item.readonly}}" resource-label="{{item.label}}" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" item-id="{{item._id}}" media="{{item.media}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
+                    <resource-header is-picker=[[isPicker]] resource-url='/freetextactivity'  resource-id=[[item._id]] resource-readonly="[[item.readonly]]" resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <free-text-question conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media={{item.media}} resource-readonly="{{item.readonly}}"
+                        resource-label="{{item.label}}" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" item-id="{{item._id}}"
+                        media="{{item.media}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{isTemp}}" restamp>
@@ -163,433 +191,439 @@ This code may only be used under the "Do whatever you want with code license"
         </div>
     </template>
     <script>
-    (function() {
-        'use strict';
+        (function () {
+            'use strict';
 
-        Polymer({
-            is: 'generic-resource-viewer',
-            ready: function() {
-                this.pickedValue = 'mainDiv'
-                this.active = false
-            },
-            isEmpty: function() {
-                this.image = false;
-                this.video = false;
-                this.user = false
-
-                this.poi = false;
-                this.freetext = false;
-                this.mcq = false;
-                this.page = false;
-                this.poiId = null
-                this.badge = false
-                this.inventory = false
-                this.unitgame = false
-                this.mlg = false
-
-
-            },
-            isUser: function() {
-                this.unitgame = false
-                this.mlg = false
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.user = true
-                this.tutorial = false
-                this.freetext = false;
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-
-            },
-
-            isImage: function() {
-                this.unitgame = false
-                this.mlg = false
-                this.image = true;
-                this.video = false;
-                this.poi = false;
-                this.user = false
-                this.tutorial = false
-                this.freetext = false;
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-
-            },
-            isBadge: function() {
-                this.unitgame = false
-                this.mlg = false
-                this.image = false;
-                this.user = false
-                this.tutorial = false
-                this.video = false;
-                this.poi = false;
-                this.freetext = false;
-                this.mcq = false;
-                this.page = false;
-                this.badge = true
-                this.inventory = false
-
-            },
-            isInventory: function() {
-                this.user = false
-                this.tutorial = false
-                this.image = false;
-                this.video = false;
-                this.mlg = false
-                this.unitgame = false
-                this.poi = false;
-                this.freetext = false;
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = true
-
-            },
-
-
-            isPage: function() {
-                this.user = false
-                this.tutorial = false
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.freetext = false;
-                this.unitgame = false
-                this.mlg = false
-                this.mcq = false;
-                this.page = true;
-                this.badge = false
-                this.inventory = false
-
-            },
-            isPoi: function() {
-                this.user = false
-                this.tutorial = false
-                this.image = false;
-                this.video = false;
-                this.poi = true;
-                this.freetext = false;
-                this.unitgame = false
-                this.mlg = false
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-
-            },
-            isVideo: function() {
-                this.image = false;
-                this.video = true;
-                this.tutorial = false
-                this.poi = false;
-                this.freetext = false;
-                this.unitgame = false
-                this.mlg = false
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-                this.user = false
-
-            },
-            isMcq: function() {
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.freetext = false;
-                this.mcq = true;
-                this.unitgame = false
-                this.mlg = false
-                this.user = false
-                this.tutorial=false
-                this.page = false;
-                this.inventory = false
-                this.badge = false
-
-            },
-            isFreetext: function() {
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.freetext = true;
-                this.unitgame = false
-                this.mlg = false
-                this.tutorial=false
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-                this.user = false
-
-            },
-            isUnitgame: function() {
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.freetext = false;
-                this.unitgame = true
-                this.mlg = false
-                this.tutorial=false
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-                this.user = false
-
-            },
-
-
-            isMlg: function() {
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.freetext = false;
-                this.unitgame = false
-                this.mlg = true
-                this.tutorial=false
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-                this.user = false
-
-            },
-
-            isTutorial:function(){
-                this.image = false;
-                this.video = false;
-                this.poi = false;
-                this.freetext = false;
-                this.unitgame = false
-                this.mlg = false
-                this.tutorial=true
-                this.mcq = false;
-                this.page = false;
-                this.badge = false
-                this.inventory = false
-                this.user = false
-            },
-
-            setUser: function(newItem) {
-                this.isUser();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-
-            setTutorial: function(newItem) {
-                this.isTutorial();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-
-            setUnigame: function(newItem) {
-                this.isUnitgame();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-            setVideo: function(newItem) {
-                this.isVideo()
-                var oldItem
-                this.item = oldItem;
-                this.item = newItem;
-
-            },
-
-            setBadge: function(newItem) {
-                this.isBadge();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-
-            setPage: function(newItem) {
-                this.isPage();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-            setPOI: function(newItem) {
-                this.isPoi();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-                this.poiId = this.item._id
-                this.set('active', true)
-            },
-            setMcq: function(newItem) {
-                this.isMcq();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-            setFreetext: function(newItem) {
-                this.isFreetext();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-            setInventory: function(newItem) {
-                this.isInventory();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-                this.set('active', true)
-
-            },
-
-            setMlg: function(newItem) {
-                this.isMlg();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-                this.set('active', true)
-
-            },
-
-            setImage: function(newItem) {
-                this.isImage();
-                var oldItem;
-                this.item = oldItem;
-                this.item = newItem;
-            },
-            removeResource: function() {
-                this.isEmpty();
-                this.item = null
-                this.fire('mediaDeleted', null)
-                this.set('active', false)
-            },
-            hasImage: function(imageId) {
-                if (!imageId) {
-                    return false
-                }
-                if (imageId.length === 0) {
-                    return false
-                }
-                return true;
-            },
-            itemChanged: function(item) {
-            },
-            observers: [
-                'statusChanged(status)',
-                'mcqChanged(newmcq)',
-                'itemChanged(item.*)',
-                'resourceTypeChanged(resourceType)',
-            ],
-
-            resourceTypeChanged: function(resourceType) {
-                if (resourceType == 'image') {
-                    this.setImage(this.item)
-                }
-                if (resourceType == 'poi') {
-                    this.setPOI(this.item)
-                }
-
-                if (resourceType == 'badge') {
-                    this.setBadge(this.item)
-                }
-                if (resourceType == 'staticmedia' || resourceType == 'page') {
-                    this.setPage(this.item)
-                }
-                if (resourceType == 'inventory') {
-                    this.setInventory(this.item)
-                }
-                if (resourceType == 'freetext') {
-                    this.setFreetext(this.item)
-                }
-                if (resourceType == 'mcq') {
-                    this.setMcq(this.item)
-                }
-                if (resourceType == 'unitgame') {
-                    this.setUnigame(this.item)
-                }
-                if (resourceType == 'mlg') {
-                    this.setMlg(this.item)
-                }
-                if (resourceType == 'video') {
-                    this.setVideo(this.item)
-                }
-
-                if (resourceType == 'user') {
-                    this.setUser(this.item)
-                }
-                if (resourceType == 'tutorial') {
-                    this.setTutorial(this.item)
-                }
-
-
-
-            },
-            statusChanged: function(stat) {
-                if (stat.logged) {
-                    this.$.ajaxLoader.generateRequest();
-
-                }
-            },
-            mcqChanged: function(newquestion) {
-                if (newquestion) {
-                    this.$.ajaxLoader.generateRequest();
-
-                }
-            },
-            properties: {
-                label:{type:String,
-                notify:true,},
-                poiId: {
-                    type: String,
-                    reflectToAttribute: true,
-                    notify: true,
+            Polymer({
+                is: 'generic-resource-viewer',
+                ready: function () {
+                    this.pickedValue = 'mainDiv'
+                    this.active = false
                 },
-                isTemp: {
-                    type: Boolean,
-                    notify: true,
-                },
-                inputName: {
-                    type: String,
-                    notify: true,
-                },
-                image: {
-                    type: Boolean,
-                    notify: true,
-                },
-                active: {
-                    type: Boolean,
-                    value: false,
-                    notify: true,
-                    reflectToAttribute: true,
-                },
-                page: {
-                    type: Boolean,
-                    notify: true,
+                isEmpty: function () {
+                    this.image = false;
+                    this.video = false;
+                    this.user = false
+
+                    this.poi = false;
+                    this.freetext = false;
+                    this.mcq = false;
+                    this.page = false;
+                    this.poiId = null
+                    this.badge = false
+                    this.inventory = false
+                    this.unitgame = false
+                    this.mlg = false
+
 
                 },
-                mcq: {
-                    type: Boolean,
-                    notify: true,
+                isUser: function () {
+                    this.unitgame = false
+                    this.mlg = false
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.user = true
+                    this.tutorial = false
+                    this.freetext = false;
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+
                 },
 
-                item: {
-                    type: Object,
-                    notify: true,
-                    reflectToAttribute: true,
+                isImage: function () {
+                    this.unitgame = false
+                    this.mlg = false
+                    this.image = true;
+                    this.video = false;
+                    this.poi = false;
+                    this.user = false
+                    this.tutorial = false
+                    this.freetext = false;
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+
                 },
-                resourceType: {
-                    type: String,
-                    notify: true,
+                isBadge: function () {
+                    this.unitgame = false
+                    this.mlg = false
+                    this.image = false;
+                    this.user = false
+                    this.tutorial = false
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = false;
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = true
+                    this.inventory = false
+
                 },
-                conceptionMode: {
-                    type: Boolean,
-                    notify: true,
+                isInventory: function () {
+                    this.user = false
+                    this.tutorial = false
+                    this.image = false;
+                    this.video = false;
+                    this.mlg = false
+                    this.unitgame = false
+                    this.poi = false;
+                    this.freetext = false;
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = true
+
+                },
+
+
+                isPage: function () {
+                    this.user = false
+                    this.tutorial = false
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = false;
+                    this.unitgame = false
+                    this.mlg = false
+                    this.mcq = false;
+                    this.page = true;
+                    this.badge = false
+                    this.inventory = false
+
+                },
+                isPoi: function () {
+                    this.user = false
+                    this.tutorial = false
+                    this.image = false;
+                    this.video = false;
+                    this.poi = true;
+                    this.freetext = false;
+                    this.unitgame = false
+                    this.mlg = false
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+
+                },
+                isVideo: function () {
+                    this.image = false;
+                    this.video = true;
+                    this.tutorial = false
+                    this.poi = false;
+                    this.freetext = false;
+                    this.unitgame = false
+                    this.mlg = false
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+                    this.user = false
+
+                },
+                isMcq: function () {
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = false;
+                    this.mcq = true;
+                    this.unitgame = false
+                    this.mlg = false
+                    this.user = false
+                    this.tutorial = false
+                    this.page = false;
+                    this.inventory = false
+                    this.badge = false
+
+                },
+                isFreetext: function () {
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = true;
+                    this.unitgame = false
+                    this.mlg = false
+                    this.tutorial = false
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+                    this.user = false
+
+                },
+                isUnitgame: function () {
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = false;
+                    this.unitgame = true
+                    this.mlg = false
+                    this.tutorial = false
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+                    this.user = false
+
+                },
+
+
+                isMlg: function () {
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = false;
+                    this.unitgame = false
+                    this.mlg = true
+                    this.tutorial = false
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+                    this.user = false
+
+                },
+
+                isTutorial: function () {
+                    this.image = false;
+                    this.video = false;
+                    this.poi = false;
+                    this.freetext = false;
+                    this.unitgame = false
+                    this.mlg = false
+                    this.tutorial = true
+                    this.mcq = false;
+                    this.page = false;
+                    this.badge = false
+                    this.inventory = false
+                    this.user = false
+                },
+
+                setUser: function (newItem) {
+                    this.isUser();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+
+                setTutorial: function (newItem) {
+                    this.isTutorial();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+
+                setUnigame: function (newItem) {
+                    this.isUnitgame();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+                setVideo: function (newItem) {
+                    this.isVideo()
+                    var oldItem
+                    this.item = oldItem;
+                    this.item = newItem;
+
+                },
+
+                setBadge: function (newItem) {
+                    this.isBadge();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+
+                setPage: function (newItem) {
+                    this.isPage();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+                setPOI: function (newItem) {
+                    this.isPoi();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                    this.poiId = this.item._id
+                    this.set('active', true)
+                },
+                setMcq: function (newItem) {
+                    this.isMcq();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+                setFreetext: function (newItem) {
+                    this.isFreetext();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+                setInventory: function (newItem) {
+                    this.isInventory();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                    this.set('active', true)
+
+                },
+
+                setMlg: function (newItem) {
+                    this.isMlg();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                    this.set('active', true)
+
+                },
+
+                setImage: function (newItem) {
+                    this.isImage();
+                    var oldItem;
+                    this.item = oldItem;
+                    this.item = newItem;
+                },
+                removeResource: function () {
+                    this.isEmpty();
+                    this.item = null
+                    this.fire('mediaDeleted', null)
+                    this.set('active', false)
+                },
+                hasImage: function (imageId) {
+                    if (!imageId) {
+                        return false
+                    }
+                    if (imageId.length === 0) {
+                        return false
+                    }
+                    return true;
+                },
+                itemChanged: function (item) {},
+                observers: [
+                    'statusChanged(status)',
+                    'mcqChanged(newmcq)',
+                    'itemChanged(item.*)',
+                    'resourceTypeChanged(resourceType)',
+                ],
+
+                resourceTypeChanged: function (resourceType) {
+                    if (resourceType == 'image') {
+                        this.setImage(this.item)
+                    }
+                    if (resourceType == 'poi') {
+                        this.setPOI(this.item)
+                    }
+
+                    if (resourceType == 'badge') {
+                        this.setBadge(this.item)
+                    }
+                    if (resourceType == 'staticmedia' || resourceType == 'page') {
+                        this.setPage(this.item)
+                    }
+                    if (resourceType == 'inventory') {
+                        this.setInventory(this.item)
+                    }
+                    if (resourceType == 'freetext') {
+                        this.setFreetext(this.item)
+                    }
+                    if (resourceType == 'mcq') {
+                        this.setMcq(this.item)
+                    }
+                    if (resourceType == 'unitgame') {
+                        this.setUnigame(this.item)
+                    }
+                    if (resourceType == 'mlg') {
+                        this.setMlg(this.item)
+                    }
+                    if (resourceType == 'video') {
+                        this.setVideo(this.item)
+                    }
+
+                    if (resourceType == 'user') {
+                        this.setUser(this.item)
+                    }
+                    if (resourceType == 'tutorial') {
+                        this.setTutorial(this.item)
+                    }
+
+
+
+                },
+                statusChanged: function (stat) {
+                    if (stat.logged) {
+                        this.$.ajaxLoader.generateRequest();
+
+                    }
+                },
+                mcqChanged: function (newquestion) {
+                    if (newquestion) {
+                        this.$.ajaxLoader.generateRequest();
+
+                    }
+                },
+                properties: {
+                    label: {
+                        type: String,
+                        notify: true,
+                    },
+                    isPicker: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                    },
+                    poiId: {
+                        type: String,
+                        reflectToAttribute: true,
+                        notify: true,
+                    },
+                    isTemp: {
+                        type: Boolean,
+                        notify: true,
+                    },
+                    inputName: {
+                        type: String,
+                        notify: true,
+                    },
+                    image: {
+                        type: Boolean,
+                        notify: true,
+                    },
+                    active: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    page: {
+                        type: Boolean,
+                        notify: true,
+
+                    },
+                    mcq: {
+                        type: Boolean,
+                        notify: true,
+                    },
+
+                    item: {
+                        type: Object,
+                        notify: true,
+                        reflectToAttribute: true,
+                    },
+                    resourceType: {
+                        type: String,
+                        notify: true,
+                    },
+                    conceptionMode: {
+                        type: Boolean,
+                        notify: true,
+                    }
                 }
-            }
-        });
-    })();
+            });
+        })();
     </script>
 </dom-module>

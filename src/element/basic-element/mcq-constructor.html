@@ -35,6 +35,7 @@ Builder for free text question resources
 
 <dom-module id="mcq-constructor">
     <style include="common-styles">
+
     </style>
     <template>
         <create-resource id="creator" resource-url="/mcq" resource="{{resource}}"></create-resource>
@@ -75,7 +76,7 @@ Builder for free text question resources
             <paper-button raised on-click="addResponseField">Ajouter un distracteur</paper-button>
 
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel)</paper-button>
-            <generic-resource-viewer input-name="mediaId" is-temp page video class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
+            <generic-resource-viewer is-picker input-name="mediaId" is-temp page class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
             <div class="insideflex ">
                 <template is="dom-if" if="{{updating}}" restamp>
                     <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
