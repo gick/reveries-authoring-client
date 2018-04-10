@@ -5,10 +5,12 @@
 <dom-module id="mlg-viewer">
     <template>
         <style include="common-styles">
+            .mlg{
+                display:flex;
+                flex-direction: column;
+            }
         </style>
-        <div class="constructorCard">
-            <generic-resource-viewer id="preview" page class="resourceViewer viewer"></generic-resource-viewer>
-            <div>
+        <div class="mlg">
                 <ul>
                     <li>
                         <b>Difficulté</b> : [[item.difficulty]]
@@ -24,7 +26,6 @@
                     </li>
 
                 </ul>
-            </div>
         </div>
     </template>
 </dom-module>
@@ -36,9 +37,6 @@
             behaviors: [sharedBehavior],
 
             ready: function () {
-                if (this.item.startpage) {
-                    this.$.preview.setPage(this.item.startpage)
-                }
             },
             _checkdiff: function (oldv, newv) {
                 console.log(oldv)

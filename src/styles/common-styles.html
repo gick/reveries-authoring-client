@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+
 <dom-module id="common-styles">
     <template>
         <style>
@@ -9,12 +11,24 @@
                 justify-content: space-between;
             }
 
+            .title {
+                @apply(--paper-font-title);
+            }
+
             .creator {
                 border-radius: 3px;
                 padding: 10px;
                 display: inline-flex;
                 flex-direction: column;
                 width: 400px;
+            }
+
+            .resourceBody {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                align-items: center;
+                @apply --resource-body-mixin;
             }
 
             .markdown-html img {
@@ -65,7 +79,9 @@
                 width: 90%;
                 @apply --custom-header;
             }
-
+            .ugOnMap{
+                @apply --ug-toggle;
+            }
             .resourceViewer {
                 display: flex;
                 flex-direction: column;
@@ -73,6 +89,7 @@
                 margin-top: 10px;
                 box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
                 @apply --resource-viewer-styling;
+                @apply --toggle-ug-visible;
             }
 
 

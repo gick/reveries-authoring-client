@@ -31,12 +31,6 @@ This code may only be used under the "Do whatever you want with code license"
         .validator{
             margin-top: 30px;
         }
-        .freetextBody {
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            align-items: center;
-        }
     </style>
     <template>
         <template is="dom-if" if="[[conceptionMode]]" restamp>
@@ -44,7 +38,7 @@ This code may only be used under the "Do whatever you want with code license"
         </template>
         <div class="resource">
             <div class="question">{{question}}</div>
-            <div class="freetextBody">
+            <div class="resourceBody">
                 <paper-input name="response" class="response" value="{{userResponse}}" error-message="{{incorrectMessage}}" label="{{responseLabel}}"></paper-input>
                 <template is="dom-if" if="{{showMediaButton}}" restamp=true>
                         <paper-toggle-button checked={{showClue}}>Indice</paper-toggle-button>

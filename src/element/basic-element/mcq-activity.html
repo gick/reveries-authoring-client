@@ -33,12 +33,6 @@ This code may only be used under the "Do whatever you want with code license"
         .correct {
             color: green;
         }
-        .freetextBody {
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            align-items: center;
-        }
 
         .wrong {
             color: red;
@@ -50,7 +44,7 @@ This code may only be used under the "Do whatever you want with code license"
         </template>
         <div id="mcqbody" class="resource">
             <div class="question" name="question">{{question}}</div>
-            <div class="freetextBody">
+            <div class="resourceBody">
             <iron-collapse opened=[[showClue]]>
                 <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
             </iron-collapse>

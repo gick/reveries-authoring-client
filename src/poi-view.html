@@ -4,17 +4,33 @@ Copyright (c) 2018 Pierre-Yves Gicquel.
 This code may only be used under the "Do whatever you want with code license"
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../src/element/helper/list-generic-resource.html">
 <link rel="import" href="../src/element/POI/map-display.html">
 <link rel="import" href="../src/element/POI/poi-from-map.html">
 <link rel="import" href="./styles/common-styles.html">
 <dom-module id="poi-view">
     <template>
-        <style include="common-styles">
-        .outer {
-            display: inline-flex;
-            flex-wrap: wrap;
+        <style include="common-styles">            
+        map-display {
+            
+                --custom-map-display: {
+                    width: 400px;
+                    height: 400px;
+                }
+            }
+        .poiDiv{
+            @apply(--shadow-elevation-2dp);
+            background-color: white;
+            margin-bottom: 5px;
+            margin-left: 20px;
+            margin-right: 20px;
+
+            display:flex;
+            flex-direction:row;
         }
+
         </style>
         <div class="card">
             <div class="topLevelInfo">
@@ -31,11 +47,10 @@ This code may only be used under the "Do whatever you want with code license"
         <div class="card">
             <poi-from-map id="poimap" activity="POIMAP" lat="48.088275" long="-0.756458"></poi-from-map>
         </div>
-        <div class="card">
-            <div class="outer">
-                <map-display id="gmap"></map-display>
-            </div>
+        <div class="poiDiv">
             <list-generic-resource share-url='/poi' id='poiList' resource-type='poi' url='/poi'></list-generic-resource>
+            <map-display id="gmap"></map-display>
+
         </div>
     </template>
     <script>

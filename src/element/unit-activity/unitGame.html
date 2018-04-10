@@ -8,30 +8,41 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../styles/common-styles.html">
 <dom-module id="unit-game">
     <style include="common-styles">
-        .activityContent{
-            margin:5px;
+        .activityContent {
+            margin: 5px;
+        }
+
+        
+        :host {
+            --resource-body-mixin: {
+                align-items: baseline;
+            }
         }
     </style>
     <template>
-        <div>
-            <template is="dom-if" if="{{item.POI}}">
-                <paper-toggle-button checked={{poiShowed}} on-change="togglePOI">Afficher sur la carte</paper-toggle-button>
-            </template>
+        <div class="resource">
+            <div class="resourceBody">
+                <template is="dom-if" if="{{item.POI}}">
+                    <div class="visible">
+                        <paper-toggle-button checked={{poiShowed}} class="ugOnMap" on-change="togglePOI">Afficher sur la carte</paper-toggle-button>
+                    </div>
+                </template>
 
-            <template is="dom-if" if="{{guidance}}">
+                <template is="dom-if" if="{{guidance}}">
+                    <div class="activityContent">
+                        <b>Guidance</b> : [[guidance]]
+                    </div>
+                </template>
+                <template is="dom-if" if="{{validation}}">
+                    <div class="activityContent">
+                        <b>Validation</b> : [[validation]]
+                    </div>
+                </template>
                 <div class="activityContent">
-                    <b>Guidance</b> : [[guidance]]
+                    <b>Activité situées</b> : [[situated]]
                 </div>
-            </template>
-            <template is="dom-if" if="{{validation}}">
-                <div class="activityContent">
-                    <b>Validation</b> : [[validation]]
-                </div>
-            </template>
-            <div class="activityContent">
-                <b>Activité situées</b> : [[situated]]
+
             </div>
-
         </div>
     </template>
     <script>
@@ -68,7 +79,7 @@ This code may only be used under the "Do whatever you want with code license"
                     }
 
                     if (this.item.mcqActivities) {
-                        this.situated = this.situated+ this.item.mcqActivities.length
+                        this.situated = this.situated + this.item.mcqActivities.length
                     }
 
                 },
