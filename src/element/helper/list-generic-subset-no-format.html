@@ -9,19 +9,30 @@ This code may only be used under the "Do whatever you want with code license"
 <dom-module id="list-generic-subset-no-format">
     <template>
         <style include="common-styles">
-            :host{
-                --resource-viewer-styling:{
-                    margin:5px;
+            :host {
+                --resource-viewer-styling: {
+                    display: inline-flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+                    margin: 5px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
+                .resourceViewer{
+                --ug-toggle: {
+                    display: none;
+                }}
+                --resource-look: {}
             }
-
         </style>
-        <div style="display:flex;flex-direction:row-reverse;flex-wrap:wrap;">
+        <div class="ug" style="display:flex;flex-direction:row-reverse;flex-wrap:wrap;">
             <template is="dom-repeat" id='list' items="{{items}}">
-                    <generic-resource-viewer is-picker is-temp input-name="situated[[item.type]]" class="resourceViewer" resource-type="{{item.type}}" item={{item}}>
-                    </generic-resource-viewer>
-                </div>
+                <generic-resource-viewer is-picker is-temp input-name="situated[[item.type]]" class="resourceViewer" resource-type="{{item.type}}"
+                    item={{item}}>
+                </generic-resource-viewer>
             </template>
+
         </div>
     </template>
     <script>
@@ -30,17 +41,20 @@ This code may only be used under the "Do whatever you want with code license"
 
             Polymer({
                 is: 'list-generic-subset-no-format',
-                ready: function () {
-                },
+                ready: function () {},
                 addItem: function (item) {
                     this.push('items', item)
                 },
+                adding: function (index) {
+                    console.log(index)
+                },
+                observers: ['adding(items.length)'],
                 properties: {
-                  items:{
-                      type:Array,
-                      value:[],
-                      notify:true,
-                  }
+                    items: {
+                        type: Array,
+                        value: [],
+                        notify: true,
+                    }
                 }
             });
         })();

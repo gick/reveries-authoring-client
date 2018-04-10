@@ -9,6 +9,11 @@ This code may only be used under the "Do whatever you want with code license"
 <dom-module id="one-poi-display">
     <template>
         <style include="common-styles">
+            :host{
+                --resource-body-mixin:{
+                    align-items:baseline;
+                }
+            }
             .info {
                 color: #737373;
                 font-weight: 400;
@@ -17,12 +22,6 @@ This code may only be used under the "Do whatever you want with code license"
                 display: inline-block;
             }
 
-            .freetextBody {
-                display: flex;
-                flex-direction: column;
-                padding: 10px;
-                align-items: flex-start;
-            }
 
             .visible {
                 display: flex;
@@ -38,7 +37,7 @@ This code may only be used under the "Do whatever you want with code license"
             <resource-header is-picker resource-label="{{resourceLabel}}"></resource-header>
         </template>
         <div class="resource">
-            <div class="freetextBody">
+            <div class="resourceBody">
                 <div>Longitude :
                     <div class="info"> {{item.longitude}}</div>
                 </div>

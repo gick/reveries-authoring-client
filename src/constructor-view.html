@@ -10,11 +10,11 @@ This code may only be used under the "Do whatever you want with code license"
 <dom-module id="constructor-view">
     <template>
         <style include="common-styles">
-            .ugList {
-                --resource-list-template: {
-                    width: 230px;
-                }
-            }
+            .outer {
+            display: inline-flex;
+            flex-wrap: wrap;
+        }
+
             map-display {
                 --custom-map-display: {
                     width: 400px;
@@ -43,14 +43,12 @@ This code may only be used under the "Do whatever you want with code license"
             </div>
         </div>
         <unit-activity-constructor id="unitGame"></unit-activity-constructor>
-        <div style="display: inline-flex;
-        width: 98%;
-        background: white;
-        margin-top: 30px;
-        margin-left: 10px;
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);">
+        <div class="card">
             <list-generic-resource share-url='/unitgame' id='unitgameList' class="ugList" resource-type='unitgame' url='/unitgame'></list-generic-resource>
-            <map-display class="mymap" id="gmap"></map-display>
+            <div class="outer">
+                    <map-display class="mymap" id="gmap"></map-display>
+                </div>
+    
         </div>
     </template>
     <script>
