@@ -19,6 +19,7 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../tutorial-elements/tutorial-viewer.html">
 <link rel="import" href="../unit-activity/unitGame.html">
 <link rel="import" href="../unit-activity/mlg-viewer.html">
+<link rel="import" href="../youtube-elements/youtube-element.html">
 
 <dom-module id="generic-resource-viewer">
     <template>
@@ -34,7 +35,7 @@ This code may only be used under the "Do whatever you want with code license"
                 height: 200px;
             }
 
-            .markdown-html video {
+            .markdown-html youtube {
                 width: 200px;
                 height: 200px;
             }
@@ -139,16 +140,18 @@ This code may only be used under the "Do whatever you want with code license"
 
                     <div class="mediablock">
                         <resource-header is-picker=[[isPicker]] resource-url='/file' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
-                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                            resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
 
-                     <iron-image class="image" sizing="contain" src="/file/{{item._id}}"></iron-image>
-                    <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
-                </div>
-                </template>
-                <template is="dom-if" if="{{video}}" restamp>
-                    <div class="mediablock">
-                        <video controls width="300" src="/file/{{item._id}}"></video>
+                        <iron-image class="image" sizing="contain" src="/file/{{item._id}}"></iron-image>
+                        <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                     </div>
+                </template>
+                <template is="dom-if" if="{{youtube}}" restamp>
+                    <resource-header is-picker=[[isPicker]] resource-url='/youtube' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <youtube-element class="" id="" conception-mode=[[conceptionMode]] resource-status="{{item.status}}" video-id="{{item.videoId}}"
+                        resource-readonly="{{item.readonly}}" item-id="{{item._id}}" resource-label="{{item.label}}">
+                    </youtube-element>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{inventory}}" restamp>
@@ -171,14 +174,16 @@ This code may only be used under the "Do whatever you want with code license"
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{mlg}}" restamp>
-                    <resource-header is-picker=[[isPicker]] resource-url='/mlg'  resource-id=[[item._id]] resource-readonly="[[item.readonly]]" resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <resource-header is-picker=[[isPicker]] resource-url='/mlg' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
                     <mlg-viewer class="" item={{item}} conception-mode=[[conceptionMode]] resource-status="{{item.status}}" resource-readonly="{{item.readonly}}"
                         resource-label="{{item.label}}" item-id="{{item._id}}">
                     </mlg-viewer>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>
                 <template is="dom-if" if="{{freetext}}" restamp>
-                    <resource-header is-picker=[[isPicker]] resource-url='/freetextactivity'  resource-id=[[item._id]] resource-readonly="[[item.readonly]]" resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
+                    <resource-header is-picker=[[isPicker]] resource-url='/freetextactivity' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
                     <free-text-question conception-mode=[[conceptionMode]] resource-status="{{item.status}}" media={{item.media}} resource-readonly="{{item.readonly}}"
                         resource-label="{{item.label}}" question="{{item.question}}" wrong-message="{{item.wrongMessage}}" item-id="{{item._id}}"
                         media="{{item.media}}" correct-message="{{item.correctMessage}}" response="{{item.response}}" response-label="Entrez la réponse"></free-text-question>
@@ -202,7 +207,7 @@ This code may only be used under the "Do whatever you want with code license"
                 },
                 isEmpty: function () {
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.user = false
 
                     this.poi = false;
@@ -221,7 +226,7 @@ This code may only be used under the "Do whatever you want with code license"
                     this.unitgame = false
                     this.mlg = false
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.user = true
                     this.tutorial = false
@@ -237,7 +242,7 @@ This code may only be used under the "Do whatever you want with code license"
                     this.unitgame = false
                     this.mlg = false
                     this.image = true;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.user = false
                     this.tutorial = false
@@ -254,7 +259,7 @@ This code may only be used under the "Do whatever you want with code license"
                     this.image = false;
                     this.user = false
                     this.tutorial = false
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = false;
                     this.mcq = false;
@@ -267,7 +272,7 @@ This code may only be used under the "Do whatever you want with code license"
                     this.user = false
                     this.tutorial = false
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.mlg = false
                     this.unitgame = false
                     this.poi = false;
@@ -284,7 +289,7 @@ This code may only be used under the "Do whatever you want with code license"
                     this.user = false
                     this.tutorial = false
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = false;
                     this.unitgame = false
@@ -299,7 +304,7 @@ This code may only be used under the "Do whatever you want with code license"
                     this.user = false
                     this.tutorial = false
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = true;
                     this.freetext = false;
                     this.unitgame = false
@@ -310,9 +315,9 @@ This code may only be used under the "Do whatever you want with code license"
                     this.inventory = false
 
                 },
-                isVideo: function () {
+                isyoutube: function () {
                     this.image = false;
-                    this.video = true;
+                    this.youtube = true;
                     this.tutorial = false
                     this.poi = false;
                     this.freetext = false;
@@ -327,7 +332,7 @@ This code may only be used under the "Do whatever you want with code license"
                 },
                 isMcq: function () {
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = false;
                     this.mcq = true;
@@ -342,7 +347,7 @@ This code may only be used under the "Do whatever you want with code license"
                 },
                 isFreetext: function () {
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = true;
                     this.unitgame = false
@@ -357,7 +362,7 @@ This code may only be used under the "Do whatever you want with code license"
                 },
                 isUnitgame: function () {
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = false;
                     this.unitgame = true
@@ -374,7 +379,7 @@ This code may only be used under the "Do whatever you want with code license"
 
                 isMlg: function () {
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = false;
                     this.unitgame = false
@@ -390,7 +395,7 @@ This code may only be used under the "Do whatever you want with code license"
 
                 isTutorial: function () {
                     this.image = false;
-                    this.video = false;
+                    this.youtube = false;
                     this.poi = false;
                     this.freetext = false;
                     this.unitgame = false
@@ -423,8 +428,8 @@ This code may only be used under the "Do whatever you want with code license"
                     this.item = oldItem;
                     this.item = newItem;
                 },
-                setVideo: function (newItem) {
-                    this.isVideo()
+                setyoutube: function (newItem) {
+                    this.isyoutube()
                     var oldItem
                     this.item = oldItem;
                     this.item = newItem;
@@ -540,8 +545,8 @@ This code may only be used under the "Do whatever you want with code license"
                     if (resourceType == 'mlg') {
                         this.setMlg(this.item)
                     }
-                    if (resourceType == 'video') {
-                        this.setVideo(this.item)
+                    if (resourceType == 'youtube') {
+                        this.setyoutube(this.item)
                     }
 
                     if (resourceType == 'user') {
