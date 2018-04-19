@@ -193,7 +193,7 @@ This code may only be used under the "Do whatever you want with code license"
                 <app-header id="header" condenses reveals effects="waterfall">
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-                        <div title>Echologia - MOGGLE 1.6</div>
+                        <div title>Echologia - MOGGLE 1.5</div>
                         <paper-icon-button style="margin-left:auto;" icon="help" on-click="showTutorial"></paper-icon-button>
                     </app-toolbar>
                 </app-header>
@@ -236,6 +236,9 @@ This code may only be used under the "Do whatever you want with code license"
 
             },
             unitGameSaved: function () {
+                if (this.$$('#mlgView') && this.$$('#mlgView').updateUnitGames) {
+                    this.$$('#mlgView').updateUnitGames();
+                }
             },
             showTutorial: function () {
                 this.$.tuto.toggle()
