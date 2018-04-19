@@ -39,7 +39,7 @@ This code may only be used under the "Do whatever you want with code license"
                     </div>
                 </template>
                 <div class="activityContent">
-                    <b>Activité situées</b> : [[situated]]
+                    <b>Activité situées</b> : [[getNumber(item.mcqActivities,item.freetextActivities)]]
                 </div>
 
             </div>
@@ -73,15 +73,17 @@ This code may only be used under the "Do whatever you want with code license"
                     if (this.item.poiQRValidation) {
                         this.validation = "scan QR-code"
                     }
-                    this.situated = 0
-                    if (this.item.freetextActivities) {
-                        this.situated = this.item.freetextActivities.length
-                    }
 
-                    if (this.item.mcqActivities) {
-                        this.situated = this.situated + this.item.mcqActivities.length
+                },
+                getNumber:function(mcqArray,freetextArray){
+                    var number=0
+                    if(mcqArray && mcqArray.length>0){
+                        number=number+mcqArray.length
                     }
-
+                    if(freetextArray && freetextArray.length>0){
+                        number=number+freetextArray.length
+                    }
+                    return number
                 },
                 togglePOI: function () {
                     if (this.item && this.item.POI) {

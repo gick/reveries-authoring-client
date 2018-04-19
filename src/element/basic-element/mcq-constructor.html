@@ -178,8 +178,6 @@ Builder for free text question resources
                     if (question.media) {
                         this.$.mcqMediaViewer.setPage(question.media)
                     }
-                    this.distractor1 = question.distractor1
-                    this.distractor2 = question.distractor2
                     this.correctChoice = question.response
                     this.wrongMessage = question.wrongMessage
                     this.correctMessage = question.correctMessage
@@ -203,16 +201,6 @@ Builder for free text question resources
                     distractorArray: {
                         type: Array,
                         notify: true,
-                    },
-                    distractor1: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
-                    },
-                    distractor2: {
-                        type: String,
-                        notify: true,
-                        reflectToAttribute: true,
                     },
                     correctChoice: {
                         type: String,

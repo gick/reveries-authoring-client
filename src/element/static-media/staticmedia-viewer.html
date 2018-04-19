@@ -37,7 +37,11 @@ Viewer for Markdown resource using marked-element
             background-color: #eeeeee;
         }
 
-
+        :host{
+            --resource-body-mixin:{
+                align-items:flex-start;
+            }
+        }
 
         .suppress-action {
             display: inline-flex;
@@ -49,7 +53,8 @@ Viewer for Markdown resource using marked-element
         <template is="dom-if" if="[[conceptionMode]]" restamp>
             <resource-header is-picker resource-label="{{resourceLabel}}"></resource-header>
         </template>
-        <form class="resource">
+        <div class="resource">
+            <div class="resourceBody">
             <marked-element markdown="{{mkdown}}">
                 <div class="markdown-html"></div>
             </marked-element>
@@ -58,7 +63,7 @@ Viewer for Markdown resource using marked-element
                     <div class="markdown-html"></div>
                 </marked-element>
             </template>
-        </form>
+        </div></div>
     </template>
     <script>
         (function () {

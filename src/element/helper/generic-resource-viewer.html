@@ -130,9 +130,9 @@ This code may only be used under the "Do whatever you want with code license"
                 </template>
                 <template is="dom-if" if="{{unitgame}}" restamp>
                     <resource-header is-importer=[[isImporter]] is-picker=[[isPicker]] resource-url='/unitgame' resource-id=[[item._id]] resource-readonly="[[item.readonly]]"
-                        resource-status="[[item.status]]" resource="[[item]]" resource-label="{{item.label}}"></resource-header>
-                    <unit-game start-media={{item.startMedia}} item={{item}} resource-readonly="{{item.readonly}}" resource-status={{item.status}}
-                        item-id="{{item._id}}" label="{{item.label}}">
+                        resource-status="[[item.status]]" resource="[[item]]" resource-label="[[item.label]]"></resource-header>
+                    <unit-game start-media=[[item.startMedia]] item=[[item]] resource-readonly="[[item.readonly]]" resource-status={{item.status}}
+                        item-id="[[item._id]]" label="[[item.label]]">
                     </unit-game>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>
                 </template>

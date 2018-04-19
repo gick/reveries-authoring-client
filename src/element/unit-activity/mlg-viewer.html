@@ -5,12 +5,9 @@
 <dom-module id="mlg-viewer">
     <template>
         <style include="common-styles">
-            .mlg{
-                display:flex;
-                flex-direction: column;
-            }
         </style>
-        <div class="mlg">
+        <div class="resource">
+            <div class="resourceBody">
                 <ul>
                     <li>
                         <b>Difficulté</b> : [[item.difficulty]]
@@ -26,6 +23,7 @@
                     </li>
 
                 </ul>
+            </div>
         </div>
     </template>
 </dom-module>
@@ -36,8 +34,7 @@
             is: 'mlg-viewer',
             behaviors: [sharedBehavior],
 
-            ready: function () {
-            },
+            ready: function () {},
             _checkdiff: function (oldv, newv) {
                 console.log(oldv)
             },
