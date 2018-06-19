@@ -192,6 +192,10 @@ This code may only be used under the "Do whatever you want with code license"
                 <template is="dom-if" if="{{isTemp}}" restamp>
                     <paper-button id="delete" style="display:inline-flex;align-self: center;" on-click="removeResource">Remove</paper-button>
                 </template>
+                <template is="dom-if" if="{{isRemovable}}" restamp>
+                    <paper-button id="delete" style="display:inline-flex;align-self: center;" on-click="callRemoveResource">Supprimer</paper-button>
+                </template>
+
             </template>
         </div>
     </template>
@@ -204,6 +208,9 @@ This code may only be used under the "Do whatever you want with code license"
                 ready: function () {
                     this.pickedValue = 'mainDiv'
                     this.active = false
+                },
+                callRemoveResource:function(){
+                        this.fire('resource-removed')
                 },
                 isEmpty: function () {
                     this.image = false;
@@ -496,7 +503,7 @@ This code may only be used under the "Do whatever you want with code license"
                 removeResource: function () {
                     this.isEmpty();
                     this.item = null
-                    this.fire('mediaDeleted', null)
+
                     this.set('active', false)
                 },
                 hasImage: function (imageId) {
@@ -581,6 +588,12 @@ This code may only be used under the "Do whatever you want with code license"
                         value: false,
                         notify: true,
                     },
+                    isRemovable: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                    },
+
                     isImporter: {
                         type: Boolean,
                         value: false,
