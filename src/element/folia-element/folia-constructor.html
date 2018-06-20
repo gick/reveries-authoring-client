@@ -86,12 +86,13 @@ TODO : Add images of leaf
 
                 _submit: function (event) {
                     var json = this.$.foliaGenerator.serialize()
+                    json.targetSpecies=this.targetSpecies
                     //   json.reference=
                     this.set('resource', json)
                     this.$.creator.createResource()
                     this.statusString = ""
                     this.label = ""
-                    this.mkdown = ""
+                    this.resetFields()
                 },
                 _reset: function () {
                     this.resetFields()
