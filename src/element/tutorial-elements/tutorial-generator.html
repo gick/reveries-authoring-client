@@ -15,6 +15,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
+
 <!--
 An element to design tutorials associated with constructor pages. 
 TODO : propose different CSS associated with the markdown
@@ -52,16 +54,7 @@ TODO : propose different CSS associated with the markdown
             <paper-input name="order" label="Position (laisser vide pour ajouter à la fin)" type="number">
             </paper-input>
             <paper-textarea id="mkdownCode" name="mkdown" value={{mkdown}} rows="5" label="Contenu du document (Markdown)"></paper-textarea>
-            <div class="insideflex">
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="resetFields">Annuler</paper-button>
-                </template>
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update document</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>

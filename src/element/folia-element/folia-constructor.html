@@ -7,16 +7,13 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/cosmoz-autocomplete/cosmoz-autocomplete.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
 
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../../styles/common-styles.html">
-<link rel="import" href="../helper/generic-resource-viewer.html">
 <!--
 An element to set up Folia interaction easily. 
 TODO : Add images of leaf
@@ -39,24 +36,14 @@ TODO : Add images of leaf
             <paper-textarea name="question" value={{question}} label="Question ex. Pouvez-vous identifier un chêne?" required>
 
             </paper-textarea>
-    
+
             <cosmoz-autocomplete items='[[species]]' placeholder="Choisir une ou plusieurs espèces" multi-selection selected-items="{{targetSpecies}}">
             </cosmoz-autocomplete>
             <paper-textarea name="correctMessage" value={{correctMessage}} label="Texte identification réussie" required>
             </paper-textarea>
             <paper-textarea name="wrongMessage" value={{wrongMessage}} label="Texte identification ratée" required>
-                </paper-textarea>
-    
-            <div class="insideflex">
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="resetFields">Annuler</paper-button>
-                </template>
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update document</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-            </div>
+            </paper-textarea>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>
@@ -76,8 +63,8 @@ TODO : Add images of leaf
 
                 resetFields: function () {
                     this.updating = false
-                    this.label=""
-                    this.splice("targetSpecies",0,this.targetSpecies.length)
+                    this.label = ""
+                    this.splice("targetSpecies", 0, this.targetSpecies.length)
                     var inputList = Polymer.dom(this.root).querySelectorAll('paper-textarea');
                     for (var i = 0; i < inputList.length; i++) {
                         inputList[i].value = ""
@@ -86,8 +73,7 @@ TODO : Add images of leaf
 
                 _submit: function (event) {
                     var json = this.$.foliaGenerator.serialize()
-                    json.targetSpecies=this.targetSpecies
-                    //   json.reference=
+                    json.targetSpecies = this.targetSpecies
                     this.set('resource', json)
                     this.$.creator.createResource()
                     this.statusString = ""

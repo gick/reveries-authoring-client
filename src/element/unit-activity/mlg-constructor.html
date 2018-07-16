@@ -13,6 +13,7 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/list-generic-resource.html">
 <link rel="import" href="../helper/list-generic-subset-no-format.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
 
 <link rel=import href='./unitGame.html'>
 <link rel="import" href="../remove-ressource/create-resource.html">
@@ -82,14 +83,9 @@ This code may only be used under the "Do whatever you want with code license"
             <paper-button class="blockButton" raised on-click="showBadgeDialog">Ajouter un badge de récompense</paper-button>
             <generic-resource-viewer is-temp no-header is-picker input-name="badge" label="Badge" badge class="resourceViewer" id="badgeViewer"></generic-resource-viewer>
 
-            <template is="dom-if" if="{{updating}}" restamp>
-                <paper-button raised on-click="submit">Update</paper-button>
-                <paper-button raised on-click="resetFields">Annuler update</paper-button>
-            </template>
-            <template is="dom-if" if="{{!updating}}" restamp>
-                <paper-button raised on-click="submit">Enregistrer</paper-button>
-                <paper-button raised on-click="resetFields">Annuler</paper-button>
-            </template></div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
+        
+        </div>
             <div style="display:inline-flex;flex-direction:row;">
             <list-generic-subset-no-format items={{currentUnitGames}}></list-generic-subset-no-format>
         </div>
@@ -173,7 +169,7 @@ This code may only be used under the "Do whatever you want with code license"
                     if (event && event.detail && event.detail.resource)
                         this.push('currentUnitGames',event.detail.resource)
                 },
-                resetFields: function () {
+                _reset: function () {
                     this.$.endPage.removeResource()
                     this.$.badgeViewer.removeResource()
                     this.$.startPage.removeResource()
@@ -204,11 +200,11 @@ This code may only be used under the "Do whatever you want with code license"
                     return {}
                 },
 
-                submit: function () {
+                _submit: function () {
                     var json = this.$.mlgform.serialize()
                     this.set('resource', json)
                     this.$.creator.createResource()
-                    this.resetFields()
+                    this._reset()
                 },
 
                 properties: {

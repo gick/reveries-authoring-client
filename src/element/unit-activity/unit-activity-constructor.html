@@ -19,6 +19,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
+
 <dom-module id="unit-activity-constructor">
     <style include="common-styles">
         .title {
@@ -91,7 +93,7 @@ This code may only be used under the "Do whatever you want with code license"
     <template>
         <create-resource id="creator" resource-url="/unitGame" resource="{{resource}}"></create-resource>
         <resource-picker-dialog page resource-viewer="startMediaViewer" id="startingMediaPicker"></resource-picker-dialog>
-        <resource-picker-dialog mcq freetext resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
+        <resource-picker-dialog mcq freetext folia resource-viewer="noid" id="situatedQuestionPicker"></resource-picker-dialog>
         <resource-picker-dialog page id="poiPAMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog page media-id="{{startMediaId}}" media-name="{{startMediaName}}" id="cluePOIMediaPicker"></resource-picker-dialog>
         <resource-picker-dialog page resource-viewer="feedbackMediaViewer" id="feedbackMediaPicker"></resource-picker-dialog>
@@ -125,7 +127,6 @@ This code may only be used under the "Do whatever you want with code license"
                     </paper-radio-group>
                     <label class="subtitle" id="label2">Validation de l'arrivée au POI:</label>
                     <paper-radio-group attr-for-selected="name" selected="gps" allow-empty-selection selectable={{poiSet}} id="selectReach" aria-labelledby="label2">
-                        <paper-radio-button disabled="[[!poiActive]]" name="folia">Reconnaissance via Folia</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" checked={{QRactive}} name="QR">Scan du QR code</paper-radio-button>
                         <paper-radio-button disabled="[[!poiActive]]" name="gps">GPS</paper-radio-button>
                     </paper-radio-group>
@@ -175,7 +176,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <div class="title">Activité situées</div>
                     <label class="subtitle" id="label2">Activités proposées au joueur lorsqu'il atteint le POI :</label>
 
-                    <paper-button on-click="addSituatedActivity" raised>Ajouter une question située</paper-button>
+                    <paper-button on-click="addSituatedActivity" raised>Ajouter une activité située</paper-button>
                 </div>
                 <list-generic-subset-no-format items={{currentActivities}}></list-generic-subset-no-format>
             </div>
@@ -187,16 +188,7 @@ This code may only be used under the "Do whatever you want with code license"
                 </div>
                 <generic-resource-viewer is-picker is-temp input-name="feedbackMedia" image page video class="resourceViewer" id="feedbackMediaViewer"></generic-resource-viewer>
             </div>
-            <div class="topLevel">
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="resetFields">Annuler update</paper-button>
-                </template>
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="resetFields">Annuler</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>
@@ -205,6 +197,7 @@ This code may only be used under the "Do whatever you want with code license"
             Polymer({
                 is: 'unit-activity-constructor',
                 edit: function (unitGame) {
+                    this._reset()
                     this.updating = true
                     this.itemId = unitGame._id
                     this.label = unitGame.label
@@ -224,6 +217,9 @@ This code may only be used under the "Do whatever you want with code license"
                             this.push('currentActivities', unitGame.mcqActivities[i])
                         }
                     }
+                    if (unitGame.identificationActivity) {
+                            this.push('currentActivities', unitGame.identificationActivity)
+                    }
 
                     if (unitGame.feedbackMedia) {
                         this.$.feedbackMediaViewer.setPage(unitGame.feedbackMedia)
@@ -242,9 +238,6 @@ This code may only be used under the "Do whatever you want with code license"
                         this.$.selectGuidance.selected = 'ping'
                     }
 
-                    if (unitGame.poiGuidFolia) {
-                        this.$.selectReach.selected = 'folia'
-                    }
                     if (unitGame.poiQRValidation) {
                         this.$.selectReach.selected = 'QR'
                     }
@@ -285,12 +278,15 @@ This code may only be used under the "Do whatever you want with code license"
                             case "freetext":
                                 this.push('currentActivities', evt.detail.resourceItem)
                                 break;
+                            case "folia":
+                                this.push('currentActivities', evt.detail.resourceItem)
+                                break
                         }
                     }
                 },
 
 
-                resetFields: function () {
+                _reset: function () {
                     this.updating = false
                     while(this.currentActivities.length){
                         this.pop('currentActivities')
@@ -343,7 +339,7 @@ This code may only be used under the "Do whatever you want with code license"
                     var json = this.$.unitActivityForm.serialize()
                     this.set('resource', json)
                     this.$.creator.createResource()
-                    this.resetFields()
+                    this._reset()
                 },
                 properties: {
                     mediaId: {

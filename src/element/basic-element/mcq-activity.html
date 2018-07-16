@@ -17,6 +17,7 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../helper/thumbnailView.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
 <link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../ui-helper/activity-feedback.html">
 
 <dom-module id="mcq-activity">
     <style include="common-styles">
@@ -45,44 +46,34 @@ This code may only be used under the "Do whatever you want with code license"
         <div id="mcqbody" class="resource">
             <div class="question" name="question">{{question}}</div>
             <div class="resourceBody">
-            <iron-collapse opened=[[showClue]]>
-                <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
-            </iron-collapse>
-            <template is="dom-if" if=[[!imageMode]] restamp>
-                <paper-radio-group selected={{textSelected}} id="textMcq" class="layout vertical wrap">
-                    <paper-radio-button name="resp1">[[correctAnswer]]</paper-radio-button>
-                    <template is="dom-repeat" items="[[distractorArray]]">
-                        <paper-radio-button name="dist[[index]]">[[item.value]]</paper-radio-button>
-                    </template>
-            </template>
-            <template is="dom-if" if=[[imageMode]] restamp>
-                <paper-radio-group  selected={{imageSelected}} id="imageMcq" class="layout vertical wrap">
-                    <paper-radio-button name="resp1">
-                        <thumbnail-view thumbnail-path="/file/[[correctAnswer]]"></thumbnail-view>
-                    </paper-radio-button>
-                    <template is="dom-repeat" items="[[distractorArray]]">
-                        <paper-radio-button name="dist[[index]]">
-                            <thumbnail-view thumbnail-path="/file/[[item.value]]"></thumbnail-view>
+                <iron-collapse opened=[[showClue]]>
+                    <staticmedia-viewer resource-label="[[media.label]]" style="display:inline-flex;" mkdown="[[media.mkdown]]"></staticmedia-viewer>
+                </iron-collapse>
+                <template is="dom-if" if=[[!imageMode]] restamp>
+                    <paper-radio-group selected={{textSelected}} id="textMcq" class="layout vertical wrap">
+                        <paper-radio-button name="resp1">[[correctAnswer]]</paper-radio-button>
+                        <template is="dom-repeat" items="[[distractorArray]]">
+                            <paper-radio-button name="dist[[index]]">[[item.value]]</paper-radio-button>
+                        </template>
+                </template>
+                <template is="dom-if" if=[[imageMode]] restamp>
+                    <paper-radio-group selected={{imageSelected}} id="imageMcq" class="layout vertical wrap">
+                        <paper-radio-button name="resp1">
+                            <thumbnail-view thumbnail-path="/file/[[correctAnswer]]"></thumbnail-view>
                         </paper-radio-button>
-                    </template>
-            </template>
-            <template is="dom-if" if="{{showMediaButton}}" restamp=true>
-                <paper-toggle-button checked={{showClue}}>Indice</paper-toggle-button>
-            </template>
-            <paper-icon-button class="validator" src="../../../images/check.png" on-click="validate"></paper-icon-button>
+                        <template is="dom-repeat" items="[[distractorArray]]">
+                            <paper-radio-button name="dist[[index]]">
+                                <thumbnail-view thumbnail-path="/file/[[item.value]]"></thumbnail-view>
+                            </paper-radio-button>
+                        </template>
+                </template>
+                <template is="dom-if" if="{{showMediaButton}}" restamp=true>
+                    <paper-toggle-button checked={{showClue}}>Indice</paper-toggle-button>
+                </template>
+                <paper-icon-button class="validator" src="../../../images/check.png" on-click="validate"></paper-icon-button>
 
-            <iron-collapse id="correct">
-                <paper-input class="correct" text="">
-                    <iron-icon icon="check-circle" prefix></iron-icon>
-                    <div prefix> {{correctAnswerMessage}}</div>
-                </paper-input>
-            </iron-collapse>
-            <iron-collapse id="wrong">
-                <paper-input class="wrong">
-                    <iron-icon icon="cancel" prefix></iron-icon>
-                    <div prefix> {{wrongAnswerMessage}}</div>
-                </paper-input>
-            </iron-collapse></div>
+                <activity-feedback id="feedback" correct-message=[[correctMessage]] wrong-message=[[wrongMessage]]></activity-feedback>
+            </div>
         </div>
         <template is="dom-if" if="[[unitActivity]]" restamp>
             <post-action></post-action>
@@ -106,21 +97,21 @@ This code may only be used under the "Do whatever you want with code license"
                 getClue: function () {
                     this.set('needClue', !this.needClue);
                 },
+                hideMessages:function(){
+                    this.$.feedback.hideAll();
+                }
+                ,
 
                 validate: function () {
                     if (this.textSelected && this.textSelected === 'resp1') {
-                        this.$.correct.show();
-                        this.$.wrong.hide();
+                        this.$.feedback.showCorrect();
                         return
                     }
                     if (this.imageSelected && this.imageSelected === 'resp1') {
-                        this.$.correct.show();
-                        this.$.wrong.hide();
+                        this.$.feedback.showCorrect();
                         return
                     }
-                    this.$.wrong.show();
-                    this.$.correct.hide();
-
+                    this.$.feedback.showWrong()
                 },
                 _mediaObserver: function (newval) {
                     if (newval) {
@@ -144,11 +135,11 @@ This code may only be used under the "Do whatever you want with code license"
                         type: String,
                         notify: true,
                     },
-                    correctAnswerMessage: {
+                    correctMessage: {
                         type: String,
                         notify: true,
                     },
-                    wrongAnswerMessage: {
+                    wrongMessage: {
                         type: String,
                         notify: true,
                     },

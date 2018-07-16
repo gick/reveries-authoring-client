@@ -10,6 +10,8 @@ Fires messages when a logging/authentification fails
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../styles/common-styles.html">
 <link rel="import" href="./badge-element.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
+
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
@@ -40,16 +42,7 @@ Fires messages when a logging/authentification fails
             <paper-input name="badgeText" value={{badgeText}} label="Texte associé au badge"></paper-input>
             <paper-button raised on-click="showMediaDialog">Associer un document multimédia</paper-button>
             <generic-resource-viewer item={{media}} input-name="badgePageId" is-temp page is-picker class="resourceViewer" id="resourceViewer"></generic-resource-viewer>
-            <div class="insideflex">
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="_reset">Annuler</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>

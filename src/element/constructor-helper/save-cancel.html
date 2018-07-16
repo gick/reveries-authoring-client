@@ -3,35 +3,46 @@
     Copyright (c) 2018 Pierre-Yves Gicquel. 
     This code may only be used under the "Do whatever you want with code license"
     -->
-    
-    <link rel="import" href="../../../bower_components/polymer/polymer.html">
-    <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-    <dom-module id="save-cancel"
-        <template>
-            <div class="insideflex">
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="resetFields">Annuler</paper-button>
-                </template>
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update document</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-            </div>
-        </template>
-    </dom-module>
-    <script>
-    (function() {
+<link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<dom-module id="save-cancel">
+    <style include="common-styles">
+    </style>
+
+    <template>
+        <div class="insideflex">
+            <template is="dom-if" if="[[!updating]]" restamp>
+                <paper-button raised on-click="fireSave">Enregistrer</paper-button>
+                <paper-button raised on-click="fireCancel">Annuler</paper-button>
+            </template>
+            <template is="dom-if" if="[[updating]]" restamp>
+                <paper-button raised on-click="fireSave">Update document</paper-button>
+                <paper-button raised on-click="fireCancel">Annuler update</paper-button>
+            </template>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function () {
         'use strict';
         Polymer({
-            is: 'save-cancel',
-            ready: function() {
+            fireSave:function(){
+                this.fire('save-resource',null)
             },
-            performTracking:function(operationType,param){
-                this.trackingString={operation:operation,param:param}
-                this.$.tracker.generateRequest()
+            fireCancel:function(){
+                this.fire('cancel-edit',null)
+            },
+
+            is: 'save-cancel',
+            ready: function () {},
+            properties: {
+                updating: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                },
             }
         })
     })();
-    </script>
-    
+</script>

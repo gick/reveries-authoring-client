@@ -13,6 +13,7 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../helper/generic-resource-viewer.html">
 <link rel="import" href="../helper/short-textinput.html">
 <link rel="import" href="../helper/short-textarea.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
 
 <link rel="import" href="../../styles/common-styles.html">
 <!--
@@ -56,16 +57,7 @@ Builder for free text question resources
                 required></short-textarea>
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel))</paper-button>
             <generic-resource-viewer input-name="mediaId" is-picker is-temp page class="resourceViewer" id="freetextMediaViewer"></generic-resource-viewer>
-            <div class="insideflex">
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="_reset">Annuler</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>

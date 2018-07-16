@@ -34,10 +34,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div class="card constructorCard">
             <mcq-constructor class="topLevelView" id="mcqConstructor" image-mode={{imageMode}} label={{label}} question={{question}} distractor-array={{distArray}}
-                correct-choice={{response}} wrong-message={{wrong}} correct-message={{correct}}>
+                correct-choice={{response}} correct-message={{correctMessage}} wrong-message={{wrongMessage}}>
             </mcq-constructor>
-            <mcq-activity style="max-width:30%;" conception-mode resource-label="[[label]]" image-mode="[[imageMode]]" distractor-array="[[distArray]]" class="topLevelView"
-                question="{{question}}" correct-answer={{response}} correct-answer-message={{correct}} wrong-answer-message={{wrong}}
+            <mcq-activity id="currentQuestion" style="max-width:30%;" conception-mode resource-label="[[label]]" image-mode="[[imageMode]]" distractor-array="[[distArray]]" class="topLevelView"
+                question="[[question]]" correct-answer=[[response]] correct-message=[[correctMessage]] wrong-message=[[wrongMessage]]
                 media-id={{mediaId}}>
             </mcq-activity>
         </div>
@@ -56,9 +56,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             updateMedia: function (message) {
                 switch (message.detail.info.operation) {
                     case 'create':
+                        this.$.currentQuestion.hideMessages()
                         this.$.mcqList.requestElements()
                         break
                     case 'update':
+                        this.$.currentQuestion.hideMessages()
                         this.$.mcqList.requestElements()
                         break
 
@@ -67,6 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         break
 
                     case 'edit':
+                        this.$.currentQuestion.hideMessages()
                         this.$.mcqConstructor.edit(message.detail.info.resource)
                         break
                 }

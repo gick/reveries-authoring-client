@@ -37,9 +37,9 @@ Viewer for Markdown resource using marked-element
             background-color: #eeeeee;
         }
 
-        :host{
-            --resource-body-mixin:{
-                align-items:flex-start;
+        :host {
+            --resource-body-mixin: {
+                align-items: flex-start;
             }
         }
 
@@ -55,15 +55,15 @@ Viewer for Markdown resource using marked-element
         </template>
         <div class="resource">
             <div class="resourceBody">
-            <marked-element markdown="{{mkdown}}">
-                <div class="markdown-html"></div>
-            </marked-element>
-            <template is="dom-if" if="[[showDefaultMkdown]]" restamp>
-                <marked-element markdown="{{defaultMkdown}}">
+                <marked-element markdown="{{mkdown}}">
                     <div class="markdown-html"></div>
                 </marked-element>
-            </template>
-        </div></div>
+                <template is="dom-if" if="[[showDefaultMkdown]]" restamp>
+                    <marked-element markdown="{{defaultMkdown}}">
+                        <div class="markdown-html"></div>
+                    </marked-element>
+                </template>
+            </div>
     </template>
     <script>
         (function () {

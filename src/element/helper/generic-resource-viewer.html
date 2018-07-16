@@ -178,7 +178,7 @@ This code may only be used under the "Do whatever you want with code license"
                     <mcq-activity preview image-mode={{item.imageMode}} distractor-array={{item.distractors}} class="" conception-mode=[[conceptionMode]]
                         question={{item.question}} resource-status="{{item.status}}" resource-readonly="{{item.readonly}}" resource-label="{{item.label}}"
                         correct-answer={{item.response}} wrong-answer2={{item.distractor2}} wrong-answer1={{item.distractor1}}
-                        correct-answer-message={{item.correctMessage}} wrong-answer-message={{item.wrongMessage}} item-id="{{item._id}}"
+                        correct-message={{item.correctMessage}} wrong-message={{item.wrongMessage}} item-id="{{item._id}}"
                         media={{item.media}}>
                     </mcq-activity>
                     <paper-input hidden class="inputfield" name="[[inputName]]" value={{item._id}}></paper-input>

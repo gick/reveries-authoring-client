@@ -14,7 +14,10 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-styles/typography.html">
 <link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../ui-helper/activity-feedback.html">
+
 <link rel="import" href="./specie-tag.html">
+<link rel="import" href="../ui-helper/activity-feedback.html">
 
 <link rel="import" href="../helper/sharedBehavior.html">
 <link rel="import" href="../static-media/staticmedia-viewer.html">
@@ -44,18 +47,7 @@ This code may only be used under the "Do whatever you want with code license"
                 <template is="dom-repeat" items="[[targetSpecies]]">
                     <specie-tag name="[[item.label]]"></specie-tag>
                 </template>
-                <iron-collapse opened id="correct">
-                    <paper-input class="correct" text="">
-                        <iron-icon icon="check-circle" prefix></iron-icon>
-                        <div prefix> {{correctMessage}}</div>
-                    </paper-input>
-                </iron-collapse>
-                <iron-collapse opened id="wrong">
-                    <paper-input class="wrong">
-                        <iron-icon icon="cancel" prefix></iron-icon>
-                        <div prefix> {{wrongMessage}}</div>
-                    </paper-input>
-                </iron-collapse>
+                <activity-feedback id="feedback" correct-message=[[correctMessage]] wrong-message=[[wrongMessage]]></activity-feedback>
             </div>
         </div>
     </template>
@@ -64,7 +56,6 @@ This code may only be used under the "Do whatever you want with code license"
             'use strict';
             Polymer({
                 is: 'folia-element',
-                behaviors: [sharedBehavior],
 
                 ready: function () {
                     // this.showMediaButton = false;

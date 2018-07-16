@@ -7,6 +7,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
+
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../../styles/common-styles.html">
@@ -39,16 +41,7 @@ TODO : propose different CSS associated with the markdown
             </paper-input>
             <paper-textarea id="mkdownCode" name="mkdown" value={{mkdown}} rows="5" label="Contenu du document (Markdown)"></paper-textarea>
             <paper-button on-click="showImageDialog">Ajouter une image</paper-button>
-            <div class="insideflex">
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="resetFields">Annuler</paper-button>
-                </template>
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update document</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>

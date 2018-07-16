@@ -65,6 +65,10 @@ This code may only be used under the "Do whatever you want with code license"
                 <template is="dom-if" if="{{freetext}}">
                     <paper-tab>Questions libres</paper-tab>
                 </template>
+                <template is="dom-if" if="{{folia}}">
+                    <paper-tab>Identification botanique</paper-tab>
+                </template>
+
             </paper-tabs>
             <iron-pages id="resourcePicker" selected="{{selected}}">
                 <template is="dom-if" if="{{image}}" restamp>
@@ -105,6 +109,12 @@ This code may only be used under the "Do whatever you want with code license"
                         <list-generic-resource lazy picker share-url='/freetextactivity' id='freetextList' resource-type='freetext' url='/freetextActivity'></list-generic-resource>
                     </div>
                 </template>
+                <template is="dom-if" if="{{folia}}">
+                    <div>
+                        <list-generic-resource lazy picker share-url='/folia' id='foliaList' resource-type='folia' url='/folia'></list-generic-resource>
+                    </div>
+                </template>
+
                 <template is="dom-if" if="{{badge}}">
                     <div>
                         <list-generic-resource lazy picker share-url='/badge' id='badge' resource-type='badge' url='/badge'></list-generic-resource>
@@ -222,6 +232,10 @@ This code may only be used under the "Do whatever you want with code license"
                     freetext: {
                         type: Boolean,
                         notify: true,
+                    },
+                    folia:{
+                        type:Boolean,
+                        notify:true,
                     },
 
                     mediaId: {

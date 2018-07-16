@@ -10,6 +10,7 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
 
 <link rel="import" href="./inventory-element.html">
 <link rel="import" href="../remove-ressource/create-resource.html">
@@ -46,16 +47,7 @@ Builder for inventory
             <generic-resource-viewer is-picker input-name="itemPageId" is-temp item={{media}} page class="resourceViewer" id="inventoryMediaViewer"></generic-resource-viewer>
             <paper-button raised style="margin-top: 10px" on-click="showDocMediaDialog">Associer une notice (optionnelle) </paper-button>
             <generic-resource-viewer is-picker is-temp input-name="itemDocPageId" page class="resourceViewer" id="inventoryDocPageViewer"></generic-resource-viewer>
-            <div class="insideflex">
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="_reset">Annuler</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>

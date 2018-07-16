@@ -29,9 +29,9 @@ This code may only be used under the "Do whatever you want with code license"
             </div>
         </div>
         <div class="card constructorCard">
-            <free-text-constructor id="questionConstructor" class="topLevelView" label="{{label}}" question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" response-label="{{rLabel}}">
+            <free-text-constructor id="questionConstructor" class="topLevelView" label="{{label}}" question="{{question}}" response="{{response}}" correct-message="{{correctMessage}}" wrong-message="{{wrongMessage}}" response-label="{{rLabel}}">
             </free-text-constructor>
-            <free-text-question conception-mode question="{{question}}" response="{{response}}" correct-message="{{cmessage}}" wrong-message="{{wmessage}}" media-id="{{currentid}}" resource-label=[[label]] response-label="{{rLabel}}" class="topLevelView" id="previewQuestion">
+            <free-text-question id="currentQuestion" conception-mode question="[[question]]" response="[[response]]" correct-message="[[correctMessage]]" wrong-message="[[wrongMessage]]" media-id="{{currentid}}" resource-label=[[label]] response-label="{{rLabel}}" class="topLevelView" id="previewQuestion">
             </free-text-question>
         </div>
         <div class="card">
@@ -49,9 +49,11 @@ This code may only be used under the "Do whatever you want with code license"
         updateMedia: function(message) {
             switch (message.detail.info.operation) {
                 case 'create':
+                    this.$.currentQuestion.hideMessages()
                     this.$.freetextList.requestElements()
                     break
                 case 'update':
+                    this.$.currentQuestion.hideMessages()
                     this.$.freetextList.requestElements()
                     break
 
@@ -60,6 +62,7 @@ This code may only be used under the "Do whatever you want with code license"
                     break
 
                 case 'edit':
+                    this.$.currentQuestion.hideMessages()
                     this.$.questionConstructor.edit(message.detail.info.resource)
                     break
             }

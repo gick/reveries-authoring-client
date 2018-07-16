@@ -12,6 +12,8 @@ This code may only be used under the "Do whatever you want with code license"
 <link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../styles/common-styles.html">
+<link rel="import" href="../constructor-helper/save-cancel.html">
+
 <link rel="import" href="../remove-ressource/create-resource.html">
 <link rel="import" href="../helper/resource-picker-dialog.html">
 <link rel="import" href="../helper/generic-resource-viewer.html">
@@ -77,16 +79,7 @@ Builder for free text question resources
 
             <paper-button raised on-click="showMediaDialog">Associer un indice (optionnel)</paper-button>
             <generic-resource-viewer is-picker input-name="mediaId" is-temp page class="resourceViewer" id="mcqMediaViewer"></generic-resource-viewer>
-            <div class="insideflex ">
-                <template is="dom-if" if="{{updating}}" restamp>
-                    <paper-button style="margin-top:15px" raised on-click="_submit">Update</paper-button>
-                    <paper-button raised on-click="_reset">Annuler update</paper-button>
-                </template>
-                <template is="dom-if" if="{{!updating}}" restamp>
-                    <paper-button style="margin-top:15px" raised on-click="_submit">Enregistrer</paper-button>
-                    <paper-button raised on-click="_reset">Annuler</paper-button>
-                </template>
-            </div>
+            <save-cancel on-save-resource="_submit" on-cancel-edit='_reset' updating=[[updating]]></save-cancel>
         </form>
     </template>
     <script>
