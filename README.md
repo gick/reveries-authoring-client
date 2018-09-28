@@ -1,3 +1,6 @@
+# Archived outdated repository 
+Please see https://github.com/gick/reveries-authoring
+
 ### Very brief introduction to Reveries.
 ReVeRIES is an ANR project that aim to ease the construction of mobile games. Mobile game are very popular, and there is still no convincing open tools that would work cross platform.
 After five years of analysis, we discovered the existence of so called "mobile web browser" that can be used for such cross platform tools.
